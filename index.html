@@ -3,31 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Reyna's Portfolio</title>
+    <title>Reyna's Portfolio | 前端與數據的學習旅程</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="styles.css"></head>
+    <link rel="stylesheet" href="styles.css">
+</head>
 <body>
 
     <nav class="navbar">
         <div class="logo">Reyna Portfolio.</div>
         <div class="nav-links">
-            <a href="#">關於我</a>
-            <a href="#">作品集</a>
-            <a href="#">聯絡資訊</a>
+            <a href="#about">關於我</a>
+            <a href="#projects">學習歷程</a>
+            <a href="#skills">技術技能</a>
+            <a href="#works">作品集</a>   
+            <a href="#contact">聯絡我</a> 
             <a href="reyna-resume.pdf" class="btn-nav" download>
-              <i class="fas fa-download"></i> 下載履歷</a>
+                <i class="fas fa-download"></i> 下載履歷
+            </a>
         </div>
     </nav>
 
-    <header class="hero">
+    <header class="hero" id="about">
         <div class="hero-content">
-            <span class="badge">coding Practice 2025</span>
+            <span class="badge">Coding Practice 2025</span>
             <h1>Turning Code into <br> <span class="highlight">Creativity</span>.</h1>
-            <p>歡迎來到 Reyna 的學習空間。這裡紀錄了我從零開始學習前端開發、數據分析與網頁設計的每一個腳印。</p>
+            <p>歡迎來到 Reyna 的學習空間。這裡紀錄了我從零開始學習前端開發、數據分析與 AI 應用的每一個腳印，致力於將邏輯轉化為有價值的互動體驗。</p>
             
             <div class="cta-group">
                 <a href="ai-data-course/1222.html" class="btn-primary">進入學習儀表板 <i class="fas fa-arrow-right"></i></a>
-                <a href="#" class="btn-secondary">查看 GitHub</a>
+                <a href="https://github.com/" target="_blank" class="btn-secondary"><i class="fab fa-github"></i> 查看 GitHub</a>
             </div>
         </div>
         
@@ -44,26 +51,189 @@
         </div>
     </header>
 
-    <section class="features">
-        <div class="feature-card">
-            <div class="icon-box"><i class="fas fa-book"></i></div>
-            <h3>前端工程筆記</h3>
-            <p>整理自前端開發的完整學習筆記。</p>
+    <section class="features" id="projects">
+        <div class="section-header">
+            <h2>學習與實作歷程</h2>
+            <p>透過實際專案與課程，累積全方位的技術實力</p>
         </div>
-        <div class="feature-card">
-            <div class="icon-box"><i class="fas fa-layer-group"></i></div>
-            <h3>實作專案</h3>
-            <p>展示 HTML/CSS 排版練習與 JavaScript 互動小程式。</p>
+
+        <div class="cards-container">
+            <div class="feature-card">
+                <div class="icon-box"><i class="fas fa-laptop-code"></i></div>
+                <h3>前端網頁程式課</h3>
+                <p>紀錄從 HTML 語意化標籤到 JavaScript 邏輯控制的完整學習筆記，包含 DOM 操作與事件處理。</p>
+                <a href="course-frontend.html" class="card-link">
+                    追蹤每日學習筆記 <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon-box"><i class="fas fa-mobile-screen-button"></i></div>
+                <h3>跨平台商業網站設計</h3>
+                <p>專注於 UI/UX 設計原則，實作 RWD 響應式網頁排版，打造符合商業需求的跨裝置體驗。</p>
+                <a href="course-design.html" class="card-link">
+                    展示排版練習 <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon-box"><i class="fas fa-brain"></i></div>
+                <h3>AI 大數據人才養成</h3>
+                <p>結合 Python 數據分析與 AI 模型應用，透過視覺化 Dashboard 追蹤專案進度與學習成效。</p>
+                <a href="ai-data-course/1222.html" class="card-link">
+                    追蹤每日學習筆記 <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
         </div>
-        <div class="feature-card">
-            <div class="icon-box"><i class="fas fa-rocket"></i></div>
-            <h3>AI大數據人才養成班</h3>
-            <p>透過 Dashboard 追蹤每日學習進度與待辦事項。</p>
+    </section>
+
+    <section class="skills-section" id="skills">
+        <div class="section-header">
+            <h2>技術工具箱</h2>
+            <p>目前掌握的核心技能與開發工具</p>
+        </div>
+        
+        <div class="skills-grid">
+            <div class="skill-category">
+                <h4><i class="fas fa-layer-group"></i> 前端開發</h4>
+                <div class="tags">
+                    <span>HTML5</span>
+                    <span>CSS3</span>
+                    <span>JavaScript (ES6+)</span>
+                    <span>RWD Layout</span>
+                    <span>Bootstrap/Tailwind</span>
+                </div>
+            </div>
+            <div class="skill-category">
+                <h4><i class="fas fa-database"></i> 數據與後端基礎</h4>
+                <div class="tags">
+                    <span>Python</span>
+                    <span>SQL 基礎</span>
+                    <span>Data Analysis</span>
+                    <span>Git Version Control</span>
+                </div>
+            </div>
+            <div class="skill-category">
+                <h4><i class="fas fa-wand-magic-sparkles"></i> 設計與 AI 工具</h4>
+                <div class="tags">
+                    <span>Figma</span>
+                    <span>Adobe XD</span>
+                    <span>ChatGPT Prompting</span>
+                    <span>Midjourney</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="works-section" id="works">
+        <div class="section-header">
+            <h2>精選作品集</h2>
+            <p>滑動查看我的實作專案與設計練習</p>
+        </div>
+
+        <div class="works-scroller">
+            
+            <div class="work-card">
+                <div class="work-img">
+                    <img src="https://placehold.co/600x400/E6F0FF/0066CC?text=Liquor+Shop" alt="Liquor Shop Project">
+                    <div class="work-overlay">
+                        <a href="#" class="btn-view">查看專案</a>
+                    </div>
+                </div>
+                <div class="work-info">
+                    <span class="category">E-Commerce</span>
+                    <h3>酒類電商網站開發</h3>
+                    <p>使用 Shopline 平台建置，客製化 CSS 版型與購物車流程優化。</p>
+                </div>
+            </div>
+
+            <div class="work-card">
+                <div class="work-img">
+                    <img src="https://placehold.co/600x400/E6F0FF/0066CC?text=AI+Generator" alt="AI Icon App">
+                    <div class="work-overlay">
+                        <a href="#" class="btn-view">查看專案</a>
+                    </div>
+                </div>
+                <div class="work-info">
+                    <span class="category">Web App</span>
+                    <h3>AI Icon 生成器</h3>
+                    <p>串接 OpenAI API，讓使用者輸入文字即可生成客製化圖示。</p>
+                </div>
+            </div>
+
+            <div class="work-card">
+                <div class="work-img">
+                    <img src="https://placehold.co/600x400/E6F0FF/0066CC?text=Dashboard" alt="Dashboard UI">
+                    <div class="work-overlay">
+                        <a href="#" class="btn-view">查看專案</a>
+                    </div>
+                </div>
+                <div class="work-info">
+                    <span class="category">UI/UX Design</span>
+                    <h3>數據後台介面設計</h3>
+                    <p>專注於資訊視覺化的儀表板設計，提升數據閱讀效率。</p>
+                </div>
+            </div>
+
+            <div class="work-card">
+                <div class="work-img">
+                    <img src="https://placehold.co/600x400/E6F0FF/0066CC?text=Campaign+Page" alt="Landing Page">
+                    <div class="work-overlay">
+                        <a href="#" class="btn-view">查看專案</a>
+                    </div>
+                </div>
+                <div class="work-info">
+                    <span class="category">Frontend</span>
+                    <h3>行銷活動 Landing Page</h3>
+                    <p>包含視差滾動 (Parallax) 與 CSS 動畫的高互動性網頁。</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="contact-section" id="contact">
+        <div class="contact-container">
+            <div class="contact-info">
+                <h2>Let's Talk!</h2>
+                <p>我正在尋找前端工程師或網頁設計的實習/正職機會。如果您對我的作品感興趣，歡迎隨時與我聯繫。</p>
+                
+                <div class="info-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>your-email@example.com</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-phone"></i>
+                    <span>0912-345-678</span>
+                </div>
+                <div class="info-item">
+                    <i class="fab fa-linkedin"></i>
+                    <span>Reyna's LinkedIn</span>
+                </div>
+            </div>
+
+            <form class="contact-form">
+                <div class="form-group">
+                    <label>您的姓名</label>
+                    <input type="text" placeholder="Name">
+                </div>
+                <div class="form-group">
+                    <label>電子郵件</label>
+                    <input type="email" placeholder="Email">
+                </div>
+                <div class="form-group">
+                    <label>訊息內容</label>
+                    <textarea rows="4" placeholder="Message"></textarea>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">發送訊息</button>
+            </form>
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2025 Reyna Portfolio. All Rights Reserved.</p>
+        <div class="copyright">
+            <p>&copy; 2025 Reyna Portfolio. All Rights Reserved.</p>
+        </div>
     </footer>
 
 </body>
