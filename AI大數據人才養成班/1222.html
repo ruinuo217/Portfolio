@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reyna's Learning Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+
+</head>
+<body>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Reyna Portfolio</h2>
+            <span>Web Design Practice</span>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 1: 基礎導入</div>
+            <ul>
+                <li class="active">
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/22 (一) </span>
+                        <span class="topic">電腦基礎概論</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) </span>
+                        <span class="topic">【NoCode】IoT 與資料收集</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) </span>
+                        <span class="topic">【NoCode】IoT 與資料收集</span>
+                        <span class="topic">Linux基礎到架站</span>
+                    </a>
+                </li>
+                 <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/26 (五) </span>
+                        <span class="topic">Linux基礎到架站</span>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 2: 深入實作</div>
+            <ul>
+               
+                 <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/29 (一) </span>
+                        <span class="topic">電腦基礎概論</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/30 (二) </span>
+                        <span class="topic">【NoCode】IoT 與資料收集</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/31 (三) </span>
+                        <span class="topic">Linux基礎到架站</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/2 (五) </span>
+                        <span class="topic">Linux基礎到架站</span>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </nav>
+
+
+   <main class="main-content">
+     
+            <div class="top-bar">
+            <div class="breadcrumb">
+                首頁 > Week 1 > <span>電腦基礎概論</span>
+            </div>
+            <a href="index.html" class="btn-nav" style="text-decoration: none;">
+            <i class="fas fa-home"></i> 回首頁
+            </a>
+            </div>
+        
+        
+        <div class="banner">
+            <div>
+                <h1>本堂課主題</h1>
+                <p>電腦系統。</p>
+            </div>
+            <i class="fa-solid fa-laptop-code banner-icon"></i>
+        </div>
+
+        <div class="dashboard-grid top-section">
+            
+            <div class="card preview-card">
+                <div class="card-header">
+                    <h3><i class="fa-solid fa-rocket"></i> 下週預習</h3>
+                </div>
+                
+                <div class="list-item">
+                    <div class="icon-box blue-light">
+                        <i class="fa-solid fa-book"></i>
+                    </div>
+                    <div class="text-content">
+                        <h4>Python 基礎語法</h4>
+                        <p>變數與資料型態</p>
+                    </div>
+                </div>
+
+                <div class="list-item">
+                    <div class="icon-box blue-light">
+                        <i class="fa-solid fa-network-wired"></i>
+                    </div>
+                    <div class="text-content">
+                        <h4>HTTP 協定</h4>
+                        <p>Request 與 Response</p>
+                    </div>
+                </div>
+
+                <button class="btn-primary">查看預習教材</button>
+            </div>
+
+            <div class="card review-card">
+                <div class="card-header">
+                    <h3><i class="fa-solid fa-rotate-left"></i> 重點複習</h3>
+                </div>
+
+                <div class="list-item">
+                    <div class="icon-box red-light">
+                        <i class="fa-solid fa-exclamation"></i>
+                    </div>
+                    <div class="text-content">
+                        <h4>Linux 指令</h4>
+                        <p>chmod, grep, ssh</p>
+                    </div>
+                </div>
+
+                <div class="list-item">
+                    <div class="icon-box orange-light">
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <div class="text-content">
+                        <h4>HTML 語意化標籤</h4>
+                        <p>header, main, section</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">課程筆記</h3>
+        <div class="dashboard-grid notes-section">
+            
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-book-open"></i> 課程筆記：電腦基礎概論</h4>
+                    <span class="status-badge running">進行中</span>
+                </div>
+                <p class="note-desc">這是 HTML/CSS 新手練習網站的 dashboard 範例。</p>
+                <ul class="note-points">
+                    <li>CPU 的運作原理</li>
+                    <li>記憶體 (RAM) 與硬碟的區別</li>
+                    <li>二進制 (Binary) 基礎概念</li>
+                </ul>
+                <div class="note-footer">
+                    最後編輯於：2025 年 12 月 22 日
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-book-open"></i> 課程筆記：Linux 基礎</h4>
+                    <span class="status-badge done">已完成</span>
+                </div>
+                <p class="note-desc">關於伺服器架設的基礎操作指令筆記。</p>
+                <ul class="note-points">
+                    <li>檔案權限管理</li>
+                    <li>Vim 編輯器操作</li>
+                    <li>排程設定</li>
+                </ul>
+                <div class="note-footer">
+                    最後編輯於：2025 年 12 月 20 日
+                </div>
+            </div>
+
+             <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-book-open"></i> 課程筆記：網路概論</h4>
+                    <span class="status-badge pending">未開始</span>
+                </div>
+                <p class="note-desc">TCP/IP 四層模型與封包傳輸。</p>
+                <div class="note-footer">
+                    最後編輯於：2025 年 12 月 18 日
+                </div>
+            </div>
+
+             <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-book-open"></i> 課程筆記：Git 版本控制</h4>
+                    <span class="status-badge running">進行中</span>
+                </div>
+                <p class="note-desc">團隊協作與分支管理。</p>
+                <div class="note-footer">
+                    最後編輯於：2025 年 12 月 15 日
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+
+
+</body>
+</html>
+
