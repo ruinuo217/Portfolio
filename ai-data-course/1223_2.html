@@ -1,0 +1,250 @@
+v<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reyna's Learning Dashboard - ESP-01S</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Reyna Portfolio</h2>
+            <span>Web Design Practice</span>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 1: 基礎導入</div>
+            <ul>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1222.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/22 (一) </span>
+                        <span class="topic">電腦基礎概論</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) am </span>
+                        <span class="topic">IT Career 職涯解析</span>
+                    </a>
+                </li>
+
+                <li class="active">
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_2.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) pm </span>
+                        <span class="topic">ESP-01S 與 Arduino</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) </span>
+                        <span class="topic">【NoCode】IoT 與資料收集</span>
+                        <span class="topic">Linux基礎到架站</span>
+                    </a>
+                </li>
+                 <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/26 (五) </span>
+                        <span class="topic">Linux基礎到架站</span>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 2: 深入實作</div>
+            <ul>
+               
+                 <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/29 (一) </span>
+                        <span class="topic">電腦基礎概論</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/30 (二) </span>
+                        <span class="topic">【NoCode】IoT 與資料收集</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/31 (三) </span>
+                        <span class="topic">Linux基礎到架站</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/2 (五) </span>
+                        <span class="topic">Linux基礎到架站</span>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </nav>
+
+
+
+   <main class="main-content">
+     
+        <div class="top-bar">
+            <div class="breadcrumb">
+                首頁 > Week 1 > <span>ESP-01S 與 Arduino</span>
+            </div>
+            <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
+                <i class="fas fa-home"></i> 回首頁
+            </a>
+        </div>
+        
+        <div class="banner">
+            <div>
+                <h1>ESP-01S 物聯網入門</h1>
+                <p>硬體認識、環境架設與 Blink 程式實作</p>
+            </div>
+            <i class="fa-solid fa-wifi banner-icon"></i>
+        </div>
+
+        <h3 class="section-title">Part 1: 硬體認識 (Hardware)</h3>
+        <div class="dashboard-grid notes-section">
+            
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-microchip"></i> ESP-01S 基礎介紹</h4>
+                    <span class="status-badge running">硬體</span>
+                </div>
+                <p class="note-desc">認識你手上的開發裝置。</p>
+                <ul class="note-points">
+                    <li><strong>ESP-01S (MCU)：</strong> 上層黑色小板子，微控制器（大腦）。</li>
+                    <li><strong>USB 轉 TTL：</strong> 下層 USB 插頭，負責電腦與晶片間的訊號翻譯。</li>
+                    <li><strong>燒錄模組 (CH340C)：</strong> 支援「自動燒錄免跳線」，插上電腦即可寫入程式。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-magnifying-glass"></i> 版本規格辨識</h4>
+                    <span class="status-badge running">硬體</span>
+                </div>
+                <p class="note-desc">如何區分 ESP-01 舊版與 ESP-01S 新版？</p>
+                <ul class="note-points">
+                    <li><strong>看燈號：</strong> 舊版通電紅燈亮；01S (新版) 只有傳輸時藍燈閃 (省電)。</li>
+                    <li><strong>看 PCB：</strong> 舊版藍色；01S 為黑色。</li>
+                    <li><strong>記憶體：</strong> 舊版 512KB；01S 為 1MB (可寫複雜程式)。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-diagram-project"></i> 腳位定義與圖解</h4>
+                    <span class="status-badge done">圖表</span>
+                </div>
+                <div style="padding: 15px; text-align: center;">
+                    <a href="https://ibb.co/8DPD9gF9" target="_blank">
+                        <img src="https://i.ibb.co/hR2RVFpV/81ba990c-c9d6-4b67-90b7-19300a6efbaa.jpg" 
+                             alt="ESP-01S Pinout" 
+                             style="width: 100%; max-width: 600px; height: auto; border-radius: 8px;">
+                    </a>
+                    <p style="margin-top: 10px; text-align: left; font-size: 0.9rem; color: #555;">
+                        <strong>重點腳位說明：</strong><br>
+                        1. <strong>VCC / GND</strong>：電源 (3.3V，不可接 5V)。<br>
+                        2. <strong>TXD / RXD</strong>：傳輸資料與燒錄用。<br>
+                        3. <strong>GPIO0 / GPIO2</strong>：控制用的手腳 (接繼電器或感測器)。
+                    </p>
+                </div>
+            </div>
+
+             <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-network-wired"></i> IoT 應用場景：一片小板子的無限可能</h4>
+                    <span class="status-badge" style="background:#6f42c1; color:white;">應用</span>
+                </div>
+                <div style="padding: 0 15px 15px 15px;">
+                    <ul class="note-points" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <li>
+                            <strong>1. 智慧家電控制</strong><br>
+                            利用 MQTT 協定與手機 App (MQTTBox)，遠端遙控家中冷氣開關。
+                        </li>
+                        <li>
+                            <strong>2. 環境監測 (視覺化)</strong><br>
+                            使用 CO2 感測器偵測空氣品質，上傳至 ThingSpeak 繪製折線圖 (監測昏睡指數)。
+                        </li>
+                        <li>
+                            <strong>3. 智慧農業 (Blynk)</strong><br>
+                            土壤濕度感測器 + 抽水馬達。透過 Blynk 手機 App 監控數值並一鍵澆水。
+                        </li>
+                        <li>
+                            <strong>4. 自動化警報 (IFTTT)</strong><br>
+                            結合光線感測器或氣象資料。設定「若有人闖入」或「明天會下雨」，自動發送 LINE/Gmail 通知。
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 2: 軟體開發 (Software)</h3>
+        <div class="dashboard-grid notes-section">
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> Arduino IDE 介紹</h4>
+                    <span class="status-badge pending">工具</span>
+                </div>
+                <p class="note-desc">主要功能與優勢。</p>
+                <ul class="note-points">
+                    <li><strong>三大功能：</strong> 撰寫 (Coding)、編譯 (Verify)、上傳 (Upload)。</li>
+                    <li><strong>優勢：</strong> 跨平台免費、擁有豐富的函式庫 (Libraries) 免去造輪子。</li>
+                    <li><strong>序列埠監控 (Serial Monitor)：</strong> 除錯神器，可看晶片回傳的數據。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-screwdriver-wrench"></i> 環境設定 SOP</h4>
+                    <span class="status-badge pending">步驟</span>
+                </div>
+                <p class="note-desc">ESP8266 開發板安裝步驟。</p>
+                <ol class="note-points" style="padding-left: 20px;">
+                    <li><strong>Preferences：</strong> 貼上 ESP8266 json 網址。</li>
+                    <li><strong>Boards Manager：</strong> 搜尋並安裝 ESP8266 套件。</li>
+                    <li><strong>選擇板子：</strong> Tools > Board > Generic ESP8266 Module。</li>
+                    <li><strong>選擇 Port：</strong> 確認 USB 連接埠 (如 COM4)。</li>
+                </ol>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-file-code"></i> 程式碼解析：Blink (閃爍 LED)</h4>
+                    <span class="status-badge running">實作</span>
+                </div>
+                <p class="note-desc">邏輯：讓內建 LED 亮 1 秒，滅 2 秒。</p>
+                
+                <div style="background: #f8f9fa; padding: 10px; border-radius: 5px; font-family: monospace; margin-bottom: 10px;">
+                    <strong>核心觀念：Active Low (低電位觸發)</strong><br>
+                    <span style="color: #dc3545;">LOW (0V)</span> = 電流通過 = <span style="color: #198754; font-weight:bold;">亮燈 (ON)</span><br>
+                    <span style="color: #0d6efd;">HIGH (3.3V)</span> = 無電位差 = <span style="color: #6c757d; font-weight:bold;">滅燈 (OFF)</span>
+                </div>
+
+                <ul class="note-points">
+                    <li><strong>void setup()：</strong> 只執行一次。設定 <code>pinMode(LED_BUILTIN, OUTPUT);</code></li>
+                    <li><strong>void loop()：</strong> 無限循環。</li>
+                    <li><code>digitalWrite(LED_BUILTIN, LOW);</code> // 開燈 (注意是 LOW)</li>
+                    <li><code>delay(1000);</code> // 等待 1 秒</li>
+                    <li><code>digitalWrite(LED_BUILTIN, HIGH);</code> // 關燈</li>
+                    <li><code>delay(2000);</code> // 等待 2 秒</li>
+                </ul>
+                <div class="note-footer">最後編輯：2025/12/23</div>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>
