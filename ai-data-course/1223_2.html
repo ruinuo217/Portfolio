@@ -1,4 +1,4 @@
-v<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
@@ -51,47 +51,39 @@ v<!DOCTYPE html>
                         <span class="topic">Linux基礎到架站</span>
                     </a>
                 </li>
-                
             </ul>
         </div>
 
         <div class="menu-group">
             <div class="group-title">Week 2: 深入實作</div>
             <ul>
-               
                  <li>
                     <a href="#">
                         <span class="date-badge"><i class="far fa-calendar"></i> 12/29 (一) </span>
                         <span class="topic">電腦基礎概論</span>
                     </a>
                 </li>
-                
                 <li>
                     <a href="#">
                         <span class="date-badge"><i class="far fa-calendar"></i> 12/30 (二) </span>
                         <span class="topic">【NoCode】IoT 與資料收集</span>
                     </a>
                 </li>
-                
                 <li>
                     <a href="#">
                         <span class="date-badge"><i class="far fa-calendar"></i> 12/31 (三) </span>
                         <span class="topic">Linux基礎到架站</span>
                     </a>
                 </li>
-                
                 <li>
                     <a href="#">
                         <span class="date-badge"><i class="far fa-calendar"></i> 1/2 (五) </span>
                         <span class="topic">Linux基礎到架站</span>
                     </a>
                 </li>
-                
             </ul>
         </div>
     </nav>
-
-
 
    <main class="main-content">
      
@@ -205,18 +197,37 @@ v<!DOCTYPE html>
                 </ul>
             </div>
 
-            <div class="card note-card">
+            <div class="card note-card" style="grid-column: 1 / -1;">
                 <div class="note-header">
                     <h4><i class="fa-solid fa-screwdriver-wrench"></i> 環境設定 SOP</h4>
                     <span class="status-badge pending">步驟</span>
                 </div>
-                <p class="note-desc">ESP8266 開發板安裝步驟。</p>
-                <ol class="note-points" style="padding-left: 20px;">
-                    <li><strong>Preferences：</strong> 貼上 ESP8266 json 網址。</li>
-                    <li><strong>Boards Manager：</strong> 搜尋並安裝 ESP8266 套件。</li>
-                    <li><strong>選擇板子：</strong> Tools > Board > Generic ESP8266 Module。</li>
-                    <li><strong>選擇 Port：</strong> 確認 USB 連接埠 (如 COM4)。</li>
-                </ol>
+                <p class="note-desc">ESP8266 開發板安裝步驟圖解。</p>
+                
+                <div style="padding: 10px;">
+                    <h5 style="margin-bottom: 10px; border-left: 4px solid #007bff; padding-left: 10px;">1. 設定開發板網址 (Preferences)</h5>
+                    <ol class="note-points" style="padding-left: 20px; margin-bottom: 15px;">
+                        <li>開啟 File > Preferences。</li>
+                        <li>在 "Additional Boards Manager URLs" 貼上 ESP8266 網址。</li>
+                    </ol>
+                    
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 25px;">
+                         <a href="https://imgbb.com/" target="_blank" style="flex: 1; min-width: 300px;">
+                            <img src="https://i.ibb.co/Y7WT0Pcg/085f1a81-172e-4d05-acb1-b4d06a4854b5.png" alt="Preferences Path" style="width: 100%; border-radius: 6px; border: 1px solid #e0e0e0;">
+                         </a>
+                         <a href="https://ibb.co/LzmrJTGK" target="_blank" style="flex: 1; min-width: 300px;">
+                            <img src="https://i.ibb.co/d0FtLNhZ/f8ff706b-dd3f-4315-9c64-3452e5be5b04.png" alt="Paste Link" style="width: 100%; border-radius: 6px; border: 1px solid #e0e0e0;">
+                         </a>
+                    </div>
+
+                    <h5 style="margin-bottom: 10px; border-left: 4px solid #007bff; padding-left: 10px;">2. 選擇開發板 (Board Manager)</h5>
+                    <ul class="note-points" style="margin-bottom: 15px;">
+                        <li>確認 Board 選擇 <strong>Generic ESP8266 Module</strong>。</li>
+                    </ul>
+                    <a href="https://ibb.co/0j1GMVdj" target="_blank">
+                        <img src="https://i.ibb.co/QFhKNj1F/3e5d63f4-d785-48b6-b080-3a44b605f208.png" alt="Board Selection" style="width: 100%; max-width: 800px; border-radius: 6px; border: 1px solid #e0e0e0;">
+                    </a>
+                </div>
             </div>
 
             <div class="card note-card" style="grid-column: 1 / -1;">
@@ -224,22 +235,35 @@ v<!DOCTYPE html>
                     <h4><i class="fa-solid fa-file-code"></i> 程式碼解析：Blink (閃爍 LED)</h4>
                     <span class="status-badge running">實作</span>
                 </div>
-                <p class="note-desc">邏輯：讓內建 LED 亮 1 秒，滅 2 秒。</p>
                 
-                <div style="background: #f8f9fa; padding: 10px; border-radius: 5px; font-family: monospace; margin-bottom: 10px;">
-                    <strong>核心觀念：Active Low (低電位觸發)</strong><br>
-                    <span style="color: #dc3545;">LOW (0V)</span> = 電流通過 = <span style="color: #198754; font-weight:bold;">亮燈 (ON)</span><br>
-                    <span style="color: #0d6efd;">HIGH (3.3V)</span> = 無電位差 = <span style="color: #6c757d; font-weight:bold;">滅燈 (OFF)</span>
-                </div>
+                <div style="padding: 10px;">
+                    <h5 style="margin: 10px 0; color: #555;">Step 1: 開啟範例 (Examples > ESP8266 > Blink)</h5>
+                    <a href="https://ibb.co/spfHHYWC" target="_blank" style="display: block; margin-bottom: 20px;">
+                        <img src="https://i.ibb.co/Cpc22GP6/337fd3f0-73fd-4b77-96a2-58dc688577d4.png" alt="Blink Path" style="width: 100%; max-width: 600px; border-radius: 6px; border: 1px solid #e0e0e0;">
+                    </a>
 
-                <ul class="note-points">
-                    <li><strong>void setup()：</strong> 只執行一次。設定 <code>pinMode(LED_BUILTIN, OUTPUT);</code></li>
-                    <li><strong>void loop()：</strong> 無限循環。</li>
-                    <li><code>digitalWrite(LED_BUILTIN, LOW);</code> // 開燈 (注意是 LOW)</li>
-                    <li><code>delay(1000);</code> // 等待 1 秒</li>
-                    <li><code>digitalWrite(LED_BUILTIN, HIGH);</code> // 關燈</li>
-                    <li><code>delay(2000);</code> // 等待 2 秒</li>
-                </ul>
+                    <h5 style="margin: 10px 0; color: #555;">Step 2: 程式碼預覽</h5>
+                    <a href="https://ibb.co/LLbNykC" target="_blank" style="display: block; margin-bottom: 20px;">
+                        <img src="https://i.ibb.co/WbqVXxc/3768d9d7-f06e-4b30-a757-a8d6edb26320.png" alt="Blink Code" style="width: 100%; max-width: 600px; border-radius: 6px; border: 1px solid #e0e0e0;">
+                    </a>
+
+                    <p class="note-desc"><strong>邏輯解析：</strong>讓內建 LED 亮 1 秒，滅 2 秒。</p>
+                    
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; font-family: monospace; margin-bottom: 15px; border-left: 4px solid #dc3545;">
+                        <strong>核心觀念：Active Low (低電位觸發)</strong><br>
+                        <span style="color: #dc3545;">LOW (0V)</span> = 電流通過 = <span style="color: #198754; font-weight:bold;">亮燈 (ON)</span><br>
+                        <span style="color: #0d6efd;">HIGH (3.3V)</span> = 無電位差 = <span style="color: #6c757d; font-weight:bold;">滅燈 (OFF)</span>
+                    </div>
+
+                    <ul class="note-points">
+                        <li><strong>void setup()：</strong> 只執行一次。設定 <code>pinMode(LED_BUILTIN, OUTPUT);</code></li>
+                        <li><strong>void loop()：</strong> 無限循環。</li>
+                        <li><code>digitalWrite(LED_BUILTIN, LOW);</code> // 開燈 (注意是 LOW)</li>
+                        <li><code>delay(1000);</code> // 等待 1 秒</li>
+                        <li><code>digitalWrite(LED_BUILTIN, HIGH);</code> // 關燈</li>
+                        <li><code>delay(2000);</code> // 等待 2 秒</li>
+                    </ul>
+                </div>
                 <div class="note-footer">最後編輯：2025/12/23</div>
             </div>
 
