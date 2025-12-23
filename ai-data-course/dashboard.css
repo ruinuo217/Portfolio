@@ -76,7 +76,7 @@ ul {
     padding: 24px 0;
     overflow-y: auto;
     flex-shrink: 0;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease; /* 為了之後可能的動畫預留 */
 }
 
 .sidebar-header {
@@ -402,48 +402,84 @@ ul {
 .status-badge.pending { background-color: #f3f4f6; color: #6b7280; }
 
 /* =========================================
-   6. 響應式調整 (RWD)
+   6. 響應式調整 (RWD) - 手機板選單修正
    ========================================= */
 @media (max-width: 768px) {
-    body {
-        flex-direction: column;
-        height: auto;
-        overflow-y: auto;
-    }
-
+    /* 1. 隱藏預設側邊欄到左側 */
     .sidebar {
-        width: 100%;
-        height: auto;
+        position: fixed;
+        left: -280px;
+        top: 0;
+        height: 100%;
+        z-index: 1000;
+        transition: 0.3s ease;
         border-right: none;
-        border-bottom: 1px solid #e5e7eb;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
     }
 
-    .menu-group {
-        display: none; /* 手機版暫時隱藏詳細選單，或可改為漢堡選單邏輯 */
+    /* 2. 顯示時的狀態 */
+    .sidebar.active {
+        left: 0;
     }
-    
-    /* 讓當前週次還是顯示 */
-    .menu-group:first-of-type {
+
+    /* 3. 手機版內容區全寬 */
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 20px;
+        overflow-y: auto; /* 恢復捲軸 */
+    }
+
+    /* 4. 漢堡按鈕 */
+    .mobile-toggle {
+        display: block; /* 顯示按鈕 */
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        z-index: 1001;
+        background: #0d6efd;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    /* 5. 遮罩層 */
+    .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 999;
+    }
+    .overlay.active {
         display: block;
     }
 
-    .main-content {
-        padding: 20px;
-        overflow: visible;
-    }
-
+    /* 其他排版調整 */
     .dashboard-grid {
         grid-template-columns: 1fr;
     }
-    
     .banner {
         flex-direction: column;
         text-align: center;
         gap: 20px;
     }
-    
     .banner-icon {
         transform: rotate(0);
         font-size: 3rem;
+    }
+}
+
+/* 電腦版隱藏手機按鈕 */
+@media (min-width: 769px) {
+    .mobile-toggle, .overlay {
+        display: none;
     }
 }
