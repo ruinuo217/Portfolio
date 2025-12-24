@@ -6,87 +6,13 @@
     <title>Reyna's Learning Dashboard - 12/24</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="dashboard.css">
-    <style>
-        /* 程式碼區塊樣式 */
-        .code-block {
-            background: #1e1e1e;
-            color: #d4d4d4;
-            padding: 15px;
-            border-radius: 8px;
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 0.9rem;
-            overflow-x: auto;
-            margin-top: 10px;
-            border-left: 4px solid #007bff;
-        }
-        .code-comment { color: #6a9955; }
-        .code-keyword { color: #569cd6; }
-        .code-string { color: #ce9178; }
-        
-        /* 連結按鈕樣式 */
-        .link-btn {
-            display: inline-block;
-            background-color: #f8f9fa;
-            color: #333;
-            padding: 10px 15px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 500;
-            margin-top: 10px;
-            border: 1px solid #ddd;
-            transition: 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            width: fit-content;
-        }
-        .link-btn:hover {
-            background-color: #e2e6ea;
-            color: #000;
-        }
-
-        /* 比較表格樣式 */
-        .comparison-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-        .comparison-table th, .comparison-table td {
-            border: 1px solid #eee;
-            padding: 12px;
-            font-size: 0.95rem;
-            vertical-align: top;
-        }
-        .comparison-table th {
-            background-color: #f8f9fa;
-            color: var(--primary-color);
-            text-align: left;
-            width: 50%;
-        }
-        .concept-box {
-            background: #f9fafb;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid var(--primary-color);
-        }
-        
-        /* 重點提示框 */
-        .alert-box {
-            background-color: #fff3cd;
-            color: #856404;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 5px solid #ffeeba;
-            margin: 15px 0;
-            font-size: 0.95rem;
-        }
-    </style>
 </head>
 <body>
 
     <button class="mobile-toggle" onclick="toggleSidebar()">
         <i class="fas fa-bars"></i>
     </button>
+
     <div class="overlay" onclick="toggleSidebar()"></div>
 
     <nav class="sidebar">
@@ -104,6 +30,7 @@
                         <span class="topic">電腦基礎概論</span>
                     </a>
                 </li>
+                
                 <li>
                     <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_1.html">
                         <span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) am </span>
