@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reyna's Learning Dashboard - 12/24</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* 程式碼區塊樣式 */
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin-top: 10px;
+            border-left: 4px solid #007bff;
+        }
+        .code-comment { color: #6a9955; }
+        .code-keyword { color: #569cd6; }
+        .code-string { color: #ce9178; }
+        
+        /* 連結按鈕樣式 */
+        .link-btn {
+            display: inline-block;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 10px 15px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: fit-content;
+        }
+        .link-btn:hover {
+            background-color: #e2e6ea;
+            color: #000;
+        }
+
+        /* 比較表格樣式 */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #eee;
+            padding: 12px;
+            font-size: 0.95rem;
+            vertical-align: top;
+        }
+        .comparison-table th {
+            background-color: #f8f9fa;
+            color: var(--primary-color);
+            text-align: left;
+            width: 50%;
+        }
+        .concept-box {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        /* 重點提示框 */
+        .alert-box {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 5px solid #ffeeba;
+            margin: 15px 0;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Reyna Portfolio</h2>
+            <span>Web Design Practice</span>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 1: 基礎導入</div>
+            <ul>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1222.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/22 (一) </span>
+                        <span class="topic">電腦基礎概論</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_1.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) am </span>
+                        <span class="topic">IT Career 職涯解析</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_2.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) pm </span>
+                        <span class="topic">ESP-01S 與 Arduino</span>
+                    </a>
+                </li>
+
+                <li class="active">
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_1.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) am </span>
+                        <span class="topic">IoT 與 Web Server 實作</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_2.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) pm </span>
+                        <span class="topic">Linux</span>
+                    </a>
+                </li>
+
+                 <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/26 (五) </span>
+                        <span class="topic">Linux基礎到架站</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 2: 深入實作</div>
+            <ul>
+                 <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/29 (一) </span>
+                        <span class="topic">電腦基礎概論</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/30 (二) </span>
+                        <span class="topic">【NoCode】IoT 與資料收集</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/31 (三) </span>
+                        <span class="topic">Linux基礎到架站</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/2 (五) </span>
+                        <span class="topic">Linux基礎到架站</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+   <main class="main-content">
+     
+        <div class="top-bar">
+            <div class="breadcrumb">
+                首頁 > Week 1 > <span>IoT 網路與 Web Server</span>
+            </div>
+            <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
+                <i class="fas fa-home"></i> 回首頁
+            </a>
+        </div>
+        
+        <div class="banner">
+            <div>
+                <h1>IoT 網路通訊與 Web Server 實作</h1>
+                <p>從網路基礎觀念到 ESP-01S 網頁控制 LED</p>
+            </div>
+            <i class="fa-solid fa-network-wired banner-icon"></i>
+        </div>
+
+        <h3 class="section-title">1. 網路基礎觀念 (Network Concepts)</h3>
+        <div class="dashboard-grid notes-section">
+            
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-globe"></i> 網際網路 vs 區域網路</h4>
+                    <span class="status-badge done">觀念</span>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="concept-box">
+                        <h5 style="margin-bottom: 10px; color:#2563eb;"><i class="fa-solid fa-cloud"></i> 網際網路 (Internet)</h5>
+                        <ul class="note-points">
+                            <li><strong>WAN (廣域網路)：</strong>連到外面的網路。</li>
+                            <li><strong>DNS：</strong>全球通用電話簿 (找 Google.com)。</li>
+                            <li><strong>功能：</strong>網址 (URL) → IP。</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="concept-box">
+                        <h5 style="margin-bottom: 10px; color:#059669;"><i class="fa-solid fa-house-signal"></i> 區域網路 (Local)</h5>
+                        <ul class="note-points">
+                            <li><strong>LAN (區域網路)：</strong>家裡的 Wi-Fi 範圍。</li>
+                            <li><strong>mDNS：</strong>小範圍廣播 (找 my-plug.local)。</li>
+                            <li><strong>功能：</strong>主機名稱 (Host) → IP。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-user-tag"></i> ESP-01S 角色定義</h4>
+                    <span class="status-badge running">硬體</span>
+                </div>
+                <ul class="note-points">
+                    <li><strong>MCU：</strong> 大腦，執行程式。</li>
+                    <li><strong>Web Server：</strong> 網站，等待連線。</li>
+                    <li><strong>Client：</strong> 手機，負責發送請求。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-key"></i> 連線關鍵資訊</h4>
+                    <span class="status-badge running">設定</span>
+                </div>
+                <ul class="note-points">
+                    <li><strong>SSID：</strong> Wi-Fi 名稱。</li>
+                    <li><strong>Password：</strong> Wi-Fi 密碼。</li>
+                    <li><strong>IP 位址：</strong> 網路上的門牌號碼。</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3 class="section-title">實作 1: 手機控制板載 LED (Basic)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-microchip"></i> 實作 SOP：控制 ESP-01S 內建 LED</h4>
+                    <span class="status-badge running">入門</span>
+                </div>
+                
+                <div style="padding: 10px;">
+                    <p class="note-desc"><strong>Step 1. [Claude] 生成程式碼</strong></p>
+                    <p style="margin-bottom: 10px; font-size: 0.9rem; color: #555;">指令：我使用 esp01-s 請幫我寫一隻程式 可以透過手機連線至板子 並且透過網頁控制板子上的LED燈</p>
+                    <a href="https://claude.ai/public/artifacts/4fb5a1d5-a9eb-49a1-a556-9a4e02905c65" target="_blank" class="link-btn">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> 查看 Claude Artifact
+                    </a>
+                    
+                    <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+
+                    <p class="note-desc"><strong>Step 2. 修改 Wi-Fi 設定</strong></p>
+                    <div class="code-block" style="padding: 10px;">
+const char* ssid = "ESP01S-LED";   <span class="code-comment">// 改成你的網路名稱</span>
+const char* password = "12345678"; <span class="code-comment">// 改成你的網路密碼</span>
+                    </div>
+
+                    <p class="note-desc" style="margin-top: 15px;"><strong>Step 3. 燒錄與查詢 IP</strong></p>
+                    <ul class="note-points">
+                        <li>打開 Arduino IDE 的 <strong>Serial Monitor</strong> (鮑率 115200)。</li>
+                        <li>查看分配到的 IP 位址 (例如 192.168.4.1)。</li>
+                    </ul>
+
+                    <p class="note-desc" style="margin-top: 15px;"><strong>Step 4. 手機控制</strong></p>
+                    <ul class="note-points">
+                        <li>手機連上相同的 Wi-Fi，瀏覽器輸入 IP。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">實作 2: 手機控制家電的燈 (Web Server)</h3>
+        <div class="dashboard-grid notes-section">
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-book-open"></i> 核心觀念：Web Server</h4>
+                    <span class="status-badge done">理論</span>
+                </div>
+                <ul class="note-points">
+                    <li><strong>Server (伺服器)：</strong> 提供服務 (ESP-01S)。</li>
+                    <li><strong>Client (客戶端)：</strong> 發請求 (手機)。</li>
+                    <li><strong>瀏覽器：</strong> 只是「發請求」的工具。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-list-check"></i> 實作 SOP：家電控制</h4>
+                    <span class="status-badge running">實作</span>
+                </div>
+                <ol class="note-points" style="padding-left: 20px;">
+                    <li><strong>建立 Server：</strong> 燒錄下方完整程式碼。</li>
+                    <li><strong>連線 SSID：</strong> 連接指定 Wi-Fi (如 DCAI)。</li>
+                    <li><strong>開啟網頁：</strong> 輸入 IP 或 mDNS 網址。</li>
+                    <li><strong>控制家電：</strong> 網頁按鈕開關繼電器。</li>
+                </ol>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-triangle-exclamation"></i> 程式碼修改指南</h4>
+                    <span class="status-badge pending">必讀</span>
+                </div>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-circle-info"></i> 請務必修改以下幾行，否則無法連線！</strong>
+                </div>
+                <div class="code-block">
+<span class="code-comment">// 第 6 行：Wi-Fi 名稱</span>
+<span class="code-keyword">const char*</span> ssid = <span class="code-string">"DCAI"</span>; 
+
+<span class="code-comment">// 第 7 行：Wi-Fi 密碼</span>
+<span class="code-keyword">const char*</span> password = <span class="code-string">"DC20251222"</span>;
+
+<span class="code-comment">// 第 10 行：mDNS 名稱 (改成你的英文名)</span>
+<span class="code-keyword">const char*</span> mdnsName = <span class="code-string">"changetoyourname"</span>;
+
+<span class="code-comment">// 第 63 行 (HTML 內)：網頁標題</span>
+&lt;h1&gt;智慧插座控制&lt;/h1&gt;
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> 完整程式碼 (Web Server + Relay)</h4>
+                    <span class="status-badge done">Code</span>
+                </div>
+                <p class="note-desc">複製此程式碼至 Arduino IDE。</p>
+                <div class="code-block" style="max-height: 400px; overflow-y: auto;">
+<pre>
+#include &lt;ESP8266WiFi.h&gt;
+#include &lt;ESP8266WebServer.h&gt;
+#include &lt;ESP8266mDNS.h&gt;
+
+// WiFi 設定 (請務必修改這裡!)
+const char* ssid = "DCAI";
+const char* password = "DC20251222";
+
+// mDNS 名稱 (請修改成你的英文名字)
+const char* mdnsName = "changetoyourname";
+
+// 繼電器控制腳位
+const int relayPin = 0;  // GPIO0
+
+// 繼電器狀態
+bool relayState = false;
+
+// 建立 Web 伺服器
+ESP8266WebServer server(80);
+
+// 簡化的網頁 HTML (存在記憶體中)
+const char index_html[] PROGMEM = R"rawliteral(
+&lt;!DOCTYPE HTML&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Smart Plug&lt;/title&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;style&gt;
+        body { font-family: Arial; text-align: center; margin: 20px; background: #f0f0f0; }
+        .container { max-width: 400px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h1 { color: #333; }
+        .button { display: inline-block; padding: 20px 40px; font-size: 24px; cursor: pointer; text-decoration: none; color: white; border-radius: 5px; margin: 10px; border: none; }
+        .button-on { background-color: #4CAF50; }
+        .button-off { background-color: #f44336; }
+        .status { font-size: 20px; margin: 20px 0; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="container"&gt;
+        &lt;h1&gt;智慧插座控制&lt;/h1&gt;
+        &lt;div class="status"&gt;狀態: &lt;span id="state"&gt;%STATE%&lt;/span&gt;&lt;/div&gt;
+        &lt;a href="/on" class="button button-on"&gt;開啟&lt;/a&gt;
+        &lt;a href="/off" class="button button-off"&gt;關閉&lt;/a&gt;
+        &lt;p&gt;IP: %IP%&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+)rawliteral";
+
+void setup() {
+    // 初始化序列埠
+    Serial.begin(115200);
+    delay(100);
+    Serial.println("\n\n=== ESP01S 智慧插座啟動 ===");
+    
+    // 設定繼電器腳位
+    pinMode(relayPin, OUTPUT);
+    digitalWrite(relayPin, LOW);
+    relayState = false;
+    Serial.println("繼電器初始化完成 - 狀態: 關閉");
+    
+    // 設定 WiFi
+    WiFi.mode(WIFI_STA);
+    WiFi.begin(ssid, password);
+    Serial.print("正在連接到 WiFi: ");
+    Serial.println(ssid);
+    
+    // 等待連線
+    int attempts = 0;
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(".");
+        attempts++;
+        if (attempts >= 60) {
+            Serial.println("\n連線逾時，重新嘗試...");
+            WiFi.disconnect();
+            delay(1000);
+            WiFi.begin(ssid, password);
+            attempts = 0;
+        }
+    }
+    
+    Serial.println("\nWiFi 連線成功!");
+    Serial.print("IP 位址: ");
+    Serial.println(WiFi.localIP());
+    
+    // 啟動 mDNS
+    if (MDNS.begin(mdnsName)) {
+        Serial.print("mDNS 啟動成功! 可透過 http://");
+        Serial.print(mdnsName);
+        Serial.println(".local 存取");
+    }
+    
+    // 設定網頁路由
+    server.on("/", handleRoot);
+    server.on("/on", handleOn);
+    server.on("/off", handleOff);
+    server.onNotFound(handleNotFound);
+    
+    // 啟動 Web 伺服器
+    server.begin();
+    Serial.println("Web 伺服器已啟動");
+}
+
+void loop() {
+    // 檢查 WiFi 連線狀態
+    if (WiFi.status() != WL_CONNECTED) {
+        WiFi.disconnect();
+        WiFi.begin(ssid, password);
+        while (WiFi.status() != WL_CONNECTED) { delay(500); }
+    }
+    
+    // 處理網頁請求
+    server.handleClient();
+    MDNS.update();
+    
+    // 定期顯示狀態
+    static unsigned long lastStatusTime = 0;
+    if (millis() - lastStatusTime > 10000) {
+        lastStatusTime = millis();
+        Serial.print("[狀態] WiFi: ");
+        if (WiFi.status() == WL_CONNECTED) {
+            Serial.print("已連線, IP: ");
+            Serial.print(WiFi.localIP());
+        } else {
+            Serial.print("未連線");
+        }
+        Serial.print(", 繼電器: ");
+        Serial.println(relayState ? "開啟" : "關閉");
+    }
+}
+
+// 處理首頁請求
+void handleRoot() {
+    Serial.println("[網頁] 存取首頁");
+    String html = String(index_html);
+    html.replace("%STATE%", relayState ? "開啟" : "關閉");
+    html.replace("%IP%", WiFi.localIP().toString());
+    server.send(200, "text/html", html);
+}
+
+// 處理開啟請求
+void handleOn() {
+    Serial.println("[控制] 開啟繼電器");
+    relayState = true;
+    digitalWrite(relayPin, HIGH);
+    server.sendHeader("Location", "/");
+    server.send(303);
+}
+
+// 處理關閉請求
+void handleOff() {
+    Serial.println("[控制] 關閉繼電器");
+    relayState = false;
+    digitalWrite(relayPin, LOW);
+    server.sendHeader("Location", "/");
+    server.send(303);
+}
+
+void handleNotFound() {
+    server.send(404, "text/plain", "404 Not Found");
+}
+</pre>
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-lightbulb"></i> ESP-01S 未來延伸應用</h4>
+                    <span class="status-badge" style="background:#6f42c1; color:white;">Idea</span>
+                </div>
+                <ul class="note-points" style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <li><i class="fa-solid fa-plug"></i> <strong>智慧插座：</strong>透過繼電器 (Relay) 控制家電電源。</li>
+                    <li><i class="fa-solid fa-temperature-three-quarters"></i> <strong>感測器：</strong>讀取溫濕度並顯示在網頁上。</li>
+                    <li><i class="fa-solid fa-gamepad"></i> <strong>遠端控制：</strong>不在家也能用手機控制家中裝置。</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.overlay');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
