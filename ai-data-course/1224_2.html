@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reyna's Learning Dashboard - 12/24 Linux</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+
+</head>
+<body>
+
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Reyna Portfolio</h2>
+            <span>Web Design Practice</span>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 1: 基礎導入</div>
+            <ul>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1222.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/22 (一) </span>
+                        <span class="topic">電腦基礎概論</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) am </span>
+                        <span class="topic">IT Career 職涯解析</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_2.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) pm </span>
+                        <span class="topic">ESP-01S 與 Arduino</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_1.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) </span>
+                        <span class="topic">IoT 與 Web Server 實作</span>
+                    </a>
+                </li>
+
+                <li class="active">
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_2.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) </span>
+                        <span class="topic">Linux 系統與應用</span>
+                    </a>
+                </li>
+
+                 <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/26 (五) </span>
+                        <span class="topic">Linux基礎到架站</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 2: 深入實作</div>
+            <ul>
+                 <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/29 (一) </span>
+                        <span class="topic">電腦基礎概論</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/30 (二) </span>
+                        <span class="topic">【NoCode】IoT 與資料收集</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/31 (三) </span>
+                        <span class="topic">Linux基礎到架站</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/2 (五) </span>
+                        <span class="topic">Linux基礎到架站</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+   <main class="main-content">
+     
+        <div class="top-bar">
+            <div class="breadcrumb">
+                首頁 > Week 1 > <span>Linux 系統與 AI</span>
+            </div>
+            <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
+                <i class="fas fa-home"></i> 回首頁
+            </a>
+        </div>
+        
+        <div class="banner">
+            <div>
+                <h1>Linux 系統架構與 AI 應用</h1>
+                <p>從核心架構到人工智慧領域的角色扮演</p>
+            </div>
+            <i class="fa-brands fa-linux banner-icon"></i>
+        </div>
+
+        <h3 class="section-title">1. Linux 系統架構 (System Architecture)</h3>
+        <div class="dashboard-grid notes-section">
+            
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-microchip"></i> 硬體層 (Hardware)</h4>
+                    <span class="status-badge running">基礎</span>
+                </div>
+                <p class="note-desc">系統運行的物理基礎。</p>
+                <ul class="note-points">
+                    <li>包含處理器 (CPU)、記憶體 (RAM)。</li>
+                    <li>硬碟、網卡等所有實體設備。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-gears"></i> 核心層 (Kernel)</h4>
+                    <span class="status-badge running">核心</span>
+                </div>
+                <p class="note-desc">操作系統的心臟，直接管理硬體。</p>
+                <ul class="note-points">
+                    <li><strong>進程管理：</strong>多任務調度。</li>
+                    <li><strong>記憶體管理：</strong>虛擬記憶體與頁面交換。</li>
+                    <li><strong>設備驅動：</strong>與硬體溝通的介面。</li>
+                    <li><strong>檔案系統 & 網路協議：</strong>資料存取與網路通訊。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-user-shield"></i> 用戶空間 (User Space)</h4>
+                    <span class="status-badge done">應用</span>
+                </div>
+                <p class="note-desc">非內核程式運行的隔離環境。</p>
+                <ul class="note-points">
+                    <li><strong>應用程式：</strong>瀏覽器、編輯器等。</li>
+                    <li><strong>Shell：</strong>與系統互動的命令行介面。</li>
+                    <li><strong>程式庫：</strong>標準函式庫 (Libraries)。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-desktop"></i> 使用者介面層 (UI)</h4>
+                    <span class="status-badge done">介面</span>
+                </div>
+                <p class="note-desc">用戶操作系統的方式。</p>
+                <ul class="note-points">
+                    <li><strong>CLI (命令行)：</strong>Bash, Zsh (文字指令，高效)。</li>
+                    <li><strong>GUI (圖形介面)：</strong>GNOME, KDE (視窗操作，直觀)。</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3 class="section-title">2. 認識 Linux (Introduction)</h3>
+        <div class="dashboard-grid notes-section">
+            
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-book-open"></i> 什麼是 Linux？</h4>
+                    <span class="status-badge pending">定義</span>
+                </div>
+                <ul class="note-points">
+                    <li><strong>起源：</strong>1991 年由 Linus Torvalds 開發。</li>
+                    <li><strong>特性：</strong>開放源代碼 (Open Source)，可自由修改與分發。</li>
+                    <li><strong>地位：</strong>全球最受歡迎的伺服器與超級電腦作業系統。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-cubes"></i> 常見發行版 (Distros)</h4>
+                    <span class="status-badge pending">版本</span>
+                </div>
+                <ul class="note-points">
+                    <li><strong>Ubuntu：</strong>新手友善，社群強大。</li>
+                    <li><strong>CentOS：</strong>企業級伺服器首選 (基於 RHEL)。</li>
+                    <li><strong>Debian：</strong>穩定，許多發行版的基礎。</li>
+                    <li><strong>Fedora：</strong>技術領先，Red Hat 支援。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-thumbs-up"></i> 核心優勢</h4>
+                    <span class="status-badge done">優點</span>
+                </div>
+                <ul class="note-points">
+                    <li><strong>免費開源：</strong>無授權費，自由度高。</li>
+                    <li><strong>穩定安全：</strong>伺服器環境首選，當機率低。</li>
+                    <li><strong>高可定制：</strong>可根據需求修改系統核心。</li>
+                    <li><strong>跨平台：</strong>支援從樹莓派到超級電腦的各種硬體。</li>
+                </ul>
+            </div>
+
+             <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-server"></i> 主要用途</h4>
+                    <span class="status-badge done">應用</span>
+                </div>
+                <ul class="note-points">
+                    <li><strong>伺服器：</strong>Web、資料庫、雲端平台。</li>
+                    <li><strong>嵌入式系統：</strong>路由器、家電、機器人。</li>
+                    <li><strong>開發環境：</strong>程式設計師首選 (Git, Docker)。</li>
+                    <li><strong>超級計算機：</strong>高效能運算 (HPC)。</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3 class="section-title">3. Linux 在 AI 領域的角色 (Linux & AI)</h3>
+        <div class="dashboard-grid notes-section">
+            
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-brain"></i> 開源與工具支持</h4>
+                    <span class="status-badge" style="background:#6f42c1; color:white;">AI 核心</span>
+                </div>
+                <p class="note-desc">AI 框架的原生環境。</p>
+                <ul class="note-points">
+                    <li>主流框架 (TensorFlow, PyTorch) 優先在 Linux 優化。</li>
+                    <li>開源特性適合研究與開發 AI 新技術。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-rocket"></i> 算力與硬體管理</h4>
+                    <span class="status-badge" style="background:#6f42c1; color:white;">效能</span>
+                </div>
+                <p class="note-desc">榨乾硬體效能。</p>
+                <ul class="note-points">
+                    <li>對 GPU 加速計算 (如 NVIDIA CUDA) 支援度最佳。</li>
+                    <li>高效管理多核處理器與記憶體，適合深度學習訓練。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-brands fa-docker"></i> 部署與容器化</h4>
+                    <span class="status-badge" style="background:#6f42c1; color:white;">部署</span>
+                </div>
+                <p class="note-desc">模型落地的關鍵。</p>
+                <ul class="note-points">
+                    <li><strong>Docker & Kubernetes：</strong>在 Linux 上運行最順暢。</li>
+                    <li>確保 AI 模型在不同環境 (開發/生產) 的一致性。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-database"></i> 自動化與數據處理</h4>
+                    <span class="status-badge" style="background:#6f42c1; color:white;">資料</span>
+                </div>
+                <p class="note-desc">資料科學家的瑞士刀。</p>
+                <ul class="note-points">
+                    <li>強大的 Shell 腳本與工具 (awk, sed, grep)。</li>
+                    <li>高效進行大規模資料清洗與預處理 (Pre-processing)。</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3 class="section-title">4. 實作資源</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-keyboard"></i> Linux 基礎實作步驟筆記</h4>
+                    <span class="status-badge done">HackMD</span>
+                </div>
+                <p class="note-desc">詳細的操作指令與練習步驟請參考外部筆記。</p>
+                <a href="https://hackmd.io/@S66OOi3STy-AFkBshNsXwA/HJQtTWtQbl" target="_blank" class="link-btn">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> 前往 HackMD 筆記
+                </a>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.overlay');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
