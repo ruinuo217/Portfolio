@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reyna's Learning Dashboard - 12/29</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Reyna Portfolio</h2>
+            <span>Web Design Practice</span>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 1: 基礎導入</div>
+            <ul>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1222.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/22 (一) </span>
+                        <span class="topic">電腦基礎概論</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_1.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) am </span>
+                        <span class="topic">IT Career 職涯解析</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_2.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) pm </span>
+                        <span class="topic">ESP-01S 與 Arduino</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_1.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) am </span>
+                        <span class="topic">IoT 與 Web Server 實作</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_2.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) pm </span>
+                         <span class="topic">Linux 系統與應用</span>
+                    </a>
+                </li>
+                 <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1226.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/26 (五) </span>
+                        <span class="topic">Linux基礎到架站</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 2: 深入實作</div>
+            <ul>
+                 <li class="active">
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1229.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/29 (一) </span>
+                        <span class="topic">電腦基礎概論 II</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/30 (二) </span>
+                        <span class="topic">【NoCode】IoT 與資料收集</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/31 (三) </span>
+                        <span class="topic">Linux基礎到架站</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/2 (五) </span>
+                        <span class="topic">Linux基礎到架站</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+   <main class="main-content">
+     
+        <div class="top-bar">
+            <div class="breadcrumb">
+                首頁 > Week 2 > <span>電腦基礎概論 II</span>
+            </div>
+            <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
+                <i class="fas fa-home"></i> 回首頁
+            </a>
+        </div>
+        
+        <div class="banner" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);">
+            <div>
+                <h1>計算機概論：資料表示與軟體</h1>
+                <p>深入理解 0 與 1 的世界：從數字系統、多媒體編碼到程式語言。</p>
+            </div>
+            <i class="fa-solid fa-binary banner-icon"></i>
+        </div>
+
+        <h3 class="section-title">Part 1: 數字系統與資料表示 (Number Systems)</h3>
+        <div class="dashboard-grid notes-section">
+            
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-wave-square"></i> 類比 vs 數位</h4>
+                    <span class="status-badge done">觀念</span>
+                </div>
+                <p class="note-desc">到底數位是什麼呢？</p>
+                <ul class="note-points">
+                    <li><strong>類比 (Analog)：</strong> 連續變化的物理量 (聲音、溫度)。圖形為波形。</li>
+                    <li><strong>數位 (Digital)：</strong> 不連續數值 (0 與 1)。圖形為矩形波。</li>
+                    <li><strong>優點：</strong> 抗干擾強、易於儲存處理。</li>
+                    <li><strong>單位：</strong> 
+                        Bit (位元)、Byte (8 bits)、Word (字組, CPU處理單位)。
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-calculator"></i> 數字系統轉換</h4>
+                    <span class="status-badge running">運算</span>
+                </div>
+                <p class="note-desc">人類用十進位，電腦用二進位。</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom:10px;">
+                    <div style="background:#f8f9fa; padding:8px; border-radius:6px; font-size:0.85rem;">
+                        <strong>常見進位：</strong><br>
+                        2進位 (0,1)<br>
+                        8進位 (0-7)<br>
+                        10進位 (0-9)<br>
+                        16進位 (0-9, A-F)
+                    </div>
+                    <div style="background:#f8f9fa; padding:8px; border-radius:6px; font-size:0.85rem;">
+                        <strong>轉換邏輯：</strong><br>
+                        二轉十：乘上權重 ($2^n$) 相加。<br>
+                        十轉二：短除法 (除以2取餘數)。
+                    </div>
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-plus-minus"></i> 整數表示法 (Integers)</h4>
+                    <span class="status-badge running">核心</span>
+                </div>
+                <p class="note-desc">電腦如何儲存正負數？</p>
+                <ul class="note-points">
+                    <li><strong>帶符號 (Signed)：</strong> 最高位 (MSB) 0正 1負。</li>
+                    <li><strong>一補數 (1's Complement)：</strong> 0 變 1，1 變 0 (反相)。</li>
+                    <li><strong>二補數 (2's Complement)：</strong> 電腦標準。一補數 + 1。解決了 "+0" 與 "-0" 問題。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-percent"></i> 浮點數 (Floating Point)</h4>
+                    <span class="status-badge running">進階</span>
+                </div>
+                <p class="note-desc">IEEE 754 標準：儲存含小數點的實數。</p>
+                
+                <div style="display:flex; width:100%; height:30px; border-radius:4px; overflow:hidden; margin: 10px 0; font-size: 0.75rem; color:white; text-align:center; line-height:30px;">
+                    <div style="width:10%; background:#ef4444;" title="Sign (1 bit)">符號</div>
+                    <div style="width:30%; background:#22c55e;" title="Exponent">指數</div>
+                    <div style="width:60%; background:#3b82f6;" title="Mantissa">假數 (尾數)</div>
+                </div>
+
+                <ul class="note-points">
+                    <li><strong>符號 (Sign)：</strong> 0正 1負。</li>
+                    <li><strong>指數 (Exponent)：</strong> 數值大小範圍。</li>
+                    <li><strong>假數 (Mantissa)：</strong> 數值精確度 (需先正規化)。</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 2: 多媒體編碼 (Multimedia)</h3>
+        <div class="dashboard-grid notes-section">
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-font"></i> 文字編碼 (Text)</h4>
+                    <span class="status-badge done">編碼</span>
+                </div>
+                <p class="note-desc">將文字符號轉為二進位。</p>
+                <ul class="note-points">
+                    <li><strong>ASCII：</strong> 美國標準，7或8 bits (英數符號)。</li>
+                    <li><strong>Big5：</strong> 台灣繁體中文標準 (2 bytes)。</li>
+                    <li><strong>Unicode (萬國碼)：</strong> 解決亂碼，UTF-8 為網頁主流。</li>
+                    <li><strong>格式：</strong> TXT, DOCX, PDF, ODF。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-image"></i> 圖形與影像 (Graphics)</h4>
+                    <span class="status-badge done">視覺</span>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div>
+                        <strong style="color:#555;">類型比較</strong>
+                        <ul class="note-points" style="margin-top:5px;">
+                            <li><strong>點陣圖：</strong> 像素組成，放大失真 (JPG, PNG)。</li>
+                            <li><strong>向量圖：</strong> 數學公式，放大清晰 (SVG, AI)。</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong style="color:#555;">色彩模式</strong>
+                        <ul class="note-points" style="margin-top:5px;">
+                            <li><strong>RGB：</strong> 螢幕顯示 (光三原色)。</li>
+                            <li><strong>CMYK：</strong> 印刷輸出。</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="note-footer">
+                    關鍵指標：解析度 (PPI/DPI)、色彩深度 (Bit Depth)
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-music"></i> 聲音與視訊 (Audio/Video)</h4>
+                    <span class="status-badge done">訊號</span>
+                </div>
+                <p class="note-desc">類比轉數位的過程。</p>
+                <ul class="note-points">
+                    <li><strong>聲音轉數位：</strong> 取樣 (Sampling) &rarr; 量化 (Quantization)。</li>
+                    <li><strong>取樣頻率：</strong> Hz 越高越真實。</li>
+                    <li><strong>視訊原理：</strong> 視覺暫留。</li>
+                    <li><strong>FPS：</strong> 幀率，24 FPS 以上較流暢。</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 3: 軟體與程式語言 (Software)</h3>
+        <div class="dashboard-grid notes-section">
+             
+             <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-brands fa-windows"></i> 軟體類型分類</h4>
+                    <span class="status-badge pending">架構</span>
+                </div>
+                <p class="note-desc">軟體 = 程式 + 文件。</p>
+                <ul class="note-points">
+                    <li><strong>系統軟體：</strong> 管理硬體 (OS, 驅動, 編譯器, 公用程式)。</li>
+                    <li><strong>應用軟體：</strong> 滿足特定需求 (Office, 瀏覽器, LINE)。</li>
+                    <li><strong>ODF (開放文件格式)：</strong> 高互通性、利於長久保存 (LibreOffice)。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> 程式語言演進 (Programming Languages)</h4>
+                    <span class="status-badge pending">歷史</span>
+                </div>
+                <p class="note-desc">從 0/1 到自然語言的進化。</p>
+                
+                <div style="overflow-x: auto;">
+                    <table style="width:100%; border-collapse: collapse; font-size: 0.9rem; margin-top: 10px;">
+                        <thead>
+                            <tr style="background-color: #f3f4f6; text-align: left;">
+                                <th style="padding: 10px; border-bottom: 2px solid #e5e7eb;">世代</th>
+                                <th style="padding: 10px; border-bottom: 2px solid #e5e7eb;">名稱</th>
+                                <th style="padding: 10px; border-bottom: 2px solid #e5e7eb;">特徵</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding: 10px; border-bottom: 1px solid #eee;">第一代</td>
+                                <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>機器語言</strong></td>
+                                <td style="padding: 10px; border-bottom: 1px solid #eee;">0與1組成，電腦直接執行，具機器依賴性。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border-bottom: 1px solid #eee;">第二代</td>
+                                <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>組合語言</strong></td>
+                                <td style="padding: 10px; border-bottom: 1px solid #eee;">使用助憶符號 (Mnemonics) 代替機器碼。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border-bottom: 1px solid #eee;">第三代</td>
+                                <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>高階語言</strong></td>
+                                <td style="padding: 10px; border-bottom: 1px solid #eee;">接近人類語言 (C, Java, Python)。需編譯/直譯。</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border-bottom: 1px solid #eee;">第四代</td>
+                                <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>極高階語言</strong></td>
+                                <td style="padding: 10px; border-bottom: 1px solid #eee;">特定領域 (SQL)。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="note-footer">
+                    執行流程：原始程式 &rarr; 編譯/組譯 &rarr; 目的程式 &rarr; 連結 &rarr; 執行檔
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.overlay');
+            
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-280px';
+                overlay.style.display = 'none';
+            } else {
+                sidebar.style.left = '0px';
+                overlay.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
