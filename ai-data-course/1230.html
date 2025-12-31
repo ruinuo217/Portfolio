@@ -34,6 +34,26 @@
             margin: 5px 0 15px 0;
             word-break: break-all;
         }
+
+        /* 練習檔連結按鈕樣式 */
+        .sheet-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            margin-left: 6px;
+            border: 1px solid #c8e6c9;
+            transition: all 0.2s;
+        }
+        .sheet-link:hover {
+            background-color: #2e7d32;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -104,7 +124,7 @@
                 <li class="active">
                     <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1230.html">
                         <span class="date-badge"><i class="far fa-calendar"></i> 12/30 (二) </span>
-                        <span class="topic">NoCode 資料蒐集與自動化</span>
+                        <span class="topic">【NoCode】IoT 與資料收集</span>
                     </a>
                 </li>
                 <li>
@@ -190,7 +210,12 @@
                     <span class="status-badge running">實作</span>
                 </div>
                 <p class="note-desc">直接匯入網路上公開的 CSV 檔案。</p>
-                <p style="font-size: 0.9rem; margin-bottom: 5px;"><strong>資料來源：</strong> <a href="https://data.gov.tw/" target="_blank">政府資料開放平台</a></p>
+                <p style="font-size: 0.9rem; margin-bottom: 5px;">
+                    <strong>資料來源：</strong> <a href="https://data.gov.tw/" target="_blank">政府資料開放平台</a>
+                    <a href="https://docs.google.com/spreadsheets/d/1kYn5yX8dS_bn1IOBlNqEvk3KxGCsT8TyMofd429m8PU/edit?gid=0#gid=0" target="_blank" class="sheet-link">
+                        <i class="fa-solid fa-file-excel"></i> 練習檔
+                    </a>
+                </p>
                 <ul class="note-points">
                     <li><strong>範例：</strong> 公司設立登記清冊</li>
                     <li><strong>練習 1：</strong> 空氣品質指標 (AQI)</li>
@@ -205,9 +230,24 @@
                 </div>
                 <p class="note-desc">訂閱 RSS 來源，建立自動更新的新聞牆。</p>
                 <ul class="note-points">
-                    <li><strong>iTunes 排行榜：</strong> 匯入 Apple Music/Podcast 資訊。</li>
-                    <li><strong>Google Alert：</strong> 將關鍵字快訊匯入試算表。</li>
-                    <li><strong>YouTube 頻道：</strong> <code>feeds/videos.xml?channel_id=頻道ID</code></li>
+                    <li>
+                        <strong>RSS 綜合練習：</strong>
+                        <a href="https://docs.google.com/spreadsheets/d/1kYn5yX8dS_bn1IOBlNqEvk3KxGCsT8TyMofd429m8PU/edit?gid=1713384178#gid=1713384178" target="_blank" class="sheet-link">
+                            <i class="fa-solid fa-file-excel"></i> 練習檔
+                        </a>
+                    </li>
+                    <li>
+                        <strong>Google Alert：</strong> 關鍵字快訊。
+                        <a href="https://docs.google.com/spreadsheets/d/1kYn5yX8dS_bn1IOBlNqEvk3KxGCsT8TyMofd429m8PU/edit?gid=292456810#gid=292456810" target="_blank" class="sheet-link">
+                            <i class="fa-solid fa-file-excel"></i> 練習檔
+                        </a>
+                    </li>
+                    <li>
+                        <strong>YouTube 頻道：</strong>
+                        <a href="https://docs.google.com/spreadsheets/d/1kYn5yX8dS_bn1IOBlNqEvk3KxGCsT8TyMofd429m8PU/edit?gid=173514830#gid=173514830" target="_blank" class="sheet-link">
+                            <i class="fa-solid fa-file-excel"></i> 練習檔
+                        </a>
+                    </li>
                     <li><strong>痞客邦 (Pixnet)：</strong> <code>blog/posts/rss/頻道ID</code></li>
                 </ul>
             </div>
@@ -218,7 +258,12 @@
                     <span class="status-badge running">實作</span>
                 </div>
                 <p class="note-desc">抓取網頁中的 <code>&lt;table&gt;</code> 或清單。</p>
-                <p style="font-size: 0.9rem;"><strong>練習：國泰世華匯率表</strong></p>
+                <p style="font-size: 0.9rem;">
+                    <strong>練習：國泰世華匯率表</strong>
+                    <a href="https://docs.google.com/spreadsheets/d/1kYn5yX8dS_bn1IOBlNqEvk3KxGCsT8TyMofd429m8PU/edit?gid=887135077#gid=887135077" target="_blank" class="sheet-link">
+                        <i class="fa-solid fa-file-excel"></i> 練習檔
+                    </a>
+                </p>
                 <div class="formula-box">
                     =IMPORTHTML("https://accessibility.cathaybk.com.tw/exchange-rate-search.aspx","table",0)
                 </div>
@@ -230,6 +275,11 @@
                     <span class="status-badge running">實作</span>
                 </div>
                 <p class="note-desc">使用 XPath 語法抓取網頁特定元素。</p>
+                <div style="margin-bottom: 10px;">
+                    <a href="https://docs.google.com/spreadsheets/d/1kYn5yX8dS_bn1IOBlNqEvk3KxGCsT8TyMofd429m8PU/edit?gid=1239777427#gid=1239777427" target="_blank" class="sheet-link" style="margin-left: 0;">
+                        <i class="fa-solid fa-file-excel"></i> 查看完整 XML 練習檔
+                    </a>
+                </div>
                 <ul class="note-points">
                     <li><strong>今周刊：</strong> 投資理財新聞抓取。</li>
                     <li><strong>Mobile01：</strong> 論壇標題爬蟲。</li>
@@ -290,7 +340,7 @@ function createSheet(spredSheet, sheetName, index) {
             </div>
         </div>
 
-        <h3 class="section-title">Part 4: VBA 網頁爬蟲 </h3>
+        <h3 class="section-title">Part 4: VBA 網頁爬蟲 (補充教材)</h3>
         <p style="margin-bottom: 20px; color: #666; font-size: 0.9rem;">注意：以下範例使用 InternetExplorer 物件，適用於舊版環境或特定需求。</p>
         
         <div class="dashboard-grid notes-section">
@@ -302,9 +352,9 @@ function createSheet(spredSheet, sheetName, index) {
                 </div>
                 <pre><code>Option Explicit
 #If Win64 Then
-  Declare PtrSafe Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)                        
+  Declare PtrSafe Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)                        '(3)
 #Else
-    Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)                               
+    Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)                               '(4)
 #End If
 
 
@@ -355,9 +405,9 @@ End Sub</code></pre>
                 </div>
                 <pre><code>Option Explicit
 #If Win64 Then
-  Declare PtrSafe Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)                        
+  Declare PtrSafe Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)                        '(3)
 #Else
-    Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)                               
+    Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)                               '(4)
 #End If
 
 
@@ -411,7 +461,7 @@ End Sub</code></pre>
 
             <div class="card note-card" style="grid-column: 1 / -1;">
                 <div class="note-header">
-                    <h4><i class="fa-solid fa-sitemap"></i> 3. Children 用法</h4>
+                    <h4><i class="fa-solid fa-sitemap"></i> 3. Children 節點遍歷與翻頁</h4>
                     <span class="status-badge pending">VBA</span>
                 </div>
                 <pre><code>Option Explicit
