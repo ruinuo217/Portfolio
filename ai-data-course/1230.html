@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reyna's Learning Dashboard - 12/30</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* 針對程式碼區塊的額外優化 */
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            white-space: pre-wrap; /* 自動換行 */
+        }
+        .code-comment { color: #75715e; }
+        .code-keyword { color: #66d9ef; }
+        .code-string { color: #e6db74; }
+        .code-function { color: #a6e22e; }
+        
+        /* 表格函數樣式 */
+        .formula-box {
+            background-color: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 10px;
+            font-family: monospace;
+            color: #2e7d32;
+            margin: 5px 0 15px 0;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Reyna Portfolio</h2>
+            <span>Web Design Practice</span>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 1: 基礎導入</div>
+            <ul>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1222.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/22 (一) </span>
+                        <span class="topic">電腦基礎概論</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_1.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) am </span>
+                        <span class="topic">IT Career 職涯解析</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_2.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) pm </span>
+                        <span class="topic">ESP-01S 與 Arduino</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_1.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) am </span>
+                        <span class="topic">IoT 與 Web Server 實作</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_2.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) pm </span>
+                         <span class="topic">Linux 系統與應用</span>
+                    </a>
+                </li>
+                 <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1226.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/26 (五) </span>
+                        <span class="topic">Linux基礎到架站</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 2: 深入實作</div>
+            <ul>
+                 <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1229.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/29 (一) </span>
+                        <span class="topic">電腦基礎概論 II</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1230.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/30 (二) </span>
+                        <span class="topic">NoCode 資料蒐集與自動化</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/31 (三) </span>
+                        <span class="topic">Linux基礎到架站</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/2 (五) </span>
+                        <span class="topic">Linux基礎到架站</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+   <main class="main-content">
+     
+        <div class="top-bar">
+            <div class="breadcrumb">
+                首頁 > Week 2 > <span>NoCode 資料蒐集</span>
+            </div>
+            <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
+                <i class="fas fa-home"></i> 回首頁
+            </a>
+        </div>
+        
+        <div class="banner" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+            <div>
+                <h1>NoCode 資料蒐集與自動化</h1>
+                <p>Google Sheets 爬蟲函數、GAS 自動化腳本與 VBA 實務應用。</p>
+            </div>
+            <i class="fa-solid fa-spider banner-icon"></i>
+        </div>
+
+        <h3 class="section-title">Part 1: NoCode 監測工具平台</h3>
+        <div class="dashboard-grid notes-section">
+            
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-chart-line"></i> 趨勢與訂閱工具</h4>
+                    <span class="status-badge done">工具</span>
+                </div>
+                <p class="note-desc">不寫程式也能掌握網路聲量。</p>
+                <ul class="note-points">
+                    <li>
+                        <strong>Google Trend (搜尋趨勢)：</strong><br>
+                        <a href="https://trends.google.com.tw/trends/?geo=TW" target="_blank">trends.google.com.tw</a>
+                    </li>
+                    <li>
+                        <strong>Google Alert (快訊通知)：</strong><br>
+                        <a href="https://www.google.com.tw/alerts" target="_blank">google.com.tw/alerts</a>
+                    </li>
+                    <li>
+                        <strong>IFTTT (自動化串接)：</strong><br>
+                        "If This Then That" 跨平台串接神器。<br>
+                        <a href="https://ifttt.com/" target="_blank">ifttt.com</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-robot"></i> 網頁爬蟲工具 (Scrapers)</h4>
+                    <span class="status-badge running">插件</span>
+                </div>
+                <p class="note-desc">瀏覽器擴充功能，無需寫 Code 即可抓取資料。</p>
+                <ul class="note-points">
+                    <li><strong>Instant Data Scraper：</strong> Chrome 擴充，AI 自動偵測列表。</li>
+                    <li><strong>Octoparse：</strong> 強大的桌面版爬蟲軟體，支援複雜流程。</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 2: Google Sheets 試算表爬蟲</h3>
+        <div class="dashboard-grid notes-section">
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-file-csv"></i> IMPORTDATA (CSV)</h4>
+                    <span class="status-badge running">實作</span>
+                </div>
+                <p class="note-desc">直接匯入網路上公開的 CSV 檔案。</p>
+                <p style="font-size: 0.9rem; margin-bottom: 5px;"><strong>資料來源：</strong> <a href="https://data.gov.tw/" target="_blank">政府資料開放平台</a></p>
+                <ul class="note-points">
+                    <li><strong>範例：</strong> 公司設立登記清冊</li>
+                    <li><strong>練習 1：</strong> 空氣品質指標 (AQI)</li>
+                    <li><strong>練習 2：</strong> 醫療器材商資料集</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-rss"></i> IMPORTFEED (RSS/XML)</h4>
+                    <span class="status-badge running">實作</span>
+                </div>
+                <p class="note-desc">訂閱 RSS 來源，建立自動更新的新聞牆。</p>
+                <ul class="note-points">
+                    <li><strong>iTunes 排行榜：</strong> 匯入 Apple Music/Podcast 資訊。</li>
+                    <li><strong>Google Alert：</strong> 將關鍵字快訊匯入試算表。</li>
+                    <li><strong>YouTube 頻道：</strong> <code>feeds/videos.xml?channel_id=頻道ID</code></li>
+                    <li><strong>痞客邦 (Pixnet)：</strong> <code>blog/posts/rss/頻道ID</code></li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-table"></i> IMPORTHTML (表格)</h4>
+                    <span class="status-badge running">實作</span>
+                </div>
+                <p class="note-desc">抓取網頁中的 <code>&lt;table&gt;</code> 或清單。</p>
+                <p style="font-size: 0.9rem;"><strong>練習：國泰世華匯率表</strong></p>
+                <div class="formula-box">
+                    =IMPORTHTML("https://accessibility.cathaybk.com.tw/exchange-rate-search.aspx","table",0)
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> IMPORTXML (網頁資料)</h4>
+                    <span class="status-badge running">實作</span>
+                </div>
+                <p class="note-desc">使用 XPath 語法抓取網頁特定元素。</p>
+                <ul class="note-points">
+                    <li><strong>今周刊：</strong> 投資理財新聞抓取。</li>
+                    <li><strong>Mobile01：</strong> 論壇標題爬蟲。</li>
+                    <li><strong>PTT Stock 版：</strong> 股票版文章列表。</li>
+                </ul>
+            </div>
+
+        </div>
+
+        <h3 class="section-title">Part 3: Google Apps Script (GAS) 自動化</h3>
+        <div class="dashboard-grid notes-section">
+             <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-brands fa-google"></i> 自動更新與備份腳本</h4>
+                    <span class="status-badge done">程式碼</span>
+                </div>
+                <p class="note-desc">功能：每天自動將 IMPORTFEED 抓到的動態資料，備份到新的工作表中存檔。</p>
+                <pre><code>function myFunction() {
+    // 1. 指定URL開啟試算表 (請輸入自己Google Spreadsheet文件的實際URL路徑)
+    var url = "https://docs.google.com/spreadsheets/d/1_TZRxwYQHQvB2zWHOohT0pGh7UVlvKrAOpbRK56601w/edit";   
+    var spredSheet = SpreadsheetApp.openByUrl(url);
+
+    // 2. 取得日期 (以取得時間命名)
+    var d = new Date();
+    var targetName = Utilities.formatDate(d, "GMT+8", "yyyy-MM-dd HH:mm:ss");
+
+    // 3. 開啟工作表和目標工作表
+    var baseSheet = spredSheet.getSheetByName("original");
+    var targetSheet = createSheet(spredSheet, targetName, 0);
+
+    // 4. 複製取得值至目標工作表
+    // 指定複製範圍（A2～d101）
+    var rangeToCopy = baseSheet.getRange('A2:D101');
+    
+    //指定複製目的地的起始儲存格（A2）
+    var targetToCopy = targetSheet.getRange('A2:D101');
+    rangeToCopy.copyTo(targetToCopy);
+    targetSheet.getRange(1,1).setValue("Title");
+    targetSheet.getRange(1,2).setValue("Url");
+    targetSheet.getRange(1,3).setValue("Date Created");
+    targetSheet.getRange(1,4).setValue("Summary");
+    rangeToCopy.copyTo(targetToCopy);
+
+    // 5. 再次使用ImportFeed函數
+    baseSheet.getRange(1,1).setValue("");
+    baseSheet.getRange(1,1).setFormula("IMPORTfeed(\"https://rss.itunes.apple.com/api/v1/tw/music-videos/top-music-videos/all/100/explicit.rss\",\"items\",true,100)");  
+    // \反斜線為跳字元 : 放置在雙引號前，使雙引號功能無效    
+}
+
+function createSheet(spredSheet, sheetName, index) {
+    var sheet = spredSheet.getSheetByName(sheetName);
+    if ( sheet == null) {
+        spredSheet.insertSheet(sheetName, index);
+        sheet = spredSheet.getSheetByName(sheetName);
+    }
+    return sheet;
+}</code></pre>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 4: VBA 網頁爬蟲 </h3>
+        <p style="margin-bottom: 20px; color: #666; font-size: 0.9rem;">注意：以下範例使用 InternetExplorer 物件，適用於舊版環境或特定需求。</p>
+        
+        <div class="dashboard-grid notes-section">
+            
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-brands fa-windows"></i> 1. 基礎爬蟲：三民書局排行</h4>
+                    <span class="status-badge pending">VBA</span>
+                </div>
+                <pre><code>Option Explicit
+#If Win64 Then
+  Declare PtrSafe Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)                        
+#Else
+    Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)                               
+#End If
+
+
+Private objIE As InternetExplorer
+
+Sub sanmin()
+    Dim url, row   '宣告變數
+    On Error Resume Next
+    row = 1
+
+        url = "https://www.sanmin.com.tw/promote/top"  '三民書局
+    
+    Set objIE = New InternetExplorer  '建立IE物件
+    
+        objIE.Visible = False
+        objIE.Navigate2 (url)
+
+
+'等待讀取完成
+
+        While objIE.readyState <> READYSTATE_COMPLETE Or objIE.Busy = True
+            DoEvents
+            Sleep 100
+        Wend
+        Sleep 100
+
+        Dim objDoc As HTMLElementCollection
+        Set objDoc = objIE.document
+
+        Dim BookName As IHTMLElement   '宣告變數指定型態
+ 
+
+        For Each BookName In objDoc.getElementsByClassName("Title") '確認書名在網頁的位置
+            Worksheets(1).Cells(row, 1) = row                       '寫入工作表與儲存格
+            Worksheets(1).Cells(row, 2) = BookName.innerText        'innerText 取得標籤間的文字
+            row = row + 1
+        Next
+    
+    Set objIE = Nothing
+    MsgBox "Done ！"
+End Sub</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-layer-group"></i> 2. 多重 Class 抓取 (書名+作者)</h4>
+                    <span class="status-badge pending">VBA</span>
+                </div>
+                <pre><code>Option Explicit
+#If Win64 Then
+  Declare PtrSafe Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)                        
+#Else
+    Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)                               
+#End If
+
+
+Private objIE As InternetExplorer
+
+Sub sanmin2()
+    
+    Dim url, row   '宣告變數
+    On Error Resume Next
+    row = 1
+
+        url = "https://www.sanmin.com.tw/promote/top"  '三民書局
+    
+    Set objIE = New InternetExplorer  '建立IE物件
+    
+        objIE.Visible = False
+        objIE.Navigate2 (url)
+
+
+'等待讀取完成
+
+        While objIE.readyState <> READYSTATE_COMPLETE Or objIE.Busy = True
+            DoEvents
+            Sleep 100
+        Wend
+        Sleep 100
+
+        Dim objDoc As HTMLElementCollection
+        Set objDoc = objIE.document
+
+        Dim BookName, Author As IHTMLElement  '宣告變數指定型態
+ 
+
+        For Each BookName In objDoc.getElementsByClassName("Title") '確認書名在網頁的位置
+            Worksheets(2).Cells(row, 1) = row                       '寫入工作表與儲存格
+            Worksheets(2).Cells(row, 2) = BookName.innerText        'innerText 取得標籤間的文字
+            
+            row = row + 1
+        Next
+        
+            row = 2
+            For Each Author In objDoc.getElementsByClassName("Author")
+            Worksheets(2).Cells(row, 3) = Author.innerText
+            row = row + 1
+        Next
+    
+    Set objIE = Nothing
+    MsgBox "Done ！"
+End Sub</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-sitemap"></i> 3. Children 用法</h4>
+                    <span class="status-badge pending">VBA</span>
+                </div>
+                <pre><code>Option Explicit
+#If Win64 Then
+  Declare PtrSafe Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)                        '(3)
+#Else
+    Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)                               '(4)
+#End If
+
+
+Private objIE As InternetExplorer
+
+Sub sanmin4()
+    
+    Dim url, row, n   '宣告變數
+    On Error Resume Next
+    row = 1
+    For n = 1 To 3
+        url = "https://www.sanmin.com.tw/promote/top/?id=wbyy&pi=" & n '三民書局
+    
+    Set objIE = New InternetExplorer     '建立IE物件
+    
+        objIE.Visible = False
+        objIE.Navigate2 (url)
+
+
+'等待讀取完成
+
+        While objIE.readyState <> READYSTATE_COMPLETE Or objIE.Busy = True
+            DoEvents
+            Sleep 100
+        Wend
+        Sleep 100
+
+        Dim objDoc As HTMLElementCollection
+        Set objDoc = objIE.document
+        Dim BookName As IHTMLElement   '宣告變數指定型態
+ 
+
+        For Each BookName In objDoc.getElementsByClassName("Info") '確認書名在網頁的位置
+            Worksheets(4).Cells(row, 1) = row                                           '寫入儲存格
+            Worksheets(4).Cells(row, 2) = BookName.Children(0).Children(0).innerText    'BookName.Children(0).innerText 執行結果相同
+            Worksheets(4).Cells(row, 3) = BookName.Children(1).Children(0).innerText
+            Worksheets(4).Cells(row, 4) = BookName.Children(1).Children(1).innerText
+            Worksheets(4).Cells(row, 5) = BookName.Children(2).Children(0).Children(0).innerText
+            Worksheets(4).Cells(row, 6) = BookName.Children(2).Children(0).Children(1).innerText
+            
+            row = row + 1
+        Next
+        
+    Next n
+    
+    objIE.Quit
+    Set objIE = Nothing
+    MsgBox "Done ！"
+End Sub</code></pre>
+            </div>
+
+        </div>
+
+        <h3 class="section-title">相關資源</h3>
+        <div class="dashboard-grid notes-section">
+             <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-link"></i> 外部連結</h4>
+                    <span class="status-badge done">HackMD</span>
+                </div>
+                <ul class="note-points">
+                    <li style="margin-bottom: 8px;">
+                        <a href="https://hackmd.io/Gsl_eh02QmeHIP9uiMlnVQ#%E7%B7%9A%E4%B8%8A%E7%88%AC%E8%9F%B2%E5%B7%A5%E5%85%B7-Instant-Data-Scraper" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: 500;">
+                            <i class="fa-solid fa-chalkboard-user"></i> 老師的筆記 (線上爬蟲工具)
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.overlay');
+            
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-280px';
+                overlay.style.display = 'none';
+            } else {
+                sidebar.style.left = '0px';
+                overlay.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
