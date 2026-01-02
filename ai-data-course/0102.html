@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reyna's Learning Dashboard - 01/02</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* 針對程式碼區塊的額外優化 */
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            white-space: pre-wrap;
+        }
+        .code-comment { color: #75715e; }
+        .code-command { color: #a6e22e; font-weight: bold; }
+        .code-path { color: #e6db74; }
+        
+        .alert-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            color: #856404;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Reyna Portfolio</h2>
+            <span>Web Design Practice</span>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 1: 基礎導入</div>
+            <ul>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1222.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/22 (一) </span>
+                        <span class="topic">電腦基礎概論</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_1.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) am </span>
+                        <span class="topic">IT Career 職涯解析</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_2.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) pm </span>
+                        <span class="topic">ESP-01S 與 Arduino</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_1.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) am </span>
+                        <span class="topic">IoT 與 Web Server 實作</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_2.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) pm </span>
+                         <span class="topic">Linux 系統與應用</span>
+                    </a>
+                </li>
+                 <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1226.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/26 (五) </span>
+                        <span class="topic">Linux基礎到架站</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 2: 深入實作</div>
+            <ul>
+                 <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1229.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/29 (一) </span>
+                        <span class="topic">電腦基礎概論 II</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1230.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/30 (二) </span>
+                        <span class="topic">【NoCode】IoT 與資料收集</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1231.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/31 (三) </span>
+                        <span class="topic">Linux 資料庫建置</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0102.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/2 (五) </span>
+                        <span class="topic">Linux 系統管理與腳本</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+   <main class="main-content">
+     
+        <div class="top-bar">
+            <div class="breadcrumb">
+                首頁 > Week 2 > <span>Linux 系統管理與腳本</span>
+            </div>
+            <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
+                <i class="fas fa-home"></i> 回首頁
+            </a>
+        </div>
+        
+        <div class="banner" style="background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);">
+            <div>
+                <h1>Linux 進階操作與 Shell Script</h1>
+                <p>從系統監控、權限管理到自動化腳本撰寫與資安設定。</p>
+            </div>
+            <i class="fa-solid fa-terminal banner-icon"></i>
+        </div>
+
+        <h3 class="section-title">Part 1: 虛擬機與網路原理</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-network-wired"></i> 網路模式 (Network Modes)</h4>
+                    <span class="status-badge done">觀念</span>
+                </div>
+                <p class="note-desc">VirtualBox 的網路設定差異。</p>
+                <ul class="note-points">
+                    <li><strong>NAT (預設)：</strong> 虛擬機透過主機上網，外部無法直接連入虛擬機。</li>
+                    <li><strong>Bridged (橋接介面)：</strong> 虛擬機視為區網內的獨立電腦，擁有獨立 IP，手機/電腦可直接連入。</li>
+                    <li><strong>Host-Only：</strong> 僅主機與虛擬機可互通，無法上網。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-desktop"></i> 虛擬化軟體比較</h4>
+                    <span class="status-badge done">知識</span>
+                </div>
+                <ul class="note-points">
+                    <li><strong>Windows/Linux：</strong> VMware Workstation, VirtualBox, Hyper-V (Microsoft)。</li>
+                    <li><strong>Mac OS：</strong> Parallels Desktop (付費且效能佳)。</li>
+                    <li><strong>Parrot OS：</strong> 這是一個資安滲透測試用的 Linux 系統，非虛擬機軟體。</li>
+                </ul>
+                <div class="alert-box">
+                    <i class="fas fa-exclamation-triangle"></i> <strong>注意：</strong> 同一台 Host 盡量不要同時開啟兩種 Hypervisor (如 VirtualBox + Hyper-V)，會導致搶佔硬體資源，效能大幅下降。
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 2: 實作監控儀表板 (PHPSysInfo)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-server"></i> Apache + PHP 環境建置</h4>
+                    <span class="status-badge running">實作</span>
+                </div>
+                <p class="note-desc">從無到有架設系統資訊監控網頁。</p>
+                <pre><code><span class="code-comment"># 1. 安裝必要套件 (Apache, PHP, XML模組, 解壓縮工具)</span>
+sudo apt install apache2 php php-xml php-mysqli unzip -y
+
+<span class="code-comment"># 2. 進入網頁根目錄</span>
+cd /var/www/html/
+
+<span class="code-comment"># 3. 下載 phpsysinfo 原始碼</span>
+sudo wget https://github.com/phpsysinfo/phpsysinfo/archive/refs/tags/v3.4.4.zip
+
+<span class="code-comment"># 4. 解壓縮並更名資料夾</span>
+sudo unzip v3.4.4.zip
+sudo mv phpsysinfo-3.4.4 phpsysinfo
+
+<span class="code-comment"># 5. 建立設定檔 (複製範例檔)</span>
+cd phpsysinfo/
+sudo cp phpsysinfo.ini.new phpsysinfo.ini
+
+<span class="code-comment"># 6. 驗收</span>
+<span class="code-comment"># 開啟瀏覽器輸入 IP/phpsysinfo 即可看到儀表板</span></code></pre>
+            </div>
+            
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-trash-can"></i> 移除與清理環境</h4>
+                    <span class="status-badge pending">維護</span>
+                </div>
+                <p class="note-desc">若要重做或移除服務的指令。</p>
+                <pre><code><span class="code-comment"># 強制刪除網頁檔案</span>
+sudo rm -rf /var/www/html/*
+
+<span class="code-comment"># 移除軟體服務</span>
+sudo apt remove apache2 php php-xml unzip -y
+
+<span class="code-comment"># 自動清除不再需要的相依套件</span>
+sudo apt autoremove</code></pre>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 3: Shell Script 腳本設計</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> 變數與基礎語法</h4>
+                    <span class="status-badge running">Coding</span>
+                </div>
+                <p class="note-desc">Linux 中的變數設定。</p>
+                <pre><code><span class="code-comment"># 設定變數 (等號兩邊不能有空白)</span>
+bob=168
+echo $bob   <span class="code-comment"># 輸出: 168</span>
+
+bob=8.8.8.8
+echo $bob   <span class="code-comment"># 輸出: 8.8.8.8</span></code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-file-code"></i> 實作：ping.sh 互動腳本</h4>
+                    <span class="status-badge running">Coding</span>
+                </div>
+                <p class="note-desc">撰寫一個讓使用者輸入網址並自動測試連線的腳本。</p>
+                <pre><code><span class="code-comment">#!/bin/bash</span>
+
+<span class="code-comment"># 詢問使用者輸入 (read -p)</span>
+read -p "請輸入網址 (Input URL): " url
+
+<span class="code-comment"># 執行 ping 指令 (-c 4 代表只跑4次)</span>
+ping -c 4 $url</code></pre>
+                <div style="margin-top: 10px; font-size: 0.85rem; color: #666;">
+                    <strong>執行步驟：</strong><br>
+                    1. <code>vim ping.sh</code> (貼上程式碼)<br>
+                    2. <code>chmod +x ping.sh</code> (給予執行權限)<br>
+                    3. <code>./ping.sh</code> (執行腳本)
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 4: 系統資源與權限管理</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-unlock-keyhole"></i> 檔案權限 (Permissions)</h4>
+                    <span class="status-badge done">核心</span>
+                </div>
+                <ul class="note-points">
+                    <li><strong>chmod +x 檔名：</strong> 賦予檔案「執行 (Executable)」權限 (變綠色)。</li>
+                    <li><strong>chmod -x 檔名：</strong> 移除「執行 (Executable)」權限 (變回一般顏色)。</li>
+                    <li><strong>ls -l / ll：</strong> 查看詳細權限 (rwx)。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-microchip"></i> 系統監控指令</h4>
+                    <span class="status-badge done">工具</span>
+                </div>
+                <ul class="note-points">
+                    <li><strong>top / htop：</strong> 即時查看 CPU 與記憶體使用量 (按 q 離開)。</li>
+                    <li><strong>free -h：</strong> 查看記憶體 (RAM) 剩餘量。</li>
+                    <li><strong>df -h：</strong> 查看硬碟 (Disk) 剩餘空間。</li>
+                    <li><strong>cal：</strong> 顯示月曆 (如 <code>cal 2025</code>)。</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 5: 資安與日誌管理</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-file-shield"></i> 日誌分析 (Logs)</h4>
+                    <span class="status-badge running">資安</span>
+                </div>
+                <p class="note-desc">路徑：<code>/var/log/</code></p>
+                <ul class="note-points">
+                    <li><strong>auth.log：</strong> 紀錄登入驗證資訊 (包含 SSH 登入失敗紀錄)。</li>
+                    <li><code>head auth.log</code>：看前 10 行。</li>
+                    <li><code>tail -n 5 auth.log</code>：看最後 5 行。</li>
+                    <li><code>grep "關鍵字" auth.log</code>：搜尋特定內容 (如 accepted)。</li>
+                    <li><code>watch tail -n 5 auth.log</code>：即時監控日誌變化。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-user-shield"></i> 帳號與 SSH 設定</h4>
+                    <span class="status-badge important">危險</span>
+                </div>
+                <ul class="note-points">
+                    <li><strong>su root：</strong> 切換到超級管理員 (權限過大，操作需小心)。</li>
+                    <li><strong>sudo passwd root：</strong> 修改 root 密碼。</li>
+                    <li><strong>修改 SSH Port：</strong>
+                        <ul>
+                            <li>編輯設定檔：<code>sudo vim /etc/ssh/sshd_config</code></li>
+                            <li>將 <code>Port 22</code> 改為其他數字 (如 8022) 以避免惡意掃描。</li>
+                            <li>修改後需重啟服務 (擇一)：<br>
+                                1. <code>sudo service ssh restart</code><br>
+                                2. <code>sudo reboot</code>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <h3 class="section-title">相關資源</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-link"></i> 外部連結</h4>
+                    <span class="status-badge done">HackMD</span>
+                </div>
+                <ul class="note-points">
+                    <li>
+                        <a href="https://hackmd.io/@S66OOi3STy-AFkBshNsXwA/BJchLi4Nbe" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: 500;">
+                            <i class="fa-solid fa-book"></i> 我的筆記 (HackMD)
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.overlay');
+            
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-280px';
+                overlay.style.display = 'none';
+            } else {
+                sidebar.style.left = '0px';
+                overlay.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reyna's Learning Dashboard - 12/31</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* 針對程式碼區塊的額外優化 */
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            white-space: pre-wrap;
+        }
+        .code-comment { color: #75715e; }
+        .code-command { color: #a6e22e; font-weight: bold; }
+        .code-path { color: #e6db74; }
+        
+        .alert-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            color: #856404;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Reyna Portfolio</h2>
+            <span>Web Design Practice</span>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 1: 基礎導入</div>
+            <ul>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1222.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/22 (一) </span>
+                        <span class="topic">電腦基礎概論</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_1.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) am </span>
+                        <span class="topic">IT Career 職涯解析</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_2.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) pm </span>
+                        <span class="topic">ESP-01S 與 Arduino</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_1.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) am </span>
+                        <span class="topic">IoT 與 Web Server 實作</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_2.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) pm </span>
+                         <span class="topic">Linux 系統與應用</span>
+                    </a>
+                </li>
+                 <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1226.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/26 (五) </span>
+                        <span class="topic">Linux基礎到架站</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 2: 深入實作</div>
+            <ul>
+                 <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1229.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/29 (一) </span>
+                        <span class="topic">電腦基礎概論 II</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1230.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/30 (二) </span>
+                        <span class="topic">NoCode 資料蒐集與自動化</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1231.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/31 (三) </span>
+                        <span class="topic">Linux 資料庫建置</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0102.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/2 (五) </span>
+                        <span class="topic">Linux 系統管理與腳本</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+   <main class="main-content">
+     
+        <div class="top-bar">
+            <div class="breadcrumb">
+                首頁 > Week 2 > <span>Linux 資料庫建置</span>
+            </div>
+            <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
+                <i class="fas fa-home"></i> 回首頁
+            </a>
+        </div>
+        
+        <div class="banner" style="background: linear-gradient(135deg, #0f766e 0%, #115e59 100%);">
+            <div>
+                <h1>MariaDB 資料庫與 PHP 連線實作</h1>
+                <p>SQL 環境建置、Adminer 管理工具部署與時區校正。</p>
+            </div>
+            <i class="fa-solid fa-database banner-icon"></i>
+        </div>
+
+        <h3 class="section-title">Part 1: MariaDB 資料庫安裝</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-download"></i> 安裝與啟動</h4>
+                    <span class="status-badge done">基礎</span>
+                </div>
+                <p class="note-desc">在 Ubuntu 上架設資料庫服務。</p>
+                <pre><code><span class="code-comment"># 安裝 MariaDB Server</span>
+sudo apt install mariadb-server -y
+
+<span class="code-comment"># 啟動服務 (非必要，通常安裝後會自啟)</span>
+sudo systemctl start mariadb
+
+<span class="code-comment"># 檢查 Port 3306 是否開啟</span>
+netstat -tnpl</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-shield-halved"></i> 安全性設定 (Secure Install)</h4>
+                    <span class="status-badge important">核心</span>
+                </div>
+                <p class="note-desc">執行 <code>sudo mysql_secure_installation</code> 進行初始化。</p>
+                <ul class="note-points">
+                    <li><strong>Set root password?</strong> [Y] 設定資料庫 root 密碼 (注意：非 Linux 系統 root)。</li>
+                    <li><strong>Remove anonymous users?</strong> [Y] 移除匿名登入。</li>
+                    <li><strong>Disallow root login remotely?</strong> [Y] 禁止遠端 root 登入 (安全性考量)。</li>
+                    <li><strong>Remove test database?</strong> [Y] 移除測試資料庫。</li>
+                    <li><strong>Reload privilege tables?</strong> [Y] 重新載入權限。</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 2: PHP 連線與除錯</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-brands fa-php"></i> 建立測試頁面</h4>
+                    <span class="status-badge running">實作</span>
+                </div>
+                <p class="note-desc">建立 <code>/var/www/html/db/index.php</code> 測試連線。</p>
+                <pre><code><span class="code-comment"># 1. 建立資料夾</span>
+cd /var/www/html
+sudo mkdir db
+cd db
+
+<span class="code-comment"># 2. 編輯 PHP 檔案</span>
+sudo vim index.php</code></pre>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-bug"></i> 常見錯誤：HTTP ERROR 500</strong><br>
+                    原因：PHP 看不懂 MySQL 指令 (缺少模組)。<br>
+                    解法：<code>sudo apt install php-mysqli</code><br>
+                    裝完後重新整理網頁即可正常運作。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> PHP 連線範例碼</h4>
+                    <span class="status-badge running">Coding</span>
+                </div>
+                <p class="note-desc">簡單的資料庫讀取與 UI 優化。</p>
+                <pre><code>&lt;?php
+  <span class="code-comment">// 設定時區</span>
+  date_default_timezone_set('Asia/Taipei');
+  
+  <span class="code-comment">// 資料庫連線設定</span>
+  $servername = "localhost";
+  $username = "root";
+  $password = "你的密碼";
+  $dbname = "diary";
+
+  <span class="code-comment">// 建立連線</span>
+  $conn = new mysqli($servername, $username, $password, $dbname);
+
+  <span class="code-comment">// 檢查連線</span>
+  if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+  }
+  echo "Connected successfully";
+?&gt;</code></pre>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 3: Adminer 管理工具</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-table-columns"></i> 安裝 Adminer</h4>
+                    <span class="status-badge done">工具</span>
+                </div>
+                <p class="note-desc">輕量級的資料庫管理介面 (替代 phpMyAdmin)。</p>
+                <pre><code><span class="code-comment"># 1. 下載 Adminer (單一 PHP 檔案)</span>
+sudo wget https://github.com/vrana/adminer/releases/download/v5.4.1/adminer-5.4.1.php
+
+<span class="code-comment"># 2. 更名 (方便輸入網址)</span>
+sudo mv adminer-5.4.1.php adminer.php
+
+<span class="code-comment"># 3. 登入使用</span>
+<span class="code-comment"># 網址：http://你的IP/db/adminer.php</span>
+<span class="code-comment"># 帳號：root / 密碼：(剛剛設定的密碼)</span></code></pre>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 4: 系統校正與補充</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-clock"></i> 系統時區校正</h4>
+                    <span class="status-badge pending">維護</span>
+                </div>
+                <p class="note-desc">解決資料庫時間 (Time) 與實際時間不符的問題。</p>
+                <pre><code><span class="code-comment"># 查看目前時間</span>
+date
+
+<span class="code-comment"># 設定時區為台北</span>
+sudo timedatectl set-timezone Asia/Taipei
+
+<span class="code-comment"># 重啟資料庫讓設定生效</span>
+sudo systemctl restart mariadb</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-cart-shopping"></i> 補充：osCommerce</h4>
+                    <span class="status-badge pending">專案</span>
+                </div>
+                <p class="note-desc">開放原始碼的電商購物車系統。</p>
+                <ul class="note-points">
+                    <li>版本：osCommerce Online Merchant v2.3.3.4</li>
+                    <li>需配合 LAMP 環境 (Linux, Apache, MySQL, PHP) 運作。</li>
+                    <li>資料庫設定需透過 Adminer 建立專用 DB。</li>
+                </ul>
+            </div>
+
+        </div>
+        <h3 class="section-title">相關資源</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-link"></i> 外部連結</h4>
+                    <span class="status-badge done">HackMD</span>
+                </div>
+                <ul class="note-points">
+                    <li>
+                        <a href="https://hackmd.io/v12pcjOaTCK6RyI7dDGLqg#Chapter4%E5%BB%BA%E7%AB%8B%E8%B3%87%E6%96%99%E5%BA%AB" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: 500;">
+                            <i class="fa-solid fa-book"></i> 老師筆記 (HackMD)
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+
+        </div>
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.overlay');
+            
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-280px';
+                overlay.style.display = 'none';
+            } else {
+                sidebar.style.left = '0px';
+                overlay.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
