@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reyna's Learning Dashboard - 01/06</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* 針對程式碼區塊的額外優化 */
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            white-space: pre-wrap;
+        }
+        .code-comment { color: #75715e; }
+        .code-command { color: #a6e22e; font-weight: bold; }
+        .code-path { color: #e6db74; }
+        
+        .alert-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            color: #856404;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+
+        .img-container {
+            margin: 15px 0;
+            text-align: center;
+        }
+        .img-container img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid #eee;
+        }
+        .img-caption {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Reyna Portfolio</h2>
+            <span>Web Design Practice</span>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 1: 基礎導入</div>
+            <ul>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1222.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/22 (一) </span>
+                        <span class="topic">電腦基礎概論</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_1.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) am </span>
+                        <span class="topic">IT Career 職涯解析</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_2.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) pm </span>
+                        <span class="topic">ESP-01S 與 Arduino</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_1.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) am </span>
+                        <span class="topic">IoT 與 Web Server 實作</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_2.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) pm </span>
+                         <span class="topic">Linux 系統與應用</span>
+                    </a>
+                </li>
+                 <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1226.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/26 (五) </span>
+                        <span class="topic">Linux基礎到架站</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 2: 深入實作</div>
+            <ul>
+                 <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1229.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/29 (一) </span>
+                        <span class="topic">電腦基礎概論 II</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1230.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/30 (二) </span>
+                        <span class="topic">NoCode 資料蒐集與自動化</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1231.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/31 (三) </span>
+                        <span class="topic">Linux 資料庫建置</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0102.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/2 (五) </span>
+                        <span class="topic">Linux 系統管理與腳本</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="menu-group">
+            <div class="group-title">Week 3: 資料庫進階</div>
+            <ul>
+                <li class="active">
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0106.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/6 (一) </span>
+                        <span class="topic">MySQL 安裝與 SSH 穿隧</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+   <main class="main-content">
+     
+        <div class="top-bar">
+            <div class="breadcrumb">
+                首頁 > Week 3 > <span>MySQL 安裝與 SSH 穿隧</span>
+            </div>
+            <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
+                <i class="fas fa-home"></i> 回首頁
+            </a>
+        </div>
+        
+        <div class="banner" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+            <div>
+                <h1>MySQL 完整安裝與 SSH Tunnel</h1>
+                <p>從安裝配置、圖形化管理到 XAMPP 環境整合與資安通道。</p>
+            </div>
+            <i class="fa-solid fa-server banner-icon"></i>
+        </div>
+
+        <h3 class="section-title">Part 1: MySQL 安裝與重置 (Ubuntu)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-rotate-right"></i> 新版登入與服務管理</h4>
+                    <span class="status-badge done">指令</span>
+                </div>
+                <pre><code><span class="code-comment"># 登入 MySQL</span>
+sudo mysql -u root
+
+<span class="code-comment"># 停止服務</span>
+sudo systemctl stop mysql
+
+<span class="code-comment"># 檢查狀態</span>
+sudo systemctl status mysql</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-trash-can"></i> 徹底清除指令 (Reinstall)</h4>
+                    <span class="status-badge important">危險</span>
+                </div>
+                <p class="note-desc">當安裝失敗或設定跑掉時，使用以下指令「完全」移除。</p>
+                <pre><code><span class="code-comment"># 1. 移除所有相關套件與設定檔</span>
+sudo apt purge mysql-server mysql-client mysql-common mysql-server-core-* mysql-client-*
+
+<span class="code-comment"># 2. 自動清除不再需要的相依套件</span>
+sudo apt autoremove
+
+<span class="code-comment"># 3. 清理快取</span>
+sudo apt autoclean</code></pre>
+            </div>
+            
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-download"></i> 標準安裝流程 (SOP)</h4>
+                    <span class="status-badge running">實作</span>
+                </div>
+                <p class="note-desc">參考連結：<a href="https://malleable-kip-65b.notion.site/Ubuntu-24-04-MySQL-2dfe6bafc9f38003950fea5fb7db39da" target="_blank">Notion 教學</a></p>
+                <ul class="note-points">
+                    <li><strong>Step 1:</strong> <code>sudo apt update</code> (更新套件清單)</li>
+                    <li><strong>Step 2:</strong> <code>sudo apt install mysql-server</code> (安裝主程式)</li>
+                    <li><strong>Step 3:</strong> <code>sudo mysql_secure_installation</code> (安全性設定，設定 root 密碼)</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 2: MySQL 安裝精靈圖解 (Windows)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-cubes"></i> 核心組件介紹</h4>
+                    <span class="status-badge done">觀念</span>
+                </div>
+                <ul class="note-points">
+                    <li><strong>MySQL Server:</strong> 資料庫本體 (引擎)，沒它跑不動。</li>
+                    <li><strong>MySQL Workbench:</strong> 圖形化介面 (GUI)，用來畫 ER 圖、管理資料。</li>
+                    <li><strong>MySQL Shell:</strong> 進階指令工具 (支援 JS/Python)，初學少用。</li>
+                    <li><strong>MySQL Router:</strong> 企業負載平衡用，個人練習少用。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-user-lock"></i> 帳號與安全設定</h4>
+                    <span class="status-badge important">資安</span>
+                </div>
+                <ul class="note-points">
+                    <li><strong>Authentication:</strong> 選擇推薦的加密方式 (第一個)。</li>
+                    <li><strong>Root Password:</strong> 務必設定強密碼 (如 Reyna910217!)，避免數分鐘內被暴力破解。</li>
+                    <li><strong>防火牆警告:</strong> 雲端主機不要隨意全開防火牆，易被植入後門。</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fas fa-exclamation-circle"></i> 一般日誌 (General Log) 設定：</strong><br>
+                    建議將慢查詢日誌 (Slow Query Log) 時間從預設 <strong>10秒</strong> 改為 <strong>2秒</strong>，方便捕捉並優化效能。
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 3: 圖形化管理工具</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-table-columns"></i> MySQL Workbench</h4>
+                    <span class="status-badge running">官方</span>
+                </div>
+                <p class="note-desc">官方推薦的管理工具。</p>
+                <ul class="note-points">
+                    <li>登入本機 (Local instance)。</li>
+                    <li>左側 Schemas 可查看 sakila (範例資料庫)。</li>
+                    <li>右鍵 Table > Select Rows 查看資料。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-leaf"></i> HeidiSQL</h4>
+                    <span class="status-badge running">輕量</span>
+                </div>
+                <p class="note-desc">輕量快速的第三方工具 (Windows 常用)。</p>
+                <ul class="note-points">
+                    <li><strong>新增連線:</strong> IP 輸入 <code>127.0.0.1</code>。</li>
+                    <li><strong>網路類型:</strong> 選擇 MySQL (TCP/IP)。</li>
+                    <li>輸入帳密後開啟，介面簡潔直觀。</li>
+                </ul>
+            </div>
+            
+             <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-hard-drive"></i> 磁碟分析工具 (WizTree)</h4>
+                    <span class="status-badge done">小工具</span>
+                </div>
+                <p class="note-desc">快速找出佔用硬碟空間的大檔案，清理系統用。</p>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 4: XAMPP 整合環境實戰</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-triangle-exclamation"></i> Port 衝突與 Multi-Port 設定</h4>
+                    <span class="status-badge pending">除錯</span>
+                </div>
+                <p class="note-desc">當電腦已有安裝 MySQL (Port 3306)，XAMPP 的 MySQL 會無法啟動。</p>
+                <div class="alert-box">
+                    <strong>解法：將 XAMPP 改用 Port 3307 (雙開資料庫)</strong>
+                </div>
+                <ul class="note-points">
+                    <li><strong>Step 1:</strong> 修改 Apache 的 <code>config.inc.php</code>。
+                        <ul>
+                            <li>複製原設定區塊。</li>
+                            <li>新增 <code>$cfg['Servers'][$i]['port'] = '3307';</code></li>
+                        </ul>
+                    </li>
+                    <li><strong>Step 2:</strong> 修改 MySQL 的 <code>my.ini</code> (Config 按鈕)。
+                        <ul>
+                            <li>將兩處的 <code>3306</code> 改為 <code>3307</code>。</li>
+                        </ul>
+                    </li>
+                    <li><strong>Step 3:</strong> 重啟 XAMPP MySQL 服務，成功亮綠燈！</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-lock"></i> phpMyAdmin 安全性優化</h4>
+                    <span class="status-badge important">資安</span>
+                </div>
+                <p class="note-desc">修改 <code>config.inc.php</code> 中的認證模式。</p>
+                <pre><code><span class="code-comment">// 原本 (不安全，自動登入)</span>
+$cfg['Servers'][$i]['auth_type'] = 'config';
+
+<span class="code-comment">// 改為 (安全，需手動輸入帳密)</span>
+$cfg['Servers'][$i]['auth_type'] = 'cookie';</code></pre>
+                <ul class="note-points">
+                    <li><strong>防護：</strong> 防止知道網址的人直接進入後台。</li>
+                    <li><strong>功能：</strong> 啟用後才支援「登出」與「切換使用者」。</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 5: SSH Tunnel (SSH 穿隧) 原理</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-key"></i> 為什麼不能直接連資料庫？</h4>
+                    <span class="status-badge done">核心觀念</span>
+                </div>
+                <div class="img-container">
+                     <div style="font-size: 2rem; color: #555; display: flex; justify-content: center; gap: 30px; align-items: center;">
+                        <div style="text-align: center;"><i class="fa-solid fa-laptop"></i><br><span style="font-size: 0.8rem;">Client (2.2.2.2)</span></div>
+                        <div style="color: #dc3545;"><i class="fa-solid fa-xmark"></i><br><span style="font-size: 0.8rem;">Direct (3306)</span></div>
+                        <div style="text-align: center;"><i class="fa-solid fa-server"></i><br><span style="font-size: 0.8rem;">Server</span></div>
+                     </div>
+                </div>
+                <p class="note-desc"><strong>情境：</strong>資料庫通常設定規則 <code>Only user 'root'@'localhost' exists</code>，只准「自己人(localhost)」連線，外人(2.2.2.2)會被 Access Denied。</p>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-shuttle-space"></i> 解法：建立加密通道</h4>
+                    <span class="status-badge running">解決方案</span>
+                </div>
+                 <div class="img-container">
+                     <div style="font-size: 2rem; color: #555; display: flex; justify-content: center; gap: 30px; align-items: center;">
+                        <div style="text-align: center;"><i class="fa-solid fa-laptop"></i><br><span style="font-size: 0.8rem;">Client</span></div>
+                        <div style="color: #28a745; display:flex; align-items:center; border: 2px dashed #28a745; padding: 5px 20px; border-radius: 20px;"><i class="fa-solid fa-key"></i> SSH (22)</div>
+                        <div style="text-align: center;"><i class="fa-solid fa-server"></i><br><span style="font-size: 0.8rem;">Server (localhost)</span></div>
+                     </div>
+                </div>
+                <ul class="note-points">
+                    <li><strong>動作：</strong> 先用 SSH (Port 22) 登入伺服器，建立一條加密通道。</li>
+                    <li><strong>效果：</strong> 你已經在伺服器「裡面」了。</li>
+                    <li><strong>結果：</strong> 此時再發送 MySQL 指令，伺服器會認為你是 <code>localhost</code> (自己人)，因此 <strong>Access Granted (允許存取)</strong>。</li>
+                </ul>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.overlay');
+            
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-280px';
+                overlay.style.display = 'none';
+            } else {
+                sidebar.style.left = '0px';
+                overlay.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
