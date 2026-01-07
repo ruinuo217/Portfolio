@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reyna's Learning Dashboard - 01/07 AM</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* 針對程式碼區塊的額外優化 */
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            white-space: pre-wrap;
+        }
+        .code-comment { color: #75715e; }
+        .code-command { color: #a6e22e; font-weight: bold; }
+        .code-sql { color: #66d9ef; font-weight: bold; }
+        .code-string { color: #e6db74; }
+        
+        .alert-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            color: #856404;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+        
+        .step-list {
+            list-style: none;
+            padding: 0;
+        }
+        .step-list li {
+            margin-bottom: 8px;
+            padding-left: 10px;
+            border-left: 3px solid #e0e0e0;
+        }
+        .step-list li strong {
+            color: #333;
+        }
+        
+        /* 圖片容器樣式 */
+        .img-container {
+            margin: 15px 0;
+            text-align: center;
+        }
+        .img-container img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid #eee;
+        }
+        .img-caption {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Reyna Portfolio</h2>
+            <span>Web Design Practice</span>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 1: 基礎導入</div>
+            <ul>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1222.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/22 (一) </span>
+                        <span class="topic">電腦基礎概論</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_1.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) am </span>
+                        <span class="topic">IT Career 職涯解析</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_2.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) pm </span>
+                        <span class="topic">ESP-01S 與 Arduino</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_1.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) am </span>
+                        <span class="topic">IoT 與 Web Server 實作</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_2.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) pm </span>
+                         <span class="topic">Linux 系統與應用</span>
+                    </a>
+                </li>
+                 <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1226.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/26 (五) </span>
+                        <span class="topic">Linux基礎到架站</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 2: 深入實作</div>
+            <ul>
+                 <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1229.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/29 (一) </span>
+                        <span class="topic">電腦基礎概論 II</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1230.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/30 (二) </span>
+                        <span class="topic">NoCode 資料蒐集與自動化</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1231.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 12/31 (三) </span>
+                        <span class="topic">Linux 資料庫建置</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0102.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/2 (五) </span>
+                        <span class="topic">Linux 系統管理與腳本</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="menu-group">
+            <div class="group-title">Week 3: 資料庫進階</div>
+            <ul>
+                <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/5 (一) </span>
+                        <span class="topic">計算機概論 (待補)</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0106.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/6 (二) </span>
+                        <span class="topic">MySQL 安裝與 SSH 穿隧</span>
+                    </a>
+                </li>
+                 <li class="active">
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0107_1.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/7 (三) am </span>
+                        <span class="topic">MySQL 管理與遠端連線</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+   <main class="main-content">
+     
+        <div class="top-bar">
+            <div class="breadcrumb">
+                首頁 > Week 3 > <span>MySQL 管理與遠端連線</span>
+            </div>
+            <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
+                <i class="fas fa-home"></i> 回首頁
+            </a>
+        </div>
+        
+        <div class="banner" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
+            <div>
+                <h1>MySQL 管理與遠端連線全攻略</h1>
+                <p>終端機操作、phpMyAdmin 權限管理、HeidiSQL 遠端設定與 XAMPP 整合。</p>
+            </div>
+            <i class="fa-solid fa-database banner-icon"></i>
+        </div>
+
+        <h3 class="section-title">Part 1: 終端機 (Terminal) 基礎操作</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-terminal"></i> 快速建立資料庫與使用者</h4>
+                    <span class="status-badge done">指令</span>
+                </div>
+                <p class="note-desc">適合快速建立特定專案用的資料庫環境。</p>
+                <pre><code><span class="code-comment"># 1. 以 root 身分登入 MySQL</span>
+sudo mysql -u root -p
+
+<span class="code-comment">-- 2. 建立資料庫</span>
+<span class="code-sql">CREATE DATABASE</span> my_database;
+
+<span class="code-comment">-- 3. 建立使用者 (限制 localhost 登入)</span>
+<span class="code-sql">CREATE USER</span> 'my_user'@'localhost' <span class="code-sql">IDENTIFIED BY</span> 'my_password';
+
+<span class="code-comment">-- 4. 授權 (給予該使用者對該資料庫的所有權限)</span>
+<span class="code-sql">GRANT ALL PRIVILEGES ON</span> my_database.* <span class="code-sql">TO</span> 'my_user'@'localhost';
+
+<span class="code-comment">-- 5. 刷新權限 (立即生效)</span>
+<span class="code-sql">FLUSH PRIVILEGES</span>;
+
+<span class="code-comment">-- 其他指令</span>
+<span class="code-sql">show databases</span>;  <span class="code-comment">-- 查看</span>
+<span class="code-sql">exit</span>             <span class="code-comment">-- 離開</span></code></pre>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 2: phpMyAdmin 使用者管理 (GUI)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-users-gear"></i> 新增使用者流程</h4>
+                    <span class="status-badge running">GUI</span>
+                </div>
+                <ul class="step-list">
+                    <li><strong>Step 1:</strong> root 登入 phpMyAdmin > 點選「使用者帳號」。</li>
+                    <li><strong>Step 2:</strong> 點選「新增使用者帳號」。</li>
+                    <li><strong>Step 3:</strong> 填寫資訊 (主機名稱選 <strong>本機</strong>)。</li>
+                </ul>
+                <div class="img-container">
+                    <img src="https://hackmd.io/_uploads/Sy5lAVj4Zl.png" alt="phpMyAdmin 登入資訊填寫">
+                    <div class="img-caption">圖：phpMyAdmin 登入資訊填寫畫面</div>
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-triangle-exclamation"></i> 權限設定關鍵</h4>
+                    <span class="status-badge important">注意</span>
+                </div>
+                <div class="alert-box">
+                    <strong>Step 4: 設定全域權限 (Global Privileges)</strong><br>
+                    請 <span style="color:red; font-weight:bold;">不要勾選 (Do NOT Check)</span> 全選！<br>
+                    我們不希望一般帳號擁有刪除系統資料庫的最高權限。
+                </div>
+                <p class="note-desc"><strong>Step 6 後續動作：</strong><br>建立完帳號後，再去「編輯權限」>「資料庫」標籤，單獨指派特定的資料庫給他。</p>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 3: 開啟遠端連線 (HeidiSQL 設定)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-network-wired"></i> 修改 MySQL 設定檔</h4>
+                    <span class="status-badge important">核心</span>
+                </div>
+                <p class="note-desc">預設 MySQL 只監聽本機 (127.0.0.1)，必須修改設定檔才能讓外部 (HeidiSQL) 連入。</p>
+                
+                <div class="img-container">
+                    <img src="https://hackmd.io/_uploads/BJ4q0SjV-x.png" alt="修改 mysqld.cnf 設定檔">
+                    <div class="img-caption">圖：使用 Vim 註解掉 bind-address</div>
+                </div>
+
+                <pre><code><span class="code-comment"># 1. 進入設定檔目錄</span>
+cd /etc/mysql/mysql.conf.d/
+
+<span class="code-comment"># 2. 編輯 mysqld.cnf</span>
+sudo vim mysqld.cnf
+
+<span class="code-comment"># 3. 找到 bind-address 並註解掉 (約第 31 行)</span>
+<span class="code-comment"># 修改前：</span> bind-address = 127.0.0.1
+<span class="code-comment"># 修改後：</span> <span style="color:#e6db74"># bind-address = 127.0.0.1</span>
+
+<span class="code-comment"># 4. 存檔離開 (:wq) 並重啟服務</span>
+sudo systemctl restart mysql.service</code></pre>
+                <div style="margin-top:10px; font-size: 0.9rem;">
+                    <strong>Step 7 驗收：</strong> 開啟 Windows 上的 HeidiSQL，輸入 Ubuntu IP 與帳密，應可成功連線。
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 4: XAMPP 設定 (本地管遠端)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-file-code"></i> 編輯 config.inc.php</h4>
+                    <span class="status-badge running">進階</span>
+                </div>
+                <p class="note-desc">讓 Windows 的 XAMPP phpMyAdmin 可以切換並管理遠端的 Ubuntu 資料庫。</p>
+                
+                <div style="background:#f9f9f9; padding:10px; border-radius:5px; border:1px solid #eee; margin-bottom:10px;">
+                    <strong>檔案位置：</strong> XAMPP Control Panel > Apache Config > Browse [PHPMyAdmin] 
+                </div>
+
+                <div class="img-container">
+                    <img src="https://hackmd.io/_uploads/B15Jp8sN-x.png" alt="config.inc.php 新增遠端設定">
+                    <div class="img-caption">圖：在 config.inc.php 中新增遠端主機設定區塊</div>
+                </div>
+
+                <pre><code><span class="code-comment">/* 在檔案末端新增以下遠端主機設定 */</span>
+$i++; <span class="code-comment">// 索引值+1，代表這是第二台伺服器</span>
+
+$cfg['Servers'][$i]['auth_type'] = 'cookie';      <span class="code-comment">// 認證模式</span>
+$cfg['Servers'][$i]['user'] = '';                 <span class="code-comment">// 預設留空</span>
+$cfg['Servers'][$i]['password'] = '';             <span class="code-comment">// 預設留空</span>
+$cfg['Servers'][$i]['extension'] = 'mysqli';      <span class="code-comment">// 擴充套件</span>
+$cfg['Servers'][$i]['AllowNoPassword'] = true;    <span class="code-comment">// 允許空密碼</span>
+$cfg['Lang'] = '';
+
+<span class="code-comment">// ⚠️ 重要：這裡是填寫遠端 Ubuntu 的 IP (例如 GCP/AWS 外網 IP)</span>
+$cfg['Servers'][$i]['host'] = '<span style="color:#ff5555">34.80.244.211</span>'; 
+$cfg['Servers'][$i]['connect_type'] = 'tcp';      <span class="code-comment">// 連線類型</span>
+$cfg['Servers'][$i]['port'] = '3306';             <span class="code-comment">// 連線埠</span></code></pre>
+                
+                <div class="alert-box">
+                    <strong>驗收方式：</strong> 重整本地 phpMyAdmin (http://localhost/phpmyadmin)，登入畫面會多出「伺服器選擇」下拉選單。
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">相關資源</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-link"></i> 外部連結</h4>
+                    <span class="status-badge done">HackMD</span>
+                </div>
+                <ul class="note-points">
+                    <li>
+                        <a href="https://hackmd.io/@S66OOi3STy-AFkBshNsXwA/HkSz24iNZg" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: 500;">
+                            <i class="fa-solid fa-book"></i> 我的筆記 (HackMD)
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.overlay');
+            
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-280px';
+                overlay.style.display = 'none';
+            } else {
+                sidebar.style.left = '0px';
+                overlay.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
