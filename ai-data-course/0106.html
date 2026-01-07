@@ -138,6 +138,12 @@
         <div class="menu-group">
             <div class="group-title">Week 3: 資料庫進階</div>
             <ul>
+                <li>
+                    <a href="#">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/5 (一) </span>
+                        <span class="topic">計算機概論 (待補)</span>
+                    </a>
+                </li>
                 <li class="active">
                     <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0106.html">
                         <span class="date-badge"><i class="far fa-calendar"></i> 1/6 (二) </span>
@@ -203,14 +209,37 @@ sudo apt autoclean</code></pre>
             <div class="card note-card" style="grid-column: 1 / -1;">
                 <div class="note-header">
                     <h4><i class="fa-solid fa-download"></i> 標準安裝流程 (SOP)</h4>
-                    <span class="status-badge running">實作</span>
+                    <span class="status-badge running">Ubuntu 24.04</span>
                 </div>
-                <p class="note-desc">參考連結：<a href="https://malleable-kip-65b.notion.site/Ubuntu-24-04-MySQL-2dfe6bafc9f38003950fea5fb7db39da" target="_blank">Notion 教學</a></p>
-                <ul class="note-points">
-                    <li><strong>Step 1:</strong> <code>sudo apt update</code> (更新套件清單)</li>
-                    <li><strong>Step 2:</strong> <code>sudo apt install mysql-server</code> (安裝主程式)</li>
-                    <li><strong>Step 3:</strong> <code>sudo mysql_secure_installation</code> (安全性設定，設定 root 密碼)</li>
-                </ul>
+                <p class="note-desc">確保系統更新並正確設定服務與權限。</p>
+                
+                <h5 style="font-weight:bold; color:#333; margin:10px 0 5px 0;">1. 安裝 MySQL</h5>
+                <pre><code><span class="code-comment"># 更新伺服器套件索引</span>
+sudo apt update
+
+<span class="code-comment"># 安裝 MySQL 伺服器套件 (-y 自動確認)</span>
+sudo apt install mysql-server -y
+
+<span class="code-comment"># 檢視已安裝的 MySQL 版本</span>
+mysql --version
+<span class="code-comment"># 預期輸出: mysql Ver 8.0.37... for Linux on x86_64 ((Ubuntu))</span></code></pre>
+
+                <h5 style="font-weight:bold; color:#333; margin:15px 0 5px 0;">2. 管理 MySQL 系統服務</h5>
+                <pre><code><span class="code-comment"># 設定 MySQL 開機自動啟動</span>
+sudo systemctl enable mysql
+
+<span class="code-comment"># 啟動 MySQL 資料庫伺服器</span>
+sudo systemctl start mysql
+
+<span class="code-comment"># 檢視 MySQL 伺服器狀態 (應顯示 active running)</span>
+sudo systemctl status mysql</code></pre>
+
+                <h5 style="font-weight:bold; color:#333; margin:15px 0 5px 0;">3. 保護 MySQL 伺服器 (安全性設定)</h5>
+                <pre><code><span class="code-comment"># 執行安全安裝腳本 (設定 root 密碼、移除匿名用戶等)</span>
+sudo mysql_secure_installation
+
+<span class="code-comment"># 重新啟動 MySQL 服務讓設定生效</span>
+sudo systemctl restart mysql</code></pre>
             </div>
         </div>
 
@@ -361,6 +390,23 @@ $cfg['Servers'][$i]['auth_type'] = 'cookie';</code></pre>
                     <li><strong>動作：</strong> 先用 SSH (Port 22) 登入伺服器，建立一條加密通道。</li>
                     <li><strong>效果：</strong> 你已經在伺服器「裡面」了。</li>
                     <li><strong>結果：</strong> 此時再發送 MySQL 指令，伺服器會認為你是 <code>localhost</code> (自己人)，因此 <strong>Access Granted (允許存取)</strong>。</li>
+                </ul>
+            </div>
+        </div>
+        
+        <h3 class="section-title">相關資源</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-link"></i> 外部連結</h4>
+                    <span class="status-badge done">HackMD</span>
+                </div>
+                <ul class="note-points">
+                    <li>
+                        <a href="https://hackmd.io/@S66OOi3STy-AFkBshNsXwA/BkRaNycV-l" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: 500;">
+                            <i class="fa-solid fa-book"></i> 我的筆記 (HackMD)
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
