@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reyna's Learning Dashboard - 01/07 AM</title>
+    <title>Reyna's Learning Dashboard - 01/07</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="dashboard.css">
     <style>
@@ -166,9 +166,9 @@
                     </a>
                 </li>
                  <li class="active">
-                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0107_1.html">
-                        <span class="date-badge"><i class="far fa-calendar"></i> 1/7 (三) am </span>
-                        <span class="topic">MySQL 管理與遠端連線</span>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0107.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/7 (三) </span>
+                        <span class="topic">MySQL 管理與 VS Code</span>
                     </a>
                 </li>
             </ul>
@@ -179,7 +179,7 @@
      
         <div class="top-bar">
             <div class="breadcrumb">
-                首頁 > Week 3 > <span>MySQL 管理與遠端連線</span>
+                首頁 > Week 3 > <span>MySQL 管理與 VS Code</span>
             </div>
             <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
                 <i class="fas fa-home"></i> 回首頁
@@ -188,10 +188,10 @@
         
         <div class="banner" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
             <div>
-                <h1>MySQL 管理與遠端連線全攻略</h1>
-                <p>終端機操作、phpMyAdmin 權限管理、HeidiSQL 遠端設定與 XAMPP 整合。</p>
+                <h1>MySQL 管理與開發環境建置</h1>
+                <p>資料庫權限設定、遠端連線配置 與 VS Code 開發環境搭建。</p>
             </div>
-            <i class="fa-solid fa-database banner-icon"></i>
+            <i class="fa-solid fa-code banner-icon"></i>
         </div>
 
         <h3 class="section-title">Part 1: 終端機 (Terminal) 基礎操作</h3>
@@ -264,11 +264,7 @@ sudo mysql -u root -p
                 </div>
                 <p class="note-desc">預設 MySQL 只監聽本機 (127.0.0.1)，必須修改設定檔才能讓外部 (HeidiSQL) 連入。</p>
                 
-                <div class="img-container">
-                    <img src="https://hackmd.io/_uploads/BJ4q0SjV-x.png" alt="修改 mysqld.cnf 設定檔">
-                    <div class="img-caption">圖：使用 Vim 註解掉 bind-address</div>
-                </div>
-
+                <h5 style="font-weight:bold; color:#333; margin:15px 0 5px 0;">Step 1 ~ 4: 修改設定檔</h5>
                 <pre><code><span class="code-comment"># 1. 進入設定檔目錄</span>
 cd /etc/mysql/mysql.conf.d/
 
@@ -277,11 +273,24 @@ sudo vim mysqld.cnf
 
 <span class="code-comment"># 3. 找到 bind-address 並註解掉 (約第 31 行)</span>
 <span class="code-comment"># 修改前：</span> bind-address = 127.0.0.1
-<span class="code-comment"># 修改後：</span> <span style="color:#e6db74"># bind-address = 127.0.0.1</span>
+<span class="code-comment"># 修改後：</span> <span style="color:#e6db74"># bind-address = 127.0.0.1</span></code></pre>
+                
+                <div class="img-container">
+                    <img src="https://hackmd.io/_uploads/BJ4q0SjV-x.png" alt="修改 mysqld.cnf 設定檔">
+                    <div class="img-caption">圖：使用 Vim 註解掉 bind-address</div>
+                </div>
 
-<span class="code-comment"># 4. 存檔離開 (:wq) 並重啟服務</span>
-sudo systemctl restart mysql.service</code></pre>
-                <div style="margin-top:10px; font-size: 0.9rem;">
+                <h5 style="font-weight:bold; color:#333; margin:15px 0 5px 0;">Step 5: 存檔離開 (Vim 操作)</h5>
+                <ul class="step-list">
+                    <li>按 <code>Esc</code> 鍵退出編輯模式。</li>
+                    <li>輸入 <code>:wq</code> (Write & Quit)。</li>
+                    <li>按 <code>Enter</code> 確認。</li>
+                </ul>
+
+                <h5 style="font-weight:bold; color:#333; margin:15px 0 5px 0;">Step 6: 重啟服務 (務必執行)</h5>
+                <pre><code>sudo systemctl restart mysql.service</code></pre>
+
+                <div class="alert-box" style="margin-top:15px;">
                     <strong>Step 7 驗收：</strong> 開啟 Windows 上的 HeidiSQL，輸入 Ubuntu IP 與帳密，應可成功連線。
                 </div>
             </div>
@@ -297,7 +306,7 @@ sudo systemctl restart mysql.service</code></pre>
                 <p class="note-desc">讓 Windows 的 XAMPP phpMyAdmin 可以切換並管理遠端的 Ubuntu 資料庫。</p>
                 
                 <div style="background:#f9f9f9; padding:10px; border-radius:5px; border:1px solid #eee; margin-bottom:10px;">
-                    <strong>檔案位置：</strong> XAMPP Control Panel > Apache Config > Browse [PHPMyAdmin] 
+                    <strong>檔案位置：</strong> XAMPP Control Panel > Apache Config > Browse [PHPMyAdmin] > <code>config.inc.php</code>
                 </div>
 
                 <div class="img-container">
@@ -322,6 +331,54 @@ $cfg['Servers'][$i]['port'] = '3306';             <span class="code-comment">// 
                 
                 <div class="alert-box">
                     <strong>驗收方式：</strong> 重整本地 phpMyAdmin (http://localhost/phpmyadmin)，登入畫面會多出「伺服器選擇」下拉選單。
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 5: VS Code 開發環境設定</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-brands fa-windows"></i> 1. 下載與安裝</h4>
+                    <span class="status-badge done">軟體</span>
+                </div>
+                <p class="note-desc">前往微軟官網下載 Visual Studio Code (System Installer)。</p>
+                <div style="margin-top: 10px;">
+                    <a href="https://code.visualstudio.com/" target="_blank" class="btn-primary" style="padding: 8px 15px; background-color: #0078d7; color: white; border-radius: 6px; display: inline-block; text-align: center; text-decoration: none;">
+                        <i class="fa-solid fa-download"></i> 前往官網下載
+                    </a>
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-plug"></i> 2. 安裝 MySQL 插件</h4>
+                    <span class="status-badge running">擴充</span>
+                </div>
+                <p class="note-desc">在 VS Code 左側點選「擴充功能 (Extensions)」。</p>
+                <ul class="step-list">
+                    <li>搜尋關鍵字：<strong>MySQL</strong></li>
+                    <li>推薦安裝：<strong>MySQL</strong> <strong>Database Client</strong>。</li>
+                    <li>點擊 Install 安裝。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-link"></i> 3. 建立資料庫連線 (Connection)</h4>
+                    <span class="status-badge important">設定</span>
+                </div>
+                <p class="note-desc">安裝完插件後，點選左側出現的資料庫圖示 (Database)，新增連線。</p>
+                <div style="background:#f8f9fa; padding:15px; border-radius:8px; border:1px solid #ddd;">
+                    <ul class="note-points">
+                        <li><strong>Host (主機):</strong> <code>127.0.0.1</code> (VirtualBox的) </li>
+                        <li><strong>Username (使用者):</strong> <code>自己設定的</code></li>
+                        <li><strong>Password (密碼):</strong> 輸入你設定的資料庫密碼</li>
+                        <li><strong>Port (埠號):</strong> <code>3306</code> (若使用 XAMPP 則改為 3307)</li>
+                    </ul>
+                </div>
+                <div class="alert-box" style="margin-top:10px;">
+                    <strong>提示：</strong> 連線成功後，即可直接在 VS Code 內查看資料表、執行 SQL 指令，不需切換視窗。
                 </div>
             </div>
         </div>
