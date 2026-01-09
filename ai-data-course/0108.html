@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reyna's Learning Dashboard - 01/08</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* 針對程式碼區塊的額外優化 */
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            white-space: pre-wrap;
+        }
+        .code-comment { color: #75715e; }
+        .code-keyword { color: #ff79c6; font-weight: bold; }
+        .code-function { color: #8be9fd; }
+        .code-string { color: #f1fa8c; }
+        .code-number { color: #bd93f9; }
+        
+        .alert-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            color: #856404;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Reyna Portfolio</h2>
+            <span>Web Design Practice</span>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 1: 基礎導入</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1222.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/22 (一)</span><span class="topic">電腦基礎概論</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_1.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) am</span><span class="topic">IT Career 職涯解析</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_2.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) pm</span><span class="topic">ESP-01S 與 Arduino</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_1.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) am</span><span class="topic">IoT 與 Web Server 實作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_2.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) pm</span><span class="topic">Linux 系統與應用</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1226.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/26 (五)</span><span class="topic">Linux基礎到架站</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 2: 深入實作</div>
+            <ul>
+                 <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1229.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/29 (一)</span><span class="topic">電腦基礎概論 II</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1230.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/30 (二)</span><span class="topic">NoCode 資料蒐集與自動化</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1231.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/31 (三)</span><span class="topic">Linux 資料庫建置</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0102.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/2 (五)</span><span class="topic">Linux 系統管理與腳本</span></a></li>
+            </ul>
+        </div>
+        
+        <div class="menu-group">
+            <div class="group-title">Week 3: 資料庫進階</div>
+            <ul>
+                <li><a href="#"><span class="date-badge"><i class="far fa-calendar"></i> 1/5 (一)</span><span class="topic">計算機概論 (待補)</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0106.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/6 (二)</span><span class="topic">MySQL 安裝與 SSH 穿隧</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0107.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/7 (三)</span><span class="topic">MySQL 管理與 VS Code</span></a></li>
+                <li class="active">
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0108.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/8 (四) </span>
+                        <span class="topic">Python 基礎與環境</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+   <main class="main-content">
+     
+        <div class="top-bar">
+            <div class="breadcrumb">
+                首頁 > Week 3 > <span>Python 基礎與環境</span>
+            </div>
+            <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
+                <i class="fas fa-home"></i> 回首頁
+            </a>
+        </div>
+        
+        <div class="banner" style="background: linear-gradient(135deg, #3776ab 0%, #ffd43b 100%);">
+            <div>
+                <h1>Python 基礎語法與遠端開發</h1>
+                <p>VS Code Remote SSH 環境建置、變數與資料結構、邏輯控制實作。</p>
+            </div>
+            <i class="fa-brands fa-python banner-icon"></i>
+        </div>
+
+        <h3 class="section-title">Part 1: 開發環境 (VS Code Remote SSH)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-server"></i> 為什麼要用 Remote SSH？</h4>
+                    <span class="status-badge done">觀念</span>
+                </div>
+                <p class="note-desc">你是一位正在學習 Python / Linux / 伺服器維運的工程師，可能會遇到：</p>
+                <ul class="note-points">
+                    <li><strong>效能考量：</strong> 手邊電腦效能有限，但未來要學爬蟲、TensorFlow、LLM，需要乾淨且高效的雲端環境。</li>
+                    <li><strong>部署一致性：</strong> 希望開發環境與實際部署的 Linux 主機一致，而非僅在本機跑 Python。</li>
+                    <li><strong>專業流程：</strong> 學習貼近雲端的開發流程，使用 VS Code 連接 VirtualBox 中的 Ubuntu Server。</li>
+                </ul>
+                <div class="alert-box">
+                    <strong>操作：</strong> 使用 VS Code 的 "Remote - SSH" 插件，連線至虛擬機並建立 Python 虛擬環境 (Virtual Environment)。
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 2: Python 基礎語法</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-quote-left"></i> 變數與 f-string</h4>
+                    <span class="status-badge running">字串</span>
+                </div>
+                <p class="note-desc">格式化字串 (Format String) 的應用。</p>
+                <pre><code>name = <span class="code-function">input</span>(<span class="code-string">"輸入文字"</span>)
+price = <span class="code-function">input</span>(<span class="code-string">"輸入文字"</span>)
+qty = <span class="code-function">input</span>(<span class="code-string">"輸入文字"</span>)
+
+<span class="code-comment"># f-string: 在字串前加 f，內部使用 {} 包裹變數</span>
+<span class="code-function">print</span>(f<span class="code-string">"有 {name}、{price}、{qty}"</span>)</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-calculator"></i> 運算元綜合練習</h4>
+                    <span class="status-badge running">邏輯</span>
+                </div>
+                <p class="note-desc">結合比較運算與布林運算 (Boolean)。</p>
+                <pre><code>number = <span class="code-number">14</span>
+
+<span class="code-comment"># 判斷多個條件 (AND 必須全為真)</span>
+result = (number > <span class="code-number">10</span>) <span class="code-keyword">and</span> \
+         (number + <span class="code-number">5</span> <= <span class="code-number">20</span>) <span class="code-keyword">and</span> \
+         (number != <span class="code-number">15</span>)
+
+<span class="code-function">print</span>(result) <span class="code-comment"># 輸出: True</span></code></pre>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 3: 資料結構 (Data Structures)</h3>
+        <div class="dashboard-grid notes-section">
+            
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-list-ol"></i> 基礎陣列 (List)</h4>
+                    <span class="status-badge running">列表</span>
+                </div>
+                <p class="note-desc">有序、可變更的資料集合。</p>
+                <pre><code>scores = [<span class="code-number">10</span>, <span class="code-number">20</span>, <span class="code-number">30</span>]
+
+<span class="code-comment"># 透過索引值 (Index) 取值並運算</span>
+<span class="code-function">print</span>(scores[<span class="code-number">0</span>] + scores[<span class="code-number">1</span>]) 
+<span class="code-comment"># 10 + 20 = 30</span></code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-book"></i> 字典 (Dictionary)</h4>
+                    <span class="status-badge running">鍵值對</span>
+                </div>
+                <p class="note-desc">Key-Value 配對，使用 <code>get()</code> 避免報錯。</p>
+                <pre><code>student = {<span class="code-string">"name"</span>: <span class="code-string">"Alice"</span>, <span class="code-string">"age"</span>: <span class="code-number">20</span>}
+
+<span class="code-function">print</span>(student.get(<span class="code-string">"name"</span>))
+<span class="code-comment"># 輸出：Alice</span>
+
+<span class="code-function">print</span>(student.get(<span class="code-string">"grade"</span>, <span class="code-string">"未定義"</span>)) 
+<span class="code-comment"># 鍵不存在時，回傳預設值：未定義</span></code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-layer-group"></i> 元組 (Tuple) 與列表應用</h4>
+                    <span class="status-badge running">複合</span>
+                </div>
+                <p class="note-desc">Tuple <code>()</code> 本身不可變，但若放在 List <code>[]</code> 中，我們可以替換 List 裡的元素。</p>
+                <pre><code>tup_list = [
+    (<span class="code-string">"To Kill a Mockingbird"</span>, <span class="code-string">"Harper Lee"</span>, <span class="code-number">20.99</span>),
+    (<span class="code-string">"1984"</span>, <span class="code-string">"George Orwell"</span>, <span class="code-number">15.99</span>),
+    (<span class="code-string">"The Great Gatsby"</span>, <span class="code-string">"F. Scott Fitzgerald"</span>, <span class="code-number">10.99</span>)
+]
+
+<span class="code-comment"># 修改 List 中索引為 1 的元素 (替換整個 Tuple)</span>
+tup_list[<span class="code-number">1</span>] = (<span class="code-string">"1984"</span>, <span class="code-string">"J.K. Rowling"</span>, <span class="code-number">15.99</span>)
+
+<span class="code-function">print</span>(tup_list)</code></pre>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 4: 邏輯控制實作</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-gamepad"></i> 實作：比大小遊戲</h4>
+                    <span class="status-badge important">練習</span>
+                </div>
+                <p class="note-desc">使用 <code>if</code>, <code>elif</code>, <code>else</code> 進行流程控制。</p>
+                <pre><code><span class="code-function">print</span>(<span class="code-string">"歡迎來到比大小遊戲！請輸入兩個數字..."</span>)
+
+<span class="code-comment"># input 預設為字串，需轉為 int 才能比較數值</span>
+num1 = <span class="code-function">int</span>(<span class="code-function">input</span>(<span class="code-string">"請輸入第一個數字："</span>))
+num2 = <span class="code-function">int</span>(<span class="code-function">input</span>(<span class="code-string">"請輸入第二個數字："</span>))
+
+<span class="code-keyword">if</span> num1 > num2:
+    <span class="code-function">print</span>(f<span class="code-string">"{num1} 比 {num2} 大"</span>)
+<span class="code-keyword">elif</span> num2 > num1:
+    <span class="code-function">print</span>(f<span class="code-string">"{num2} 比 {num1} 大"</span>)
+<span class="code-keyword">else</span>:
+    <span class="code-function">print</span>(f<span class="code-string">"{num1} 和 {num2} 一樣大"</span>)
+
+<span class="code-function">print</span>(<span class="code-string">"遊戲結束，謝謝參加！"</span>)</code></pre>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.overlay');
+            
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-280px';
+                overlay.style.display = 'none';
+            } else {
+                sidebar.style.left = '0px';
+                overlay.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
