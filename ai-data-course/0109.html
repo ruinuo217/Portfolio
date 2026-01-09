@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reyna's Learning Dashboard - 01/09</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* 針對程式碼區塊的額外優化 */
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            white-space: pre-wrap;
+        }
+        .code-comment { color: #75715e; }
+        .code-keyword { color: #ff79c6; font-weight: bold; }
+        .code-function { color: #8be9fd; }
+        .code-string { color: #f1fa8c; }
+        .code-number { color: #bd93f9; }
+        
+        .alert-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            color: #856404;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Reyna Portfolio</h2>
+            <span>Web Design Practice</span>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 1: 基礎導入</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1222.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/22 (一)</span><span class="topic">電腦基礎概論</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_1.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) am</span><span class="topic">IT Career 職涯解析</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_2.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) pm</span><span class="topic">ESP-01S 與 Arduino</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_1.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) am</span><span class="topic">IoT 與 Web Server 實作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_2.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) pm</span><span class="topic">Linux 系統與應用</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1226.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/26 (五)</span><span class="topic">Linux基礎到架站</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 2: 深入實作</div>
+            <ul>
+                 <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1229.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/29 (一)</span><span class="topic">電腦基礎概論 II</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1230.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/30 (二)</span><span class="topic">NoCode 資料蒐集與自動化</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1231.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/31 (三)</span><span class="topic">Linux 資料庫建置</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0102.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/2 (五)</span><span class="topic">Linux 系統管理與腳本</span></a></li>
+            </ul>
+        </div>
+        
+        <div class="menu-group">
+            <div class="group-title">Week 3: 資料庫進階</div>
+            <ul>
+                <li><a href="#"><span class="date-badge"><i class="far fa-calendar"></i> 1/5 (一)</span><span class="topic">計算機概論 (待補)</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0106.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/6 (二)</span><span class="topic">MySQL 安裝與 SSH 穿隧</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0107.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/7 (三)</span><span class="topic">MySQL 管理與 VS Code</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0108.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/8 (四)</span><span class="topic">Python 基礎與環境</span></a></li>
+                <li class="active">
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0109.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/9 (五) </span>
+                        <span class="topic">Python 進階與資料處理</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+   <main class="main-content">
+     
+        <div class="top-bar">
+            <div class="breadcrumb">
+                首頁 > Week 3 > <span>Python 進階與資料處理</span>
+            </div>
+            <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
+                <i class="fas fa-home"></i> 回首頁
+            </a>
+        </div>
+        
+        <div class="banner" style="background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);">
+            <div>
+                <h1>Python 進階語法與資料處理</h1>
+                <p>錯誤控制、進階迴圈與迭代、檔案讀寫以及 JSON 格式轉換。</p>
+            </div>
+            <i class="fa-solid fa-code-branch banner-icon"></i>
+        </div>
+
+        <h3 class="section-title">Part 1: 判斷式與迴圈控制</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-triangle-exclamation"></i> 錯誤檢查 (Assert)</h4>
+                    <span class="status-badge done">除錯</span>
+                </div>
+                <p class="note-desc">確保變數符合條件，否則程式會中斷並報錯。</p>
+                <pre><code>a = <span class="code-number">1</span>
+b = <span class="code-number">0</span>
+
+<span class="code-comment"># 若 b 為 0，則跳出錯誤訊息 "不零"</span>
+<span class="code-keyword">assert</span> b != <span class="code-number">0</span>, <span class="code-string">"不零"</span>
+
+<span class="code-function">print</span>(a/b)</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-rotate"></i> 兩種基礎迴圈</h4>
+                    <span class="status-badge running">迴圈</span>
+                </div>
+                <pre><code><span class="code-comment"># 1. For 迴圈 (累加 1 到 5)</span>
+b = <span class="code-number">0</span>
+<span class="code-keyword">for</span> a <span class="code-keyword">in</span> <span class="code-function">range</span>(<span class="code-number">1</span>, <span class="code-number">6</span>):
+    b += a
+<span class="code-function">print</span>(b)
+
+<span class="code-comment"># 2. While 迴圈</span>
+a = <span class="code-number">1</span> <span class="code-comment"># 計數器</span>
+b = <span class="code-number">0</span> <span class="code-comment"># 總和</span>
+<span class="code-keyword">while</span> a <= <span class="code-number">5</span>:
+    b = b + a 
+    a = a + <span class="code-number">1</span> 
+<span class="code-function">print</span>(b)</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-forward"></i> 進階迴圈 (Break & Continue)</h4>
+                    <span class="status-badge important">邏輯</span>
+                </div>
+                <p class="note-desc">無限迴圈與條件跳轉的應用。</p>
+                <pre><code>a = <span class="code-number">0</span> <span class="code-comment"># 計數器</span>
+b = <span class="code-number">0</span> <span class="code-comment"># 次數</span>
+
+<span class="code-keyword">while</span> <span class="code-keyword">True</span>:
+    a += <span class="code-number">1</span>
+    <span class="code-keyword">if</span> a % <span class="code-number">2</span> == <span class="code-number">0</span>: <span class="code-comment"># 如果是偶數</span>
+        <span class="code-keyword">if</span> a == <span class="code-number">100</span>: <span class="code-comment"># 到 100 停止</span>
+            <span class="code-keyword">break</span>
+        <span class="code-keyword">continue</span> <span class="code-comment"># 跳過本次迴圈 (不執行 b+=1)</span>
+    
+    b += <span class="code-number">1</span> <span class="code-comment"># 只有奇數時會執行到這</span>
+
+<span class="code-function">print</span>(a, b)</code></pre>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 2: 迭代與資料處理</h3>
+        <div class="dashboard-grid notes-section">
+            
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-repeat"></i> 迭代器 (Iteration)</h4>
+                    <span class="status-badge running">原理</span>
+                </div>
+                <p class="note-desc">使用 <code>iter()</code> 與 <code>next()</code> 手動取值。</p>
+                <pre><code>my_list = [<span class="code-number">1</span>, <span class="code-number">2</span>, <span class="code-number">3</span>, <span class="code-number">4</span>]
+it = <span class="code-function">iter</span>(my_list)
+
+<span class="code-keyword">while</span> <span class="code-keyword">True</span>:
+    <span class="code-keyword">try</span>:
+        num = <span class="code-function">next</span>(it)
+        <span class="code-function">print</span>(num)
+    <span class="code-keyword">except</span> <span class="code-function">StopIteration</span>:
+        <span class="code-keyword">break</span> <span class="code-comment"># 取完後停止</span></code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-scissors"></i> 字串切割 (Split)</h4>
+                    <span class="status-badge done">應用</span>
+                </div>
+                <p class="note-desc">將輸入字串依逗號切割成列表。</p>
+                <pre><code>a = <span class="code-function">input</span>(<span class="code-string">"輸入數字1,2"</span>).split(<span class="code-string">","</span>)
+
+<span class="code-keyword">if</span> a[<span class="code-number">0</span>] > a[<span class="code-number">1</span>]:
+    <span class="code-function">print</span>(f<span class="code-string">"{a[0]} > {a[1]}"</span>)
+<span class="code-keyword">elif</span> a[<span class="code-number">0</span>] < a[<span class="code-number">1</span>]:
+    <span class="code-function">print</span>(f<span class="code-string">"{a[0]} < {a[1]}"</span>)
+<span class="code-keyword">else</span>:
+    <span class="code-function">print</span>(f<span class="code-string">"{a[0]} = {a[1]}"</span>)</code></pre>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 3: 檔案讀寫與 JSON</h3>
+        <div class="dashboard-grid notes-section">
+            
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-file-lines"></i> 檔案讀取 (Read)</h4>
+                    <span class="status-badge running">IO</span>
+                </div>
+                <p class="note-desc">讀取文字檔並印出偶數行。</p>
+                <pre><code>f = <span class="code-function">open</span>(<span class="code-string">"0109.txt"</span>, <span class="code-string">"r"</span>)
+b = <span class="code-number">0</span>
+
+<span class="code-keyword">for</span> content <span class="code-keyword">in</span> f.readlines():
+    <span class="code-keyword">if</span> b % <span class="code-number">2</span> == <span class="code-number">0</span>:
+        <span class="code-function">print</span>(content)
+    b = b + <span class="code-number">1</span>
+
+f.close()</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-brands fa-js"></i> JSON 轉換 (Loads/Dumps)</h4>
+                    <span class="status-badge important">格式</span>
+                </div>
+                <pre><code><span class="code-keyword">import</span> json
+
+<span class="code-comment"># 1. Loads: JSON 字串 -> Python 字典</span>
+str1 = <span class="code-string">'{"id": 123, "Name": "wsrsw"}'</span>
+j = json.loads(str1)
+<span class="code-function">print</span>(<span class="code-function">type</span>(j)) <span class="code-comment"># dict</span>
+
+<span class="code-comment"># 2. Dumps: Python 字典 -> JSON 字串</span>
+j_data = {<span class="code-string">'id'</span>: <span class="code-number">123</span>, <span class="code-string">'Name'</span>: <span class="code-string">'wsrsw'</span>}
+str2 = json.dumps(j_data)
+<span class="code-function">print</span>(<span class="code-function">type</span>(str2)) <span class="code-comment"># str</span></code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-laptop-code"></i> JSON 實戰練習</h4>
+                    <span class="status-badge important">練習</span>
+                </div>
+                <p class="note-desc">讀取 <code>0109.json</code> 檔案並篩選出數學成績。</p>
+                <pre><code><span class="code-keyword">import</span> json
+
+<span class="code-comment"># 讀取 JSON 檔案</span>
+f = <span class="code-function">open</span>(<span class="code-string">"0109.json"</span>, <span class="code-string">"r"</span>)
+date = json.load(f) <span class="code-comment"># 注意這裡是 load 不是 loads</span>
+f.close()
+
+<span class="code-function">print</span>(<span class="code-string">"讀取類型"</span>, <span class="code-function">type</span>(date))
+
+<span class="code-comment"># 遍歷資料</span>
+a = date[<span class="code-string">'contents'</span>]
+<span class="code-keyword">for</span> item <span class="code-keyword">in</span> a:
+    <span class="code-keyword">if</span> item[<span class="code-string">'subject'</span>] == <span class="code-string">'Math'</span>:
+        <span class="code-function">print</span>(<span class="code-string">"數學成績:"</span>, item[<span class="code-string">'score'</span>])</code></pre>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.overlay');
+            
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-280px';
+                overlay.style.display = 'none';
+            } else {
+                sidebar.style.left = '0px';
+                overlay.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
