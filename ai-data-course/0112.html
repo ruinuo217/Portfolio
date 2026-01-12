@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reyna's Learning Dashboard - 01/12</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* 針對程式碼區塊的額外優化 */
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            white-space: pre-wrap;
+        }
+        .code-comment { color: #75715e; }
+        .code-keyword { color: #ff79c6; font-weight: bold; }
+        .code-function { color: #8be9fd; }
+        .code-string { color: #f1fa8c; }
+        .code-number { color: #bd93f9; }
+        .code-type { color: #50fa7b; font-style: italic;}
+        
+        .alert-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            color: #856404;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+
+        .img-container {
+            margin: 15px 0;
+            text-align: center;
+        }
+        .img-container img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Reyna Portfolio</h2>
+            <span>Web Design Practice</span>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 1: 基礎導入</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1222.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/22 (一)</span><span class="topic">電腦基礎概論</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_1.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) am</span><span class="topic">IT Career 職涯解析</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_2.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) pm</span><span class="topic">ESP-01S 與 Arduino</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_1.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) am</span><span class="topic">IoT 與 Web Server 實作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_2.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) pm</span><span class="topic">Linux 系統與應用</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1226.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/26 (五)</span><span class="topic">Linux基礎到架站</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 2: 深入實作</div>
+            <ul>
+                 <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1229.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/29 (一)</span><span class="topic">電腦基礎概論 II</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1230.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/30 (二)</span><span class="topic">NoCode 資料蒐集與自動化</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1231.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/31 (三)</span><span class="topic">Linux 資料庫建置</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0102.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/2 (五)</span><span class="topic">Linux 系統管理與腳本</span></a></li>
+            </ul>
+        </div>
+        
+        <div class="menu-group">
+            <div class="group-title">Week 3: 資料庫與 Python</div>
+            <ul>
+                <li><a href="#"><span class="date-badge"><i class="far fa-calendar"></i> 1/5 (一)</span><span class="topic">計算機概論 (待補)</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0106.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/6 (二)</span><span class="topic">MySQL 安裝與 SSH 穿隧</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0107.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/7 (三)</span><span class="topic">MySQL 管理與 VS Code</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0108.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/8 (四)</span><span class="topic">Python 基礎與環境</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0109.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/9 (五)</span><span class="topic">Python 進階與資料處理</span></a></li>
+                <li class="active">
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0112.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/12 (一) </span>
+                        <span class="topic">Python 函數與異常處理</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+   <main class="main-content">
+     
+        <div class="top-bar">
+            <div class="breadcrumb">
+                首頁 > Week 3 > <span>Python 函數與異常處理</span>
+            </div>
+            <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
+                <i class="fas fa-home"></i> 回首頁
+            </a>
+        </div>
+        
+        <div class="banner" style="background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);">
+            <div>
+                <h1>Python 函數、模組與異常處理</h1>
+                <p>Function 定義、Type Hinting、模組化開發與 Try-Except 除錯實戰。</p>
+            </div>
+            <i class="fa-solid fa-bug banner-icon"></i>
+        </div>
+
+        <h3 class="section-title">Part 1: 自定義函數 (Functions)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> 基礎比大小函數</h4>
+                    <span class="status-badge running">邏輯</span>
+                </div>
+                <p class="note-desc">使用 Type Hinting 標註參數類型。</p>
+                <pre><code><span class="code-keyword">def</span> <span class="code-function">compare_nums</span>(n1: <span class="code-type">int</span>, n2: <span class="code-type">int</span>) -> <span class="code-type">str</span>:
+    <span class="code-keyword">if</span> n1 > n2:
+        <span class="code-keyword">return</span> f<span class="code-string">"{n1} 大 {n2}"</span>
+    <span class="code-keyword">elif</span> n1 < n2:
+        <span class="code-keyword">return</span> f<span class="code-string">"{n1} 小 {n2}"</span>
+    <span class="code-keyword">else</span>:
+        <span class="code-keyword">return</span> f<span class="code-string">"{n1} 等於 {n2}"</span>
+
+<span class="code-comment"># 呼叫測試</span>
+<span class="code-function">print</span>(compare_nums(<span class="code-number">5</span>, <span class="code-number">3</span>))
+x = <span class="code-function">int</span>(<span class="code-function">input</span>(<span class="code-string">"輸入數字1: "</span>))
+y = <span class="code-function">int</span>(<span class="code-function">input</span>(<span class="code-string">"輸入數字2: "</span>))
+<span class="code-function">print</span>(compare_nums(x, y))</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-box-open"></i> Any 類型與簡單運算</h4>
+                    <span class="status-badge done">語法</span>
+                </div>
+                <p class="note-desc">從 typing 模組引入 Any，表示可接受任何型態。</p>
+                <pre><code><span class="code-keyword">from</span> typing <span class="code-keyword">import</span> Any
+
+<span class="code-comment"># 1. 接受任何型態並回傳</span>
+<span class="code-keyword">def</span> <span class="code-function">identity</span>(x: <span class="code-type">Any</span>) -> <span class="code-type">Any</span>:
+    <span class="code-keyword">return</span> x
+
+<span class="code-function">print</span>(identity(<span class="code-number">10</span>))       <span class="code-comment"># int</span>
+<span class="code-function">print</span>(identity(<span class="code-string">"hello"</span>))  <span class="code-comment"># str</span>
+
+<span class="code-comment"># 2. 平方函數</span>
+<span class="code-keyword">def</span> <span class="code-function">square</span>(n: <span class="code-type">int</span>) -> <span class="code-type">int</span>:
+    <span class="code-keyword">return</span> n * n
+
+<span class="code-function">print</span>(square(<span class="code-number">5</span>)) <span class="code-comment"># 25</span></code></pre>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 2: 內建函數應用</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-toolbox"></i> 常用工具庫實作</h4>
+                    <span class="status-badge running">工具</span>
+                </div>
+                <pre><code><span class="code-keyword">import</span> random
+<span class="code-keyword">from</span> datetime <span class="code-keyword">import</span> datetime, timedelta
+
+<span class="code-comment"># 1. 隨機數與統計</span>
+a = [random.randint(<span class="code-number">1</span>, <span class="code-number">100</span>) <span class="code-keyword">for</span> _ <span class="code-keyword">in</span> <span class="code-function">range</span>(<span class="code-number">5</span>)]
+<span class="code-function">print</span>(f<span class="code-string">"列表: {a}"</span>)
+<span class="code-function">print</span>(f<span class="code-string">"總和: {sum(a)}, 最大: {max(a)}, 最小: {min(a)}"</span>)
+
+<span class="code-comment"># 2. 列表推導式 (List Comprehension)</span>
+b = [x * <span class="code-number">2</span> <span class="code-keyword">for</span> x <span class="code-keyword">in</span> a]
+<span class="code-function">print</span>(f<span class="code-string">"加倍後: {b}"</span>)
+
+<span class="code-comment"># 3. 日期運算</span>
+today = datetime.now().date()
+future = today + timedelta(days=<span class="code-number">10</span>)
+<span class="code-function">print</span>(f<span class="code-string">"今天: {today}, 10天後: {future}"</span>)
+
+<span class="code-comment"># 4. Map 與 Split</span>
+e = <span class="code-function">input</span>(<span class="code-string">"請輸入整數列表(空格隔開): "</span>)
+f = <span class="code-function">list</span>(<span class="code-function">map</span>(<span class="code-type">int</span>, e.split()))
+<span class="code-function">print</span>(f<span class="code-string">"總和: {sum(f)}"</span>)</code></pre>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 3: 模組化與日誌 (Logging)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-puzzle-piece"></i> 自製模組 (Module)</h4>
+                    <span class="status-badge done">結構</span>
+                </div>
+                <div class="img-container">
+                    <img src="https://hackmd.io/_uploads/SJbY7ffHZl.png" alt="Module Import Error">
+                </div>
+                <p class="note-desc">將功能拆分到不同檔案 (maths.py)，再由主程式 (main.py) 引用。</p>
+                <pre><code><span class="code-comment"># maths.py</span>
+<span class="code-keyword">def</span> <span class="code-function">add</span>(a, b): <span class="code-keyword">return</span> a + b
+<span class="code-keyword">def</span> <span class="code-function">mul</span>(a, b): <span class="code-keyword">return</span> a * b
+
+<span class="code-comment"># main.py</span>
+<span class="code-keyword">from</span> maths <span class="code-keyword">import</span> add, mul
+<span class="code-function">print</span>(add(<span class="code-number">2</span>, <span class="code-number">3</span>)) <span class="code-comment"># 5</span>
+<span class="code-comment"># print(sub(10, 2)) # Error: 未引入 sub</span></code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-file-signature"></i> Logging 日誌記錄</h4>
+                    <span class="status-badge running">紀錄</span>
+                </div>
+                <p class="note-desc">取代 print，將執行過程寫入檔案。</p>
+                <pre><code><span class="code-keyword">import</span> logging
+logging.basicConfig(
+    filename=<span class="code-string">'run.log'</span>,
+    filemode=<span class="code-string">'w'</span>, <span class="code-comment"># w: 覆寫, a: 續寫</span>
+    level=logging.INFO,
+    format=<span class="code-string">'%(asctime)s - %(levelname)s - %(message)s'</span>
+)
+
+logging.info(<span class="code-string">"程式開始"</span>)
+result = <span class="code-number">100</span> + <span class="code-number">200</span>
+logging.info(f<span class="code-string">"計算結果: {result}"</span>)</code></pre>
+                <div class="img-container">
+                    <img src="https://hackmd.io/_uploads/SkeBg7GrWx.png" alt="Run Log Output">
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 4: 異常處理 (Exception Handling)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-shield-virus"></i> 基礎 Try-Except 結構</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <pre><code><span class="code-keyword">try</span>:
+    <span class="code-comment"># 嘗試執行的程式碼</span>
+    <span class="code-keyword">if</span> a < b: <span class="code-function">print</span>(n) <span class="code-comment"># NameError</span>
+<span class="code-keyword">except</span> NameError:
+    <span class="code-function">print</span>(<span class="code-string">"發生錯誤: 變數未定義"</span>)
+<span class="code-keyword">else</span>:
+    <span class="code-function">print</span>(<span class="code-string">"成功執行 (無錯誤)"</span>)
+<span class="code-keyword">finally</span>:
+    <span class="code-function">print</span>(<span class="code-string">"無論如何都會執行 (清理資源)"</span>)</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-calculator"></i> 實戰：除法遊戲</h4>
+                    <span class="status-badge running">練習</span>
+                </div>
+                <pre><code><span class="code-keyword">def</span> <span class="code-function">game</span>():
+    <span class="code-keyword">try</span>:
+        a = <span class="code-function">float</span>(<span class="code-function">input</span>(<span class="code-string">"分子: "</span>))
+        b = <span class="code-function">float</span>(<span class="code-function">input</span>(<span class="code-string">"分母: "</span>))
+        <span class="code-keyword">return</span> a / b
+    <span class="code-keyword">except</span> ZeroDivisionError:
+        <span class="code-function">print</span>(<span class="code-string">"錯誤：分母不得為 0"</span>)
+    <span class="code-keyword">except</span> ValueError:
+        <span class="code-function">print</span>(<span class="code-string">"錯誤：請輸入數字"</span>)
+    <span class="code-keyword">return</span> <span class="code-keyword">None</span>
+
+result = game()
+<span class="code-keyword">if</span> result <span class="code-keyword">is not None</span>:
+    <span class="code-function">print</span>(f<span class="code-string">"結果: {result}"</span>)</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-check-double"></i> 老師範例：狀態回傳模式</h4>
+                    <span class="status-badge done">進階</span>
+                </div>
+                <p class="note-desc">使用 Tuple 同時回傳「狀態 (Boolean)」與「資料/錯誤訊息」，讓主程式更好判斷。</p>
+                <pre><code><span class="code-keyword">def</span> <span class="code-function">calc</span>(a, b):
+    <span class="code-keyword">try</span>:
+        <span class="code-keyword">return</span> <span class="code-keyword">True</span>, a / b  <span class="code-comment"># 成功</span>
+    <span class="code-keyword">except</span> Exception <span class="code-keyword">as</span> e:
+        <span class="code-keyword">return</span> <span class="code-keyword">False</span>, f<span class="code-string">"錯誤: {e}"</span>  <span class="code-comment"># 失敗</span>
+
+<span class="code-comment"># 主程式接球</span>
+status, data = calc(<span class="code-number">4</span>, <span class="code-number">2</span>)
+
+<span class="code-keyword">if</span> status:
+    <span class="code-function">print</span>(f<span class="code-string">"計算成功：{data}"</span>)
+<span class="code-keyword">else</span>:
+    <span class="code-function">print</span>(f<span class="code-string">"發生錯誤：{data}"</span>)</code></pre>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.overlay');
+            
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-280px';
+                overlay.style.display = 'none';
+            } else {
+                sidebar.style.left = '0px';
+                overlay.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
