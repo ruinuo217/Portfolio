@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reyna's Learning Dashboard - 01/15</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* 針對程式碼區塊的額外優化 */
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            white-space: pre-wrap;
+        }
+        .code-comment { color: #75715e; }
+        .code-keyword { color: #ff79c6; font-weight: bold; }
+        .code-function { color: #8be9fd; }
+        .code-string { color: #f1fa8c; }
+        .code-number { color: #bd93f9; }
+        .code-sql { color: #66d9ef; font-weight: bold; }
+        
+        .alert-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            color: #856404;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+
+        .img-container {
+            margin: 15px 0;
+            text-align: center;
+        }
+        .img-container img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Reyna Portfolio</h2>
+            <span>Web Design Practice</span>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 1: 基礎導入</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1222.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/22 (一)</span><span class="topic">電腦基礎概論</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_1.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) am</span><span class="topic">IT Career 職涯解析</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_2.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) pm</span><span class="topic">ESP-01S 與 Arduino</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_1.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) am</span><span class="topic">IoT 與 Web Server 實作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_2.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) pm</span><span class="topic">Linux 系統與應用</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1226.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/26 (五)</span><span class="topic">Linux基礎到架站</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 2: 深入實作</div>
+            <ul>
+                 <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1229.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/29 (一)</span><span class="topic">電腦基礎概論 II</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1230.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/30 (二)</span><span class="topic">NoCode 資料蒐集與自動化</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1231.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/31 (三)</span><span class="topic">Linux 資料庫建置</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0102.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/2 (五)</span><span class="topic">Linux 系統管理與腳本</span></a></li>
+            </ul>
+        </div>
+        
+        <div class="menu-group">
+            <div class="group-title">Week 3: 資料庫與 Python</div>
+            <ul>
+                <li><a href="#"><span class="date-badge"><i class="far fa-calendar"></i> 1/5 (一)</span><span class="topic">計算機概論 (待補)</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0106.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/6 (二)</span><span class="topic">MySQL 安裝與 SSH 穿隧</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0107.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/7 (三)</span><span class="topic">MySQL 管理與 VS Code</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0108.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/8 (四)</span><span class="topic">Python 基礎與環境</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0109.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/9 (五)</span><span class="topic">Python 進階與資料處理</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 4: Python 與 SQL</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0112.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/12 (一)</span><span class="topic">Python 函數與異常處理</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0113.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/13 (二)</span><span class="topic">OOP 與 記憶體管理</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0114.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/14 (三)</span><span class="topic">MySQL 語法與資料操作</span></a></li>
+                <li class="active">
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0115.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/15 (四) </span>
+                        <span class="topic">MySQL 進階查詢與實作</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+   <main class="main-content">
+     
+        <div class="top-bar">
+            <div class="breadcrumb">
+                首頁 > Week 4 > <span>MySQL 進階查詢與實作</span>
+            </div>
+            <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
+                <i class="fas fa-home"></i> 回首頁
+            </a>
+        </div>
+        
+        <div class="banner" style="background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%);">
+            <div>
+                <h1>MySQL 進階查詢與實作</h1>
+                <p>權限管理、多表 JOIN 實戰、資料分組統計與 Python 連線整合。</p>
+            </div>
+            <i class="fa-solid fa-layer-group banner-icon"></i>
+        </div>
+
+        <h3 class="section-title">Part 1: 資料庫管理 (權限與匯入匯出)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-user-shield"></i> 權限賦予 (Grant)</h4>
+                    <span class="status-badge important">管理</span>
+                </div>
+                <pre><code><span class="code-comment">-- 1. 授權 mydbo 可以建立任何資料庫 (請謹慎使用)</span>
+<span class="code-sql">GRANT ALL PRIVILEGES ON</span> *.* <span class="code-sql">TO</span> 'mydbo'@'%';
+<span class="code-sql">FLUSH PRIVILEGES</span>;
+
+<span class="code-comment">-- 2. 較安全的做法：先建立 DB，再授權單一資料庫</span>
+<span class="code-sql">GRANT ALL PRIVILEGES ON</span> ecommerce_db.* <span class="code-sql">TO</span> 'mydbo'@'%';
+<span class="code-sql">FLUSH PRIVILEGES</span>;</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-file-import"></i> 匯入注意事項</h4>
+                    <span class="status-badge running">操作</span>
+                </div>
+                <p class="note-desc">從 MySQL 匯出到微軟環境時，務必檢查 <strong>UTF-8 編碼</strong>。</p>
+                <div class="img-container">
+                    <img src="https://hackmd.io/_uploads/Sy6SVpSSWx.png" alt="匯入前檢查編碼">
+                    <div class="img-caption">圖：使用文字編輯器確認編碼</div>
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-file-export"></i> 匯出 SQL</h4>
+                    <span class="status-badge done">備份</span>
+                </div>
+                <p class="note-desc">透過管理工具匯出 .sql 檔案，可於 VS Code 檢視內容。</p>
+                <div class="img-container">
+                    <img src="https://hackmd.io/_uploads/ByWRRaBrbl.png" alt="VS Code 查看 SQL">
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 2: 進階查詢 (分頁、統計)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrow-down-1-9"></i> 排序與分頁 (Order By & Limit)</h4>
+                    <span class="status-badge running">常用</span>
+                </div>
+                <p class="note-desc">實作「先排好隊，再發號碼牌，最後只拿第 11 頁資料」的邏輯。</p>
+                <pre><code><span class="code-sql">SELECT</span> * <span class="code-sql">FROM</span> `users`
+<span class="code-sql">ORDER BY</span> u_birth <span class="code-sql">DESC</span>, u_name <span class="code-sql">ASC</span> <span class="code-comment">-- 先按生日降序，平手則按名字升序</span>
+<span class="code-sql">LIMIT</span> 10 <span class="code-sql">OFFSET</span> 100;            <span class="code-comment">-- 跳過前 100 筆，取 10 筆 (即第 11 頁)</span></code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-filter"></i> 分組統計 (Group By & Having)</h4>
+                    <span class="status-badge important">重點</span>
+                </div>
+                <div class="alert-box">
+                    <strong>面試必考：</strong><br>
+                    <code>WHERE</code>：過濾原始資料 (分組前)。<br>
+                    <code>HAVING</code>：過濾統計結果 (分組後)。
+                </div>
+                <pre><code><span class="code-comment">-- 找出總消費超過 70000 的大戶</span>
+<span class="code-sql">SELECT</span> `user_id`, <span class="code-function">sum</span>(`price_at_purchase`) <span class="code-sql">FROM</span> `orders` 
+<span class="code-sql">WHERE</span> status <span class="code-sql">IN</span> ('PAID', 'SHIPPED')      <span class="code-comment">-- 1. 先篩選有效訂單</span>
+<span class="code-sql">GROUP BY</span> user_id                         <span class="code-comment">-- 2. 按人分組算總和</span>
+<span class="code-sql">HAVING</span> <span class="code-function">sum</span>(`price_at_purchase`) > 70000; <span class="code-comment">-- 3. 最後踢掉小戶</span></code></pre>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 3: 多表關聯 (JOIN) 詳解</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-handshake"></i> INNER JOIN (交集)</h4>
+                    <span class="status-badge done">預設</span>
+                </div>
+                <p class="note-desc">只顯示「兩邊都有」的資料。找不到主人的訂單會被隱藏。</p>
+                <pre><code><span class="code-comment">-- 預設的 JOIN 就是 INNER JOIN</span>
+<span class="code-sql">SELECT</span> * <span class="code-sql">FROM</span> `orders` 
+<span class="code-sql">JOIN</span> users <span class="code-sql">ON</span> orders.user_id = users.id;</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrow-right-to-bracket"></i> LEFT JOIN (左外部關聯)</h4>
+                    <span class="status-badge important">查帳</span>
+                </div>
+                <div class="alert-box">
+                    <strong>核心觀念：</strong> 左表 (`FROM` 後面的表) 是老大，資料全保留。右表沒對應到的，就填 <code>NULL</code>。
+                </div>
+                <pre><code><span class="code-comment">-- 列出所有訂單 (左表)，即使它找不到使用者 (右表) -> 抓出幽靈訂單</span>
+<span class="code-sql">SELECT</span> orders.id, orders.price, users.name
+<span class="code-sql">FROM</span> orders       <span class="code-comment">-- 左表 (老大)</span>
+<span class="code-sql">LEFT JOIN</span> users   <span class="code-comment">-- 右表 (配角)</span>
+<span class="code-sql">ON</span> orders.user_id = users.id;</code></pre>
+                <p style="margin-top:10px; font-size:0.9rem; color:#666;">
+                    如果有一筆訂單的 `user_id` 是 999，但 `users` 表沒有這個人，結果會顯示：<br>
+                    <code>訂單ID: 101 | 價格: 500 | 姓名: NULL</code>
+                </p>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-bullhorn"></i> RIGHT JOIN (右外部關聯)</h4>
+                    <span class="status-badge running">分析</span>
+                </div>
+                <p class="note-desc">右表是老大。常用於行銷分析 (找出「註冊但沒買過東西」的潛水會員)。</p>
+                <pre><code><span class="code-comment">-- 列出所有使用者 (右表)，包含沒下過單的</span>
+<span class="code-sql">SELECT</span> * <span class="code-sql">FROM</span> orders
+<span class="code-sql">RIGHT JOIN</span> users <span class="code-sql">ON</span> ...</code></pre>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 4: 進階概念 (View & NULL)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-table"></i> 檢視表 (View)</h4>
+                    <span class="status-badge done">虛擬表</span>
+                </div>
+                <p class="note-desc">將複雜查詢存成虛擬表，方便重複使用。</p>
+                <div class="img-container">
+                    <img src="https://hackmd.io/_uploads/rJDowb8Bbx.png" alt="建立 View 示意圖">
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-circle-question"></i> NULL 的陷阱 (三值邏輯)</h4>
+                    <span class="status-badge important">陷阱</span>
+                </div>
+                <p class="note-desc">在 SQL 中，<code>NULL</code> 代表「未知 (Unknown)」，不是 0 也不是空字串。</p>
+                
+                <h5 style="margin:15px 0 5px 0;">1. 比較的陷阱</h5>
+                <pre><code><span class="code-comment">-- 錯誤寫法：永遠回傳 Unknown (不會有結果)</span>
+<span class="code-sql">SELECT</span> * <span class="code-sql">FROM</span> users <span class="code-sql">WHERE</span> email = <span class="code-keyword">NULL</span>; 
+
+<span class="code-comment">-- 正確寫法：使用 IS NULL</span>
+<span class="code-sql">SELECT</span> * <span class="code-sql">FROM</span> users <span class="code-sql">WHERE</span> email <span class="code-keyword">IS NULL</span>;</code></pre>
+
+                <h5 style="margin:15px 0 5px 0;">2. 運算的陷阱</h5>
+                <p style="font-size:0.9rem;">任何數字加上 NULL，結果都是 NULL (100 + 未知 = 未知)。</p>
+                <pre><code><span class="code-sql">SELECT</span> 100 + <span class="code-keyword">NULL</span>; <span class="code-comment">-- 結果: NULL</span></code></pre>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 5: 實作練習 (Practice)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-nib"></i> 練習 1: 列出會員購買清單</h4>
+                    <span class="status-badge running">GROUP_CONCAT</span>
+                </div>
+                <p class="note-desc">目標：列出所有訂單的購買人、商品名稱 (用逗號隔開)，並使用別名 (Alias) 簡化代碼。</p>
+                <pre><code><span class="code-sql">SELECT</span> 
+    u.name <span class="code-sql">AS</span> user_name, 
+    <span class="code-function">GROUP_CONCAT</span>(p.name <span class="code-sql">SEPARATOR</span> ', ') <span class="code-sql">AS</span> prod_name 
+<span class="code-sql">FROM</span> `orders` <span class="code-sql">AS</span> o 
+<span class="code-sql">JOIN</span> `users` <span class="code-sql">AS</span> u <span class="code-sql">ON</span> o.user_id = u.id 
+<span class="code-sql">JOIN</span> `products` <span class="code-sql">AS</span> p <span class="code-sql">ON</span> o.product_id = p.id 
+<span class="code-sql">GROUP BY</span> u.id; <span class="code-comment">-- 依照使用者分組，才能把商品黏在一起</span></code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-nib"></i> 練習 2: 產品銷售總表 (含 0 銷量)</h4>
+                    <span class="status-badge important">LEFT JOIN + IFNULL</span>
+                </div>
+                <p class="note-desc">目標：列出「所有商品」的銷售總數。若沒賣出，數量需顯示為 0 而非 NULL。</p>
+                <div class="alert-box">
+                    <strong>解題關鍵：</strong> 使用 <code>LEFT JOIN</code> 確保商品不消失，配合 <code>IFNULL</code> 處理空值。
+                </div>
+                <pre><code><span class="code-sql">SELECT</span> 
+    p.name, 
+    <span class="code-function">IFNULL</span>(<span class="code-function">SUM</span>(o.quantity), 0) <span class="code-sql">AS</span> total_sold 
+<span class="code-sql">FROM</span> products <span class="code-sql">AS</span> p
+<span class="code-sql">LEFT JOIN</span> orders <span class="code-sql">AS</span> o <span class="code-sql">ON</span> p.id = o.product_id
+<span class="code-sql">GROUP BY</span> p.id, p.name
+<span class="code-sql">ORDER BY</span> total_sold <span class="code-sql">DESC</span>;</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-nib"></i> 練習 3: 查詢檢視表</h4>
+                    <span class="status-badge done">View</span>
+                </div>
+                <pre><code><span class="code-sql">SELECT</span> * <span class="code-sql">FROM</span> `view_sum_personal_spent` 
+<span class="code-sql">WHERE</span> total_spent > 50000;</code></pre>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 6: Python 連線 MySQL</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-brands fa-python"></i> 環境安裝與連線</h4>
+                    <span class="status-badge running">PyMySQL</span>
+                </div>
+                <p class="note-desc">安裝必要套件：</p>
+                <pre><code>pip install pymysql cryptography</code></pre>
+                
+                <h5 style="margin-top:15px;">單元三：建立連線 (Connection & Cursor)</h5>
+                <div class="img-container">
+                    <img src="https://hackmd.io/_uploads/HJlbkVIB-g.png" alt="Python 連線程式碼">
+                </div>
+
+                <h5 style="margin-top:15px;">單元四：執行 SQL (Execute)</h5>
+                <div class="img-container">
+                    <img src="https://hackmd.io/_uploads/ry1C0X8r-e.png" alt="Python 執行 SQL">
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.overlay');
+            
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-280px';
+                overlay.style.display = 'none';
+            } else {
+                sidebar.style.left = '0px';
+                overlay.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

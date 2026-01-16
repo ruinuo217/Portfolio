@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reyna's Learning Dashboard - 01/13</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* 針對程式碼區塊的額外優化 */
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            white-space: pre-wrap;
+        }
+        .code-comment { color: #75715e; }
+        .code-keyword { color: #ff79c6; font-weight: bold; }
+        .code-function { color: #8be9fd; }
+        .code-string { color: #f1fa8c; }
+        .code-number { color: #bd93f9; }
+        .code-class { color: #50fa7b; font-weight: bold; }
+        
+        .alert-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            color: #856404;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+
+        .concept-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        .concept-table th, .concept-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .concept-table th {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        
+        /* 版本標籤 */
+        .ver-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .ver-1 { background-color: #e0f2f1; color: #00695c; border: 1px solid #b2dfdb; }
+        .ver-2 { background-color: #fff3e0; color: #ef6c00; border: 1px solid #ffe0b2; }
+        .ver-3 { background-color: #f3e5f5; color: #8e24aa; border: 1px solid #e1bee7; }
+        .ver-4 { background-color: #e8eaf6; color: #3f51b5; border: 1px solid #c5cae9; }
+    </style>
+</head>
+<body>
+
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Reyna Portfolio</h2>
+            <span>Web Design Practice</span>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 1: 基礎導入</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1222.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/22 (一)</span><span class="topic">電腦基礎概論</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_1.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) am</span><span class="topic">IT Career 職涯解析</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_2.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) pm</span><span class="topic">ESP-01S 與 Arduino</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_1.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) am</span><span class="topic">IoT 與 Web Server 實作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_2.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) pm</span><span class="topic">Linux 系統與應用</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1226.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/26 (五)</span><span class="topic">Linux基礎到架站</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 2: 深入實作</div>
+            <ul>
+                 <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1229.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/29 (一)</span><span class="topic">電腦基礎概論 II</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1230.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/30 (二)</span><span class="topic">NoCode 資料蒐集與自動化</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1231.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/31 (三)</span><span class="topic">Linux 資料庫建置</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0102.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/2 (五)</span><span class="topic">Linux 系統管理與腳本</span></a></li>
+            </ul>
+        </div>
+        
+        <div class="menu-group">
+            <div class="group-title">Week 3: 資料庫與 Python</div>
+            <ul>
+                <li><a href="#"><span class="date-badge"><i class="far fa-calendar"></i> 1/5 (一)</span><span class="topic">計算機概論 (待補)</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0106.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/6 (二)</span><span class="topic">MySQL 安裝與 SSH 穿隧</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0107.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/7 (三)</span><span class="topic">MySQL 管理與 VS Code</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0108.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/8 (四)</span><span class="topic">Python 基礎與環境</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0109.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/9 (五)</span><span class="topic">Python 進階與資料處理</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 4: Python 與 SQL</div>
+            <ul>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0112.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/12 (一) </span>
+                        <span class="topic">Python 函數與異常處理</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0113.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/13 (二) </span>
+                        <span class="topic">OOP 與 記憶體管理</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0114.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/14 (三) </span>
+                        <span class="topic">MySQL 語法與資料操作</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0115.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/15 (四) </span>
+                        <span class="topic">MySQL 進階查詢與實作</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+   <main class="main-content">
+     
+        <div class="top-bar">
+            <div class="breadcrumb">
+                首頁 > Week 4 > <span>OOP 與 記憶體管理</span>
+            </div>
+            <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
+                <i class="fas fa-home"></i> 回首頁
+            </a>
+        </div>
+        
+        <div class="banner" style="background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);">
+            <div>
+                <h1>物件導向與記憶體管理</h1>
+                <p>Class 類別實作、變數作用域 (LEGB)、Mutable 陷阱與二維陣列。</p>
+            </div>
+            <i class="fa-solid fa-cubes banner-icon"></i>
+        </div>
+
+        <h3 class="section-title">Part 1: 物件導向程式設計 (OOP)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-car"></i> Class 類別實作練習</h4>
+                    <span class="status-badge running">實作</span>
+                </div>
+                <p class="note-desc">定義一個 Car 類別，包含屬性初始化與方法 (Method)。</p>
+                <pre><code><span class="code-keyword">class</span> <span class="code-class">Car</span>:
+    <span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>, brand, model, year):
+        <span class="code-keyword">self</span>.brand = brand
+        <span class="code-keyword">self</span>.model = model
+        <span class="code-keyword">self</span>.year = year
+
+    <span class="code-keyword">def</span> <span class="code-function">a</span>(<span class="code-keyword">self</span>):
+        <span class="code-function">print</span>(f<span class="code-string">"車: {self.brand} {self.model} ({self.year})"</span>)
+
+    <span class="code-keyword">def</span> <span class="code-function">update_year</span>(<span class="code-keyword">self</span>, new_year):
+        <span class="code-keyword">self</span>.year = new_year
+        <span class="code-function">print</span>(f<span class="code-string">"新年: {self.year}"</span>)
+        
+    <span class="code-keyword">def</span> <span class="code-function">update_model</span>(<span class="code-keyword">self</span>, new_model):
+        <span class="code-keyword">self</span>.model = new_model
+        <span class="code-function">print</span>(f<span class="code-string">"新車: {self.model}"</span>)
+
+<span class="code-comment"># 實例化與操作</span>
+my_car = Car(<span class="code-string">"Toyota"</span>, <span class="code-string">"Corolla"</span>, <span class="code-number">2020</span>)
+my_car.a()
+
+my_car.update_year(<span class="code-number">2026</span>)
+my_car.a()
+
+my_car.update_model(<span class="code-string">"Rev4"</span>)
+my_car.a()</code></pre>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 2: 變數生命週期 (Scope)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-layer-group"></i> LEGB 查找規則</h4>
+                    <span class="status-badge done">觀念</span>
+                </div>
+                <p class="note-desc">Python 變數查找順序：由內而外。</p>
+                <table class="concept-table">
+                    <tr><th>代號</th><th>意義</th><th>說明</th></tr>
+                    <tr><td><strong>L</strong></td><td>Local</td><td>函式內部</td></tr>
+                    <tr><td><strong>E</strong></td><td>Enclosing</td><td>外部巢狀函式</td></tr>
+                    <tr><td><strong>G</strong></td><td>Global</td><td>全域 (模組層級)</td></tr>
+                    <tr><td><strong>B</strong></td><td>Built-in</td><td>內建 (如 print)</td></tr>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-ban"></i> 避免使用 Global</h4>
+                    <span class="status-badge important">最佳實踐</span>
+                </div>
+                <p class="note-desc">不要直接在函式內修改 Global 變數，應使用 <strong>參數傳遞</strong> 與 <strong>Return</strong>。</p>
+                <pre><code>s = <span class="code-number">1</span>
+
+<span class="code-keyword">def</span> <span class="code-function">add</span>(a):
+    b = a + <span class="code-number">2</span>
+    <span class="code-keyword">return</span> b
+
+<span class="code-comment"># 正確做法：用變數接住回傳值</span>
+s = add(s) 
+<span class="code-function">print</span>(s) <span class="code-comment"># 輸出 3</span></code></pre>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 3: 記憶體與 Mutable 陷阱</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-microchip"></i> Call by Assignment (指派式呼叫)</h4>
+                    <span class="status-badge important">核心</span>
+                </div>
+                <p class="note-desc">觀察傳入 Function 後，List (可變) 與 Int (不可變) 的行為差異。</p>
+                <pre><code>x = <span class="code-number">10</span>
+y = [<span class="code-number">10</span>]
+
+<span class="code-keyword">def</span> <span class="code-function">modify</span>(a, b):
+    a += <span class="code-number">5</span>      <span class="code-comment"># Integer 是不可變的，這裡 a 變成了新的物件 (Re-assign)，不影響外部 x</span>
+    b += [<span class="code-number">5</span>]    <span class="code-comment"># List 是可變的，+= 會直接修改原物件 (In-place update)</span>
+
+modify(x, y)
+<span class="code-function">print</span>(x)  <span class="code-comment"># 10 (沒變)</span>
+<span class="code-function">print</span>(y)  <span class="code-comment"># [10, 5] (變了！)</span></code></pre>
+                <div class="alert-box">
+                    <strong>結論：</strong> 傳入 Mutable 物件 (如 List) 時要小心，函式內的修改可能會影響到外部變數。
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 4: 資料結構 - 二維陣列</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-table-cells"></i> 矩陣實作 (Nested Loop)</h4>
+                    <span class="status-badge running">演算法</span>
+                </div>
+                <p class="note-desc">使用巢狀迴圈建立 3x4 的二維陣列。</p>
+                <pre><code>rows = <span class="code-number">3</span>
+cols = <span class="code-number">4</span>
+matrix = []
+count = <span class="code-number">1</span>
+
+<span class="code-keyword">for</span> i <span class="code-keyword">in</span> <span class="code-function">range</span>(rows):       <span class="code-comment"># 外層：控制列 (Row)</span>
+    row = []
+    <span class="code-keyword">for</span> j <span class="code-keyword">in</span> <span class="code-function">range</span>(cols):   <span class="code-comment"># 內層：控制行 (Col)</span>
+        row.append(count)
+        count += <span class="code-number">1</span>
+    matrix.append(row)
+
+<span class="code-function">print</span>(matrix)
+<span class="code-comment"># 輸出: [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]]</span></code></pre>
+            </div>
+        </div>
+
+        <h3 class="section-title">Homework: 警報狀態機設計</h3>
+        <div class="dashboard-grid notes-section">
+            
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code-branch"></i> Version 1: 基礎狀態機</h4>
+                    <span class="ver-badge ver-1">V1</span>
+                </div>
+                <p class="note-desc">重點：實作 <code>IDLE</code>, <code>MONITORING</code>, <code>STOPPED</code> 狀態切換與異常防護。</p>
+                <pre><code><span class="code-keyword">import</span> logging
+logging.basicConfig(
+    level=logging.INFO, 
+    format=<span class="code-string">'%(asctime)s - [%(levelname)s] - %(message)s'</span>,
+    datefmt=<span class="code-string">'%Y-%m-%d %H:%M:%S'</span> <span class="code-comment"># 年-月-日 時:分:秒</span>
+)
+
+<span class="code-keyword">class</span> <span class="code-class">AlertStateMachine</span>:
+    <span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):
+        <span class="code-keyword">self</span>.state = <span class="code-string">"IDLE"</span> 
+
+    <span class="code-comment"># [動作] a: 啟動監控</span>
+    <span class="code-keyword">def</span> <span class="code-function">a</span>(<span class="code-keyword">self</span>):
+        <span class="code-keyword">self</span>.state = <span class="code-string">"MONITORING"</span>
+        logging.info(<span class="code-string">"系統【啟動監控中】"</span>) <span class="code-comment"># Status -> MONITORING</span>
+
+    <span class="code-comment"># [動作] c: 強制停止</span>
+    <span class="code-keyword">def</span> <span class="code-function">c</span>(<span class="code-keyword">self</span>):
+        <span class="code-keyword">self</span>.state = <span class="code-string">"STOPPED"</span>
+        logging.warning(<span class="code-string">"系統【強制停止】"</span>)
+
+    <span class="code-comment"># [核心] b: 處理事件</span>
+    <span class="code-keyword">def</span> <span class="code-function">b</span>(<span class="code-keyword">self</span>, event):
+        source = event.get(<span class="code-string">"source"</span>, <span class="code-string">"未知來源"</span>)
+        e_type = event.get(<span class="code-string">"type"</span>, <span class="code-string">"未知類型"</span>)
+        confidence = event.get(<span class="code-string">"confidence"</span>, <span class="code-number">0</span>)
+
+        <span class="code-keyword">if</span> <span class="code-keyword">self</span>.state == <span class="code-string">"IDLE"</span>: <span class="code-comment"># 1. IDLE 狀態：報錯</span>
+            msg = f<span class="code-string">"系統【錯誤】，狀態： {self.state} | 來源: {source}"</span>
+            logging.error(msg)
+            <span class="code-keyword">raise</span> <span class="code-function">Exception</span>(msg)
+
+        <span class="code-keyword">if</span> <span class="code-keyword">self</span>.state == <span class="code-string">"STOPPED"</span>: <span class="code-comment"># 2. STOPPED 狀態</span>
+            logging.warning(f<span class="code-string">"系統【已停止】，狀態： {self.state} | 來源: {source}"</span>)
+            <span class="code-keyword">return</span> 
+
+        <span class="code-keyword">if</span> <span class="code-keyword">self</span>.state == <span class="code-string">"ALERTING"</span>: <span class="code-comment"># 3. ALERTING 狀態：忽略後續事件</span>
+            logging.info(f<span class="code-string">"系統【忙碌中】，忽略來自 {source} 的事件"</span>)
+            <span class="code-keyword">return</span>
+
+        <span class="code-keyword">if</span> e_type == <span class="code-string">"入侵"</span> <span class="code-keyword">and</span> confidence >= <span class="code-number">0.8</span>:  <span class="code-comment"># 必須是「入侵」且「信心 >= 0.8」才觸發</span>
+            <span class="code-keyword">self</span>.state = <span class="code-string">"ALERTING"</span>
+            logging.critical(f<span class="code-string">"系統【警告】{e_type} | 來源: {source} | 信心度: {confidence}"</span>)
+        <span class="code-keyword">else</span>:  <span class="code-comment"># 沒觸發</span>
+            logging.info(f<span class="code-string">"系統【安全或其他】| 來源: {source} | 信心度: {confidence}"</span>)
+
+<span class="code-comment"># --- 測試區 ---</span>
+<span class="code-function">print</span>(<span class="code-string">"\n測試 1: 正常抓到入侵 (高信心)"</span>)
+s1 = AlertStateMachine()
+s1.a() 
+s1.b({<span class="code-string">"source"</span>: <span class="code-string">"Cam01"</span>, <span class="code-string">"type"</span>: <span class="code-string">"入侵"</span>, <span class="code-string">"confidence"</span>: <span class="code-number">0.92</span>}) 
+
+<span class="code-function">print</span>(<span class="code-string">"\n測試 2: 入侵 (低信心)"</span>)
+s2 = AlertStateMachine()
+s2.a() 
+s2.b({<span class="code-string">"source"</span>: <span class="code-string">"Cam02"</span>, <span class="code-string">"type"</span>: <span class="code-string">"入侵"</span>, <span class="code-string">"confidence"</span>: <span class="code-number">0.4</span>}) 
+
+<span class="code-function">print</span>(<span class="code-string">"\n測試 3: IDLE 狀態誤觸 (預期報錯)"</span>)
+s3 = AlertStateMachine()
+<span class="code-keyword">try</span>:
+    s3.b({<span class="code-string">"source"</span>: <span class="code-string">"Cam03"</span>, <span class="code-string">"type"</span>: <span class="code-string">"入侵"</span>, <span class="code-string">"confidence"</span>: <span class="code-number">0.9</span>})
+<span class="code-keyword">except</span> <span class="code-function">Exception</span> <span class="code-keyword">as</span> e:
+    <span class="code-function">print</span>(f<span class="code-string">"(外部攔截到 Exception: {e})"</span>)
+
+<span class="code-function">print</span>(<span class="code-string">"\n測試 4: 警報響起後，忽略後續事件"</span>)
+s4 = AlertStateMachine()
+s4.a() 
+s4.b({<span class="code-string">"source"</span>: <span class="code-string">"Cam04"</span>, <span class="code-string">"type"</span>: <span class="code-string">"入侵"</span>, <span class="code-string">"confidence"</span>: <span class="code-number">0.95</span>}) 
+s4.b({<span class="code-string">"source"</span>: <span class="code-string">"Cam05"</span>, <span class="code-string">"type"</span>: <span class="code-string">"入侵"</span>, <span class="code-string">"confidence"</span>: <span class="code-number">0.3</span>}) 
+
+<span class="code-function">print</span>(<span class="code-string">"\n測試 5: STOPPED 狀態 (紀錄 Log 但不崩潰)"</span>)
+s5 = AlertStateMachine()
+s5.c() 
+s5.b({<span class="code-string">"source"</span>: <span class="code-string">"Cam_Backdoor"</span>, <span class="code-string">"type"</span>: <span class="code-string">"入侵"</span>, <span class="code-string">"confidence"</span>: <span class="code-number">0.99</span>})
+
+<span class="code-function">print</span>(<span class="code-string">"\n--- 全部測試完成 ---"</span>)</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-list-check"></i> Version 2: 多重條件判斷</h4>
+                    <span class="ver-badge ver-2">V2</span>
+                </div>
+                <p class="note-desc">重點：使用 <code>if-elif-else</code> 結構，針對「入侵」、「火災」、「跌倒」處理不同的門檻值。</p>
+                <pre><code><span class="code-keyword">import</span> logging
+
+logging.basicConfig(
+    level=logging.INFO, 
+    format=<span class="code-string">'%(asctime)s - [%(levelname)s] - %(message)s'</span>,
+    datefmt=<span class="code-string">'%Y-%m-%d %H:%M:%S'</span>
+)
+
+<span class="code-keyword">class</span> <span class="code-class">AlertStateMachine</span>:
+    <span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):
+        <span class="code-keyword">self</span>.state = <span class="code-string">"IDLE"</span> 
+
+    <span class="code-keyword">def</span> <span class="code-function">a</span>(<span class="code-keyword">self</span>): <span class="code-comment"># 啟動</span>
+        <span class="code-keyword">self</span>.state = <span class="code-string">"MONITORING"</span>
+        logging.info(<span class="code-string">"系統【啟動監控中】"</span>) 
+
+    <span class="code-keyword">def</span> <span class="code-function">c</span>(<span class="code-keyword">self</span>): <span class="code-comment"># 停止</span>
+        <span class="code-keyword">self</span>.state = <span class="code-string">"STOPPED"</span>
+        logging.warning(<span class="code-string">"系統【強制停止】"</span>)
+
+    <span class="code-keyword">def</span> <span class="code-function">b</span>(<span class="code-keyword">self</span>, event): <span class="code-comment"># 處理事件</span>
+        source = event.get(<span class="code-string">"source"</span>, <span class="code-string">"未知來源"</span>)
+        e_type = event.get(<span class="code-string">"type"</span>, <span class="code-string">"未知類型"</span>)
+        confidence = event.get(<span class="code-string">"confidence"</span>, <span class="code-number">0</span>)
+
+        <span class="code-keyword">if</span> <span class="code-keyword">self</span>.state == <span class="code-string">"IDLE"</span>: 
+            msg = f<span class="code-string">"系統【錯誤】，狀態： {self.state} | 來源: {source}"</span>
+            logging.error(msg)
+            <span class="code-keyword">raise</span> <span class="code-function">Exception</span>(msg)
+
+        <span class="code-keyword">if</span> <span class="code-keyword">self</span>.state == <span class="code-string">"STOPPED"</span>: 
+            logging.warning(f<span class="code-string">"系統【已停止】，狀態： {self.state} | 來源: {source}"</span>)
+            <span class="code-keyword">return</span> 
+
+        <span class="code-keyword">if</span> <span class="code-keyword">self</span>.state == <span class="code-string">"ALERTING"</span>: 
+            logging.info(f<span class="code-string">"系統【忙碌中】，忽略來自 {source} 的事件"</span>)
+            <span class="code-keyword">return</span>
+
+        <span class="code-comment"># --- 事件邏輯 ---</span>
+
+        <span class="code-comment"># 情況 A: 入侵 (信心 >= 0.8)</span>
+        <span class="code-keyword">if</span> e_type == <span class="code-string">"入侵"</span> <span class="code-keyword">and</span> confidence >= <span class="code-number">0.8</span>:
+            <span class="code-keyword">self</span>.state = <span class="code-string">"ALERTING"</span>
+            logging.critical(f<span class="code-string">"系統【入侵警報】(情況A) | 來源: {source} | 抓小偷！"</span>)
+            
+        <span class="code-comment"># 情況 B: 火災 (信心 >= 0.5)</span>
+        <span class="code-keyword">elif</span> e_type == <span class="code-string">"火災"</span> <span class="code-keyword">and</span> confidence >= <span class="code-number">0.5</span>:
+            <span class="code-keyword">self</span>.state = <span class="code-string">"ALERTING"</span>
+            logging.critical(f<span class="code-string">"系統【火災警報】(情況B) | 來源: {source} | 快逃啊！"</span>)
+            
+        <span class="code-comment"># 情況 C: 跌倒 (信心 >= 0.9)</span>
+        <span class="code-keyword">elif</span> e_type == <span class="code-string">"跌倒"</span> <span class="code-keyword">and</span> confidence >= <span class="code-number">0.9</span>:
+            <span class="code-keyword">self</span>.state = <span class="code-string">"ALERTING"</span>
+            logging.critical(f<span class="code-string">"系統【跌倒警報】(情況C) | 來源: {source} | 請派救護車"</span>)
+            
+        <span class="code-comment"># 情況 D: 其他/忽略 (沒選上)</span>
+        <span class="code-keyword">else</span>:
+            logging.info(f<span class="code-string">"系統【忽略/安全】(情況D) | 類型: {e_type} | 信心: {confidence}"</span>)
+
+
+<span class="code-comment"># --- 針對 A, B, C, D 的獨立測試 ---</span>
+
+<span class="code-function">print</span>(<span class="code-string">"\n--- 開始 ABCD 測試 ---\n"</span>)
+
+<span class="code-function">print</span>(<span class="code-string">"測試 A: 入侵 (信心 0.85 -> 應觸發)"</span>)
+s_a = AlertStateMachine()
+s_a.a()
+s_a.b({<span class="code-string">"source"</span>: <span class="code-string">"大門口"</span>, <span class="code-string">"type"</span>: <span class="code-string">"入侵"</span>, <span class="code-string">"confidence"</span>: <span class="code-number">0.85</span>})
+
+<span class="code-function">print</span>(<span class="code-string">"\n測試 B: 火災 (信心 0.6 -> 應觸發)"</span>)
+s_b = AlertStateMachine()
+s_b.a()
+s_b.b({<span class="code-string">"source"</span>: <span class="code-string">"廚房"</span>, <span class="code-string">"type"</span>: <span class="code-string">"火災"</span>, <span class="code-string">"confidence"</span>: <span class="code-number">0.6</span>})
+
+<span class="code-function">print</span>(<span class="code-string">"\n測試 C: 跌倒 (信心 0.95 -> 應觸發)"</span>)
+s_c = AlertStateMachine()
+s_c.a()
+s_c.b({<span class="code-string">"source"</span>: <span class="code-string">"臥室"</span>, <span class="code-string">"type"</span>: <span class="code-string">"跌倒"</span>, <span class="code-string">"confidence"</span>: <span class="code-number">0.95</span>})
+
+<span class="code-function">print</span>(<span class="code-string">"\n測試 D: 忽略 (信心不足或未知類型)"</span>)
+s_d = AlertStateMachine()
+s_d.a()
+s_d.b({<span class="code-string">"source"</span>: <span class="code-string">"客廳"</span>, <span class="code-string">"type"</span>: <span class="code-string">"入侵"</span>, <span class="code-string">"confidence"</span>: <span class="code-number">0.3</span>}) <span class="code-comment"># 信心不足</span>
+s_d.b({<span class="code-string">"source"</span>: <span class="code-string">"客廳"</span>, <span class="code-string">"type"</span>: <span class="code-string">"貓咪路過"</span>, <span class="code-string">"confidence"</span>: <span class="code-number">0.9</span>}) <span class="code-comment"># 未知類型</span>
+
+<span class="code-function">print</span>(<span class="code-string">"\n--- 測試結束 ---"</span>)</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-gears"></i> Version 3: 字典驅動設計 (Config-Driven)</h4>
+                    <span class="ver-badge ver-3">V3</span>
+                </div>
+                <p class="note-desc">重點：將邏輯抽離至 <code>EVENT_RULES</code> 字典，實現 Config-Driven 架構，易於擴充維護。</p>
+                <pre><code><span class="code-keyword">import</span> logging
+
+<span class="code-comment"># 設定日誌</span>
+logging.basicConfig(level=logging.INFO, format=<span class="code-string">'%(asctime)s - %(message)s'</span>)
+
+<span class="code-keyword">class</span> <span class="code-class">AlertStateMachine</span>:
+    <span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):
+        <span class="code-keyword">self</span>.state = <span class="code-string">"MONITORING"</span> <span class="code-comment"># 假設已經啟動</span>
+
+        <span class="code-comment"># ==========================================</span>
+        <span class="code-comment"># 1. 這裡就是「設定檔 (Config)」/「價目表」</span>
+        <span class="code-comment"># 未來有 100 種事件，只要來改這裡就好，不用動下面的程式碼</span>
+        <span class="code-comment"># ==========================================</span>
+        <span class="code-keyword">self</span>.EVENT_RULES = {
+            <span class="code-comment"># 格式： "事件名稱": (門檻值, 警報訊息)</span>
+            <span class="code-string">"火災"</span>: (<span class="code-number">0.50</span>, <span class="code-string">"檢測到高溫，啟動灑水！"</span>),
+            <span class="code-string">"入侵"</span>: (<span class="code-number">0.80</span>, <span class="code-string">"有人員闖入，通知警衛！"</span>),
+            <span class="code-string">"跌倒"</span>: (<span class="code-number">0.90</span>, <span class="code-string">"老人跌倒，呼叫救護車！"</span>),
+            <span class="code-string">"抽菸"</span>: (<span class="code-number">0.60</span>, <span class="code-string">"偵測煙霧，語音勸導！"</span>),
+            <span class="code-string">"地震"</span>: (<span class="code-number">0.40</span>, <span class="code-string">"震度異常，開啟逃生門！"</span>),
+        }
+
+    <span class="code-keyword">def</span> <span class="code-function">b</span>(<span class="code-keyword">self</span>, event):
+        source = event.get(<span class="code-string">"source"</span>, <span class="code-string">"未知"</span>)
+        e_type = event.get(<span class="code-string">"type"</span>, <span class="code-string">"未知"</span>)
+        confidence = event.get(<span class="code-string">"confidence"</span>, <span class="code-number">0</span>)
+
+        <span class="code-comment"># ==========================================</span>
+        <span class="code-comment"># 2. 這裡就是「通用邏輯」</span>
+        <span class="code-comment"># 不管是哪種事件，都走這一套流程</span>
+        <span class="code-comment"># ==========================================</span>
+        
+        <span class="code-comment"># 步驟 A: 查表 (去字典裡找有沒有這個事件的設定)</span>
+        <span class="code-comment"># rule 抓出來會是 (門檻, 訊息)，如果找不到就回傳 None</span>
+        rule = <span class="code-keyword">self</span>.EVENT_RULES.get(e_type)
+
+        <span class="code-comment"># 步驟 B: 如果「沒這條規則」或是「信心不夠」，就忽略</span>
+        <span class="code-keyword">if</span> rule <span class="code-keyword">is</span> <span class="code-keyword">None</span>:
+            logging.info(f<span class="code-string">"忽略：系統不認識這個事件 [{e_type}]"</span>)
+            <span class="code-keyword">return</span>
+
+        threshold = rule[<span class="code-number">0</span>] <span class="code-comment"># 取得門檻 (例如 0.5)</span>
+        message = rule[<span class="code-number">1</span>]   <span class="code-comment"># 取得訊息 (例如 "啟動灑水")</span>
+
+        <span class="code-keyword">if</span> confidence < threshold:
+            logging.info(f<span class="code-string">"忽略：[{e_type}] 信心度 {confidence} 不足 (標準: {threshold})"</span>)
+            <span class="code-keyword">return</span>
+
+        <span class="code-comment"># 步驟 C: 條件都符合，觸發警報！</span>
+        <span class="code-keyword">self</span>.state = <span class="code-string">"ALERTING"</span>
+        logging.critical(f<span class="code-string">"【嚴重警報】{e_type} | 來源: {source} | {message}"</span>)
+
+
+<span class="code-comment"># ==========================================</span>
+<span class="code-comment"># 測試區</span>
+<span class="code-comment"># ==========================================</span>
+s = AlertStateMachine()
+
+<span class="code-function">print</span>(<span class="code-string">"--- 測試 1: 火災 (門檻只要 0.5) ---"</span>)
+s.b({<span class="code-string">"source"</span>: <span class="code-string">"Sensor1"</span>, <span class="code-string">"type"</span>: <span class="code-string">"火災"</span>, <span class="code-string">"confidence"</span>: <span class="code-number">0.6</span>}) 
+<span class="code-comment"># 結果：會響！因為 0.6 >= 0.5</span>
+
+<span class="code-function">print</span>(<span class="code-string">"\n--- 測試 2: 跌倒 (門檻要很高 0.9) ---"</span>)
+s.b({<span class="code-string">"source"</span>: <span class="code-string">"Camera2"</span>, <span class="code-string">"type"</span>: <span class="code-string">"跌倒"</span>, <span class="code-string">"confidence"</span>: <span class="code-number">0.85</span>}) 
+<span class="code-comment"># 結果：不響，因為 0.85 還沒到 0.9</span>
+
+<span class="code-function">print</span>(<span class="code-string">"\n--- 測試 3: 未知事件 (不再表中) ---"</span>)
+s.b({<span class="code-string">"source"</span>: <span class="code-string">"Camera3"</span>, <span class="code-string">"type"</span>: <span class="code-string">"有人打噴嚏"</span>, <span class="code-string">"confidence"</span>: <span class="code-number">0.99</span>}) 
+<span class="code-comment"># 結果：忽略，因為字典裡沒有 key 是 "有人打噴嚏"</span></code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code-compare"></i> Version 4: 列舉與模式匹配 (Enum & Match-Case)</h4>
+                    <span class="ver-badge ver-4">V4</span>
+                </div>
+                <p class="note-desc">重點：使用 <strong>Enum</strong> 確保狀態安全性，並利用 Python 3.10+ 的 <strong>match-case</strong> 語法優化結構。</p>
+                <pre><code><span class="code-keyword">import</span> logging
+<span class="code-keyword">from</span> enum <span class="code-keyword">import</span> Enum, auto
+
+<span class="code-comment"># 設定 Log 格式，讓輸出更清晰</span>
+logging.basicConfig(
+    level=logging.INFO,
+    format=<span class="code-string">'%(asctime)s - [%(levelname)s] - %(message)s'</span>,
+    datefmt=<span class="code-string">'%H:%M:%S'</span>
+)
+
+<span class="code-comment"># 使用 Enum 定義狀態，防止打錯字</span>
+<span class="code-keyword">class</span> <span class="code-class">State</span>(Enum):
+    IDLE = auto()       <span class="code-comment"># 閒置</span>
+    MONITORING = auto() <span class="code-comment"># 監控中</span>
+    ALERTING = auto()   <span class="code-comment"># 警報響起中</span>
+    STOPPED = auto()    <span class="code-comment"># 強制停止</span>
+
+<span class="code-keyword">class</span> <span class="code-class">AlertStateMachine</span>:
+    <span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):
+        <span class="code-keyword">self</span>.state = State.IDLE
+
+    <span class="code-comment"># 對應測試的 start()</span>
+    <span class="code-keyword">def</span> <span class="code-function">start</span>(<span class="code-keyword">self</span>):
+        <span class="code-keyword">self</span>.state = State.MONITORING
+        logging.info(<span class="code-string">"系統【啟動監控】 Status -> MONITORING"</span>)
+
+    <span class="code-comment"># 對應測試的 stop()</span>
+    <span class="code-keyword">def</span> <span class="code-function">stop</span>(<span class="code-keyword">self</span>):
+        <span class="code-keyword">self</span>.state = State.STOPPED
+        logging.warning(<span class="code-string">"系統【強制停止】 Status -> STOPPED"</span>)
+
+    <span class="code-comment"># 對應測試的 handle_event()</span>
+    <span class="code-keyword">def</span> <span class="code-function">handle_event</span>(<span class="code-keyword">self</span>, event):
+        source = event.get(<span class="code-string">"source"</span>, <span class="code-string">"Unknown"</span>)
+        evt_type = event.get(<span class="code-string">"type"</span>, <span class="code-string">"Unknown"</span>)
+        confidence = event.get(<span class="code-string">"confidence"</span>, <span class="code-number">0.0</span>)
+
+        <span class="code-comment"># 使用 match-case 處理狀態邏輯 (Python 3.10+)</span>
+        <span class="code-keyword">match</span> <span class="code-keyword">self</span>.state:
+            <span class="code-comment"># Test 3: IDLE 狀態誤觸 -> 報錯</span>
+            <span class="code-keyword">case</span> State.IDLE:
+                msg = f<span class="code-string">"系統未啟動 ({self.state.name})，無法處理來自 {source} 的事件"</span>
+                logging.error(msg)
+                <span class="code-keyword">raise</span> <span class="code-function">Exception</span>(msg)
+
+            <span class="code-comment"># Test 5: STOPPED 狀態 -> 只紀錄 Log</span>
+            <span class="code-keyword">case</span> State.STOPPED:
+                logging.warning(f<span class="code-string">"系統已停止，忽略來自 {source} 的事件"</span>)
+                <span class="code-keyword">return</span>
+
+            <span class="code-comment"># Test 4: ALERTING 狀態 -> 忽略後續事件</span>
+            <span class="code-keyword">case</span> State.ALERTING:
+                logging.info(f<span class="code-string">"系統忙碌中 (已觸發警報)，忽略來自 {source} 的事件"</span>)
+                <span class="code-keyword">return</span>
+
+            <span class="code-comment"># Test 1 & 2: MONITORING 狀態 -> 正常判斷</span>
+            <span class="code-keyword">case</span> State.MONITORING:
+                <span class="code-comment"># 判斷邏輯：類型是入侵 且 信心度 >= 0.8</span>
+                <span class="code-keyword">if</span> evt_type == <span class="code-string">"入侵"</span> <span class="code-keyword">and</span> confidence >= <span class="code-number">0.8</span>:
+                    <span class="code-keyword">self</span>.state = State.ALERTING
+                    logging.critical(f<span class="code-string">"🚨 警報觸發！來源: {source} | 信心度: {confidence}"</span>)
+                <span class="code-keyword">else</span>:
+                    logging.info(f<span class="code-string">"PASS (未達標) | 來源: {source} | 信心度: {confidence}"</span>)
+
+<span class="code-comment"># ==========================================</span>
+<span class="code-comment"># 測試區</span>
+<span class="code-comment"># ==========================================</span>
+
+<span class="code-function">print</span>(<span class="code-string">"=== 測試 1: 正常抓到入侵 (高信心) ==="</span>)
+bot1 = AlertStateMachine()
+bot1.start() 
+bot1.handle_event({<span class="code-string">"source"</span>: <span class="code-string">"Cam01"</span>, <span class="code-string">"type"</span>: <span class="code-string">"入侵"</span>, <span class="code-string">"confidence"</span>: <span class="code-number">0.92</span>}) 
+
+<span class="code-function">print</span>(<span class="code-string">"\n=== 測試 2: 忽略誤報 (低信心) ==="</span>)
+bot2 = AlertStateMachine()
+bot2.start()
+bot2.handle_event({<span class="code-string">"source"</span>: <span class="code-string">"Cam01"</span>, <span class="code-string">"type"</span>: <span class="code-string">"入侵"</span>, <span class="code-string">"confidence"</span>: <span class="code-number">0.4</span>}) 
+
+<span class="code-function">print</span>(<span class="code-string">"\n=== 測試 3: IDLE 狀態誤觸 (預期報錯) ==="</span>)
+bot3 = AlertStateMachine()
+<span class="code-comment"># 故意不啟動</span>
+<span class="code-keyword">try</span>:
+    bot3.handle_event({<span class="code-string">"source"</span>: <span class="code-string">"Cam02"</span>, <span class="code-string">"type"</span>: <span class="code-string">"入侵"</span>, <span class="code-string">"confidence"</span>: <span class="code-number">0.9</span>})
+<span class="code-keyword">except</span> <span class="code-function">Exception</span> <span class="code-keyword">as</span> e:
+    <span class="code-function">print</span>(f<span class="code-string">" ❌ 攔截到錯誤: {e}"</span>)
+
+<span class="code-function">print</span>(<span class="code-string">"\n=== 測試 4: 警報響起後，忽略後續事件 ==="</span>)
+bot4 = AlertStateMachine()
+bot4.start()
+<span class="code-function">print</span>(<span class="code-string">"[Step A] 觸發警報"</span>)
+bot4.handle_event({<span class="code-string">"source"</span>: <span class="code-string">"Cam01"</span>, <span class="code-string">"type"</span>: <span class="code-string">"入侵"</span>, <span class="code-string">"confidence"</span>: <span class="code-number">0.95</span>}) 
+<span class="code-function">print</span>(<span class="code-string">"[Step B] 嘗試傳入新事件"</span>)
+bot4.handle_event({<span class="code-string">"source"</span>: <span class="code-string">"Cam01"</span>, <span class="code-string">"type"</span>: <span class="code-string">"入侵"</span>, <span class="code-string">"confidence"</span>: <span class="code-number">0.3</span>}) 
+
+<span class="code-function">print</span>(<span class="code-string">"\n=== 測試 5: STOPPED 狀態 (只寫 Log) ==="</span>)
+bot5 = AlertStateMachine()
+bot5.stop() <span class="code-comment"># 先強制停止</span>
+<span class="code-comment"># 丟一個事件進去，測試有沒有乖乖只寫 Log</span>
+bot5.handle_event({<span class="code-string">"source"</span>: <span class="code-string">"Cam_Backdoor"</span>, <span class="code-string">"type"</span>: <span class="code-string">"入侵"</span>, <span class="code-string">"confidence"</span>: <span class="code-number">0.99</span>})
+
+<span class="code-function">print</span>(<span class="code-string">"\n--- 全部測試完成 ---"</span>)</code></pre>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.overlay');
+            
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-280px';
+                overlay.style.display = 'none';
+            } else {
+                sidebar.style.left = '0px';
+                overlay.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

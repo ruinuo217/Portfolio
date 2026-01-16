@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reyna's Learning Dashboard - 01/14</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* 針對程式碼區塊的額外優化 */
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            white-space: pre-wrap;
+        }
+        .code-comment { color: #75715e; }
+        .code-keyword { color: #ff79c6; font-weight: bold; }
+        .code-function { color: #8be9fd; }
+        .code-string { color: #f1fa8c; }
+        .code-sql { color: #66d9ef; font-weight: bold; }
+        
+        .alert-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            color: #856404;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+
+        .img-container {
+            margin: 15px 0;
+            text-align: center;
+        }
+        .img-container img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid #eee;
+        }
+        .img-caption {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Reyna Portfolio</h2>
+            <span>Web Design Practice</span>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 1: 基礎導入</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1222.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/22 (一)</span><span class="topic">電腦基礎概論</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_1.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) am</span><span class="topic">IT Career 職涯解析</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_2.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) pm</span><span class="topic">ESP-01S 與 Arduino</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_1.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) am</span><span class="topic">IoT 與 Web Server 實作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_2.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) pm</span><span class="topic">Linux 系統與應用</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1226.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/26 (五)</span><span class="topic">Linux基礎到架站</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 2: 深入實作</div>
+            <ul>
+                 <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1229.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/29 (一)</span><span class="topic">電腦基礎概論 II</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1230.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/30 (二)</span><span class="topic">NoCode 資料蒐集與自動化</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1231.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/31 (三)</span><span class="topic">Linux 資料庫建置</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0102.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/2 (五)</span><span class="topic">Linux 系統管理與腳本</span></a></li>
+            </ul>
+        </div>
+        
+        <div class="menu-group">
+            <div class="group-title">Week 3: 資料庫與 Python</div>
+            <ul>
+                <li><a href="#"><span class="date-badge"><i class="far fa-calendar"></i> 1/5 (一)</span><span class="topic">計算機概論 (待補)</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0106.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/6 (二)</span><span class="topic">MySQL 安裝與 SSH 穿隧</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0107.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/7 (三)</span><span class="topic">MySQL 管理與 VS Code</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0108.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/8 (四)</span><span class="topic">Python 基礎與環境</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0109.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/9 (五)</span><span class="topic">Python 進階與資料處理</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 4: Python 與 SQL</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0112.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/12 (一)</span><span class="topic">Python 函數與異常處理</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0113.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/13 (二)</span><span class="topic">OOP 與 記憶體管理</span></a></li>
+                <li class="active">
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0114.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/14 (三) </span>
+                        <span class="topic">MySQL 語法與資料操作</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0115.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/15 (四) </span>
+                        <span class="topic">MySQL 進階查詢與實作</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+   <main class="main-content">
+     
+        <div class="top-bar">
+            <div class="breadcrumb">
+                首頁 > Week 4 > <span>MySQL 語法與資料操作</span>
+            </div>
+            <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
+                <i class="fas fa-home"></i> 回首頁
+            </a>
+        </div>
+        
+        <div class="banner" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+            <div>
+                <h1>MySQL 語法實戰與權限管理</h1>
+                <p>資料庫建置、使用者授權、CRUD 增刪改查與查詢優化。</p>
+            </div>
+            <i class="fa-solid fa-server banner-icon"></i>
+        </div>
+
+        <h3 class="section-title">Part 1: 資料庫建置與權限</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-user-lock"></i> 權限設定 (Grant)</h4>
+                    <span class="status-badge important">管理</span>
+                </div>
+                <pre><code><span class="code-comment">-- 建立最高權限使用者 (可從任何主機 %)</span>
+<span class="code-sql">GRANT ALL PRIVILEGES ON</span> *.* <span class="code-sql">TO</span> 'mydbo'@'%' <span class="code-sql">WITH GRANT OPTION</span>;
+
+<span class="code-comment">-- 讓設定立即生效</span>
+<span class="code-sql">FLUSH PRIVILEGES</span>;
+
+<span class="code-comment">-- 修改密碼 (相容舊版驗證)</span>
+<span class="code-sql">ALTER USER</span> 'mydbo'@'%' <span class="code-sql">IDENTIFIED WITH mysql_native_password BY</span> 'Pass123';</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-database"></i> 建立資料庫與表</h4>
+                    <span class="status-badge running">建置</span>
+                </div>
+                <pre><code><span class="code-comment">-- 建立資料庫 (指定編碼)</span>
+<span class="code-sql">CREATE DATABASE IF NOT EXISTS</span> ecommerce_db
+<span class="code-sql">CHARACTER SET</span> utf8mb4
+<span class="code-sql">COLLATE</span> utf8mb4_unicode_ci;
+
+<span class="code-sql">USE</span> ecommerce_db;</code></pre>
+                
+                <h5 style="margin:15px 0 5px 0; font-weight:bold; color:#333;">建立資料表 (GUI 操作示意)</h5>
+                <div class="img-container">
+                    <img src="https://hackmd.io/_uploads/HkWvrsEBbe.png" alt="建立資料表 GUI">
+                    <div class="img-caption">圖：使用圖形化介面設定欄位與型態</div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 2: CRUD 資料操作 (增刪改)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-plus"></i> INSERT (新增)</h4>
+                    <span class="status-badge done">寫入</span>
+                </div>
+                <p class="note-desc">單筆與多筆寫入範例。</p>
+                <pre><code><span class="code-comment">-- 寫法 1: 指定欄位</span>
+<span class="code-sql">INSERT INTO</span> users (u_email, u_name) <span class="code-sql">VALUES</span>
+('alex@example.com', 'Alex');
+
+<span class="code-comment">-- 寫法 2: 多筆寫入 (VS Code 範例)</span>
+<span class="code-sql">INSERT INTO</span> `users`(`u_name`, `u_email`, `status`) 
+<span class="code-sql">VALUES</span> 
+('nnn', 'frank@imusm.net', '已審核'),
+('nnn2', 'frank2@imusm.net', '已審核');</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> UPDATE (更新)</h4>
+                    <span class="status-badge done">修改</span>
+                </div>
+                <div class="alert-box">
+                    <i class="fas fa-exclamation-circle"></i> <strong>注意：</strong> 務必加上 <code>WHERE</code> 條件，否則會修改整張表的資料！
+                </div>
+                <pre><code><span class="code-sql">UPDATE</span> `users` 
+<span class="code-sql">SET</span> `u_email` = 'test@abc.com', 
+    `u_birth` = '2025-01-01'
+<span class="code-sql">WHERE</span> `u_name` = 'nnn';</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-trash-can"></i> DELETE 與 軟刪除 (Soft Delete)</h4>
+                    <span class="status-badge important">危險</span>
+                </div>
+                <p class="note-desc">比較「真的刪除」與「標記刪除」。</p>
+                
+                <h5 style="margin:10px 0 5px 0;">1. 硬刪除 (Hard Delete)</h5>
+                <pre><code><span class="code-sql">DELETE FROM</span> users <span class="code-sql">WHERE</span> u_name = 'nnnnn'; <span class="code-comment">-- 資料真的消失</span></code></pre>
+
+                <h5 style="margin:15px 0 5px 0;">2. 軟刪除 (Soft Delete)</h5>
+                <p style="font-size:0.9rem; color:#666;">透過 <code>UPDATE</code> 更新 <code>delete_at</code> 時間戳記，資料還在但被視為已刪除。</p>
+                <pre><code><span class="code-sql">UPDATE</span> `users` 
+<span class="code-sql">SET</span> `delete_at` = <span class="code-function">NOW</span>() 
+<span class="code-sql">WHERE</span> `u_name` = 'nnnnn';</code></pre>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 3: SELECT 查詢語法</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-magnifying-glass"></i> SELECT * 的壞處</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <ul class="note-points">
+                    <li><strong>浪費流量：</strong> 把不必要的欄位全部傳輸。</li>
+                    <li><strong>拖慢速度：</strong> 增加硬碟 I/O 讀取負擔。</li>
+                    <li><strong>索引失效：</strong> 無法利用 Covering Index 優化查詢。</li>
+                </ul>
+                <div class="alert-box">
+                    <strong>好習慣：</strong> <code>SELECT u_email, u_name FROM users ...</code> (只抓需要的欄位)
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-filter"></i> 模糊查詢 (LIKE %)</h4>
+                    <span class="status-badge running">技巧</span>
+                </div>
+                <table style="width:100%; font-size:0.9rem; border-collapse:collapse;">
+                    <tr style="background:#f4f4f4;"><th style="padding:5px;">語法</th><th style="padding:5px;">說明</th></tr>
+                    <tr><td style="padding:5px;"><code>'%值%'</code></td><td>包含 (Contains)</td></tr>
+                    <tr><td style="padding:5px;"><code>'%值'</code></td><td>結尾是 (Ends with)</td></tr>
+                    <tr><td style="padding:5px;"><code>'值%'</code></td><td>開頭是 (Starts with)</td></tr>
+                </table>
+                <pre><code><span class="code-comment">-- 找名字裡面有 "Amy" 的人</span>
+<span class="code-sql">SELECT</span> * <span class="code-sql">FROM</span> users <span class="code-sql">WHERE</span> u_name <span class="code-sql">LIKE</span> '%Amy%';</code></pre>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.overlay');
+            
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-280px';
+                overlay.style.display = 'none';
+            } else {
+                sidebar.style.left = '0px';
+                overlay.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
