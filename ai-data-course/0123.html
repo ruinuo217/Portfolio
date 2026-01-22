@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reyna's Learning Dashboard - 01/23</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* --- 基礎樣式 --- */
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+        .code-tag { color: #f92672; }
+        .code-attr { color: #a6e22e; }
+        .code-string { color: #e6db74; }
+        .code-selector { color: #a6e22e; font-weight: bold; }
+        .code-property { color: #66d9ef; }
+        .code-value { color: #ae81ff; }
+        .code-comment { color: #75715e; font-style: italic; }
+        
+        .alert-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            color: #856404;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+
+        /* --- 表格樣式 --- */
+        .concept-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        .concept-table th, .concept-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .concept-table th {
+            background-color: #f4f4f4;
+            color: #333;
+            font-weight: bold;
+        }
+        
+        /* --- 排版系統 --- */
+        .grid-2-cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; align-items: start; }
+        
+        @media (max-width: 768px) {
+            .grid-2-cols { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Reyna Portfolio</h2>
+            <span>Web Design Practice</span>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 1: 基礎導入</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1222.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/22 (一)</span><span class="topic">電腦基礎概論</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_1.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) am</span><span class="topic">IT Career 職涯解析</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_2.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) pm</span><span class="topic">ESP-01S 與 Arduino</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_1.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) am</span><span class="topic">IoT 與 Web Server 實作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_2.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) pm</span><span class="topic">Linux 系統與應用</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1226.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/26 (五)</span><span class="topic">Linux基礎到架站</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 2: 深入實作</div>
+            <ul>
+                 <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1229.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/29 (一)</span><span class="topic">電腦基礎概論 II</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1230.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/30 (二)</span><span class="topic">NoCode 資料蒐集與自動化</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1231.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/31 (三)</span><span class="topic">Linux 資料庫建置</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0102.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/2 (五)</span><span class="topic">Linux 系統管理與腳本</span></a></li>
+            </ul>
+        </div>
+        
+        <div class="menu-group">
+            <div class="group-title">Week 3: 資料庫與 Python</div>
+            <ul>
+                <li><a href="#"><span class="date-badge"><i class="far fa-calendar"></i> 1/5 (一)</span><span class="topic">計算機概論 (待補)</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0106.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/6 (二)</span><span class="topic">MySQL 安裝與 SSH 穿隧</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0107.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/7 (三)</span><span class="topic">MySQL 管理與 VS Code</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0108.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/8 (四)</span><span class="topic">Python 基礎與環境</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0109.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/9 (五)</span><span class="topic">Python 進階與資料處理</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 4: Python 與 SQL</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0112.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/12 (一)</span><span class="topic">Python 函數與異常處理</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0113.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/13 (二)</span><span class="topic">OOP 與 記憶體管理</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0114.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/14 (三)</span><span class="topic">MySQL 語法與資料操作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0115.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/15 (四)</span><span class="topic">MySQL 進階查詢與實作</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 5: 商業智慧與網頁基礎</div>
+            <ul>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0120.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/20 (二) </span>
+                        <span class="topic">Tableau 基礎與視覺化</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0121.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/21 (三) </span>
+                        <span class="topic">Tableau 進階分析</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0122.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/22 (四) </span>
+                        <span class="topic">HTML 基礎與表單設計</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0123.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/23 (五) </span>
+                        <span class="topic">CSS 樣式設計全攻略</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+   <main class="main-content">
+     
+        <div class="top-bar">
+            <div class="breadcrumb">
+                首頁 > Week 5 > <span>CSS 樣式設計全攻略</span>
+            </div>
+            <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
+                <i class="fas fa-home"></i> 回首頁
+            </a>
+        </div>
+        
+        <div class="banner" style="background: linear-gradient(135deg, #264de4 0%, #2965f1 100%);">
+            <div>
+                <h1>CSS 樣式設計全攻略</h1>
+                <p>選擇器權重、盒模型、排版系統 (Flex/Position)、BEM 命名與 CSS 動畫實戰。</p>
+            </div>
+            <i class="fa-brands fa-css3-alt banner-icon"></i>
+        </div>
+
+        <h3 class="section-title">Part 1: 選擇器與權重 (Selectors & Specificity)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-crosshairs"></i> CSS 選擇器大全</h4>
+                    <span class="status-badge important">核心</span>
+                </div>
+                
+                <h5 style="margin-top:10px; border-bottom:1px solid #eee; padding-bottom:5px;">1. 簡單與組合選擇器</h5>
+                <table class="concept-table">
+                    <tr><th>名稱</th><th>語法</th><th>說明</th><th>範例</th></tr>
+                    <tr><td>後代</td><td><code>div p</code></td><td>選取 div 內的所有 p (不論層級)。</td><td><code>.container p</code></td></tr>
+                    <tr><td>子元素</td><td><code>ul > li</code></td><td>只選取<strong>第一層</strong>子元素。</td><td><code>nav > ul</code></td></tr>
+                    <tr><td>相鄰兄弟</td><td><code>h1 + p</code></td><td>選取緊接在 h1 後的第一個 p。</td><td><code>label + input</code></td></tr>
+                    <tr><td>一般兄弟</td><td><code>h1 ~ p</code></td><td>選取 h1 之後同層級的所有 p。</td><td><code>h2 ~ p</code></td></tr>
+                </table>
+
+                <h5 style="margin-top:20px; border-bottom:1px solid #eee; padding-bottom:5px;">2. 屬性選擇器 (Attribute)</h5>
+                <table class="concept-table">
+                    <tr><th>語法</th><th>說明</th></tr>
+                    <tr><td><code>[attr]</code></td><td>有該屬性的元素 (如 <code>[disabled]</code>)。</td></tr>
+                    <tr><td><code>[attr="val"]</code></td><td>屬性值完全相符 (如 <code>[type="text"]</code>)。</td></tr>
+                    <tr><td><code>[attr^="val"]</code></td><td>以 val <strong>開頭</strong> (如 <code>[src^="https"]</code>)。</td></tr>
+                    <tr><td><code>[attr$="val"]</code></td><td>以 val <strong>結尾</strong> (如 <code>[src$=".png"]</code>)。</td></tr>
+                </table>
+
+                <h5 style="margin-top:20px; border-bottom:1px solid #eee; padding-bottom:5px;">3. 偽類 (Pseudo-class)</h5>
+                <p class="note-desc">選取元素的「狀態」。</p>
+                <div class="grid-2-cols">
+                    <ul>
+                        <li><code>:hover</code> - 滑鼠懸停</li>
+                        <li><code>:active</code> - 點擊當下</li>
+                        <li><code>:focus</code> - 獲得焦點 (表單)</li>
+                    </ul>
+                    <ul>
+                        <li><code>:first-child</code> / <code>:last-child</code></li>
+                        <li><code>:nth-child(n)</code> - 第 n 個元素</li>
+                        <li><code>:not(.class)</code> - 排除特定元素</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-weight-hanging"></i> 權重計算 (Specificity)</h4>
+                    <span class="status-badge important">必考</span>
+                </div>
+                <p class="note-desc">當樣式衝突時，瀏覽器根據權重分數決定聽誰的。</p>
+                <table class="concept-table">
+                    <tr><th>選擇器類型</th><th>分數</th><th>範例</th></tr>
+                    <tr><td><strong>!important</strong></td><td>∞</td><td>(最強制)</td></tr>
+                    <tr><td><strong>Inline Style</strong></td><td>1000</td><td><code>style="..."</code></td></tr>
+                    <tr><td><strong>ID</strong></td><td>100</td><td><code>#header</code></td></tr>
+                    <tr><td><strong>Class / 偽類</strong></td><td>10</td><td><code>.btn</code>, <code>:hover</code></td></tr>
+                    <tr><td><strong>Element / 偽元素</strong></td><td>1</td><td><code>div</code>, <code>::before</code></td></tr>
+                </table>
+                <div class="alert-box">
+                    <strong>口訣：</strong> ID > Class > Tag。盡量少用 !important。
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 2: 視覺樣式與排版 (Visual & Layout)</h3>
+        <div class="dashboard-grid notes-section">
+            
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-font"></i> 文字與背景</h4>
+                    <span class="status-badge running">樣式</span>
+                </div>
+                <h5 style="margin-top:5px;">文字 (Typography)</h5>
+                <ul class="step-list">
+                    <li><code>font-family</code>: 字型 (<code>"Arial", sans-serif</code>)。</li>
+                    <li><code>line-height</code>: 行高 (如 <code>1.5</code>)。</li>
+                    <li><code>letter-spacing</code>: 字距。</li>
+                    <li><code>text-align</code>: 對齊 (<code>justify</code> 真對齊)。</li>
+                </ul>
+                <h5 style="margin-top:15px;">背景 (Background)</h5>
+                <pre><code><span class="code-selector">.bg</span> {
+  <span class="code-property">background-image</span>: <span class="code-value">url("img.jpg")</span>;
+  <span class="code-property">background-size</span>: <span class="code-value">cover</span>; <span class="code-comment">/* 填滿 */</span>
+  <span class="code-property">background-position</span>: <span class="code-value">center</span>;
+  <span class="code-property">background-repeat</span>: <span class="code-value">no-repeat</span>;
+}</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-box-open"></i> Box Model 與 Display</h4>
+                    <span class="status-badge running">佈局</span>
+                </div>
+                
+                <h5 style="margin-top:5px;">Box Model</h5>
+                <p class="note-desc">Content -> Padding -> Border -> Margin</p>
+                <div class="alert-box">
+                    <code>box-sizing: border-box;</code><br>
+                    <strong>必設！</strong>讓 padding/border 包含在寬度內，不爆框。
+                </div>
+
+                <h5 style="margin-top:15px;">Display 模式</h5>
+                <ul class="step-list">
+                    <li><code>block</code>: 獨佔一行 (div, p)。</li>
+                    <li><code>inline</code>: 並排，無法設寬高 (span, a)。</li>
+                    <li><code>inline-block</code>: 並排且可設寬高。</li>
+                    <li><code>flex</code>: 彈性排版容器。</li>
+                    <li><code>none</code>: 隱藏 (不佔位) vs <code>visibility: hidden</code> (佔位)。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-layer-group"></i> 定位 (Position) 與裝飾</h4>
+                    <span class="status-badge done">進階</span>
+                </div>
+                <div class="grid-2-cols">
+                    <div>
+                        <h5 style="margin-bottom:10px;">Position 定位</h5>
+                        <table class="concept-table">
+                            <tr><td><code>static</code></td><td>預設值，照順序排。</td></tr>
+                            <tr><td><code>relative</code></td><td>相對自己原位偏移 (佔位)。</td></tr>
+                            <tr><td><code>absolute</code></td><td>絕對定位，找非 static 的父層定位。</td></tr>
+                            <tr><td><code>fixed</code></td><td>固定視窗，不隨滾動移動 (導覽列)。</td></tr>
+                            <tr><td><code>sticky</code></td><td>滾到特定位置後黏住。</td></tr>
+                        </table>
+                    </div>
+                    <div>
+                        <h5 style="margin-bottom:10px;">裝飾屬性</h5>
+                        <ul class="step-list">
+                            <li><strong>Border-radius:</strong> 圓角 (<code>50%</code> 變圓形)。</li>
+                            <li><strong>Box-shadow:</strong> 陰影 (x y blur spread color)。
+                                <br><code>box-shadow: 4px 4px 10px rgba(0,0,0,0.2);</code>
+                            </li>
+                            <li><strong>Overflow:</strong> 溢出處理 (<code>hidden</code>, <code>scroll</code>, <code>auto</code>)。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 3: CSS 架構 (BEM)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-sitemap"></i> BEM 命名規範</h4>
+                    <span class="status-badge done">規範</span>
+                </div>
+                <p class="note-desc">Block-Element-Modifier：讓 CSS 類別名稱具備結構性與可讀性，像蓋房子一樣。</p>
+                
+                <div class="grid-2-cols">
+                    <div style="background:#f9f9f9; padding:15px; border-radius:8px;">
+                        <h5>1. Block (區塊)</h5>
+                        <p>獨立的組件，如 <code>.menu</code>, <code>.card</code>。</p>
+                        
+                        <h5 style="margin-top:10px;">2. Element (元素)</h5>
+                        <p>區塊內的零件，用 <code>__</code> 連接。<br>如 <code>.menu__item</code>。</p>
+                        
+                        <h5 style="margin-top:10px;">3. Modifier (修飾符)</h5>
+                        <p>狀態或變體，用 <code>--</code> 連接。<br>如 <code>.menu__item--active</code>。</p>
+                    </div>
+                    <div>
+                        <pre><code><span class="code-comment">&lt;!-- HTML 結構範例 --&gt;</span>
+<span class="code-tag">&lt;nav class="menu"&gt;</span>
+  <span class="code-tag">&lt;ul class="menu__list"&gt;</span>
+    <span class="code-tag">&lt;li class="menu__item menu__item--active"&gt;</span>首頁<span class="code-tag">&lt;/li&gt;</span>
+    <span class="code-tag">&lt;li class="menu__item"&gt;</span>關於我們<span class="code-tag">&lt;/li&gt;</span>
+  <span class="code-tag">&lt;/ul&gt;</span>
+<span class="code-tag">&lt;/nav&gt;</span></code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 4: 動畫與互動 (Animation)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-bolt"></i> Transition (過渡)</h4>
+                    <span class="status-badge running">互動</span>
+                </div>
+                <p class="note-desc">適合簡單的 A 到 B 狀態改變 (如 Hover)。</p>
+                <pre><code><span class="code-selector">.btn</span> {
+  <span class="code-property">transition</span>: <span class="code-value">background 0.3s ease</span>;
+}
+<span class="code-selector">.btn:hover</span> {
+  <span class="code-property">background</span>: <span class="code-value">red</span>;
+}</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrows-spin"></i> Transform (變形)</h4>
+                    <span class="status-badge running">變形</span>
+                </div>
+                <p class="note-desc">改變形狀與位置，不影響文件流。</p>
+                <ul class="step-list">
+                    <li><code>translate(x, y)</code>: 位移。</li>
+                    <li><code>scale(1.2)</code>: 縮放。</li>
+                    <li><code>rotate(45deg)</code>: 旋轉。</li>
+                    <li><code>skew(10deg)</code>: 傾斜。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-film"></i> Animation & AOS</h4>
+                    <span class="status-badge advanced">進階</span>
+                </div>
+                <div class="grid-2-cols">
+                    <div>
+                        <h5>Keyframe Animation (關鍵影格)</h5>
+                        <p class="note-desc">適合複雜、自動播放的動畫。</p>
+                        <pre><code><span class="code-selector">@keyframes slide</span> {
+  <span class="code-value">0%</span> { <span class="code-property">transform</span>: <span class="code-value">translateX(0)</span>; }
+  <span class="code-value">100%</span> { <span class="code-property">transform</span>: <span class="code-value">translateX(100px)</span>; }
+}
+<span class="code-selector">.box</span> {
+  <span class="code-property">animation</span>: <span class="code-value">slide 2s infinite</span>;
+}</code></pre>
+                    </div>
+                    <div>
+                        <h5>AOS (Animate On Scroll)</h5>
+                        <p class="note-desc">捲動視窗觸發動畫的 JS 套件。</p>
+                        <pre><code><span class="code-comment">&lt;!-- 引入 CSS/JS 後 --&gt;</span>
+<span class="code-tag">&lt;div data-aos="fade-up"&gt;</span>
+  當我捲動出現時，我會向上淡入
+<span class="code-tag">&lt;/div&gt;</span>
+
+<span class="code-tag">&lt;script&gt;</span>
+  AOS.init();
+<span class="code-tag">&lt;/script&gt;</span></code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.overlay');
+            
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-280px';
+                overlay.style.display = 'none';
+            } else {
+                sidebar.style.left = '0px';
+                overlay.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

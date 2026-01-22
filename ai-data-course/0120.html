@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reyna's Learning Dashboard - 01/20</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* --- 基礎樣式 --- */
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            white-space: pre-wrap;
+        }
+        .code-comment { color: #75715e; }
+        .code-keyword { color: #ff79c6; font-weight: bold; }
+        
+        .alert-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            color: #856404;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+
+        /* --- 圖片容器優化 --- */
+        .img-container {
+            text-align: center;
+            height: 100%; 
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        .img-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid #eee;
+            transition: transform 0.2s;
+            object-fit: contain;
+        }
+        .img-container img:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .img-caption {
+            font-size: 0.85rem;
+            color: #555;
+            margin-top: 8px;
+            background: #f1f5f9;
+            padding: 4px 12px;
+            border-radius: 12px;
+            display: inline-block;
+            font-weight: 500;
+        }
+
+        /* --- 網格排版系統 --- */
+        .grid-2-cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .grid-3-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        .grid-4-cols { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+
+        @media (max-width: 900px) {
+            .grid-3-cols, .grid-4-cols { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 600px) {
+            .grid-2-cols, .grid-3-cols, .grid-4-cols { grid-template-columns: 1fr; }
+        }
+        
+        /* --- 表格樣式 --- */
+        .concept-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        .concept-table th, .concept-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .concept-table th {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Reyna Portfolio</h2>
+            <span>Web Design Practice</span>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 1: 基礎導入</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1222.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/22 (一)</span><span class="topic">電腦基礎概論</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_1.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) am</span><span class="topic">IT Career 職涯解析</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_2.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) pm</span><span class="topic">ESP-01S 與 Arduino</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_1.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) am</span><span class="topic">IoT 與 Web Server 實作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_2.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) pm</span><span class="topic">Linux 系統與應用</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1226.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/26 (五)</span><span class="topic">Linux基礎到架站</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 2: 深入實作</div>
+            <ul>
+                 <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1229.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/29 (一)</span><span class="topic">電腦基礎概論 II</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1230.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/30 (二)</span><span class="topic">NoCode 資料蒐集與自動化</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1231.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/31 (三)</span><span class="topic">Linux 資料庫建置</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0102.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/2 (五)</span><span class="topic">Linux 系統管理與腳本</span></a></li>
+            </ul>
+        </div>
+        
+        <div class="menu-group">
+            <div class="group-title">Week 3: 資料庫與 Python</div>
+            <ul>
+                <li><a href="#"><span class="date-badge"><i class="far fa-calendar"></i> 1/5 (一)</span><span class="topic">計算機概論 (待補)</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0106.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/6 (二)</span><span class="topic">MySQL 安裝與 SSH 穿隧</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0107.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/7 (三)</span><span class="topic">MySQL 管理與 VS Code</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0108.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/8 (四)</span><span class="topic">Python 基礎與環境</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0109.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/9 (五)</span><span class="topic">Python 進階與資料處理</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 4: Python 與 SQL</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0112.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/12 (一)</span><span class="topic">Python 函數與異常處理</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0113.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/13 (二)</span><span class="topic">OOP 與 記憶體管理</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0114.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/14 (三)</span><span class="topic">MySQL 語法與資料操作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0115.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/15 (四)</span><span class="topic">MySQL 進階查詢與實作</span></a></li>
+            </ul>
+        </div>
+
+         <div class="menu-group">
+            <div class="group-title">Week 5: 商業智慧與網頁基礎</div>
+            <ul>
+                <li class="active">
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0120.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/20 (二) </span>
+                        <span class="topic">Tableau 基礎與視覺化</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0121.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/21 (三) </span>
+                        <span class="topic">Tableau 進階分析</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0122.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/22 (四) </span>
+                        <span class="topic">HTML 基礎與表單設計</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0123.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/23 (五) </span>
+                        <span class="topic">CSS 樣式設計全攻略</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+   <main class="main-content">
+     
+        <div class="top-bar">
+            <div class="breadcrumb">
+                首頁 > Week 5 > <span>Tableau 基礎與視覺化</span>
+            </div>
+            <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
+                <i class="fas fa-home"></i> 回首頁
+            </a>
+        </div>
+        
+        <div class="banner" style="background: linear-gradient(135deg, #0e2f5a 0%, #2a5a9c 100%);">
+            <div>
+                <h1>Tableau 商業智慧與視覺化分析</h1>
+                <p>資料連結、維度與度量、全方位圖表製作實戰與儀表板設計。</p>
+            </div>
+            <i class="fa-solid fa-chart-pie banner-icon"></i>
+        </div>
+
+        <h3 class="section-title">Part 1: 資料分析前置作業 (Preparation)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-clipboard-check"></i> 前置準備三步驟</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <ul class="step-list">
+                    <li><strong>Step 1 確認目標 (WHAT):</strong> 給誰看？有哪些資料？這些人想看什麼？</li>
+                    <li><strong>Step 2 確認品質 (QUALITY):</strong> 資料完整度、乾淨程度、結構化程度。</li>
+                    <li><strong>Step 3 資料處理 (PROCESSING):</strong> 決定資料來源與目標架構。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-server"></i> ETL vs ELT</h4>
+                    <span class="status-badge running">架構</span>
+                </div>
+                <table class="concept-table">
+                    <tr>
+                        <th>比較項目</th>
+                        <th>ETL</th>
+                        <th>ELT</th>
+                    </tr>
+                    <tr>
+                        <td><strong>流程</strong></td>
+                        <td>Extract -> Transform -> Load<br>先轉換再載入</td>
+                        <td>Extract -> Load -> Transform<br>先載入再轉換</td>
+                    </tr>
+                    <tr>
+                        <td><strong>適合資料</strong></td>
+                        <td>結構化資料</td>
+                        <td>結構化、非結構化、半結構化</td>
+                    </tr>
+                    <tr>
+                        <td><strong>速度</strong></td>
+                        <td>較慢 (轉換在輔助伺服器)</td>
+                        <td>較快 (使用資料倉儲資源)</td>
+                    </tr>
+                </table>
+                <div style="margin-top: 10px; font-size: 0.85rem; color: #666;">
+                    * <strong>資料轉換內容</strong>：資料清除、去重、格式修訂、分割與匯整。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-database"></i> 倉儲 vs 資料湖</h4>
+                    <span class="status-badge done">儲存</span>
+                </div>
+                <table class="concept-table">
+                    <tr>
+                        <th>項目</th>
+                        <th>資料倉儲 (Data Warehouse)</th>
+                        <th>資料湖 (Data Lake)</th>
+                    </tr>
+                    <tr>
+                        <td><strong>資料類型</strong></td>
+                        <td>結構化 (歷史資料)</td>
+                        <td>所有類型 (含非結構化)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>用途</strong></td>
+                        <td>商業決策分析 (BI)</td>
+                        <td>機器學習、大數據分析</td>
+                    </tr>
+                    <tr>
+                        <td><strong>使用者</strong></td>
+                        <td>商業分析師</td>
+                        <td>資料科學家、工程師</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 2: 資料分析方法論 (Methodology)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-magnifying-glass-chart"></i> Gartner 四大分析類別</h4>
+                    <span class="status-badge important">核心</span>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                    <div style="background: #eef2ff; padding: 10px; border-radius: 6px;">
+                        <strong style="color: #2a5a9c;">1. 描述性 (Descriptive)</strong><br>
+                        <em>What happened?</em><br>
+                        理解過去發生了什麼 (如：今年銷售額)。
+                    </div>
+                    <div style="background: #fff7ed; padding: 10px; border-radius: 6px;">
+                        <strong style="color: #ea580c;">2. 診斷性 (Diagnostic)</strong><br>
+                        <em>Why did it happen?</em><br>
+                        解釋原因 (如：為何利潤下降？)。
+                    </div>
+                    <div style="background: #f0fdf4; padding: 10px; border-radius: 6px;">
+                        <strong style="color: #16a34a;">3. 預測性 (Predictive)</strong><br>
+                        <em>What will happen?</em><br>
+                        預測未來 (如：明年銷量預測)。
+                    </div>
+                    <div style="background: #fdf2f8; padding: 10px; border-radius: 6px;">
+                        <strong style="color: #db2777;">4. 指示性 (Prescriptive)</strong><br>
+                        <em>How can we make it happen?</em><br>
+                        提供最佳建議方案 (如：定價優化)。
+                    </div>
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-table-cells"></i> 矩陣與漏斗分析</h4>
+                    <span class="status-badge running">模型</span>
+                </div>
+                <div class="grid-2-cols">
+                    <div>
+                        <ul class="note-points">
+                            <li><strong>波士頓矩陣 (BCG Matrix):</strong> 利用「市場佔有率」與「市場增長率」將產品分為：明星、金牛、問號、老狗。</li>
+                            <li><strong>SWOT 分析:</strong> 優勢 (S)、劣勢 (W) [內部]；機會 (O)、威脅 (T) [外部]。</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul class="note-points">
+                            <li><strong>漏斗分析 (AARRR):</strong>
+                                <ul>
+                                    <li>Acquisition (獲取)</li>
+                                    <li>Activation (啟動)</li>
+                                    <li>Retention (留存)</li>
+                                    <li>Revenue (收入)</li>
+                                    <li>Referral (傳播)</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 3: 視覺化圖表實作 (Visualization)</h3>
+        <div class="dashboard-grid notes-section">
+            
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-images"></i> 應用場景分享</h4>
+                    <span class="status-badge done">案例</span>
+                </div>
+                <div class="grid-4-cols">
+                    <div class="img-container">
+                        <img src="https://hackmd.io/_uploads/SJnX8nnSWe.png" alt="Heat Map">
+                        <div class="img-caption">急診室 Heat Map</div>
+                    </div>
+                    <div class="img-container">
+                        <img src="https://hackmd.io/_uploads/S1-iL23BWg.png" alt="底圖應用">
+                        <div class="img-caption">機艙配置圖 (底圖應用)</div>
+                    </div>
+                    <div class="img-container">
+                        <img src="https://hackmd.io/_uploads/rycn8nnHWx.png" alt="招募分析">
+                        <div class="img-caption">招募管道分析</div>
+                    </div>
+                    <div class="img-container">
+                        <img src="https://hackmd.io/_uploads/ry5AL2nrbe.png" alt="HR分析">
+                        <div class="img-caption">HR 流動率分析</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-chart-bar"></i> 長條圖與線圖 (Bar & Line)</h4>
+                    <span class="status-badge done">比較/趨勢</span>
+                </div>
+                <p class="note-desc">最適合比較大小與觀察趨勢。</p>
+                <div class="grid-2-cols">
+                    <div class="img-container">
+                        <img src="https://hackmd.io/_uploads/rySGwhhSbg.png" alt="並排長條圖">
+                        <div class="img-caption">並排長條圖 (Side-by-side)</div>
+                    </div>
+                    <div class="img-container">
+                        <img src="https://hackmd.io/_uploads/B157v33BZl.png" alt="雙軸圖表">
+                        <div class="img-caption">雙軸圖表 (Dual Axis) - 記得使用「同步軸」</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-table"></i> 表格與熱圖 (Tables & Heatmaps)</h4>
+                    <span class="status-badge done">數值</span>
+                </div>
+                <div class="grid-3-cols">
+                    <div class="img-container">
+                        <img src="https://hackmd.io/_uploads/HySS_3nBbe.png" alt="一般表格">
+                        <div class="img-caption">文字表格 (Text Table)</div>
+                    </div>
+                    <div class="img-container">
+                        <img src="https://hackmd.io/_uploads/BJu8d22Sbl.png" alt="壓力圖">
+                        <div class="img-caption">壓力圖 (Highlight Table)</div>
+                    </div>
+                    <div class="img-container">
+                        <img src="https://hackmd.io/_uploads/SJnX8nnSWe.png" alt="熱圖">
+                        <div class="img-caption">熱圖 (Heat Map)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-map-location-dot"></i> 地圖與層級 (Geo & Hierarchy)</h4>
+                    <span class="status-badge done">地理</span>
+                </div>
+                <div class="grid-3-cols">
+                    <div class="img-container">
+                        <img src="https://hackmd.io/_uploads/S1InO3nS-e.png" alt="地圖">
+                        <div class="img-caption">符號地圖 (Symbol Map)</div>
+                    </div>
+                    <div class="img-container">
+                        <img src="https://hackmd.io/_uploads/S1-iL23BWg.png" alt="底圖應用">
+                        <div class="img-caption">自訂底圖 (Background Map)</div>
+                    </div>
+                    <div class="img-container">
+                        <img src="https://hackmd.io/_uploads/B1rud22H-g.png" alt="樹地圖">
+                        <div class="img-caption">樹地圖 (Tree Map)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-shapes"></i> 進階圖表類型 (Advanced)</h4>
+                    <span class="status-badge running">應用</span>
+                </div>
+                <p class="note-desc">更多樣化的視覺呈現，適合分析佔比、分佈與計算邏輯。</p>
+                <div class="grid-4-cols">
+                    <div class="img-container">
+                        <img src="https://hackmd.io/_uploads/SkD-u3hHZe.png" alt="圓餅圖">
+                        <div class="img-caption">圓餅圖 (Pie)</div>
+                    </div>
+                    <div class="img-container">
+                        <img src="https://hackmd.io/_uploads/HkLf_h3B-e.png" alt="散佈圖">
+                        <div class="img-caption">散佈圖 (Scatter)</div>
+                    </div>
+                    <div class="img-container">
+                        <img src="https://hackmd.io/_uploads/BJHou2hSWx.png" alt="填充泡泡圖">
+                        <div class="img-caption">填充泡泡圖 (Bubble)</div>
+                    </div>
+                    <div class="img-container">
+                        <img src="https://hackmd.io/_uploads/rkCp_nhH-l.png" alt="計算表">
+                        <div class="img-caption">計算欄位 (如: YTD)</div>
+                    </div>
+                </div>
+                <div style="margin-top: 15px; width: 25%;">
+                     <div class="img-container">
+                        <img src="https://hackmd.io/_uploads/H1-VO22r-l.png" alt="盒鬚圖">
+                        <div class="img-caption">盒鬚圖 (Box Plot)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 4: 建立儀表板 (Dashboard)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-columns"></i> 互動式儀表板</h4>
+                    <span class="status-badge running">整合</span>
+                </div>
+                <p class="note-desc">將多個工作表組合，講述數據故事。</p>
+                <div class="img-container">
+                    <img src="https://hackmd.io/_uploads/ryekFhhBbe.png" alt="儀錶板">
+                    <div class="img-caption">最終成品：互動式銷售儀表板</div>
+                </div>
+                
+                <h5 style="margin:15px 0 5px 0;">操作重點：</h5>
+                <ul class="step-list">
+                    <li>設定 <strong>裝置預覽</strong> (Desktop/Mobile)。</li>
+                    <li>使用 <strong>水平/垂直容器</strong> 進行排版。</li>
+                    <li>設定 <strong>篩選動作 (Actions)</strong> 讓圖表連動 (Click & Filter)。</li>
+                </ul>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.overlay');
+            
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-280px';
+                overlay.style.display = 'none';
+            } else {
+                sidebar.style.left = '0px';
+                overlay.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

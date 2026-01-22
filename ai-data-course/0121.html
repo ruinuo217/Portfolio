@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reyna's Learning Dashboard - 01/21</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* --- 基礎樣式 --- */
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+        .code-comment { color: #75715e; }
+        .code-keyword { color: #ff79c6; font-weight: bold; }
+        .code-function { color: #8be9fd; }
+        .code-string { color: #f1fa8c; }
+        .code-number { color: #bd93f9; }
+        
+        .alert-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            color: #856404;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+
+        /* --- 圖片容器優化 --- */
+        .img-container {
+            text-align: center;
+            width: 100%;
+            margin-bottom: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 5px;
+            border: 1px solid #eee;
+            /* 防止圖片撐爆容器 */
+            overflow: hidden;
+        }
+        .img-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            transition: transform 0.2s;
+            object-fit: contain;
+        }
+        .img-container img:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .img-caption {
+            font-size: 0.85rem;
+            color: #555;
+            margin-top: 8px;
+            background: #f1f5f9;
+            padding: 4px 12px;
+            border-radius: 12px;
+            display: inline-block;
+            font-weight: 500;
+        }
+
+        /* --- 網格排版系統 --- */
+        /* 使用 align-items: start 防止卡片被拉長 */
+        .grid-2-cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; align-items: start; }
+        .grid-3-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; align-items: start; }
+        .grid-4-cols { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; align-items: start; }
+        
+        /* 針對最後圖表選擇的置中排版 */
+        .chart-grid-row-1 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+            align-items: start;
+        }
+        .chart-grid-row-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            width: 66%; /* 讓下面兩個置中 */
+            margin: 0 auto;
+            align-items: start;
+        }
+
+        /* 響應式 */
+        @media (max-width: 900px) {
+            .grid-3-cols, .grid-4-cols, .chart-grid-row-1 { grid-template-columns: repeat(2, 1fr); }
+            .chart-grid-row-2 { width: 100%; }
+        }
+        @media (max-width: 600px) {
+            .grid-2-cols, .grid-3-cols, .grid-4-cols, .chart-grid-row-1, .chart-grid-row-2 { grid-template-columns: 1fr; width: 100%; }
+        }
+        
+        /* --- 表格樣式 --- */
+        .concept-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        .concept-table th, .concept-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .concept-table th {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Reyna Portfolio</h2>
+            <span>Web Design Practice</span>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 1: 基礎導入</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1222.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/22 (一)</span><span class="topic">電腦基礎概論</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_1.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) am</span><span class="topic">IT Career 職涯解析</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_2.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) pm</span><span class="topic">ESP-01S 與 Arduino</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_1.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) am</span><span class="topic">IoT 與 Web Server 實作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_2.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) pm</span><span class="topic">Linux 系統與應用</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1226.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/26 (五)</span><span class="topic">Linux基礎到架站</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 2: 深入實作</div>
+            <ul>
+                 <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1229.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/29 (一)</span><span class="topic">電腦基礎概論 II</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1230.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/30 (二)</span><span class="topic">NoCode 資料蒐集與自動化</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1231.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/31 (三)</span><span class="topic">Linux 資料庫建置</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0102.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/2 (五)</span><span class="topic">Linux 系統管理與腳本</span></a></li>
+            </ul>
+        </div>
+        
+        <div class="menu-group">
+            <div class="group-title">Week 3: 資料庫與 Python</div>
+            <ul>
+                <li><a href="#"><span class="date-badge"><i class="far fa-calendar"></i> 1/5 (一)</span><span class="topic">計算機概論 (待補)</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0106.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/6 (二)</span><span class="topic">MySQL 安裝與 SSH 穿隧</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0107.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/7 (三)</span><span class="topic">MySQL 管理與 VS Code</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0108.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/8 (四)</span><span class="topic">Python 基礎與環境</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0109.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/9 (五)</span><span class="topic">Python 進階與資料處理</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 4: Python 與 SQL</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0112.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/12 (一)</span><span class="topic">Python 函數與異常處理</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0113.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/13 (二)</span><span class="topic">OOP 與 記憶體管理</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0114.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/14 (三)</span><span class="topic">MySQL 語法與資料操作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0115.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/15 (四)</span><span class="topic">MySQL 進階查詢與實作</span></a></li>
+            </ul>
+        </div>
+
+         <div class="menu-group">
+            <div class="group-title">Week 5: 商業智慧與網頁基礎</div>
+            <ul>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0120.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/20 (二) </span>
+                        <span class="topic">Tableau 基礎與視覺化</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0121.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/21 (三) </span>
+                        <span class="topic">Tableau 進階分析</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0122.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/22 (四) </span>
+                        <span class="topic">HTML 基礎與表單設計</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0123.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/23 (五) </span>
+                        <span class="topic">CSS 樣式設計全攻略</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+   <main class="main-content">
+     
+        <div class="top-bar">
+            <div class="breadcrumb">
+                首頁 > Week 5 > <span>Tableau 進階分析與資料處理</span>
+            </div>
+            <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
+                <i class="fas fa-home"></i> 回首頁
+            </a>
+        </div>
+        
+        <div class="banner" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);">
+            <div>
+                <h1>Tableau 進階分析與資料處理</h1>
+                <p>資料連結、特殊圖表、參數應用、函數運算與 RFM 模型實戰。</p>
+            </div>
+            <i class="fa-solid fa-layer-group banner-icon"></i>
+        </div>
+
+        <h3 class="section-title">Part 1: 合併/連結資料的方式</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-link"></i> 三種資料連結模式</h4>
+                    <span class="status-badge important">基礎</span>
+                </div>
+                <div class="grid-3-cols">
+                    <div style="background: #f8fafc; padding: 15px; border-radius: 8px;">
+                        <h5 style="color: #0e2f5a; margin-bottom: 5px;">1. 關聯 (Join) - 橫向</h5>
+                        <p style="color: #666; font-size: 0.9rem;">
+                            將兩份資料透過「共同欄位」合併。<br>
+                            <strong>情境：</strong> 擴充欄位 (如：訂單表 + 客戶表)。
+                        </p>
+                    </div>
+                    <div style="background: #f8fafc; padding: 15px; border-radius: 8px;">
+                        <h5 style="color: #0e2f5a; margin-bottom: 5px;">2. 聯集 (Union) - 垂直</h5>
+                        <p style="color: #666; font-size: 0.9rem;">
+                            將格式相同的資料上下堆疊。<br>
+                            <strong>情境：</strong> 合併不同月份報表 (1月 + 2月)。
+                        </p>
+                    </div>
+                    <div style="background: #f8fafc; padding: 15px; border-radius: 8px;">
+                        <h5 style="color: #0e2f5a; margin-bottom: 5px;">3. 混合 (Blending)</h5>
+                        <p style="color: #666; font-size: 0.9rem;">
+                            混合兩個「不同來源」的資料 (如 SQL + Excel)。<br>
+                            需指定主資料來源與次要來源。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 2: 特殊圖表與進階功能</h3>
+        <div class="dashboard-grid notes-section">
+            
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-chart-gantt"></i> 進階視覺化類型 I</h4>
+                    <span class="status-badge running">實作</span>
+                </div>
+                <div class="grid-4-cols">
+                    <div>
+                        <div class="img-container">
+                            <img src="https://hackmd.io/_uploads/HymfwH1Ubl.png" alt="靶心圖">
+                        </div>
+                        <p class="img-caption">靶心圖 (Bullet Graph)</p>
+                    </div>
+                    <div>
+                        <div class="img-container">
+                            <img src="https://hackmd.io/_uploads/SkuXwrkUWl.png" alt="組合式圖表">
+                        </div>
+                        <p class="img-caption">組合式圖表 (Combo Chart)</p>
+                    </div>
+                    <div>
+                        <div class="img-container">
+                            <img src="https://hackmd.io/_uploads/HygWNvrk8Zg.png" alt="文字雲">
+                        </div>
+                        <p class="img-caption">文字雲 (Word Cloud)</p>
+                    </div>
+                    <div>
+                        <div class="img-container">
+                            <img src="https://hackmd.io/_uploads/r1v8PS1U-x.png" alt="直方圖">
+                        </div>
+                        <p class="img-caption">直方圖 (Histogram)</p>
+                    </div>
+                </div>
+                <p class="note-desc" style="margin-top:10px;">
+                    <strong>靶心圖：</strong> 用於比較目標達成率 (參考線/分佈區間)。<br>
+                    <strong>直方圖：</strong> 搭配「資料桶 (Bins)」觀察數據分佈。<br>
+                    <strong>組合圖：</strong> 雙軸應用。
+                </p>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-calculator"></i> 瀑布圖與 LOD 計算</h4>
+                    <span class="status-badge important">進階</span>
+                </div>
+                <div class="grid-2-cols">
+                    <div>
+                        <h5 style="color:#0e2f5a; margin-bottom:10px;">瀑布圖 (Waterfall Chart)</h5>
+                        <div class="img-container">
+                            <img src="https://hackmd.io/_uploads/BkKPDH1L-g.png" alt="瀑布圖">
+                        </div>
+                        <p class="note-desc">顯示數值的累計變化 (如利潤累積)。</p>
+                        <div class="alert-box">
+                            <strong>關鍵技巧：</strong><br>
+                            1. 使用甘特長條圖。<br>
+                            2. 建立計算欄位：<code>-[利潤]</code> (負利潤) 作為大小。
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h5 style="color:#0e2f5a; margin-bottom:10px;">FIXED LOD 功能</h5>
+                        <div class="img-container">
+                            <img src="https://hackmd.io/_uploads/HJCVDHJ8Ze.png" alt="FIXED功能">
+                        </div>
+                        <pre><code>{ <span class="code-keyword">FIXED</span> [區域], DATENAME('year',[訂單日期]): <span class="code-function">SUM</span>([銷售額]) }</code></pre>
+                        <p class="note-desc" style="margin-top:10px;">無視視圖層級，強制鎖定區域與年份計算銷售額。</p>
+                        <div class="img-container" style="margin-top:15px;">
+                            <img src="https://hackmd.io/_uploads/HkWbvSkL-e.png" alt="公告計算">
+                            <div class="img-caption">計算欄位編輯器</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-sliders"></i> 參數應用 (Parameters)</h4>
+                    <span class="status-badge running">互動</span>
+                </div>
+                
+                <div class="grid-3-cols">
+                    <div>
+                        <h5 style="color:#0e2f5a;">1. Top N 篩選</h5>
+                        <div class="img-container">
+                            <img src="https://hackmd.io/_uploads/ry_uwrJUbl.png" alt="TOP參數功能">
+                        </div>
+                        <p class="note-desc">讓使用者彈性選擇前 5、10、50 大客戶。</p>
+                        <ol class="step-list" style="font-size:0.85rem;">
+                            <li>建立「Top N」參數 (整數)。</li>
+                            <li>建立排行計算式：<code>INDEX()</code>。</li>
+                            <li>建立判斷式：<code>[排行] <= [TopN]</code>，放入篩選器。</li>
+                        </ol>
+                    </div>
+
+                    <div>
+                        <h5 style="color:#0e2f5a;">2. 幣別換算 (清單參數)</h5>
+                        <div class="img-container">
+                            <img src="https://hackmd.io/_uploads/BJqqPBkUWg.png" alt="幣別參數功能">
+                        </div>
+                        <p class="note-desc">建立匯率清單，計算式：<code>[銷售額] * [幣別]</code>。</p>
+                    </div>
+
+                    <div>
+                        <h5 style="color:#0e2f5a;">3. 假設分析 (範圍參數)</h5>
+                        <div class="img-container">
+                            <img src="https://hackmd.io/_uploads/B19Z_HJ8Wl.png" alt="範圍參數功能">
+                        </div>
+                        <p class="note-desc">模擬成本上漲對毛利的影響。</p>
+                        <ul class="step-list" style="font-size:0.85rem;">
+                            <li>建立「預估成本增長率」參數 (範圍)。</li>
+                            <li>計算新成本：<code>[原成本] * (1 + [增長率])</code>。</li>
+                            <li>計算新毛利率。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-table-list"></i> 動態變動報表</h4>
+                    <span class="status-badge important">技巧</span>
+                </div>
+                <div class="grid-2-cols">
+                    <div class="img-container">
+                        <img src="https://hackmd.io/_uploads/HkTJdBJUZl.png" alt="變動報表">
+                    </div>
+                    <div>
+                        <p class="note-desc">透過參數切換維度，一張表抵多張表。</p>
+                        <pre><code><span class="code-keyword">CASE</span> [報表項目參數]
+  <span class="code-keyword">WHEN</span> "國家/地區" <span class="code-keyword">THEN</span> [國家/地區]
+  <span class="code-keyword">WHEN</span> "客戶名稱" <span class="code-keyword">THEN</span> [客戶名稱]
+  <span class="code-keyword">WHEN</span> "產品分類" <span class="code-keyword">THEN</span> [產品分類]
+  <span class="code-keyword">WHEN</span> "郵寄方式" <span class="code-keyword">THEN</span> [郵寄方式]
+<span class="code-keyword">END</span></code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flag-checkered"></i> KPI 與甘特圖</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <div class="grid-2-cols">
+                    <div>
+                        <h5 style="color:#0e2f5a; margin-bottom:10px;">KPI 達標判斷</h5>
+                        <div class="img-container">
+                            <img src="https://hackmd.io/_uploads/r1HmOSk8Wx.png" alt="KPI">
+                        </div>
+                        <p class="note-desc">自建銷售達標計算式：60,000 以上達標。</p>
+                        <pre><code><span class="code-keyword">IF</span> SUM([銷售額]) > 60000 
+<span class="code-keyword">THEN</span> '達標'
+<span class="code-keyword">ELSE</span> '未達標' <span class="code-keyword">END</span></code></pre>
+                    </div>
+                    
+                    <div>
+                        <h5 style="color:#0e2f5a; margin-bottom:10px;">甘特圖 - 交貨天數</h5>
+                        <div class="img-container">
+                            <img src="https://hackmd.io/_uploads/SJEEdHkIZx.png" alt="甘特圖">
+                        </div>
+                        <p class="note-desc">以交貨天數設定大小及顏色。</p>
+                        <pre><code>DATEDIFF('day', [訂單日期], [郵寄日期])</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-circle-nodes"></i> 數據觀察與叢集 (Clustering)</h4>
+                    <span class="status-badge important">AI分析</span>
+                </div>
+                
+                <div class="grid-2-cols">
+                    <div>
+                        <h5 style="color:#0e2f5a;">叢集分析</h5>
+                        <div class="img-container">
+                            <img src="https://hackmd.io/_uploads/rkpL_r1U-e.png" alt="叢集分群">
+                        </div>
+                        <p class="note-desc">自動將相似特徵的數據分群 (例如：高消費低頻率 vs 低消費高頻率)。</p>
+                        <table class="concept-table">
+                            <tr><th>指標</th><th>意義</th><th>解讀</th></tr>
+                            <tr><td><strong>BBS</strong></td><td>群組間差異</td><td>越大越好。</td></tr>
+                            <tr><td><strong>WWS</strong></td><td>群組內緊密</td><td>越小越好。</td></tr>
+                            <tr><td><strong>BBS/TTS</strong></td><td>分群效果</td><td>接近 1 越好。</td></tr>
+                        </table>
+                    </div>
+
+                    <div>
+                        <h5 style="color:#0e2f5a;">工具提示 & 趨勢預測</h5>
+                        <div class="img-container" style="height:auto;">
+                            <img src="https://hackmd.io/_uploads/rkk8drJUbg.png" alt="工具提示">
+                            <div class="img-caption">Tooltip: 懸停顯示詳細資訊</div>
+                        </div>
+                        <div class="img-container" style="margin-top:20px; height:auto;">
+                            <img src="https://hackmd.io/_uploads/Hk3udSyU-e.png" alt="趨勢預測">
+                            <div class="img-caption">Forecast: 預測未來趨勢</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 3: 常用函數與模型 (Functions & Models)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-font"></i> 字串函數</h4>
+                    <span class="status-badge done">String</span>
+                </div>
+                <ul class="step-list">
+                    <li><code>MID(欄位, start, len)</code>：從中間擷取。</li>
+                    <li><code>LEFT(欄位, len)</code>：取左邊 N 字。</li>
+                    <li><code>RIGHT(欄位, len)</code>：取右邊 N 字。</li>
+                    <li><code>LEN(欄位)</code>：計算字數長度。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-regular fa-calendar"></i> 日期函數</h4>
+                    <span class="status-badge done">Date</span>
+                </div>
+                <ul class="step-list">
+                    <li><code>MAKEDATE(2023, 1, 1)</code>：建立日期。</li>
+                    <li><code>DATEDIFF('day', start, end)</code>：計算相差天數。</li>
+                    <li><code>DATENAME('weekday', [日期])</code>：回傳星期幾。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code-branch"></i> 邏輯函數</h4>
+                    <span class="status-badge done">Logic</span>
+                </div>
+                <pre><code><span class="code-comment">// 判斷假日</span>
+<span class="code-keyword">IF</span> [weekday] = 'Friday' <span class="code-keyword">OR</span> [weekday] = 'Saturday'
+<span class="code-keyword">THEN</span> '假日'
+<span class="code-keyword">ELSE</span> '平日'
+<span class="code-keyword">END</span></code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-user-tag"></i> RFM 銷售模型實戰</h4>
+                    <span class="status-badge important">核心</span>
+                </div>
+                <div class="grid-3-cols" style="margin-bottom: 20px;">
+                    <div style="background:#eef2ff; padding:10px; border-radius:6px;">
+                        <strong style="color:#2a5a9c;">Recency (最近消費)</strong><br>
+                        距離上次消費多久？<br>越近越高分。
+                    </div>
+                    <div style="background:#fff7ed; padding:10px; border-radius:6px;">
+                        <strong style="color:#ea580c;">Frequency (消費頻率)</strong><br>
+                        消費了幾次？<br>越多次越高分。
+                    </div>
+                    <div style="background:#f0fdf4; padding:10px; border-radius:6px;">
+                        <strong style="color:#16a34a;">Monetary (消費金額)</strong><br>
+                        總共花了多少錢？<br>越多錢越高分。
+                    </div>
+                </div>
+                
+                <div class="grid-2-cols">
+                    <div>
+                        <h5 style="margin-bottom:5px;">1. LOD 指標計算</h5>
+                        <pre><code><span class="code-comment">// 近期消費時間 (FIXED 客戶)</span>
+{ <span class="code-keyword">FIXED</span> [客戶名稱]: MIN(DATEDIFF('day', [訂單日期], MAKEDATE(2020,12,31))) }
+
+<span class="code-comment">// 消費頻率</span>
+{ <span class="code-keyword">FIXED</span> [客戶名稱]: COUNTD([訂單 Id]) }
+
+<span class="code-comment">// 消費金額</span>
+{ <span class="code-keyword">FIXED</span> [客戶名稱]: SUM([銷貨額]) }</code></pre>
+                    </div>
+                    <div>
+                        <h5 style="margin-bottom:5px;">2. 評分邏輯 (以 R 為例)</h5>
+                        <p class="note-desc" style="margin-bottom:5px;">使用 <code>PERCENTILE</code> (百分位數) 將客戶分為 5 個等級。</p>
+                        <pre><code><span class="code-keyword">IF</span> [LOD_R] < {<span class="code-keyword">FIXED</span>: PERCENTILE([LOD_R], 0.2)} <span class="code-keyword">THEN</span> "5"
+<span class="code-keyword">ELSEIF</span> [LOD_R] < {<span class="code-keyword">FIXED</span>: PERCENTILE([LOD_R], 0.4)} <span class="code-keyword">THEN</span> "4"
+<span class="code-keyword">ELSEIF</span> [LOD_R] < {<span class="code-keyword">FIXED</span>: PERCENTILE([LOD_R], 0.6)} <span class="code-keyword">THEN</span> "3"
+<span class="code-keyword">ELSEIF</span> [LOD_R] < {<span class="code-keyword">FIXED</span>: PERCENTILE([LOD_R], 0.8)} <span class="code-keyword">THEN</span> "2"
+<span class="code-keyword">ELSE</span> "1"
+<span class="code-keyword">END</span></code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 4: 圖表選擇指南 (Chart Selection)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-shapes"></i> 如何選擇正確的圖表？</h4>
+                    <span class="status-badge done">總結</span>
+                </div>
+                
+                <div class="chart-grid-row-1">
+                    <div style="background-color:#f9f9f9; padding:15px; border-radius:8px; border:1px solid #eee;">
+                        <h5 style="color:#0e2f5a; margin-bottom:10px;">1. 時間序列分析</h5>
+                        <div class="img-container">
+                            <img src="https://hackmd.io/_uploads/rJLkI8kLZe.png" alt="時間序列">
+                        </div>
+                        <ul class="step-list" style="margin-top:5px; font-size:0.9rem;">
+                            <li>折線圖 (Line)</li>
+                            <li>區域圖 (Area)</li>
+                            <li>堆疊長條圖 (Stacked Bar)</li>
+                        </ul>
+                    </div>
+
+                    <div style="background-color:#f9f9f9; padding:15px; border-radius:8px; border:1px solid #eee;">
+                        <h5 style="color:#0e2f5a; margin-bottom:10px;">2. 分類比較</h5>
+                        <div class="img-container">
+                            <img src="https://hackmd.io/_uploads/HJ0yLIJIZe.png" alt="分類比較">
+                        </div>
+                        <ul class="step-list" style="margin-top:5px; font-size:0.9rem;">
+                            <li>長條圖 (Bar)</li>
+                            <li>並排長條圖 (Side-by-side)</li>
+                        </ul>
+                    </div>
+
+                    <div style="background-color:#f9f9f9; padding:15px; border-radius:8px; border:1px solid #eee;">
+                        <h5 style="color:#0e2f5a; margin-bottom:10px;">3. 組成比例分析</h5>
+                        <div class="img-container">
+                            <img src="https://hackmd.io/_uploads/B1iSI81UZx.png" alt="組成比例">
+                        </div>
+                        <ul class="step-list" style="margin-top:5px; font-size:0.9rem;">
+                            <li>圓餅圖 (Pie)</li>
+                            <li>樹狀圖 (Treemap)</li>
+                            <li>堆疊長條圖 (Stacked Bar)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="chart-grid-row-2">
+                    <div style="background-color:#f9f9f9; padding:15px; border-radius:8px; border:1px solid #eee;">
+                        <h5 style="color:#0e2f5a; margin-bottom:10px;">4. 關係與相關性</h5>
+                        <div class="img-container">
+                            <img src="https://hackmd.io/_uploads/SJRG8I1I-g.png" alt="關係與相關性">
+                        </div>
+                        <ul class="step-list" style="margin-top:5px; font-size:0.9rem;">
+                            <li>組合式圖表 (Combo)</li>
+                            <li>散佈圖 (Scatter)</li>
+                            <li>填充泡泡圖 (Bubble)</li>
+                        </ul>
+                    </div>
+
+                    <div style="background-color:#f9f9f9; padding:15px; border-radius:8px; border:1px solid #eee;">
+                        <h5 style="color:#0e2f5a; margin-bottom:10px;">5. 分佈與變化</h5>
+                        <div class="img-container">
+                            <img src="https://hackmd.io/_uploads/S1D4L8JLbe.png" alt="分佈與變化">
+                        </div>
+                        <ul class="step-list" style="margin-top:5px; font-size:0.9rem;">
+                            <li>盒鬚圖 (Box Plot)</li>
+                            <li>直方圖 (Histogram)</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.overlay');
+            
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-280px';
+                overlay.style.display = 'none';
+            } else {
+                sidebar.style.left = '0px';
+                overlay.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

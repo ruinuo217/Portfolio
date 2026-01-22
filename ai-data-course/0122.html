@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reyna's Learning Dashboard - 01/22</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* --- 基礎樣式 --- */
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            white-space: pre-wrap;
+        }
+        .code-tag { color: #f92672; }
+        .code-attr { color: #a6e22e; }
+        .code-string { color: #e6db74; }
+        .code-content { color: #f8f8f2; }
+        .code-comment { color: #75715e; }
+        
+        .alert-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            color: #856404;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+
+        /* --- 網格排版系統 --- */
+        .grid-2-cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        
+        @media (max-width: 768px) {
+            .grid-2-cols { grid-template-columns: 1fr; }
+        }
+        
+        /* --- 表格樣式 --- */
+        .concept-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        .concept-table th, .concept-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .concept-table th {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Reyna Portfolio</h2>
+            <span>Web Design Practice</span>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 1: 基礎導入</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1222.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/22 (一)</span><span class="topic">電腦基礎概論</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_1.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) am</span><span class="topic">IT Career 職涯解析</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_2.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) pm</span><span class="topic">ESP-01S 與 Arduino</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_1.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) am</span><span class="topic">IoT 與 Web Server 實作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_2.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) pm</span><span class="topic">Linux 系統與應用</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1226.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/26 (五)</span><span class="topic">Linux基礎到架站</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 2: 深入實作</div>
+            <ul>
+                 <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1229.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/29 (一)</span><span class="topic">電腦基礎概論 II</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1230.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/30 (二)</span><span class="topic">NoCode 資料蒐集與自動化</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1231.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/31 (三)</span><span class="topic">Linux 資料庫建置</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0102.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/2 (五)</span><span class="topic">Linux 系統管理與腳本</span></a></li>
+            </ul>
+        </div>
+        
+        <div class="menu-group">
+            <div class="group-title">Week 3: 資料庫與 Python</div>
+            <ul>
+                <li><a href="#"><span class="date-badge"><i class="far fa-calendar"></i> 1/5 (一)</span><span class="topic">計算機概論 (待補)</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0106.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/6 (二)</span><span class="topic">MySQL 安裝與 SSH 穿隧</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0107.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/7 (三)</span><span class="topic">MySQL 管理與 VS Code</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0108.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/8 (四)</span><span class="topic">Python 基礎與環境</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0109.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/9 (五)</span><span class="topic">Python 進階與資料處理</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 4: Python 與 SQL</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0112.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/12 (一)</span><span class="topic">Python 函數與異常處理</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0113.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/13 (二)</span><span class="topic">OOP 與 記憶體管理</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0114.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/14 (三)</span><span class="topic">MySQL 語法與資料操作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0115.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/15 (四)</span><span class="topic">MySQL 進階查詢與實作</span></a></li>
+            </ul>
+        </div>
+
+         <div class="menu-group">
+            <div class="group-title">Week 5: 商業智慧與網頁基礎</div>
+            <ul>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0120.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/20 (二) </span>
+                        <span class="topic">Tableau 基礎與視覺化</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0121.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/21 (三) </span>
+                        <span class="topic">Tableau 進階分析</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0122.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/22 (四) </span>
+                        <span class="topic">HTML 基礎與表單設計</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0123.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/23 (五) </span>
+                        <span class="topic">CSS 樣式設計全攻略</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+   <main class="main-content">
+     
+        <div class="top-bar">
+            <div class="breadcrumb">
+                首頁 > Week 5 > <span>HTML 基礎與表單設計</span>
+            </div>
+            <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
+                <i class="fas fa-home"></i> 回首頁
+            </a>
+        </div>
+        
+        <div class="banner" style="background: linear-gradient(135deg, #e34c26 0%, #f06529 100%);">
+            <div>
+                <h1>HTML 基礎與表單設計</h1>
+                <p>超文本標記語言 (HTML5)、語意化標籤 (Semantic Tags)、Resume 實作與 Form 表單應用。</p>
+            </div>
+            <i class="fa-brands fa-html5 banner-icon"></i>
+        </div>
+
+        <h3 class="section-title">0. HTML 基礎 (The Basics)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> HTML 文件結構與開發環境</h4>
+                    <span class="status-badge important">核心</span>
+                </div>
+                <p class="note-desc">HTML (HyperText Markup Language) 是網頁的骨架。推薦使用 VS Code 進行開發。</p>
+                
+                <h5 style="margin-top:15px;">標準文件結構 (Boilerplate)</h5>
+                <pre><code><span class="code-tag">&lt;!DOCTYPE html&gt;</span>
+<span class="code-tag">&lt;html lang="zh-TW"&gt;</span>
+<span class="code-tag">&lt;head&gt;</span>
+    <span class="code-tag">&lt;meta charset="UTF-8"&gt;</span> <span class="code-comment">&lt;!-- 指定編碼防止亂碼 --&gt;</span>
+    <span class="code-tag">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</span> <span class="code-comment">&lt;!-- 手機版RWD適配 --&gt;</span>
+    <span class="code-tag">&lt;title&gt;</span>我的網頁<span class="code-tag">&lt;/title&gt;</span>
+<span class="code-tag">&lt;/head&gt;</span>
+<span class="code-tag">&lt;body&gt;</span>
+    <span class="code-tag">&lt;h1&gt;</span>Hello World<span class="code-tag">&lt;/h1&gt;</span>
+    <span class="code-tag">&lt;p&gt;</span>這是一個段落。<span class="code-tag">&lt;/p&gt;</span>
+<span class="code-tag">&lt;/body&gt;</span>
+<span class="code-tag">&lt;/html&gt;</span></code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-tags"></i> 常用文字標籤</h4>
+                    <span class="status-badge running">常用</span>
+                </div>
+                <ul class="step-list">
+                    <li><code>&lt;h1&gt;~&lt;h6&gt;</code>: 標題 (Title)，權重 h1 最大。</li>
+                    <li><code>&lt;p&gt;</code>: 段落 (Paragraph)，會自動換行。</li>
+                    <li><code>&lt;a href="..."&gt;</code>: 超連結 (Anchor)。</li>
+                    <li><code>&lt;img src="..."&gt;</code>: 圖片 (Image)，單標籤。</li>
+                    <li><code>&lt;ul&gt;/&lt;ol&gt; + &lt;li&gt;</code>: 清單列表。</li>
+                    <li><code>&lt;hr&gt;</code>: 水平分隔線。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-cube"></i> Block vs Inline</h4>
+                    <span class="status-badge done">觀念</span>
+                </div>
+                <table class="concept-table">
+                    <tr>
+                        <th>Block (區塊)</th>
+                        <th>Inline (行內)</th>
+                    </tr>
+                    <tr>
+                        <td>獨佔一行 (換行)</td>
+                        <td>與他人並排 (不換行)</td>
+                    </tr>
+                    <tr>
+                        <td><code>&lt;div&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;h1&gt;</code></td>
+                        <td><code>&lt;span&gt;</code>, <code>&lt;a&gt;</code>, <code>&lt;img&gt;</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>用途：</strong> 排版、容器</td>
+                        <td><strong>用途：</strong> 局部文字樣式</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <h3 class="section-title">1. 語意化標籤實作 (Resume Project)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-regular fa-file-code"></i> 為什麼要用語意化標籤？</h4>
+                    <span class="status-badge important">SEO</span>
+                </div>
+                <p class="note-desc">讓機器 (搜尋引擎、螢幕閱讀器) 讀懂網頁結構，而不僅僅是使用 <code>&lt;div&gt;</code>。</p>
+                
+                <div class="grid-2-cols">
+                    <div>
+                        <h5 style="margin-top:10px;">主要結構標籤</h5>
+                        <ul class="step-list">
+                            <li><strong>&lt;header&gt;</strong>: 頁首，通常包含標題或導航。</li>
+                            <li><strong>&lt;nav&gt;</strong>: 導航選單 (Navigation)。</li>
+                            <li><strong>&lt;main&gt;</strong>: 主要內容區 (一個頁面只能有一個)。</li>
+                            <li><strong>&lt;footer&gt;</strong>: 頁尾，版權宣告或聯絡資訊。</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h5 style="margin-top:10px;">內容區塊標籤</h5>
+                        <ul class="step-list">
+                            <li><strong>&lt;article&gt;</strong>: 獨立完整的內容 (如部落格文章)。</li>
+                            <li><strong>&lt;section&gt;</strong>: 主題分區 (如履歷的「學歷區」、「經歷區」)。</li>
+                            <li><strong>&lt;aside&gt;</strong>: 側邊欄或補充資訊 (與主題間接相關)。</li>
+                            <li><strong>&lt;address&gt;</strong>: 聯絡人資訊區塊。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">2. HTML 表單設計 (Forms)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-list-check"></i> &lt;form&gt; 容器屬性</h4>
+                    <span class="status-badge running">設定</span>
+                </div>
+                <ul class="note-points">
+                    <li><strong>action</strong>: 資料要送到哪裡 (後端 URL)。</li>
+                    <li><strong>method</strong>: 傳送方式。
+                        <ul>
+                            <li><code>GET</code>: 參數在網址上 (搜尋)。</li>
+                            <li><code>POST</code>: 參數在封包內 (註冊、登入)。</li>
+                        </ul>
+                    </li>
+                    <li><strong>enctype</strong>: 傳送檔案時需設為 <code>multipart/form-data</code>。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-regular fa-keyboard"></i> &lt;input&gt; 常用類型</h4>
+                    <span class="status-badge done">元件</span>
+                </div>
+                <table class="concept-table">
+                    <tr><td><code>type="text"</code></td><td>單行文字 (預設)</td></tr>
+                    <tr><td><code>type="password"</code></td><td>密碼 (隱藏字元)</td></tr>
+                    <tr><td><code>type="radio"</code></td><td>單選 (需同名 name)</td></tr>
+                    <tr><td><code>type="checkbox"</code></td><td>多選 / 核取方塊</td></tr>
+                    <tr><td><code>type="date"</code></td><td>日期選擇器</td></tr>
+                    <tr><td><code>type="file"</code></td><td>檔案上傳</td></tr>
+                    <tr><td><code>type="submit"</code></td><td>提交按鈕</td></tr>
+                </table>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> 表單範例程式碼</h4>
+                    <span class="status-badge running">實作</span>
+                </div>
+                <pre><code><span class="code-tag">&lt;form action="/submit" method="post"&gt;</span>
+    <span class="code-comment">&lt;!-- Label 的 for 屬性要對應 input 的 id，點擊文字也會聚焦 --&gt;</span>
+    <span class="code-tag">&lt;label for="username"&gt;</span>姓名:<span class="code-tag">&lt;/label&gt;</span>
+    <span class="code-tag">&lt;input type="text" id="username" name="user" required placeholder="請輸入姓名"&gt;</span>
+
+    <span class="code-tag">&lt;label&gt;</span>性別:<span class="code-tag">&lt;/label&gt;</span>
+    <span class="code-tag">&lt;input type="radio" name="gender" value="M"&gt;</span> 男
+    <span class="code-tag">&lt;input type="radio" name="gender" value="F"&gt;</span> 女
+
+    <span class="code-tag">&lt;label for="bio"&gt;</span>自我介紹:<span class="code-tag">&lt;/label&gt;</span>
+    <span class="code-tag">&lt;textarea id="bio" name="bio" rows="5"&gt;&lt;/textarea&gt;</span>
+
+    <span class="code-tag">&lt;label for="city"&gt;</span>居住城市:<span class="code-tag">&lt;/label&gt;</span>
+    <span class="code-tag">&lt;select id="city" name="city"&gt;</span>
+        <span class="code-tag">&lt;option value="tp"&gt;</span>台北<span class="code-tag">&lt;/option&gt;</span>
+        <span class="code-tag">&lt;option value="kh"&gt;</span>高雄<span class="code-tag">&lt;/option&gt;</span>
+    <span class="code-tag">&lt;/select&gt;</span>
+
+    <span class="code-tag">&lt;button type="submit"&gt;</span>送出<span class="code-tag">&lt;/button&gt;</span>
+<span class="code-tag">&lt;/form&gt;</span></code></pre>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.overlay');
+            
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-280px';
+                overlay.style.display = 'none';
+            } else {
+                sidebar.style.left = '0px';
+                overlay.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
