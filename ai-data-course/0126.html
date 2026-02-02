@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reyna's Learning Dashboard - 01/22</title>
+    <title>Reyna's Learning Dashboard - 01/26</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="dashboard.css">
     <style>
@@ -18,12 +18,15 @@
             font-size: 0.9rem;
             margin-top: 10px;
             white-space: pre-wrap;
+            line-height: 1.6;
         }
         .code-tag { color: #f92672; }
         .code-attr { color: #a6e22e; }
         .code-string { color: #e6db74; }
-        .code-content { color: #f8f8f2; }
-        .code-comment { color: #75715e; }
+        .code-selector { color: #a6e22e; font-weight: bold; }
+        .code-property { color: #66d9ef; }
+        .code-value { color: #ae81ff; }
+        .code-comment { color: #75715e; font-style: italic; }
         
         .alert-box {
             background-color: #fff3cd;
@@ -34,13 +37,6 @@
             font-size: 0.9rem;
         }
 
-        /* --- 網格排版系統 --- */
-        .grid-2-cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        
-        @media (max-width: 768px) {
-            .grid-2-cols { grid-template-columns: 1fr; }
-        }
-        
         /* --- 表格樣式 --- */
         .concept-table {
             width: 100%;
@@ -56,6 +52,14 @@
         .concept-table th {
             background-color: #f4f4f4;
             color: #333;
+            font-weight: bold;
+        }
+        
+        /* --- 排版系統 --- */
+        .grid-2-cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; align-items: start; }
+        
+        @media (max-width: 768px) {
+            .grid-2-cols { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -116,7 +120,7 @@
             </ul>
         </div>
 
-         <div class="menu-group">
+        <div class="menu-group">
             <div class="group-title">Week 5: 商業智慧與網頁基礎</div>
             <ul>
                 <li>
@@ -131,7 +135,7 @@
                         <span class="topic">Tableau 進階分析</span>
                     </a>
                 </li>
-                <li class="active">
+                <li>
                     <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0122.html">
                         <span class="date-badge"><i class="far fa-calendar"></i> 1/22 (四) </span>
                         <span class="topic">HTML 基礎與表單設計</span>
@@ -149,189 +153,196 @@
         <div class="menu-group">
             <div class="group-title">Week 6: 網路爬蟲與資料擷取</div>
             <ul>
-                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0126.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/26 (一) </span><span class="topic">網路爬蟲基礎與 requests</span></a></li>
-                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0127.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/27 (二) </span><span class="topic">Selenium 動態爬蟲</span></a></li>
+                <li class="active">
+                    <a href="0126.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/26 (一) </span>
+                        <span class="topic">網路爬蟲基礎與 requests</span>
+                    </a>
+                </li>
+                 <li><a href="#"><span class="date-badge"><i class="far fa-calendar"></i> 1/27 (二) </span><span class="topic">Selenium 動態爬蟲 (待補)</span></a></li>
             </ul>
         </div>
-
     </nav>
 
    <main class="main-content">
      
         <div class="top-bar">
             <div class="breadcrumb">
-                首頁 > Week 5 > <span>HTML 基礎與表單設計</span>
+                首頁 > Week 6 > <span>網路爬蟲基礎與 requests</span>
             </div>
             <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
                 <i class="fas fa-home"></i> 回首頁
             </a>
         </div>
         
-        <div class="banner" style="background: linear-gradient(135deg, #e34c26 0%, #f06529 100%);">
+        <div class="banner" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
             <div>
-                <h1>HTML 基礎與表單設計</h1>
-                <p>超文本標記語言 (HTML5)、語意化標籤 (Semantic Tags)、Resume 實作與 Form 表單應用。</p>
+                <h1>網路爬蟲基礎與 requests</h1>
+                <p>從 robots.txt 協議、HTTP 請求原理，到 BeautifulSoup 解析與 DOM 遍歷策略。</p>
             </div>
-            <i class="fa-brands fa-html5 banner-icon"></i>
+            <i class="fa-solid fa-spider banner-icon"></i>
         </div>
 
-        <h3 class="section-title">0. HTML 基礎 (The Basics)</h3>
+        <h3 class="section-title">Part 1: 爬蟲概念與規範 (Concept & Robots.txt)</h3>
         <div class="dashboard-grid notes-section">
             <div class="card note-card" style="grid-column: 1 / -1;">
                 <div class="note-header">
-                    <h4><i class="fa-solid fa-code"></i> HTML 文件結構與開發環境</h4>
-                    <span class="status-badge important">核心</span>
+                    <h4><i class="fa-solid fa-robot"></i> 爬蟲的角色與限制</h4>
+                    <span class="status-badge important">觀念</span>
                 </div>
-                <p class="note-desc">HTML (HyperText Markup Language) 是網頁的骨架。推薦使用 VS Code 進行開發。</p>
                 
-                <h5 style="margin-top:15px;">標準文件結構 (Boilerplate)</h5>
-                <pre><code><span class="code-tag">&lt;!DOCTYPE html&gt;</span>
-<span class="code-tag">&lt;html lang="zh-TW"&gt;</span>
-<span class="code-tag">&lt;head&gt;</span>
-    <span class="code-tag">&lt;meta charset="UTF-8"&gt;</span> <span class="code-comment">&lt;!-- 指定編碼防止亂碼 --&gt;</span>
-    <span class="code-tag">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</span> <span class="code-comment">&lt;!-- 手機版RWD適配 --&gt;</span>
-    <span class="code-tag">&lt;title&gt;</span>我的網頁<span class="code-tag">&lt;/title&gt;</span>
-<span class="code-tag">&lt;/head&gt;</span>
-<span class="code-tag">&lt;body&gt;</span>
-    <span class="code-tag">&lt;h1&gt;</span>Hello World<span class="code-tag">&lt;/h1&gt;</span>
-    <span class="code-tag">&lt;p&gt;</span>這是一個段落。<span class="code-tag">&lt;/p&gt;</span>
-<span class="code-tag">&lt;/body&gt;</span>
-<span class="code-tag">&lt;/html&gt;</span></code></pre>
-            </div>
+                <h5 style="margin-top:10px;">什麼是網路爬蟲 (Web Scraper)?</h5>
+                <p>自動從網路上搜集並擷取數據的技術，是 AI 學習語言模式、市場趨勢的重要資料來源 (Offline Data Provider)。</p>
 
+                <div class="danger-box">
+                    <strong>⚠️ 關鍵架構觀念：離線 vs 線上</strong><br>
+                    不要在「即時系統 (Runtime)」中直接執行爬蟲！
+                    <ul>
+                        <li><strong>錯誤：</strong> 用戶點擊 -> 系統去爬網站 -> 回傳結果 (網站掛了系統就掛了)。</li>
+                        <li><strong>正確：</strong> 爬蟲 (Offline) -> 存成快照 (laws.json) -> 系統讀取快照 (Runtime)。</li>
+                    </ul>
+                </div>
+
+                <h5 style="margin-top:20px; border-bottom:1px solid #eee; padding-bottom:5px;">robots.txt 協議</h5>
+                <p class="note-desc">網站與爬蟲的溝通橋樑，放置於網站根目錄 (e.g., <code>apple.com/robots.txt</code>)。它是一種「君子協定」，非強制性安全機制。</p>
+                <table class="concept-table">
+                    <tr><th>規則</th><th>語法範例</th><th>說明</th></tr>
+                    <tr><td><strong>User-agent</strong></td><td><code>User-agent: Googlebot</code></td><td>指定適用的爬蟲 (<code>*</code> 代表所有爬蟲)。</td></tr>
+                    <tr><td><strong>Disallow</strong></td><td><code>Disallow: /admin/</code></td><td>禁止訪問的路徑。</td></tr>
+                    <tr><td><strong>Allow</strong></td><td><code>Allow: /public/</code></td><td>允許訪問的路徑 (通常用於 override Disallow)。</td></tr>
+                </table>
+                <pre><code><span class="code-comment"># 範例：禁止所有爬蟲進入 private 資料夾</span>
+User-agent: *
+Disallow: /private/</code></pre>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 2: HTTP 協定與 Requests (HTTP Protocol)</h3>
+        <div class="dashboard-grid notes-section">
+            
             <div class="card note-card">
                 <div class="note-header">
-                    <h4><i class="fa-solid fa-tags"></i> 常用文字標籤</h4>
-                    <span class="status-badge running">常用</span>
+                    <h4><i class="fa-solid fa-network-wired"></i> HTTP 請求結構</h4>
+                    <span class="status-badge running">基礎</span>
                 </div>
                 <ul class="step-list">
-                    <li><code>&lt;h1&gt;~&lt;h6&gt;</code>: 標題 (Title)，權重 h1 最大。</li>
-                    <li><code>&lt;p&gt;</code>: 段落 (Paragraph)，會自動換行。</li>
-                    <li><code>&lt;a href="..."&gt;</code>: 超連結 (Anchor)。</li>
-                    <li><code>&lt;img src="..."&gt;</code>: 圖片 (Image)，單標籤。</li>
-                    <li><code>&lt;ul&gt;/&lt;ol&gt; + &lt;li&gt;</code>: 清單列表。</li>
-                    <li><code>&lt;hr&gt;</code>: 水平分隔線。</li>
-                </ul>
-            </div>
-
-            <div class="card note-card">
-                <div class="note-header">
-                    <h4><i class="fa-solid fa-cube"></i> Block vs Inline</h4>
-                    <span class="status-badge done">觀念</span>
-                </div>
-                <table class="concept-table">
-                    <tr>
-                        <th>Block (區塊)</th>
-                        <th>Inline (行內)</th>
-                    </tr>
-                    <tr>
-                        <td>獨佔一行 (換行)</td>
-                        <td>與他人並排 (不換行)</td>
-                    </tr>
-                    <tr>
-                        <td><code>&lt;div&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;h1&gt;</code></td>
-                        <td><code>&lt;span&gt;</code>, <code>&lt;a&gt;</code>, <code>&lt;img&gt;</code></td>
-                    </tr>
-                    <tr>
-                        <td><strong>用途：</strong> 排版、容器</td>
-                        <td><strong>用途：</strong> 局部文字樣式</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-
-        <h3 class="section-title">1. 語意化標籤實作 (Resume Project)</h3>
-        <div class="dashboard-grid notes-section">
-            <div class="card note-card" style="grid-column: 1 / -1;">
-                <div class="note-header">
-                    <h4><i class="fa-regular fa-file-code"></i> 為什麼要用語意化標籤？</h4>
-                    <span class="status-badge important">SEO</span>
-                </div>
-                <p class="note-desc">讓機器 (搜尋引擎、螢幕閱讀器) 讀懂網頁結構，而不僅僅是使用 <code>&lt;div&gt;</code>。</p>
-                
-                <div class="grid-2-cols">
-                    <div>
-                        <h5 style="margin-top:10px;">主要結構標籤</h5>
-                        <ul class="step-list">
-                            <li><strong>&lt;header&gt;</strong>: 頁首，通常包含標題或導航。</li>
-                            <li><strong>&lt;nav&gt;</strong>: 導航選單 (Navigation)。</li>
-                            <li><strong>&lt;main&gt;</strong>: 主要內容區 (一個頁面只能有一個)。</li>
-                            <li><strong>&lt;footer&gt;</strong>: 頁尾，版權宣告或聯絡資訊。</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h5 style="margin-top:10px;">內容區塊標籤</h5>
-                        <ul class="step-list">
-                            <li><strong>&lt;article&gt;</strong>: 獨立完整的內容 (如部落格文章)。</li>
-                            <li><strong>&lt;section&gt;</strong>: 主題分區 (如履歷的「學歷區」、「經歷區」)。</li>
-                            <li><strong>&lt;aside&gt;</strong>: 側邊欄或補充資訊 (與主題間接相關)。</li>
-                            <li><strong>&lt;address&gt;</strong>: 聯絡人資訊區塊。</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <h3 class="section-title">2. HTML 表單設計 (Forms)</h3>
-        <div class="dashboard-grid notes-section">
-            <div class="card note-card">
-                <div class="note-header">
-                    <h4><i class="fa-solid fa-list-check"></i> &lt;form&gt; 容器屬性</h4>
-                    <span class="status-badge running">設定</span>
-                </div>
-                <ul class="note-points">
-                    <li><strong>action</strong>: 資料要送到哪裡 (後端 URL)。</li>
-                    <li><strong>method</strong>: 傳送方式。
+                    <li><strong>Request (請求):</strong>
                         <ul>
-                            <li><code>GET</code>: 參數在網址上 (搜尋)。</li>
-                            <li><code>POST</code>: 參數在封包內 (註冊、登入)。</li>
+                            <li>Method: GET (查詢), POST (提交)</li>
+                            <li>Headers: User-Agent, Authorization</li>
+                            <li>Body: 攜帶的資料 (JSON/Form)</li>
                         </ul>
                     </li>
-                    <li><strong>enctype</strong>: 傳送檔案時需設為 <code>multipart/form-data</code>。</li>
+                    <li><strong>Response (回應):</strong>
+                        <ul>
+                            <li>Status Code: 200 (成功), 404 (未找到)</li>
+                            <li>Body: HTML 原始碼或 JSON 資料</li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
 
             <div class="card note-card">
                 <div class="note-header">
-                    <h4><i class="fa-regular fa-keyboard"></i> &lt;input&gt; 常用類型</h4>
-                    <span class="status-badge done">元件</span>
-                </div>
-                <table class="concept-table">
-                    <tr><td><code>type="text"</code></td><td>單行文字 (預設)</td></tr>
-                    <tr><td><code>type="password"</code></td><td>密碼 (隱藏字元)</td></tr>
-                    <tr><td><code>type="radio"</code></td><td>單選 (需同名 name)</td></tr>
-                    <tr><td><code>type="checkbox"</code></td><td>多選 / 核取方塊</td></tr>
-                    <tr><td><code>type="date"</code></td><td>日期選擇器</td></tr>
-                    <tr><td><code>type="file"</code></td><td>檔案上傳</td></tr>
-                    <tr><td><code>type="submit"</code></td><td>提交按鈕</td></tr>
-                </table>
-            </div>
-
-            <div class="card note-card" style="grid-column: 1 / -1;">
-                <div class="note-header">
-                    <h4><i class="fa-solid fa-code"></i> 表單範例程式碼</h4>
+                    <h4><i class="fa-brands fa-python"></i> Python Requests 實戰</h4>
                     <span class="status-badge running">實作</span>
                 </div>
-                <pre><code><span class="code-tag">&lt;form action="/submit" method="post"&gt;</span>
-    <span class="code-comment">&lt;!-- Label 的 for 屬性要對應 input 的 id，點擊文字也會聚焦 --&gt;</span>
-    <span class="code-tag">&lt;label for="username"&gt;</span>姓名:<span class="code-tag">&lt;/label&gt;</span>
-    <span class="code-tag">&lt;input type="text" id="username" name="user" required placeholder="請輸入姓名"&gt;</span>
+                <p class="note-desc">安裝: <code>pip install requests</code></p>
+                
+                <h5 style="margin-top:5px;">GET 與 POST 請求</h5>
+                <pre><code><span class="code-keyword">import</span> requests
 
-    <span class="code-tag">&lt;label&gt;</span>性別:<span class="code-tag">&lt;/label&gt;</span>
-    <span class="code-tag">&lt;input type="radio" name="gender" value="M"&gt;</span> 男
-    <span class="code-tag">&lt;input type="radio" name="gender" value="F"&gt;</span> 女
+<span class="code-comment"># GET: 獲取資料</span>
+res = requests.<span class="code-func">get</span>(<span class="code-string">"https://httpbin.org/get"</span>)
+<span class="code-func">print</span>(res.text)
 
-    <span class="code-tag">&lt;label for="bio"&gt;</span>自我介紹:<span class="code-tag">&lt;/label&gt;</span>
-    <span class="code-tag">&lt;textarea id="bio" name="bio" rows="5"&gt;&lt;/textarea&gt;</span>
+<span class="code-comment"># POST: 帶 Header 與 Data</span>
+headers = {<span class="code-string">"User-Agent"</span>: <span class="code-string">"MyBot/1.0"</span>}
+data = {<span class="code-string">"name"</span>: <span class="code-string">"Reyna"</span>}
 
-    <span class="code-tag">&lt;label for="city"&gt;</span>居住城市:<span class="code-tag">&lt;/label&gt;</span>
-    <span class="code-tag">&lt;select id="city" name="city"&gt;</span>
-        <span class="code-tag">&lt;option value="tp"&gt;</span>台北<span class="code-tag">&lt;/option&gt;</span>
-        <span class="code-tag">&lt;option value="kh"&gt;</span>高雄<span class="code-tag">&lt;/option&gt;</span>
-    <span class="code-tag">&lt;/select&gt;</span>
+res = requests.<span class="code-func">post</span>(
+    <span class="code-string">"https://httpbin.org/post"</span>, 
+    headers=headers, 
+    json=data
+)</code></pre>
+            </div>
+        </div>
 
-    <span class="code-tag">&lt;button type="submit"&gt;</span>送出<span class="code-tag">&lt;/button&gt;</span>
-<span class="code-tag">&lt;/form&gt;</span></code></pre>
+        <h3 class="section-title">Part 3: BeautifulSoup 解析 (Parsing HTML)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-magnifying-glass"></i> BeautifulSoup 查找神器</h4>
+                    <span class="status-badge important">核心</span>
+                </div>
+                <div class="grid-2-cols">
+                    <div>
+                        <h5 style="margin-bottom:10px;">基本操作</h5>
+                        <p>安裝: <code>pip install beautifulsoup4</code></p>
+                        <pre><code><span class="code-keyword">from</span> bs4 <span class="code-keyword">import</span> BeautifulSoup
+
+html = <span class="code-string">"&lt;a href='...'&gt;Link&lt;/a&gt;"</span>
+soup = <span class="code-class">BeautifulSoup</span>(html, <span class="code-string">'html.parser'</span>)
+
+<span class="code-comment"># 取得第一個匹配的標籤</span>
+tag = soup.a 
+<span class="code-func">print</span>(tag.text) <span class="code-comment"># 文字內容</span>
+<span class="code-func">print</span>(tag[<span class="code-string">'href'</span>]) <span class="code-comment"># 取得屬性</span></code></pre>
+                    </div>
+                    <div>
+                        <h5 style="margin-bottom:10px;">find vs find_all</h5>
+                        <table class="concept-table">
+                            <tr><th>方法</th><th>回傳</th><th>用途</th></tr>
+                            <tr><td><code>find()</code></td><td>Tag 物件</td><td>找「第一個」符合的。</td></tr>
+                            <tr><td><code>find_all()</code></td><td>ResultSet (List)</td><td>找「所有」符合的。</td></tr>
+                        </table>
+                        
+                        <h5 style="margin-top:10px;">進階篩選</h5>
+                        <pre><code><span class="code-comment"># 找 id="link1" 的 a 標籤</span>
+soup.<span class="code-func">find_all</span>(<span class="code-string">"a"</span>, id=<span class="code-string">"link1"</span>)
+
+<span class="code-comment"># 找含有特定文字的標籤</span>
+soup.<span class="code-func">find_all</span>(<span class="code-string">"a"</span>, string=<span class="code-string">"Elsie"</span>)</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 4: DOM Traversal (樹狀結構遍歷)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-sitemap"></i> DOM 移動方法</h4>
+                    <span class="status-badge advanced">進階</span>
+                </div>
+                <p class="note-desc">當無法直接定位時，從「鄰居」或「父母」出發。</p>
+                <ul class="step-list">
+                    <li><code>.parent</code>: 往上找父節點。</li>
+                    <li><code>.children</code>: 往下找子節點。</li>
+                    <li><code>.next_sibling</code>: 下一個兄弟 (小心空白換行也是節點)。</li>
+                    <li><code>.previous_sibling</code>: 上一個兄弟。</li>
+                </ul>
+                <div class="alert-box">
+                    <strong>Tag 是物件：</strong> 找到的 Tag 可以繼續 call <code>.find()</code>，不一定要從 soup 開始找。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-location-crosshairs"></i> 定位策略</h4>
+                    <span class="status-badge advanced">策略</span>
+                </div>
+                <h5 style="margin-top:5px;">策略 1: By Attribute (推薦)</h5>
+                <p>利用 id, class, data-* 這些語意明確的屬性當作錨點 (Anchor)。</p>
+                <pre><code><span class="code-comment"># 先抓有 id 的容器，再往下找 p</span>
+container = soup.<span class="code-func">find</span>(<span class="code-string">"div"</span>, id=<span class="code-string">"container"</span>)
+target = container.<span class="code-func">find</span>(<span class="code-string">"p"</span>)</code></pre>
+
+                <h5 style="margin-top:15px;">策略 2: By String (最後手段)</h5>
+                <p>結構亂且無屬性時，用「顯示文字」定位，再推算位置。</p>
+                <pre><code><span class="code-comment"># 找到 "台灣時間：" 的標籤，再找它的父層的下一個兄弟</span>
+label = soup.<span class="code-func">find</span>(<span class="code-string">"p"</span>, string=<span class="code-string">"台灣時間："</span>)
+time_div = label.parent.previous_sibling</code></pre>
             </div>
         </div>
 

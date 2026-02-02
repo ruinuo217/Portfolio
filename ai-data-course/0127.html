@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reyna's Learning Dashboard - 01/26</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* --- 基礎樣式 --- */
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+        .code-tag { color: #f92672; }
+        .code-attr { color: #a6e22e; }
+        .code-string { color: #e6db74; }
+        .code-selector { color: #a6e22e; font-weight: bold; }
+        .code-property { color: #66d9ef; }
+        .code-value { color: #ae81ff; }
+        .code-comment { color: #75715e; font-style: italic; }
+        
+        .alert-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            color: #856404;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+
+        /* --- 表格樣式 --- */
+        .concept-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        .concept-table th, .concept-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .concept-table th {
+            background-color: #f4f4f4;
+            color: #333;
+            font-weight: bold;
+        }
+        
+        /* --- 排版系統 --- */
+        .grid-2-cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; align-items: start; }
+        
+        @media (max-width: 768px) {
+            .grid-2-cols { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Reyna Portfolio</h2>
+            <span>Web Design Practice</span>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 1: 基礎導入</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1222.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/22 (一)</span><span class="topic">電腦基礎概論</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_1.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) am</span><span class="topic">IT Career 職涯解析</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_2.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) pm</span><span class="topic">ESP-01S 與 Arduino</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_1.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) am</span><span class="topic">IoT 與 Web Server 實作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_2.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) pm</span><span class="topic">Linux 系統與應用</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1226.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/26 (五)</span><span class="topic">Linux基礎到架站</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 2: 深入實作</div>
+            <ul>
+                 <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1229.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/29 (一)</span><span class="topic">電腦基礎概論 II</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1230.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/30 (二)</span><span class="topic">NoCode 資料蒐集與自動化</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1231.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/31 (三)</span><span class="topic">Linux 資料庫建置</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0102.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/2 (五)</span><span class="topic">Linux 系統管理與腳本</span></a></li>
+            </ul>
+        </div>
+        
+        <div class="menu-group">
+            <div class="group-title">Week 3: 資料庫與 Python</div>
+            <ul>
+                <li><a href="#"><span class="date-badge"><i class="far fa-calendar"></i> 1/5 (一)</span><span class="topic">計算機概論 (待補)</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0106.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/6 (二)</span><span class="topic">MySQL 安裝與 SSH 穿隧</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0107.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/7 (三)</span><span class="topic">MySQL 管理與 VS Code</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0108.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/8 (四)</span><span class="topic">Python 基礎與環境</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0109.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/9 (五)</span><span class="topic">Python 進階與資料處理</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 4: Python 與 SQL</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0112.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/12 (一)</span><span class="topic">Python 函數與異常處理</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0113.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/13 (二)</span><span class="topic">OOP 與 記憶體管理</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0114.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/14 (三)</span><span class="topic">MySQL 語法與資料操作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0115.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/15 (四)</span><span class="topic">MySQL 進階查詢與實作</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 5: 商業智慧與網頁基礎</div>
+            <ul>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0120.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/20 (二) </span>
+                        <span class="topic">Tableau 基礎與視覺化</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0121.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/21 (三) </span>
+                        <span class="topic">Tableau 進階分析</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0122.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/22 (四) </span>
+                        <span class="topic">HTML 基礎與表單設計</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0123.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/23 (五) </span>
+                        <span class="topic">CSS 樣式設計全攻略</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 6: 網路爬蟲與資料擷取</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0126.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/26 (一) </span><span class="topic">網路爬蟲基礎與 requests</span></a></li>
+                 <li class="active"><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0127.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/27 (二) </span><span class="topic">Selenium 動態爬蟲</span></a></li>
+            </ul>
+        </div>
+    </nav>
+
+   <main class="main-content">
+     
+        <div class="top-bar">
+            <div class="breadcrumb">
+                首頁 > Week 6 > <span>Selenium 動態爬蟲</span>
+            </div>
+            <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
+                <i class="fas fa-home"></i> 回首頁
+            </a>
+        </div>
+        
+        <div class="banner" style="background: linear-gradient(135deg, #FF8008 0%, #FFC837 100%);">
+            <div>
+                <h1>Selenium 動態爬蟲實戰</h1>
+                <p>從 bs4.Tag 進階操作、Requests 實戰，到 Selenium 自動化控制瀏覽器與 JavaScript 執行。</p>
+            </div>
+            <i class="fa-solid fa-robot banner-icon"></i>
+        </div>
+
+        <h3 class="section-title">Part 1: BeautifulSoup 進階 (bs4.Tag Object)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> 操作 bs4.Tag 物件</h4>
+                    <span class="status-badge important">核心</span>
+                </div>
+                <p class="note-desc"><code>find()</code> 找到的不只是文字，而是一個完整的物件 (Object)，可以讀取屬性或繼續往下找。</p>
+                
+                <div class="grid-2-cols">
+                    <div>
+                        <h5 style="margin-bottom:10px;">常用屬性與方法</h5>
+                        <table class="concept-table">
+                            <tr><th>屬性/方法</th><th>說明</th></tr>
+                            <tr><td><code>tag.name</code></td><td>取得標籤名稱 (如 'a', 'div')。</td></tr>
+                            <tr><td><code>tag['href']</code></td><td>像字典一樣存取屬性 (若無會報錯)。</td></tr>
+                            <tr><td><code>tag.get('href')</code></td><td>安全取得屬性 (若無回傳 None)。</td></tr>
+                            <tr><td><code>tag.text</code></td><td>取得包含子標籤的所有純文字。</td></tr>
+                            <tr><td><code>tag.string</code></td><td>僅在標籤內只有單一文字節點時有值。</td></tr>
+                        </table>
+                    </div>
+                    <div>
+                        <h5 style="margin-bottom:10px;">實作範例</h5>
+                        <pre><code><span class="code-keyword">from</span> bs4 <span class="code-keyword">import</span> BeautifulSoup
+
+html = <span class="code-string">'&lt;a href="http://ex.com" class="link"&gt;Example&lt;/a&gt;'</span>
+soup = <span class="code-class">BeautifulSoup</span>(html, <span class="code-string">'html.parser'</span>)
+tag = soup.a
+
+<span class="code-func">print</span>(tag.name)       <span class="code-comment"># a</span>
+<span class="code-func">print</span>(tag[<span class="code-string">'href'</span>])    <span class="code-comment"># http://ex.com</span>
+<span class="code-func">print</span>(tag.<span class="code-func">get</span>(<span class="code-string">'id'</span>))  <span class="code-comment"># None</span>
+
+<span class="code-comment"># 修改屬性 (物件是可變的)</span>
+tag.name = <span class="code-string">"div"</span>
+<span class="code-func">print</span>(tag) <span class="code-comment"># &lt;div href="..." ...&gt;Example&lt;/div&gt;</span></code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 2: Requests + BS4 實戰 (Crawler Case Study)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-newspaper"></i> 實戰：ETtoday 旅遊雲爬蟲</h4>
+                    <span class="status-badge running">實作</span>
+                </div>
+                <p class="note-desc">目標：爬取新聞列表的「標題 (h3)」與「摘要內容 (p)」。</p>
+                
+                <pre><code><span class="code-keyword">import</span> requests
+<span class="code-keyword">from</span> bs4 <span class="code-keyword">import</span> BeautifulSoup
+
+<span class="code-comment"># 1. 發送請求</span>
+url = <span class="code-string">"https://travel.ettoday.net/category/台北/"</span>
+response = requests.<span class="code-func">get</span>(url)
+soup = <span class="code-class">BeautifulSoup</span>(response.text, <span class="code-string">"html.parser"</span>)
+
+<span class="code-comment"># 2. 提取標題 (h3)</span>
+titles = soup.<span class="code-func">find_all</span>(<span class="code-string">"h3"</span>)
+<span class="code-keyword">for</span> t <span class="code-keyword">in</span> titles:
+    <span class="code-func">print</span>(t.text.<span class="code-func">strip</span>())
+
+<span class="code-comment"># 3. 提取摘要 (p class="summary")</span>
+<span class="code-comment"># 注意：class 是 Python 保留字，需用 attrs 或 class_</span>
+summaries = soup.<span class="code-func">find_all</span>(<span class="code-string">"p"</span>, attrs={<span class="code-string">"class"</span>: <span class="code-string">"summary"</span>})
+<span class="code-keyword">for</span> s <span class="code-keyword">in</span> summaries:
+    <span class="code-comment"># text=True, recursive=False 只抓第一層文字，避開內部標籤</span>
+    <span class="code-func">print</span>(s.<span class="code-func">find</span>(text=<span class="code-keyword">True</span>, recursive=<span class="code-keyword">False</span>).<span class="code-func">strip</span>())</code></pre>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 3: Selenium 基礎與設定 (Setup & Options)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-brands fa-chrome"></i> Selenium & WebDriver</h4>
+                    <span class="status-badge running">環境</span>
+                </div>
+                <p class="note-desc">解決動態載入 (JavaScript) 網頁的爬取問題，模擬真人操作瀏覽器。</p>
+                <ul class="step-list">
+                    <li>安裝：<code>pip install selenium webdriver_manager</code></li>
+                    <li><strong>WebDriver:</strong> 瀏覽器的驅動程式 (如 chromedriver)。</li>
+                    <li><strong>webdriver_manager:</strong> 自動下載並管理 Driver 版本，避免版本衝突。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-sliders"></i> 瀏覽器選項 (Options)</h4>
+                    <span class="status-badge advanced">設定</span>
+                </div>
+                <p class="note-desc">透過 <code>ChromeOptions</code> 自訂瀏覽器行為。</p>
+                <pre><code><span class="code-keyword">from</span> selenium.webdriver.chrome.options <span class="code-keyword">import</span> Options
+
+opts = webdriver.<span class="code-class">ChromeOptions</span>()
+<span class="code-comment"># 無頭模式 (不顯示視窗，適合伺服器執行)</span>
+opts.<span class="code-func">add_argument</span>(<span class="code-string">"headless"</span>)
+<span class="code-comment"># 無痕模式</span>
+opts.<span class="code-func">add_argument</span>(<span class="code-string">"--incognito"</span>)
+
+driver = webdriver.<span class="code-class">Chrome</span>(options=opts)</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-play"></i> 啟動範例 (Boilerplate Code)</h4>
+                    <span class="status-badge running">代碼</span>
+                </div>
+                <pre><code><span class="code-keyword">from</span> selenium <span class="code-keyword">import</span> webdriver
+<span class="code-keyword">from</span> selenium.webdriver.chrome.service <span class="code-keyword">import</span> Service
+<span class="code-keyword">from</span> webdriver_manager.chrome <span class="code-keyword">import</span> ChromeDriverManager
+
+<span class="code-comment"># 自動安裝並啟動 Driver</span>
+service = <span class="code-class">Service</span>(<span class="code-class">ChromeDriverManager</span>().<span class="code-func">install</span>())
+driver = webdriver.<span class="code-class">Chrome</span>(service=service)
+
+driver.<span class="code-func">get</span>(<span class="code-string">"https://www.google.com"</span>)
+<span class="code-func">print</span>(driver.title)
+
+<span class="code-comment"># 保持開啟 (若無此行，腳本結束瀏覽器會關閉)</span>
+<span class="code-keyword">while</span> <span class="code-keyword">True</span>:
+    <span class="code-keyword">pass</span></code></pre>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 4: 元素定位與操作 (Locators & Interactions)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-crosshairs"></i> find_element vs find_elements</h4>
+                    <span class="status-badge important">定位</span>
+                </div>
+                <table class="concept-table">
+                    <tr><th>方法</th><th>回傳</th><th>行為</th></tr>
+                    <tr><td><code>find_element</code></td><td>WebElement</td><td>回傳第一個，找不到報錯。</td></tr>
+                    <tr><td><code>find_elements</code></td><td>List [WebElement]</td><td>回傳列表，找不到回傳空 List <code>[]</code>。</td></tr>
+                </table>
+                <h5 style="margin-top:10px;">常用定位策略 (By)</h5>
+                <pre><code><span class="code-keyword">from</span> selenium.webdriver.common.by <span class="code-keyword">import</span> By
+
+driver.<span class="code-func">find_element</span>(By.ID, <span class="code-string">"login"</span>)
+driver.<span class="code-func">find_element</span>(By.NAME, <span class="code-string">"username"</span>)
+driver.<span class="code-func">find_element</span>(By.CLASS_NAME, <span class="code-string">"btn"</span>)
+driver.<span class="code-func">find_element</span>(By.TAG_NAME, <span class="code-string">"h1"</span>)
+<span class="code-comment"># XPath 強大定位</span>
+driver.<span class="code-func">find_element</span>(By.XPATH, <span class="code-string">'//button[@id="submit"]'</span>)</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-hand-pointer"></i> 互動操作 (Interactions)</h4>
+                    <span class="status-badge running">操作</span>
+                </div>
+                <p class="note-desc">取得 WebElement 後的動作。</p>
+                <ul class="step-list">
+                    <li><code>element.click()</code>: 點擊。</li>
+                    <li><code>element.send_keys("text")</code>: 輸入文字。</li>
+                    <li><code>element.submit()</code>: 提交表單。</li>
+                    <li><code>element.get_attribute("href")</code>: 取得屬性。</li>
+                </ul>
+                <div class="alert-box">
+                    <strong>Workshop: 表單填寫</strong><br>
+                    <code>input.send_keys("admin")</code> -> <code>btn.click()</code>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 5: JavaScript 執行 (Execute Script)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-brands fa-js"></i> 執行 JS (Execute Script)</h4>
+                    <span class="status-badge advanced">進階</span>
+                </div>
+                <p class="note-desc">當 Selenium 無法點擊或需要控制捲軸時，直接注入 JS。</p>
+                
+                <div class="grid-2-cols">
+                    <div>
+                        <h5 style="margin-bottom:10px;">常見應用</h5>
+                        <ul class="step-list">
+                            <li>強制捲動到底部 (觸發懶加載)。</li>
+                            <li>修改 CSS 樣式。</li>
+                            <li>彈出 Alert 視窗。</li>
+                            <li>處理被遮擋的元素點擊。</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h5 style="margin-bottom:10px;">代碼範例</h5>
+                        <pre><code><span class="code-comment"># 捲動到頁面底部</span>
+driver.<span class="code-func">execute_script</span>(<span class="code-string">"window.scrollTo(0, document.body.scrollHeight)"</span>)
+
+<span class="code-comment"># 修改背景顏色</span>
+driver.<span class="code-func">execute_script</span>(<span class="code-string">"document.body.style.background='yellow'"</span>)
+
+<span class="code-comment"># 彈出 Alert</span>
+driver.<span class="code-func">execute_script</span>(<span class="code-string">"alert('Hello Selenium!');"</span>)</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.overlay');
+            
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-280px';
+                overlay.style.display = 'none';
+            } else {
+                sidebar.style.left = '0px';
+                overlay.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
