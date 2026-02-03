@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reyna's Learning Dashboard - 02/02</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* --- 基礎樣式 --- */
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+        /* Python Syntax Highlighting */
+        .code-keyword { color: #f92672; font-weight: bold; }
+        .code-func { color: #66d9ef; }
+        .code-string { color: #e6db74; }
+        .code-class { color: #a6e22e; }
+        .code-comment { color: #75715e; font-style: italic; }
+        .code-num { color: #ae81ff; }
+        
+        .alert-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            color: #856404;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+
+        .danger-box {
+            background-color: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 10px;
+            color: #721c24;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+
+        /* --- 表格樣式 --- */
+        .concept-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        .concept-table th, .concept-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .concept-table th {
+            background-color: #f4f4f4;
+            color: #333;
+            font-weight: bold;
+        }
+        
+        /* --- 實作圖片樣式 --- */
+        .practice-img {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* --- 排版系統 --- */
+        .grid-2-cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; align-items: start; }
+        
+        @media (max-width: 768px) {
+            .grid-2-cols { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Reyna Portfolio</h2>
+            <span>Web Design Practice</span>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 1: 基礎導入</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1222.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/22 (一)</span><span class="topic">電腦基礎概論</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_1.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) am</span><span class="topic">IT Career 職涯解析</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1223_2.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) pm</span><span class="topic">ESP-01S 與 Arduino</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_1.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) am</span><span class="topic">IoT 與 Web Server 實作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1224_2.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) pm</span><span class="topic">Linux 系統與應用</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1226.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/26 (五)</span><span class="topic">Linux基礎到架站</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 2: 深入實作</div>
+            <ul>
+                 <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1229.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/29 (一)</span><span class="topic">電腦基礎概論 II</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1230.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/30 (二)</span><span class="topic">NoCode 資料蒐集與自動化</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1231.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/31 (三)</span><span class="topic">Linux 資料庫建置</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0102.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/2 (五)</span><span class="topic">Linux 系統管理與腳本</span></a></li>
+            </ul>
+        </div>
+        
+        <div class="menu-group">
+            <div class="group-title">Week 3: 資料庫與 Python</div>
+            <ul>
+                <li><a href="#"><span class="date-badge"><i class="far fa-calendar"></i> 1/5 (一)</span><span class="topic">計算機概論 (待補)</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0106.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/6 (二)</span><span class="topic">MySQL 安裝與 SSH 穿隧</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0107.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/7 (三)</span><span class="topic">MySQL 管理與 VS Code</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0108.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/8 (四)</span><span class="topic">Python 基礎與環境</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0109.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/9 (五)</span><span class="topic">Python 進階與資料處理</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 4: Python 與 SQL</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0112.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/12 (一)</span><span class="topic">Python 函數與異常處理</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0113.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/13 (二)</span><span class="topic">OOP 與 記憶體管理</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0114.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/14 (三)</span><span class="topic">MySQL 語法與資料操作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0115.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/15 (四)</span><span class="topic">MySQL 進階查詢與實作</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 5: 商業智慧與網頁基礎</div>
+            <ul>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0120.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/20 (二) </span>
+                        <span class="topic">Tableau 基礎與視覺化</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0121.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/21 (三) </span>
+                        <span class="topic">Tableau 進階分析</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0122.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/22 (四) </span>
+                        <span class="topic">HTML 基礎與表單設計</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0123.html">
+                        <span class="date-badge"><i class="far fa-calendar"></i> 1/23 (五) </span>
+                        <span class="topic">CSS 樣式設計全攻略</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 6: 網路爬蟲與資料擷取</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0126.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/26 (一) </span><span class="topic">網路爬蟲基礎與 requests</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0127.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/27 (二) </span><span class="topic">Selenium 動態爬蟲</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 7: 資料分析與 Pandas</div>
+            <ul>
+                <li class="active"><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0202.html"><span class="date-badge"><i class="far fa-calendar"></i> 2/2 (一) </span><span class="topic">Pandas 基礎與資料結構</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0203.html"><span class="date-badge"><i class="far fa-calendar"></i> 2/3 (二) </span><span class="topic">Pandas 進階與 NumPy</span></a></li>
+            </ul>
+        </div>
+    </nav>
+
+   <main class="main-content">
+     
+        <div class="top-bar">
+            <div class="breadcrumb">
+                首頁 > Week 7 > <span>Pandas 基礎與資料結構</span>
+            </div>
+            <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
+                <i class="fas fa-home"></i> 回首頁
+            </a>
+        </div>
+        
+        <div class="banner" style="background: linear-gradient(135deg, #3a7bd5 0%, #3a6073 100%);">
+            <div>
+                <h1>Pandas 資料分析基礎</h1>
+                <p>AI 系統的記憶體：從即時事件 (Event) 到長期行為分析 (Behavior Analysis)。</p>
+            </div>
+            <i class="fa-solid fa-database banner-icon"></i>
+        </div>
+
+        <h3 class="section-title">Part 1: Pandas 在 AI 系統的角色 (Role & Concept)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-project-diagram"></i> 多模態 AI 系統架構</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">為什麼需要 Pandas？因為 LLM 無法直接閱讀數萬筆原始 Log，Pandas 負責將「原始事件」轉化為「有意義的行為摘要」。</p>
+                
+                <table class="concept-table">
+                    <tr><th>層級</th><th>工具</th><th>任務</th><th>時間維度</th></tr>
+                    <tr><td><strong>感知層</strong></td><td>YOLO / Sensors</td><td>看見什麼 (Detection)</td><td>毫秒 (ms)</td></tr>
+                    <tr><td><strong>反應層</strong></td><td>Rule / State Machine</td><td>即時反應 (Alert)</td><td>秒 (s)</td></tr>
+                    <tr><td><strong>記憶層</strong></td><td><strong>Pandas</strong></td><td><strong>長期紀錄與彙總</strong></td><td><strong>日/週/月</strong></td></tr>
+                    <tr><td><strong>認知層</strong></td><td>LLM (GPT/Gemini)</td><td>解釋與建議 (Explain)</td><td>回顧</td></tr>
+                </table>
+                <div class="alert-box">
+                    <strong>核心觀念：</strong> Pandas 是 AI 專案的「記憶體」。沒有 Pandas，AI 系統就只有「當下」，沒有「歷史」。
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 2: DataFrame 基礎與結構 (Structure)</h3>
+        <div class="dashboard-grid notes-section">
+            
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-table"></i> DataFrame 核心概念</h4>
+                    <span class="status-badge running">基礎</span>
+                </div>
+                <ul class="step-list">
+                    <li><strong>定義：</strong> 多個 Series 共用同一組 Index 的二維表格。</li>
+                    <li><strong>Row (列)：</strong> 代表一個「事件」(Event)。</li>
+                    <li><strong>Column (欄)：</strong> 代表事件的「屬性」(Attribute)。</li>
+                </ul>
+                <pre><code><span class="code-keyword">import</span> pandas <span class="code-keyword">as</span> pd
+
+data = {
+    <span class="code-string">"event_id"</span>: [<span class="code-num">101</span>, <span class="code-num">102</span>],
+    <span class="code-string">"confidence"</span>: [<span class="code-num">0.92</span>, <span class="code-num">0.76</span>]
+}
+df = pd.<span class="code-class">DataFrame</span>(data)</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-list-check"></i> 事件表標準欄位 (Schema)</h4>
+                    <span class="status-badge advanced">設計</span>
+                </div>
+                <p class="note-desc">AI 系統的最小可用欄位設計：</p>
+                <table class="concept-table">
+                    <tr><th>欄位</th><th>意義</th></tr>
+                    <tr><td><code>timestamp</code></td><td>行為時間軸 (最重要的骨架)。</td></tr>
+                    <tr><td><code>person</code></td><td>行為主體 (User, Camera, Worker)。</td></tr>
+                    <tr><td><code>event</code></td><td>行為類型 (Login, Enter_zone)。</td></tr>
+                    <tr><td><code>value</code></td><td>數值 (Score, Count)。</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 3: 資料處理與清洗 (Cleaning & Processing)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-regular fa-clock"></i> 時間處理 (Time)</h4>
+                    <span class="status-badge important">必做</span>
+                </div>
+                <p>字串時間無法計算，必須轉型。</p>
+                <pre><code><span class="code-comment"># 轉型為 datetime64[ns]</span>
+df[<span class="code-string">"timestamp"</span>] = pd.<span class="code-func">to_datetime</span>(df[<span class="code-string">"timestamp"</span>])
+
+<span class="code-comment"># 計算時間間隔</span>
+df[<span class="code-string">"delta"</span>] = df[<span class="code-string">"timestamp"</span>].<span class="code-func">diff</span>()</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-filter"></i> 缺值處理 (Missing Data)</h4>
+                    <span class="status-badge running">清洗</span>
+                </div>
+                <p class="note-desc">資料進模型前必須處理 NaN。</p>
+                <pre><code><span class="code-comment"># 1. 檢查哪裡有缺值</span>
+df.<span class="code-func">isna</span>()
+
+<span class="code-comment"># 2. 補值 (例如補 0)</span>
+df[<span class="code-string">"value"</span>] = df[<span class="code-string">"value"</span>].<span class="code-func">fillna</span>(<span class="code-num">0</span>)
+
+<span class="code-comment"># 3. 刪除缺值 (當資料不可信時)</span>
+df_clean = df.<span class="code-func">dropna</span>()</code></pre>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 4: 分析與彙總 (Aggregation)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-chart-pie"></i> Groupby 與 統計</h4>
+                    <span class="status-badge advanced">分析</span>
+                </div>
+                <div class="grid-2-cols">
+                    <div>
+                        <h5 style="margin-bottom:10px;">基本彙總</h5>
+                        <pre><code><span class="code-comment"># 統計每個人有幾筆事件</span>
+df.<span class="code-func">groupby</span>(<span class="code-string">"person"</span>).<span class="code-func">size</span>()
+
+<span class="code-comment"># 統計哪種 event 最常出現</span>
+df[<span class="code-string">"event"</span>].<span class="code-func">value_counts</span>()</code></pre>
+                    </div>
+                    <div>
+                        <h5 style="margin-bottom:10px;">衍生欄位 (Derived Column)</h5>
+                        <p>透過計算產生新特徵，供 AI 判斷。</p>
+                        <pre><code><span class="code-comment"># 簡單計算</span>
+df[<span class="code-string">"risk_score"</span>] = df[<span class="code-string">"fail_count"</span>] * <span class="code-num">2</span>
+
+<span class="code-comment"># 複雜邏輯用 apply</span>
+df[<span class="code-string">"level"</span>] = df[<span class="code-string">"score"</span>].<span class="code-func">apply</span>(risk_func)</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 5: Reyna's Workshop 實作紀錄</h3>
+        <div class="dashboard-grid notes-section">
+            
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> 練習 1: 建立 DataFrame</h4>
+                </div>
+                <p class="note-desc">測試 Pandas 安裝與基礎表格建立。</p>
+                <img src="https://hackmd.io/_uploads/rJg_8K6UWe.png" alt="DataFrame Basic" class="practice-img">
+                <pre><code><span class="code-keyword">import</span> pandas <span class="code-keyword">as</span> pd
+mydataset = {
+    <span class="code-string">"cars"</span>: [<span class="code-string">"BMW"</span>, <span class="code-string">"Volvo"</span>, <span class="code-string">"Ford"</span>],
+    <span class="code-string">"passings"</span>: [<span class="code-num">3</span>, <span class="code-num">7</span>, <span class="code-num">2</span>]
+}
+df = pd.<span class="code-class">DataFrame</span>(mydataset)
+<span class="code-func">print</span>(df)</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> 練習 2: 工地安全表</h4>
+                </div>
+                <p class="note-desc">建立包含 worker, event, value 的事件表。</p>
+                <img src="https://hackmd.io/_uploads/BJ8Xl9a8bx.png" alt="Worker DataFrame" class="practice-img">
+                <pre><code>df = pd.<span class="code-class">DataFrame</span>({
+    <span class="code-string">"person"</span>:[<span class="code-string">"Worker-A"</span>,<span class="code-string">"Worker-B"</span>,<span class="code-string">"Worker-C"</span>],
+    <span class="code-string">"event"</span>:[<span class="code-string">"no_helmet"</span>,<span class="code-string">"helmet_on"</span>,<span class="code-string">"no_helmet"</span>],
+    <span class="code-string">"value"</span>:[<span class="code-num">1</span>,<span class="code-num">0</span>,<span class="code-num">1</span>]
+})
+<span class="code-func">print</span>(df)</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> 練習 3 & 4: 資料選取與型態</h4>
+                </div>
+                <div class="grid-2-cols">
+                    <div>
+                        <p class="note-desc">觀察 Dict 轉 DataFrame 的過程及 Series 型態。</p>
+                        <img src="https://hackmd.io/_uploads/ryB9Lc6L-g.png" alt="Data Types" class="practice-img">
+                    </div>
+                    <div>
+                        <p class="note-desc">使用 Boolean Indexing 篩選特定資料 (Alice, login)。</p>
+                        <img src="https://hackmd.io/_uploads/H1Xsn968Zg.png" alt="Selection" class="practice-img">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> 練習 5 & 6: 時間處理與彙總</h4>
+                </div>
+                <div class="grid-2-cols">
+                    <div>
+                        <p class="note-desc">使用 <code>to_datetime</code> 轉型並計算 <code>diff()</code>。</p>
+                        <img src="https://hackmd.io/_uploads/HJhzSap8Wx.png" alt="Time Diff" class="practice-img">
+                    </div>
+                    <div>
+                        <p class="note-desc">使用 <code>groupby</code> 與 <code>value_counts</code> 進行統計。</p>
+                        <img src="https://hackmd.io/_uploads/rkBG_6pUWg.png" alt="Groupby" class="practice-img">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> 進階操作：合併、風險分級、缺值</h4>
+                </div>
+                <div class="grid-2-cols">
+                    <div>
+                         <p class="note-desc">DataFrame 合併 (Concat) 與資料清洗 (fillna)。</p>
+                         <img src="https://hackmd.io/_uploads/SJsBJApUbx.png" alt="Concat" class="practice-img">
+                         <img src="https://hackmd.io/_uploads/rk-xGJRIZl.png" alt="Fillna" class="practice-img">
+                    </div>
+                    <div>
+                        <p class="note-desc">自定義 Function 進行風險分級 (Apply)。</p>
+                        <img src="https://hackmd.io/_uploads/B1VS6A6U-l.png" alt="Risk Level" class="practice-img">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.overlay');
+            
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-280px';
+                overlay.style.display = 'none';
+            } else {
+                sidebar.style.left = '0px';
+                overlay.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
