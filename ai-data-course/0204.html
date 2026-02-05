@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reyna's Learning Dashboard - 02/03</title>
+    <title>Reyna's Learning Dashboard - 02/04</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="dashboard.css">
     <style>
@@ -93,10 +93,10 @@
     <nav class="sidebar">
         <div class="sidebar-header">
             <h2>Reyna Portfolio</h2>
-            <span>Web Design Practice</span>
+            <span>Data Analysis & AI</span>
         </div>
 
-        <div class="menu-group">
+                <div class="menu-group">
             <div class="group-title">Week 1: 基礎導入</div>
             <ul>
                 <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/1222.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/22 (一)</span><span class="topic">電腦基礎概論</span></a></li>
@@ -180,14 +180,9 @@
         <div class="menu-group">
             <div class="group-title">Week 7: 資料分析與 Pandas</div>
             <ul>
-                <li><a href="0202.html"><span class="date-badge"><i class="far fa-calendar"></i> 2/2 (一) </span><span class="topic">Pandas 基礎與資料結構</span></a></li>
-                <li class="active">
-                    <a href="0203.html">
-                        <span class="date-badge"><i class="far fa-calendar"></i> 2/3 (二) </span>
-                        <span class="topic">Pandas 進階與 NumPy 基礎</span>
-                    </a>
-                </li>
-                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0204.html"><span class="date-badge"><i class="far fa-calendar"></i> 2/4 (三) </span><span class="topic">NumPy 進階與維度操作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0202.html"><span class="date-badge"><i class="far fa-calendar"></i> 2/2 (一) </span><span class="topic">Pandas 基礎與資料結構</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0203.html"><span class="date-badge"><i class="far fa-calendar"></i> 2/3 (二) </span><span class="topic">Pandas 進階與 NumPy</span></a></li>
+                <li class="active"><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/0204.html"><span class="date-badge"><i class="far fa-calendar"></i> 2/4 (三) </span><span class="topic">NumPy 進階與維度操作</span></a></li>
             </ul>
         </div>
     </nav>
@@ -196,240 +191,205 @@
      
         <div class="top-bar">
             <div class="breadcrumb">
-                首頁 > Week 7 > <span>Pandas 進階與 NumPy 基礎</span>
+                首頁 > Week 7 > <span>NumPy 進階與維度操作</span>
             </div>
             <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
                 <i class="fas fa-home"></i> 回首頁
             </a>
         </div>
         
-        <div class="banner" style="background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);">
+        <div class="banner" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
             <div>
-                <h1>Pandas 清洗與 NumPy 核心</h1>
-                <p>資料驗證、型態修正、行為分析，以及高效能數值運算的核心 ndarray。</p>
+                <h1>NumPy 進階操作</h1>
+                <p>廣播 (Broadcast)、遮罩 (Masking)、重塑 (Reshape) 與維度變換。</p>
             </div>
             <i class="fa-solid fa-layer-group banner-icon"></i>
         </div>
 
-        <h3 class="section-title">Part 1: Pandas 進階清洗 (Advanced Cleaning)</h3>
-        <div class="dashboard-grid notes-section">
-            <div class="card note-card">
-                <div class="note-header">
-                    <h4><i class="fa-solid fa-wrench"></i> 型態修正 (astype)</h4>
-                    <span class="status-badge important">修正</span>
-                </div>
-                <p class="note-desc">AI 模型不吃字串 (Object)，必須轉為數值。</p>
-                <pre><code><span class="code-comment"># 錯誤： "1" + 1 -> Error</span>
-<span class="code-comment"># 正確： 轉型後再運算</span>
-df[<span class="code-string">"value"</span>] = df[<span class="code-string">"value"</span>].<span class="code-func">astype</span>(<span class="code-class">int</span>)</code></pre>
-                <div class="danger-box">
-                    <strong>注意：</strong> 轉型前必須先處理完缺值 (NaN)，否則 <code>astype(int)</code> 會報錯。
-                </div>
-            </div>
-
-            <div class="card note-card">
-                <div class="note-header">
-                    <h4><i class="fa-solid fa-clone"></i> 重複資料 (Duplicated)</h4>
-                    <span class="status-badge running">清洗</span>
-                </div>
-                <p class="note-desc">一列 = 一個事件。重複的列會導致統計偏差。</p>
-                <pre><code><span class="code-comment"># 標記重複 (回傳 True/False)</span>
-df.<span class="code-func">duplicated</span>()
-
-<span class="code-comment"># 刪除重複 (保留第一筆)</span>
-df_clean = df.<span class="code-func">drop_duplicates</span>()</code></pre>
-            </div>
-        </div>
-
-        <h3 class="section-title">Part 2: 行為分析與驗證 (Behavior & Validation)</h3>
-        <div class="dashboard-grid notes-section">
-            <div class="card note-card">
-                <div class="note-header">
-                    <h4><i class="fa-solid fa-arrow-trend-up"></i> 從事件到行為</h4>
-                    <span class="status-badge advanced">分析</span>
-                </div>
-                <p class="note-desc">單一事件沒有意義，<strong>順序</strong>與<strong>間隔</strong>才是行為。</p>
-                <pre><code><span class="code-comment"># 前一個事件 (Shift)</span>
-df[<span class="code-string">"prev"</span>] = df[<span class="code-string">"event"</span>].<span class="code-func">shift</span>(<span class="code-num">1</span>)
-
-<span class="code-comment"># 與前一次的時間差 (Diff)</span>
-df[<span class="code-string">"delta"</span>] = df[<span class="code-string">"timestamp"</span>].<span class="code-func">diff</span>()</code></pre>
-            </div>
-            
-            <div class="card note-card">
-                <div class="note-header">
-                    <h4><i class="fa-solid fa-font"></i> 字串正規化</h4>
-                    <span class="status-badge running">清洗</span>
-                </div>
-                <p>避免 <code>Login</code>, <code>login</code>, <code>LOGIN</code> 被視為不同事件。</p>
-                <pre><code>df[<span class="code-string">"event"</span>] = df[<span class="code-string">"event"</span>].str.<span class="code-func">lower</span>()
-df[<span class="code-string">"event"</span>] = df[<span class="code-string">"event"</span>].str.<span class="code-func">replace</span>(<span class="code-string">"-"</span>, <span class="code-string">""</span>)</code></pre>
-            </div>
-
-            <div class="card note-card" style="grid-column: 1 / -1;">
-                <div class="note-header">
-                    <h4><i class="fa-solid fa-shield-halved"></i> 資料驗證 (Validation)</h4>
-                    <span class="status-badge important">防線</span>
-                </div>
-                <p class="note-desc">AI 上線前的最後一道防線：欄位、型態、數值合理性。</p>
-                <div class="grid-2-cols">
-                    <ul>
-                        <li><strong>Schema Check:</strong> 欄位有沒有少？</li>
-                        <li><strong>Type Check:</strong> <code>timestamp</code> 是不是 datetime？</li>
-                        <li><strong>Value Check:</strong> 數值有沒有負數？Event 是否在白名單內？</li>
-                    </ul>
-                    <pre><code><span class="code-keyword">if</span> (df[<span class="code-string">"value"</span>] < <span class="code-num">0</span>).<span class="code-func">any</span>():
-    <span class="code-func">print</span>(<span class="code-string">"警報：發現負數！"</span>)</code></pre>
-                </div>
-            </div>
-        </div>
-
-        <h3 class="section-title">Part 3: NumPy 核心基礎 (NumPy Core)</h3>
+        <h3 class="section-title">Part 1: 廣播與批次處理 (Broadcasting)</h3>
         <div class="dashboard-grid notes-section">
             <div class="card note-card" style="grid-column: 1 / -1;">
                 <div class="note-header">
-                    <h4><i class="fa-solid fa-cube"></i> ndarray 多維陣列</h4>
+                    <h4><i class="fa-solid fa-wifi"></i> 什麼是廣播 (Broadcast)？</h4>
                     <span class="status-badge important">核心</span>
                 </div>
-                <p class="note-desc">NumPy 是 Python 資料分析的引擎，pandas 的底層。它使用 <strong>向量化運算</strong> 取代 for-loop。</p>
+                <p class="note-desc">定義：將「一組規則」一次套用到「一整批資料」，自動對齊 Shape，完全不使用 for-loop。</p>
                 
-                <table class="concept-table">
-                    <tr><th>建立方式</th><th>語法</th><th>用途</th></tr>
-                    <tr><td>列表轉換</td><td><code>np.array([1, 2, 3])</code></td><td>基本建立。</td></tr>
-                    <tr><td>全零/全一</td><td><code>np.zeros((2,2))</code> / <code>np.ones()</code></td><td>初始化矩陣。</td></tr>
-                    <tr><td>範圍序列</td><td><code>np.arange(0, 10, 2)</code></td><td>整數序列 (類似 range)。</td></tr>
-                    <tr><td>線性切分</td><td><code>np.linspace(0, 1, 10)</code></td><td>固定區間取樣 (圖表/參數)。</td></tr>
-                    <tr><td>指數切分</td><td><code>np.logspace(0, 2, 10)</code></td><td>模擬指數成長 (風險/病毒)。</td></tr>
-                </table>
-            </div>
+                <div class="grid-2-cols">
+                    <div>
+                        <h5 style="margin-bottom:10px;">運作原理</h5>
+                        <p>當兩個 Array 形狀不同時，NumPy 會自動「擴展」較小的 Array 以匹配較大的 Array。</p>
+                        <pre><code><span class="code-comment"># (4, 3) * (3,) -> 自動擴展</span>
+event_data = np.<span class="code-func">array</span>([
+    [<span class="code-num">0.92</span>, <span class="code-num">800</span>, <span class="code-num">1.0</span>],
+    [<span class="code-num">0.76</span>, <span class="code-num">300</span>, <span class="code-num">1.0</span>]
+])
+weights = np.<span class="code-func">array</span>([<span class="code-num">1.0</span>, <span class="code-num">0.01</span>, <span class="code-num">2.0</span>])
 
-            <div class="card note-card">
-                <div class="note-header">
-                    <h4><i class="fa-solid fa-shuffle"></i> 隨機與亂數 (Random)</h4>
+<span class="code-comment"># 一次套用權重</span>
+result = event_data * weights</code></pre>
+                    </div>
+                    <div>
+                         <h5 style="margin-bottom:10px;">為什麼要用？</h5>
+                         <ul class="step-list">
+                             <li><strong>效能：</strong> 底層 C 語言執行，比 Python Loop 快數十倍。</li>
+                             <li><strong>簡潔：</strong> 程式碼更短，邏輯更清晰。</li>
+                             <li><strong>系統化：</strong> 適合處理 AI 模型的 Batch Input。</li>
+                         </ul>
+                    </div>
                 </div>
-                <ul class="step-list">
-                    <li><code>np.random.seed(42)</code>: <strong>重要！</strong>確保實驗可重現。</li>
-                    <li><code>np.random.shuffle(arr)</code>: 打亂順序 (模擬非同步)。</li>
-                    <li><code>np.random.normal()</code>: 常態分佈 (模擬誤差)。</li>
-                </ul>
-            </div>
-
-            <div class="card note-card">
-                <div class="note-header">
-                    <h4><i class="fa-solid fa-magnifying-glass"></i> 索引與篩選 (Indexing)</h4>
-                </div>
-                <p class="note-desc">不要用 for-loop 找資料！</p>
-                <pre><code><span class="code-comment"># Boolean Indexing (條件篩選)</span>
-high_risk = data[data > <span class="code-num">0.8</span>]
-
-<span class="code-comment"># ROI Indexing (區域切片)</span>
-roi = grid[<span class="code-num">0</span>:<span class="code-num">2</span>, <span class="code-num">0</span>:<span class="code-num">2</span>]</code></pre>
             </div>
         </div>
 
-        <h3 class="section-title">Part 4: Reyna's Workshop 實作紀錄</h3>
+        <h3 class="section-title">Part 2: 迭代與條件篩選 (Iterating vs Masking)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-ban"></i> 避免使用 Iterating</h4>
+                    <span class="status-badge danger">警示</span>
+                </div>
+                <p class="note-desc"><code>for x in np.nditer(a):</code> 是合法的，但在 AI 系統中是<strong>不推薦</strong>的。</p>
+                <div class="danger-box">
+                    <strong>為什麼？</strong><br>
+                    逐筆進入 Python 解譯器會破壞 NumPy 的向量化優勢，導致效能低落。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-filter"></i> 條件遮罩 (Boolean Masking)</h4>
+                    <span class="status-badge running">推薦</span>
+                </div>
+                <p class="note-desc">用邏輯運算一次選出符合條件的資料。</p>
+                <pre><code><span class="code-comment"># 找出 Valid 事件</span>
+<span class="code-comment"># 條件：信心度 >= 0.8 且 面積 >= 500</span>
+mask = (conf >= <span class="code-num">0.8</span>) & (area >= <span class="code-num">500</span>)
+
+valid_ids = event_id[mask]</code></pre>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 3: 陣列重塑與還原 (Reshape & Flatten)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-shapes"></i> Reshape 結構還原</h4>
+                    <span class="status-badge advanced">操作</span>
+                </div>
+                <p class="note-desc">把「沒有語意的一維資料流」還原成「有結構的矩陣」。</p>
+                <pre><code><span class="code-comment"># 1D 事件流 -> (時間, ROI) 矩陣</span>
+matrix = stream.<span class="code-func">reshape</span>(<span class="code-num">4</span>, <span class="code-num">5</span>)
+
+<span class="code-comment"># 自動推算維度 (-1)</span>
+matrix = stream.<span class="code-func">reshape</span>(-<span class="code-num">1</span>, <span class="code-num">5</span>)</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrow-down-up-across-line"></i> Flatten vs Ravel</h4>
+                </div>
+                <table class="concept-table">
+                    <tr><th>方法</th><th>特性</th><th>影響</th></tr>
+                    <tr><td><code>flatten()</code></td><td>回傳<strong>副本 (Copy)</strong></td><td>修改不影響原陣列 (安全)。</td></tr>
+                    <tr><td><code>ravel()</code></td><td>回傳<strong>視圖 (View)</strong></td><td>修改<strong>會影響</strong>原陣列 (效能快)。</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 4: 軸的轉換 (Transpose & Swapaxes)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-rotate"></i> 解決維度順序錯亂</h4>
+                    <span class="status-badge advanced">Debug</span>
+                </div>
+                <div class="grid-2-cols">
+                    <div>
+                        <h5 style="margin-bottom:10px;">轉置 (Transpose)</h5>
+                        <p>適用於 2D 矩陣，行變列，列變行。</p>
+                        <pre><code>a = np.arange(<span class="code-num">12</span>).reshape(<span class="code-num">3</span>, <span class="code-num">4</span>)
+print(a.T) <span class="code-comment"># 變成 (4, 3)</span></code></pre>
+                    </div>
+                    <div>
+                        <h5 style="margin-bottom:10px;">軸交換 (Swapaxes)</h5>
+                        <p>適用於 3D+ 資料，修正資料維度順序 (例如：把 ROI 和 Feature 對調)。</p>
+                        <pre><code><span class="code-comment"># 原始: (ROI, Feature, Time)</span>
+<span class="code-comment"># 目標: (Time, ROI, Feature)</span>
+swapped = np.<span class="code-func">swapaxes</span>(data, <span class="code-num">0</span>, <span class="code-num">2</span>)</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 5: 核心觀念辨析 (Concept)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-brain"></i> 事件 vs 影像 vs 陣列</h4>
+                    <span class="status-badge important">必讀</span>
+                </div>
+                <table class="concept-table">
+                    <tr><th>層級</th><th>資料長怎樣 (Shape)</th><th>本質</th><th>問題</th></tr>
+                    <tr><td><strong>影像 (Image)</strong></td><td><code>(H, W, 3)</code></td><td>空間上的像素分布</td><td>畫面長怎樣？</td></tr>
+                    <tr><td><strong>陣列 (Array)</strong></td><td><code>[[...], [...]]</code></td><td>資料的儲存結構 (容器)</td><td>資料怎麼存？</td></tr>
+                    <tr><td><strong>事件 (Event)</strong></td><td><code>{time, person, violation}</code></td><td>語意 + 時間</td><td>發生了什麼事？</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 6: Reyna's Workshop 實作紀錄</h3>
         <div class="dashboard-grid notes-section">
             
             <div class="card note-card">
                 <div class="note-header">
-                    <h4><i class="fa-solid fa-code"></i> 練習 01: astype 型態修正</h4>
+                    <h4><i class="fa-solid fa-code"></i> 練習 01: Boolean Indexing</h4>
                 </div>
-                <p class="note-desc">將字串型態的數值欄位轉換為整數。</p>
-                <img src="https://hackmd.io/_uploads/ByfkoC0IWx.png" alt="astype" class="practice-img">
-                <pre><code>df[<span class="code-string">"value"</span>] = df[<span class="code-string">"value"</span>].<span class="code-func">astype</span>(<span class="code-class">int</span>)</code></pre>
+                <p class="note-desc">使用條件篩選出高風險事件。</p>
+                <img src="https://hackmd.io/_uploads/B1HvsXxwbg.png" alt="Boolean Indexing" class="practice-img">
+                <pre><code>high_risk = confidence >= <span class="code-num">0.8</span>
+selected = confidence[high_risk]
+<span class="code-func">print</span>(selected)</code></pre>
             </div>
 
             <div class="card note-card">
                 <div class="note-header">
-                    <h4><i class="fa-solid fa-code"></i> 練習 02: 重複資料處理</h4>
+                    <h4><i class="fa-solid fa-code"></i> 練習 02: Argmax (Axis)</h4>
                 </div>
-                <p class="note-desc">找出並移除重複的事件紀錄。</p>
-                <img src="https://hackmd.io/_uploads/ryPecC0IZg.png" alt="duplicated" class="practice-img">
-                <pre><code><span class="code-func">print</span>(df.<span class="code-func">drop_duplicates</span>())</code></pre>
-            </div>
-
-            <div class="card note-card">
-                <div class="note-header">
-                    <h4><i class="fa-solid fa-code"></i> 練習 03: NumPy 安裝與 ndmin</h4>
-                </div>
-                <p class="note-desc">Ubuntu LTS (Server) 安裝指令與測試，並指定 ndarray 最小維度。</p>
-                
-                <div class="alert-box" style="margin-bottom: 10px;">
-                    Ubuntu LTS（Server）: <code>pip3 install numpy</code><br>
-                    測試是否安裝成功
-                </div>
-
-                <img src="https://hackmd.io/_uploads/H1nka0AU-x.png" alt="numpy install" class="practice-img">
-                <pre><code><span class="code-keyword">import</span> numpy <span class="code-keyword">as</span> np
-
-arr = np.<span class="code-func">array</span>([<span class="code-num">1</span>, <span class="code-num">2</span>, <span class="code-num">3</span>, <span class="code-num">4</span>], ndmin=<span class="code-num">5</span>)
-<span class="code-func">print</span>(arr)
-<span class="code-func">print</span>(<span class="code-string">'number of dimensions:'</span>, arr.ndim)</code></pre>
-            </div>
-
-            <div class="card note-card">
-                <div class="note-header">
-                    <h4><i class="fa-solid fa-code"></i> 練習 04: 讀取 CSV 轉 ndarray</h4>
-                </div>
-                <p class="note-desc">模擬將產品良率資料載入為 NumPy Array。</p>
-                <img src="https://hackmd.io/_uploads/By44PWyv-e.png" alt="loadtxt" class="practice-img">
-                <pre><code>data = np.<span class="code-func">loadtxt</span>(<span class="code-string">"product_quality.csv"</span>, delimiter=<span class="code-string">","</span>, skiprows=<span class="code-num">1</span>)</code></pre>
+                <p class="note-desc">沿著不同軸 (Axis 0 vs Axis 1) 尋找最大值的索引。</p>
+                <img src="https://hackmd.io/_uploads/SJFvlElD-e.png" alt="Argmax" class="practice-img">
+                <pre><code><span class="code-func">print</span>(np.<span class="code-func">argmax</span>(risk, axis=<span class="code-num">0</span>))
+<span class="code-func">print</span>(np.<span class="code-func">argmax</span>(risk, axis=<span class="code-num">1</span>))</code></pre>
             </div>
 
             <div class="card note-card" style="grid-column: 1 / -1;">
                 <div class="note-header">
-                    <h4><i class="fa-solid fa-code"></i> 練習 05 & 06: dtype 影響與混合型態</h4>
+                    <h4><i class="fa-solid fa-code"></i> 練習 03: 廣播應用 (Broadcasting)</h4>
                 </div>
                 <div class="grid-2-cols">
                     <div>
-                        <p class="note-desc">比較 int32 與 float64 對精度的影響 (截斷問題)。</p>
-                        <img src="https://hackmd.io/_uploads/By4TUMJD-x.png" alt="dtype comparison" class="practice-img">
+                        <p class="note-desc">計算加權分數：將權重 Array 自動套用到每一筆事件，不使用迴圈。</p>
+                        <pre><code>weights = np.<span class="code-func">array</span>([<span class="code-num">1.0</span>, <span class="code-num">0.01</span>, <span class="code-num">2.0</span>])
+weighted_scores = event_data * weights</code></pre>
                     </div>
                     <div>
-                        <p class="note-desc">觀察 NumPy 如何處理混合型態 (升級為 Unicode)。</p>
-                        <img src="https://hackmd.io/_uploads/r1aJgmyvbe.png" alt="mixed types" class="practice-img">
+                        <img src="https://hackmd.io/_uploads/S1RrcNeDWg.png" alt="Broadcasting" class="practice-img">
                     </div>
                 </div>
             </div>
 
             <div class="card note-card" style="grid-column: 1 / -1;">
                 <div class="note-header">
-                    <h4><i class="fa-solid fa-code"></i> 練習 07 & 08: 資料生成 (arange, linspace)</h4>
+                    <h4><i class="fa-solid fa-code"></i> 練習 04: 事件分類 (Logic Masking)</h4>
                 </div>
                 <div class="grid-2-cols">
                     <div>
-                        <p class="note-desc">比較 arange, linspace, logspace 的基本用法。</p>
-                        <img src="https://hackmd.io/_uploads/Hkv4sQkwZg.png" alt="creation basic" class="practice-img">
+                        <p class="note-desc">結合多個邏輯條件 (AND/OR)，將事件分類為 Valid, Low Risk, Ignore。</p>
+                        <pre><code>Valid = (confidence >= <span class="code-num">0.8</span>) & (area >= <span class="code-num">500</span>)
+Low_Risk = (confidence >= <span class="code-num">0.5</span>) & (area < <span class="code-num">500</span>)
+Ignore = (confidence < <span class="code-num">0.5</span>)</code></pre>
                     </div>
                     <div>
-                        <p class="note-desc">模擬應用：影格序列、進度條、風險指數成長。</p>
-                        <img src="https://hackmd.io/_uploads/S1T8kV1PZg.png" alt="creation app" class="practice-img">
-                    </div>
-                </div>
-            </div>
-
-            <div class="card note-card">
-                <div class="note-header">
-                    <h4><i class="fa-solid fa-code"></i> 練習 09: 隨機與 Seed</h4>
-                </div>
-                <p class="note-desc">設定亂數種子，模擬可重現的 AI 信心度資料。</p>
-                <img src="https://hackmd.io/_uploads/HJR4SN1wWl.png" alt="random seed" class="practice-img">
-                <pre><code>np.random.<span class="code-func">seed</span>(<span class="code-num">55</span>)
-c = np.random.<span class="code-func">normal</span>(loc=<span class="code-num">0.8</span>, scale=<span class="code-num">0.1</span>, size=<span class="code-num">100</span>)</code></pre>
-            </div>
-
-            <div class="card note-card" style="grid-column: 1 / -1;">
-                <div class="note-header">
-                    <h4><i class="fa-solid fa-code"></i> 練習 10 & 11: 多維索引與 Reshape</h4>
-                </div>
-                <div class="grid-2-cols">
-                    <div>
-                        <p class="note-desc">3D Array 的索引操作與維度觀察。</p>
-                        <img src="https://hackmd.io/_uploads/Hkvo9E1P-e.png" alt="3d indexing" class="practice-img">
-                    </div>
-                    <div>
-                        <p class="note-desc">使用 Reshape 改變資料結構 (Samples, Features)。</p>
-                        <img src="https://hackmd.io/_uploads/B1VzCEJvZl.png" alt="reshape" class="practice-img">
+                        <img src="https://hackmd.io/_uploads/HyTU1rxvWl.png" alt="Event Classification" class="practice-img">
                     </div>
                 </div>
             </div>
