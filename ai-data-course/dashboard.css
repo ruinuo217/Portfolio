@@ -238,7 +238,7 @@ ul {
     font-size: 1.2rem;
     font-weight: 700;
     color: var(--text-main);
-    margin: 40px 0 20px 0;
+    margin: 28px 0 14px 0;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -247,14 +247,14 @@ ul {
 .dashboard-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 24px;
-    margin-bottom: 24px;
+    gap: 16px;
+    margin-bottom: 16px;
 }
 
 .card {
     background: var(--bg-card);
     border-radius: var(--border-radius);
-    padding: 24px;
+    padding: 20px;
     box-shadow: var(--shadow-sm);
     border: 1px solid #f1f5f9;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -279,8 +279,8 @@ ul {
     display: flex;
     align-items: flex-start;
     gap: 16px;
-    margin-bottom: 20px;
-    padding-bottom: 20px;
+    margin-bottom: 14px;
+    padding-bottom: 14px;
     border-bottom: 1px solid #f3f4f6;
 }
 
@@ -362,8 +362,8 @@ ul {
 .note-desc {
     font-size: 0.9rem;
     color: var(--text-secondary);
-    margin-bottom: 16px;
-    line-height: 1.5;
+    margin-bottom: 10px;
+    line-height: 1.4;
 }
 
 .note-points {
@@ -380,8 +380,8 @@ ul {
 }
 
 .note-footer {
-    margin-top: 20px;
-    padding-top: 15px;
+    margin-top: 14px;
+    padding-top: 10px;
     border-top: 1px dashed #e5e7eb;
     font-size: 0.75rem;
     color: #9ca3af;
@@ -483,3 +483,170 @@ ul {
         display: none;
     }
 }
+
+/* =========================================
+   7. 程式碼區塊 (Code Blocks)
+   ========================================= */
+pre {
+    background-color: #2d2d2d;
+    color: #f8f8f2;
+    padding: 15px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    white-space: pre-wrap;
+    line-height: 1.6;
+}
+
+/* --- Syntax Highlighting --- */
+.code-keyword { color: #f92672; font-weight: bold; }
+.code-func { color: #66d9ef; }
+.code-string { color: #e6db74; }
+.code-class { color: #a6e22e; }
+.code-comment { color: #75715e; font-style: italic; }
+.code-num { color: #ae81ff; }
+.code-tag { color: #f92672; }
+.code-attr { color: #a6e22e; }
+.code-selector { color: #a6e22e; font-weight: bold; }
+.code-property { color: #66d9ef; }
+.code-value { color: #ae81ff; }
+.code-command { color: #a6e22e; font-weight: bold; }
+.code-path { color: #e6db74; }
+.code-function { color: #a6e22e; }
+
+/* =========================================
+   8. 提示框 (Alert & Danger Boxes)
+   ========================================= */
+.alert-box {
+    background-color: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 10px;
+    color: #856404;
+    margin: 10px 0;
+    font-size: 0.9rem;
+}
+
+.danger-box {
+    background-color: #f8d7da;
+    border-left: 4px solid #dc3545;
+    padding: 10px;
+    color: #721c24;
+    margin: 10px 0;
+    font-size: 0.9rem;
+}
+
+/* =========================================
+   9. 表格樣式 (Tables)
+   ========================================= */
+.concept-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    font-size: 0.9rem;
+}
+.concept-table th, .concept-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+.concept-table th {
+    background-color: #f4f4f4;
+    color: #333;
+    font-weight: bold;
+}
+
+/* =========================================
+   10. 圖片樣式 (Images)
+   ========================================= */
+.img-container {
+    text-align: center;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.img-container img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border: 1px solid #eee;
+    transition: transform 0.2s;
+    object-fit: contain;
+}
+.img-container img:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.img-caption {
+    font-size: 0.85rem;
+    color: #555;
+    margin-top: 8px;
+    background: #f1f5f9;
+    padding: 4px 12px;
+    border-radius: 12px;
+    display: inline-block;
+    font-weight: 500;
+}
+
+.practice-img {
+    width: 100%;
+    max-width: 600px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    margin: 10px 0;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* =========================================
+   11. 排版網格 (Grid Layouts)
+   ========================================= */
+.grid-2-cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; align-items: start; }
+.grid-3-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+.grid-4-cols { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+
+@media (max-width: 900px) {
+    .grid-3-cols, .grid-4-cols { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+    .grid-2-cols, .grid-3-cols, .grid-4-cols { grid-template-columns: 1fr; }
+}
+
+/* =========================================
+   12. 特殊元件 (Special Components)
+   ========================================= */
+.formula-box {
+    background-color: #e8f5e9;
+    border-left: 4px solid #4caf50;
+    padding: 10px;
+    font-family: monospace;
+    color: #2e7d32;
+    margin: 5px 0 15px 0;
+    word-break: break-all;
+}
+
+.sheet-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.8rem;
+    margin-left: 6px;
+    border: 1px solid #c8e6c9;
+    transition: all 0.2s;
+}
+.sheet-link:hover {
+    background-color: #2e7d32;
+    color: white;
+}
+
+/* --- 額外狀態標籤 --- */
+.status-badge.important { background-color: #fef3c7; color: #d97706; }
+.status-badge.danger { background-color: #fef2f2; color: #ef4444; }
+.status-badge.advanced { background-color: #f0fdf4; color: #16a34a; }

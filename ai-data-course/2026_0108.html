@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI大數據養成班 - 1/8 Python 基礎與環境</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+        <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Reyna Portfolio</h2>
+            <span>Data Analysis & AI</span>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 1: 基礎導入</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2025_1222.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/22 (一)</span><span class="topic">電腦基礎概論</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2025_1223_1.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) am</span><span class="topic">IT Career 職涯解析</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2025_1223_2.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/23 (二) pm</span><span class="topic">ESP-01S 與 Arduino</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2025_1224_1.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) am</span><span class="topic">IoT 與 Web Server 實作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2025_1224_2.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/24 (三) pm</span><span class="topic">Linux 系統與應用</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2025_1226.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/26 (五)</span><span class="topic">Linux基礎到架站</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 2: 深入實作</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2025_1229.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/29 (一)</span><span class="topic">電腦基礎概論 II</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2025_1230.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/30 (二)</span><span class="topic">NoCode 資料蒐集與自動化</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2025_1231.html"><span class="date-badge"><i class="far fa-calendar"></i> 12/31 (三)</span><span class="topic">Linux 資料庫建置</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0102.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/2 (五)</span><span class="topic">Linux 系統管理與腳本</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 3: 資料庫與 Python</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0106.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/6 (二)</span><span class="topic">MySQL 安裝與 SSH 穿隧</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0107.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/7 (三)</span><span class="topic">MySQL 管理與 VS Code</span></a></li>
+                <li class="active"><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0108.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/8 (四)</span><span class="topic">Python 基礎與環境</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0109.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/9 (五)</span><span class="topic">Python 進階與資料處理</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 4: Python 與 SQL</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0112.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/12 (一)</span><span class="topic">Python 函數與異常處理</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0113.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/13 (二)</span><span class="topic">OOP 與記憶體管理</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0114.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/14 (三)</span><span class="topic">MySQL 語法與資料操作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0115.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/15 (四)</span><span class="topic">MySQL 進階查詢與實作</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 5: 商業智慧與網頁</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0120.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/20 (二)</span><span class="topic">Tableau 基礎與視覺化</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0121.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/21 (三)</span><span class="topic">Tableau 進階分析</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0122.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/22 (四)</span><span class="topic">HTML 基礎與表單設計</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0123.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/23 (五)</span><span class="topic">CSS 樣式設計全攻略</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 6: Python 應用</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0126.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/26 (一)</span><span class="topic">網路爬蟲基礎與 requests</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0127.html"><span class="date-badge"><i class="far fa-calendar"></i> 1/27 (二)</span><span class="topic">Selenium 動態爬蟲</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 7: 資料分析</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0202.html"><span class="date-badge"><i class="far fa-calendar"></i> 2/2 (一)</span><span class="topic">Pandas 基礎與資料結構</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0203.html"><span class="date-badge"><i class="far fa-calendar"></i> 2/3 (二)</span><span class="topic">Pandas 進階與 NumPy</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0204.html"><span class="date-badge"><i class="far fa-calendar"></i> 2/4 (三)</span><span class="topic">NumPy 進階與維度操作</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 8: 協作開發</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0205.html"><span class="date-badge"><i class="far fa-calendar"></i> 2/5 (四)</span><span class="topic">協作開發與虛擬化技術</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0206.html"><span class="date-badge"><i class="far fa-calendar"></i> 2/6 (五)</span><span class="topic">協作開發與虛擬化技術</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 9: 視覺化與專案管理</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0223.html"><span class="date-badge"><i class="far fa-calendar"></i> 2/23 (一)</span><span class="topic">課後練功坊</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0224.html"><span class="date-badge"><i class="far fa-calendar"></i> 2/24 (二)</span><span class="topic">數據視覺化分析平台</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0225.html"><span class="date-badge"><i class="far fa-calendar"></i> 2/25 (三)</span><span class="topic">數據視覺化分析平台</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0226.html"><span class="date-badge"><i class="far fa-calendar"></i> 2/26 (四)</span><span class="topic">專案管理實務應用</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 10: 雲端平台</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0302.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/2 (一)</span><span class="topic">數據視覺化分析平台</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0303.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/3 (二)</span><span class="topic">雲端平台入門</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0304.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/4 (三)</span><span class="topic">雲端平台入門</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0305.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/5 (四)</span><span class="topic">雲端平台入門</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0306.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/6 (五)</span><span class="topic">雲端平台入門</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 11: NoSQL 與 Python</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0309.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/9 (一)</span><span class="topic">NoSQL 資料庫</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0310.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/10 (二)</span><span class="topic">NoSQL 資料庫</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0311.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/11 (三)</span><span class="topic">NoSQL 資料庫</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0312.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/12 (四)</span><span class="topic">Python 應用</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0313.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/13 (五)</span><span class="topic">Python 應用</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 12: AI 與資料科學</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0316.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/16 (一)</span><span class="topic">資料科學與生成式 AI</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0317.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/17 (二)</span><span class="topic">資料科學與生成式 AI</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0318.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/18 (三)</span><span class="topic">專案管理實務應用</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0319.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/19 (四)</span><span class="topic">專案管理實務應用</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0320.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/20 (五)</span><span class="topic">資料整合應用</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 13: 資料庫與 LLM</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0323.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/23 (一)</span><span class="topic">SQL 資料庫</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0324.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/24 (二)</span><span class="topic">SQL 資料庫</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0325.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/25 (三)</span><span class="topic">資料科學與生成式 AI</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0326.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/26 (四)</span><span class="topic">LLM 大型語言模型</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0327.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/27 (五)</span><span class="topic">資料整合應用</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0328.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/28 (六)</span><span class="topic">資料整合應用</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 14: LLM 與整合</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0330.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/30 (一)</span><span class="topic">畢業專題實作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0331.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/31 (二)</span><span class="topic">LLM 大型語言模型</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0401.html"><span class="date-badge"><i class="far fa-calendar"></i> 4/1 (三)</span><span class="topic">LLM 大型語言模型</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 15: 實務應用</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0407.html"><span class="date-badge"><i class="far fa-calendar"></i> 4/7 (二)</span><span class="topic">畢業專題實作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0408.html"><span class="date-badge"><i class="far fa-calendar"></i> 4/8 (三)</span><span class="topic">就業輔導及人才媒合</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0409.html"><span class="date-badge"><i class="far fa-calendar"></i> 4/9 (四)</span><span class="topic">LLM 大型語言模型</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0410.html"><span class="date-badge"><i class="far fa-calendar"></i> 4/10 (五)</span><span class="topic">協作開發與虛擬化技術</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 16: DevOps 與 Linux</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0413.html"><span class="date-badge"><i class="far fa-calendar"></i> 4/13 (一)</span><span class="topic">協作開發與虛擬化技術</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0414.html"><span class="date-badge"><i class="far fa-calendar"></i> 4/14 (二)</span><span class="topic">協作開發與虛擬化技術</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0415.html"><span class="date-badge"><i class="far fa-calendar"></i> 4/15 (三)</span><span class="topic">Linux 基礎到架站</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0416.html"><span class="date-badge"><i class="far fa-calendar"></i> 4/16 (四)</span><span class="topic">Linux 基礎到架站</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0417.html"><span class="date-badge"><i class="far fa-calendar"></i> 4/17 (五)</span><span class="topic">Linux 基礎到架站</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 17: 日誌分析</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0420.html"><span class="date-badge"><i class="far fa-calendar"></i> 4/20 (一)</span><span class="topic">日誌分析平台</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0421.html"><span class="date-badge"><i class="far fa-calendar"></i> 4/21 (二)</span><span class="topic">日誌分析平台</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0422.html"><span class="date-badge"><i class="far fa-calendar"></i> 4/22 (三)</span><span class="topic">日誌分析平台</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0423.html"><span class="date-badge"><i class="far fa-calendar"></i> 4/23 (四)</span><span class="topic">日誌分析平台</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0424.html"><span class="date-badge"><i class="far fa-calendar"></i> 4/24 (五)</span><span class="topic">日誌分析平台</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 18: 畢業專題 I</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0427.html"><span class="date-badge"><i class="far fa-calendar"></i> 4/27 (一)</span><span class="topic">課後練功坊</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0428.html"><span class="date-badge"><i class="far fa-calendar"></i> 4/28 (二)</span><span class="topic">畢業專題實作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0429.html"><span class="date-badge"><i class="far fa-calendar"></i> 4/29 (三)</span><span class="topic">畢業專題實作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0504.html"><span class="date-badge"><i class="far fa-calendar"></i> 5/4 (一)</span><span class="topic">畢業專題實作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0505.html"><span class="date-badge"><i class="far fa-calendar"></i> 5/5 (二)</span><span class="topic">畢業專題實作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0506.html"><span class="date-badge"><i class="far fa-calendar"></i> 5/6 (三)</span><span class="topic">畢業專題實作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0507.html"><span class="date-badge"><i class="far fa-calendar"></i> 5/7 (四)</span><span class="topic">畢業專題實作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0508.html"><span class="date-badge"><i class="far fa-calendar"></i> 5/8 (五)</span><span class="topic">企業參訪</span></a></li>
+            </ul>
+        </div>
+
+        <div class="menu-group">
+            <div class="group-title">Week 19: 畢業專題 II</div>
+            <ul>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0511.html"><span class="date-badge"><i class="far fa-calendar"></i> 5/11 (一)</span><span class="topic">畢業專題實作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0512.html"><span class="date-badge"><i class="far fa-calendar"></i> 5/12 (二)</span><span class="topic">畢業專題實作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0513.html"><span class="date-badge"><i class="far fa-calendar"></i> 5/13 (三)</span><span class="topic">畢業專題實作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0514.html"><span class="date-badge"><i class="far fa-calendar"></i> 5/14 (四)</span><span class="topic">畢業專題實作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0515.html"><span class="date-badge"><i class="far fa-calendar"></i> 5/15 (五)</span><span class="topic">畢業專題實作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0518.html"><span class="date-badge"><i class="far fa-calendar"></i> 5/18 (一)</span><span class="topic">畢業專題實作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0519.html"><span class="date-badge"><i class="far fa-calendar"></i> 5/19 (二)</span><span class="topic">畢業專題實作</span></a></li>
+                <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0520.html"><span class="date-badge"><i class="far fa-calendar"></i> 5/20 (三)</span><span class="topic">就業輔導及人才媒合</span></a></li>
+            </ul>
+        </div>
+    </nav>
+
+   <main class="main-content">
+     
+        <div class="top-bar">
+            <div class="breadcrumb">
+                首頁 > Week 3 > <span>Python 基礎與環境</span>
+            </div>
+            <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
+                <i class="fas fa-home"></i> 回首頁
+            </a>
+        </div>
+        
+        <div class="banner" style="background: linear-gradient(135deg, #3776ab 0%, #ffd43b 100%);">
+            <div>
+                <h1>Python 基礎語法與遠端開發</h1>
+                <p>VS Code Remote SSH 環境建置、變數與資料結構、邏輯控制實作。</p>
+            </div>
+            <i class="fa-brands fa-python banner-icon"></i>
+        </div>
+
+        <h3 class="section-title">Part 1: 開發環境 (VS Code Remote SSH)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-server"></i> 為什麼要用 Remote SSH？</h4>
+                    <span class="status-badge done">觀念</span>
+                </div>
+                <p class="note-desc">你是一位正在學習 Python / Linux / 伺服器維運的工程師，可能會遇到：</p>
+                <ul class="note-points">
+                    <li><strong>效能考量：</strong> 手邊電腦效能有限，但未來要學爬蟲、TensorFlow、LLM，需要乾淨且高效的雲端環境。</li>
+                    <li><strong>部署一致性：</strong> 希望開發環境與實際部署的 Linux 主機一致，而非僅在本機跑 Python。</li>
+                    <li><strong>專業流程：</strong> 學習貼近雲端的開發流程，使用 VS Code 連接 VirtualBox 中的 Ubuntu Server。</li>
+                </ul>
+                <div class="alert-box">
+                    <strong>操作：</strong> 使用 VS Code 的 "Remote - SSH" 插件，連線至虛擬機並建立 Python 虛擬環境 (Virtual Environment)。
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 2: Python 基礎語法</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-quote-left"></i> 變數與 f-string</h4>
+                    <span class="status-badge running">字串</span>
+                </div>
+                <p class="note-desc">格式化字串 (Format String) 的應用。</p>
+                <pre><code>name = <span class="code-function">input</span>(<span class="code-string">"輸入文字"</span>)
+price = <span class="code-function">input</span>(<span class="code-string">"輸入文字"</span>)
+qty = <span class="code-function">input</span>(<span class="code-string">"輸入文字"</span>)
+
+<span class="code-comment"># f-string: 在字串前加 f，內部使用 {} 包裹變數</span>
+<span class="code-function">print</span>(f<span class="code-string">"有 {name}、{price}、{qty}"</span>)</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-calculator"></i> 運算元綜合練習</h4>
+                    <span class="status-badge running">邏輯</span>
+                </div>
+                <p class="note-desc">結合比較運算與布林運算 (Boolean)。</p>
+                <pre><code>number = <span class="code-number">14</span>
+
+<span class="code-comment"># 判斷多個條件 (AND 必須全為真)</span>
+result = (number > <span class="code-number">10</span>) <span class="code-keyword">and</span> \
+         (number + <span class="code-number">5</span> <= <span class="code-number">20</span>) <span class="code-keyword">and</span> \
+         (number != <span class="code-number">15</span>)
+
+<span class="code-function">print</span>(result) <span class="code-comment"># 輸出: True</span></code></pre>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 3: 資料結構 (Data Structures)</h3>
+        <div class="dashboard-grid notes-section">
+            
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-list-ol"></i> 基礎陣列 (List)</h4>
+                    <span class="status-badge running">列表</span>
+                </div>
+                <p class="note-desc">有序、可變更的資料集合。</p>
+                <pre><code>scores = [<span class="code-number">10</span>, <span class="code-number">20</span>, <span class="code-number">30</span>]
+
+<span class="code-comment"># 透過索引值 (Index) 取值並運算</span>
+<span class="code-function">print</span>(scores[<span class="code-number">0</span>] + scores[<span class="code-number">1</span>]) 
+<span class="code-comment"># 10 + 20 = 30</span></code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-book"></i> 字典 (Dictionary)</h4>
+                    <span class="status-badge running">鍵值對</span>
+                </div>
+                <p class="note-desc">Key-Value 配對，使用 <code>get()</code> 避免報錯。</p>
+                <pre><code>student = {<span class="code-string">"name"</span>: <span class="code-string">"Alice"</span>, <span class="code-string">"age"</span>: <span class="code-number">20</span>}
+
+<span class="code-function">print</span>(student.get(<span class="code-string">"name"</span>))
+<span class="code-comment"># 輸出：Alice</span>
+
+<span class="code-function">print</span>(student.get(<span class="code-string">"grade"</span>, <span class="code-string">"未定義"</span>)) 
+<span class="code-comment"># 鍵不存在時，回傳預設值：未定義</span></code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-layer-group"></i> 元組 (Tuple) 與列表應用</h4>
+                    <span class="status-badge running">複合</span>
+                </div>
+                <p class="note-desc">Tuple <code>()</code> 本身不可變，但若放在 List <code>[]</code> 中，我們可以替換 List 裡的元素。</p>
+                <pre><code>tup_list = [
+    (<span class="code-string">"To Kill a Mockingbird"</span>, <span class="code-string">"Harper Lee"</span>, <span class="code-number">20.99</span>),
+    (<span class="code-string">"1984"</span>, <span class="code-string">"George Orwell"</span>, <span class="code-number">15.99</span>),
+    (<span class="code-string">"The Great Gatsby"</span>, <span class="code-string">"F. Scott Fitzgerald"</span>, <span class="code-number">10.99</span>)
+]
+
+<span class="code-comment"># 修改 List 中索引為 1 的元素 (替換整個 Tuple)</span>
+tup_list[<span class="code-number">1</span>] = (<span class="code-string">"1984"</span>, <span class="code-string">"J.K. Rowling"</span>, <span class="code-number">15.99</span>)
+
+<span class="code-function">print</span>(tup_list)</code></pre>
+            </div>
+        </div>
+
+        <h3 class="section-title">Part 4: 邏輯控制實作</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-gamepad"></i> 實作：比大小遊戲</h4>
+                    <span class="status-badge important">練習</span>
+                </div>
+                <p class="note-desc">使用 <code>if</code>, <code>elif</code>, <code>else</code> 進行流程控制。</p>
+                <pre><code><span class="code-function">print</span>(<span class="code-string">"歡迎來到比大小遊戲！請輸入兩個數字..."</span>)
+
+<span class="code-comment"># input 預設為字串，需轉為 int 才能比較數值</span>
+num1 = <span class="code-function">int</span>(<span class="code-function">input</span>(<span class="code-string">"請輸入第一個數字："</span>))
+num2 = <span class="code-function">int</span>(<span class="code-function">input</span>(<span class="code-string">"請輸入第二個數字："</span>))
+
+<span class="code-keyword">if</span> num1 > num2:
+    <span class="code-function">print</span>(f<span class="code-string">"{num1} 比 {num2} 大"</span>)
+<span class="code-keyword">elif</span> num2 > num1:
+    <span class="code-function">print</span>(f<span class="code-string">"{num2} 比 {num1} 大"</span>)
+<span class="code-keyword">else</span>:
+    <span class="code-function">print</span>(f<span class="code-string">"{num1} 和 {num2} 一樣大"</span>)
+
+<span class="code-function">print</span>(<span class="code-string">"遊戲結束，謝謝參加！"</span>)</code></pre>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.overlay');
+            
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-280px';
+                overlay.style.display = 'none';
+            } else {
+                sidebar.style.left = '0px';
+                overlay.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
