@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI大數據養成班 - 4/1 LLM 大型語言模型</title>
+    <title>AI大數據養成班 - 4/1 Function Calling 與 RAG</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="dashboard.css">
 </head>
@@ -221,7 +221,7 @@
 
         <div class="top-bar">
             <div class="breadcrumb">
-                首頁 > Week 13: LLM 與整合 > <span>LLM 大型語言模型</span>
+                首頁 > Week 13: LLM 與整合 > <span>Function Calling 與 RAG</span>
             </div>
             <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
                 <i class="fas fa-home"></i> 回首頁
@@ -230,20 +230,466 @@
 
         <div class="banner">
             <div>
-                <h1>LLM 大型語言模型</h1>
+                <h1>Function Calling 與 RAG</h1>
                 <p>4/1 課程筆記</p>
             </div>
             <i class="fa-solid fa-robot banner-icon"></i>
         </div>
 
-        <h3 class="section-title">課程筆記：LLM 大型語言模型</h3>
+        <!-- Section 1: Function Calling 概念 -->
+        <h3 class="section-title"><i class="fa-solid fa-plug"></i> Function Calling 概念</h3>
         <div class="dashboard-grid notes-section">
             <div class="card note-card" style="grid-column: 1 / -1;">
                 <div class="note-header">
-                    <h4><i class="fa-solid fa-robot"></i> 筆記待補</h4>
-                    <span class="status-badge pending">待補</span>
+                    <h4><i class="fa-solid fa-lightbulb"></i> 什麼是 Function Calling</h4>
+                    <span class="status-badge important">觀念</span>
                 </div>
-                <p class="note-desc">課程內容稍後補充。</p>
+                <p class="note-desc">你定義函式，LLM 決定要不要呼叫。整個流程是<strong>兩段式</strong>：LLM 選擇（回傳函式名稱 + 參數） → 你執行（把結果送回 LLM）。</p>
+                <ul class="note-points">
+                    <li><strong>核心觀念：</strong>Gemini 只負責「決定」不負責「執行」——執行權在你手上</li>
+                    <li><strong>完整流程：</strong>使用者需求 → Gemini 看可用函式 → 選擇呼叫 → 你執行 → 結果送回 → Gemini 再選擇或回傳文字</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 重點：</strong>LLM 不會直接操作系統，它只是「告訴你」要呼叫哪個函式、傳什麼參數。真正的執行永遠在你的程式碼裡。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> 定義工具</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">Gemini 用 Python function 的 <strong>docstring</strong> 和 <strong>type hint</strong> 理解函式用途與參數。</p>
+                <pre><code>def check_regulation(violation_type: str) -> str:
+    """查詢違規類型對應的法規
+    Args:
+        violation_type: 違規類型
+    """
+    # 實作內容...
+
+model = genai.GenerativeModel(
+    "gemini-2.5-flash",
+    tools=[check_regulation, send_alert, log_incident]
+)</code></pre>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 技巧：</strong>docstring 寫得越清楚，Gemini 越能正確判斷何時該呼叫這個函式。type hint 讓 Gemini 知道參數型別。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrows-spin"></i> 完整迴圈實作</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">Function Calling 的核心是一個 <strong>while loop</strong>：持續檢查回應是否為 function_call，直到 LLM 回傳文字為止。</p>
+                <pre><code>chat = model.start_chat()
+response = chat.send_message("使用者輸入")
+
+# func_map 是函式指標字典
+func_map = {"check_regulation": check_regulation,
+            "send_alert": send_alert,
+            "log_incident": log_incident}
+
+while True:
+    part = response.candidates[0].content.parts[0]
+    if hasattr(part, "function_call") and part.function_call.name:
+        fc = part.function_call
+        result = func_map[fc.name](**dict(fc.args))  # 執行函式
+        response = chat.send_message(
+            genai.protos.Content(parts=[
+                genai.protos.Part(function_response=
+                    genai.protos.FunctionResponse(
+                        name=fc.name,
+                        response={"result": result}))]))
+    else:
+        print(part.text)  # 最終文字回覆
+        break</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop：違規處理助手</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">整合 Function Calling 完整流程，建立一個工安違規處理助手。</p>
+                <div class="alert-box">
+<pre><code>import google.generativeai as genai
+
+def check_regulation(violation_type: str) -> str:
+    '''查詢違規類型對應的法規 Args: violation_type: 違規類型如no_helmet'''
+    regs = {"no_helmet": "職安法第281條：應使勞工確實使用安全帽。",
+            "no_vest": "職安法第21條：應提供反光背心。"}
+    return regs.get(violation_type, "查無相關法規")
+
+def send_alert(message: str, severity: str) -> str:
+    '''發送告警 Args: message: 告警內容 severity: 嚴重程度high/medium/low'''
+    print(f"[{severity.upper()}] {message}")
+    return f"告警已發送: {message}"
+
+def log_incident(description: str, location: str) -> str:
+    '''記錄事件 Args: description: 事件描述 location: 發生地點'''
+    print(f"{location} - {description}")
+    return f"已記錄: {location} {description}"
+
+model = genai.GenerativeModel("gemini-2.5-flash",
+    tools=[check_regulation, send_alert, log_incident])
+chat = model.start_chat()
+response = chat.send_message("A區有人沒戴安全帽，幫我處理")
+
+func_map = {"check_regulation": check_regulation,
+            "send_alert": send_alert,
+            "log_incident": log_incident}
+while True:
+    part = response.candidates[0].content.parts[0]
+    if hasattr(part, "function_call") and part.function_call.name:
+        fc = part.function_call
+        print(f"呼叫: {fc.name}({dict(fc.args)})")
+        result = func_map[fc.name](**dict(fc.args))
+        response = chat.send_message(genai.protos.Content(parts=[
+            genai.protos.Part(function_response=genai.protos.FunctionResponse(
+                name=fc.name, response={"result": result}))]))
+    else:
+        print(f"{part.text}")
+        break</code></pre>
+                    <p>Gemini 會依序呼叫：<code>check_regulation</code> → <code>send_alert</code> → <code>log_incident</code> → 最終文字回覆。跟 LangChain Tool 的關係：Function Calling 是原生 API，LangChain Tool 是框架封裝——學完原生再學框架就知道它在包裝什麼。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: OpenAI 原生 API -->
+        <h3 class="section-title"><i class="fa-solid fa-brain"></i> OpenAI 原生 API</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-scale-balanced"></i> Gemini vs OpenAI 對照</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">兩大 LLM API 的語法差異對照表。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>項目</th><th>Gemini</th><th>OpenAI</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>安裝</strong></td><td>google-generativeai</td><td>openai</td></tr>
+                        <tr><td><strong>初始化</strong></td><td>genai.configure + GenerativeModel</td><td>OpenAI()</td></tr>
+                        <tr><td><strong>呼叫</strong></td><td>generate_content</td><td>chat.completions.create</td></tr>
+                        <tr><td><strong>訊息格式</strong></td><td>字串或 list</td><td>messages list (role + content)</td></tr>
+                        <tr><td><strong>回傳</strong></td><td>response.text</td><td>choices[0].message.content</td></tr>
+                        <tr><td><strong>計費</strong></td><td>免費額度大</td><td>預付按 token</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-comments"></i> OpenAI Chat Completion</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">OpenAI 的基本對話呼叫方式，使用 messages list 管理對話歷史。</p>
+                <pre><code>from openai import OpenAI
+
+client = OpenAI()
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        {"role": "system", "content": "你是工安專家"},
+        {"role": "user", "content": "什麼是PPE？"}
+    ]
+)
+print(response.choices[0].message.content)</code></pre>
+                <ul class="note-points">
+                    <li><strong>system：</strong>系統設定，定義 AI 角色與行為</li>
+                    <li><strong>user：</strong>使用者輸入</li>
+                    <li><strong>assistant：</strong>AI 回覆，多輪對話時需手動帶入歷史</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-wrench"></i> OpenAI Function Calling</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">OpenAI 的工具定義用 <strong>JSON Schema</strong>（比 Gemini 囉嗦但更明確）。</p>
+                <pre><code># 工具定義
+tools = [{"type": "function", "function": {
+    "name": "check_regulation",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "violation_type": {
+                "type": "string",
+                "description": "違規類型"
+            }
+        },
+        "required": ["violation_type"]
+    }
+}}]
+
+# 取得呼叫
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=messages,
+    tools=tools
+)
+tool_call = response.choices[0].message.tool_calls[0]
+
+# 送回結果
+messages.append({"role": "tool",
+    "tool_call_id": tool_call.id,
+    "content": result})</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code-compare"></i> FC 差異對照</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">Function Calling 在兩個平台的語法差異與共同點。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>項目</th><th>Gemini</th><th>OpenAI</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>工具定義</strong></td><td>Python docstring</td><td>JSON Schema</td></tr>
+                        <tr><td><strong>定義風格</strong></td><td>簡單</td><td>囉嗦但明確</td></tr>
+                        <tr><td><strong>對話歷史</strong></td><td>chat.send_message 自動帶歷史</td><td>每次傳完整 messages list</td></tr>
+                    </tbody>
+                </table>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 共同點：</strong>兩段式流程完全相同——LLM 選擇 → 你執行 → 送回。邏輯一樣，只是語法不同。
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop：OpenAI 實作</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">分三個任務實作 OpenAI API 並與 Gemini 比較。</p>
+                <div class="alert-box">
+                    <p><strong>任務 1 Chat Completion：</strong><code>client.chat.completions.create(model='gpt-4o-mini', messages=[...])</code>。</p>
+                    <p><strong>任務 2 Function Calling：</strong>工具定義用 JSON Schema 格式（type / properties / required）。</p>
+                    <p><strong>任務 3 比較：</strong>同一問題兩邊跑——Gemini 免費額度大適合圖片分析，OpenAI 文字任務可能更穩定。兩種 API 都會用，根據任務選模型：圖片分析 → Gemini，文字生成 → 看效果和成本，Function Calling → 語法不同但邏輯一樣。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: RAG 概念 -->
+        <h3 class="section-title"><i class="fa-solid fa-book-open"></i> RAG 概念</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-magnifying-glass"></i> 什麼是 RAG</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc"><strong>Retrieval-Augmented Generation</strong>：讓 LLM「先找資料再回答」。200 頁法規不可能全塞進 prompt → 只搜相關段落塞進去。</p>
+                <ul class="note-points">
+                    <li><strong>流程：</strong>使用者問題 → Embedding 搜尋法規庫 → 找到相關段落 → 塞進 prompt → LLM 回答</li>
+                    <li><strong>能引用真實文件：</strong>回答有依據，可附上來源</li>
+                    <li><strong>不需重新訓練：</strong>不用 fine-tune 模型</li>
+                    <li><strong>資料更新快：</strong>改知識庫即可，不用重訓</li>
+                    <li><strong>減少幻覺：</strong>限定 LLM 只用提供的資料回答</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-scale-balanced"></i> RAG vs Prompt Engineering</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">兩種讓 LLM 使用外部知識的方式比較。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>項目</th><th>Prompt Engineering</th><th>RAG</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>資料來源</strong></td><td>資料直接放進 prompt</td><td>經過 embedding 的外部資料</td></tr>
+                        <tr><td><strong>適用場景</strong></td><td>少量短期資料</td><td>大量長期需語意搜尋</td></tr>
+                        <tr><td><strong>技術重點</strong></td><td>提示語設計</td><td>向量資料管理</td></tr>
+                        <tr><td><strong>成本</strong></td><td>低</td><td>稍高</td></tr>
+                    </tbody>
+                </table>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 選擇策略：</strong>靜態知識 → RAG，動態資訊 → Function Call，兩者都有 → 混合架構。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: RAG 實作 -->
+        <h3 class="section-title"><i class="fa-solid fa-gears"></i> RAG 實作</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-database"></i> Embedding 建索引</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">文件切段 → 每段做 embedding → 存入向量資料庫（一次性建置）。</p>
+                <pre><code># 將文件內容做 embedding
+client.models.embed_content(
+    model="gemini-embedding-001",
+    contents=["段落1的內容", "段落2的內容", ...]
+)</code></pre>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 重點：</strong>Embedding 是將文字轉成高維向量，語意相近的文字在向量空間中距離較近。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-searchengin"></i> 向量搜尋</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">用 cosine similarity 計算查詢與所有段落的相似度，分數越高越相關。</p>
+                <pre><code>from sklearn.metrics.pairwise import cosine_similarity
+
+sims = cosine_similarity([query_emb], chunk_embeddings)[0]
+# 取 top 3 最相關段落
+top_idx = np.argsort(sims)[::-1][:3]</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-link"></i> 組合 RAG Pipeline</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">搜尋 → 組 context → 塞進 prompt → Gemini 回答 → 附上來源。</p>
+                <pre><code># 組合 prompt
+context = "\n".join([chunks[i]["content"] for i in top_idx])
+prompt = f"""根據以下法規回答問題，不要編造：
+{context}
+
+問題：{query}"""
+
+model = genai.GenerativeModel("gemini-2.5-flash")
+response = model.generate_content(prompt)
+print(response.text)</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop：RAG 法規問答</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">完整實作 RAG Pipeline：從建索引到搜尋到回答。</p>
+                <div class="alert-box">
+<pre><code>import google.generativeai as genai
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+
+client = genai.Client(api_key="your-key")
+chunks = [
+    {"id": "reg_001", "title": "安全帽規定", "content": "依據職安法第281條..."},
+    {"id": "reg_002", "title": "反光背心規定", "content": "依據職安法第21條..."},
+    # ...共8段
+]
+# 建索引
+contents = [c["content"] for c in chunks]
+result = client.models.embed_content(model="gemini-embedding-001", contents=contents)
+chunk_embs = np.array(result["embedding"])
+
+# 搜尋
+query = "安全帽有什麼規定？"
+q_result = client.models.embed_content(model="gemini-embedding-001", contents=query)
+q_emb = np.array(q_result["embedding"])
+sims = cosine_similarity([q_emb], chunk_embs)[0]
+top_idx = np.argsort(sims)[::-1][:3]
+
+# 組 prompt
+context = "\n".join([chunks[i]["content"] for i in top_idx])
+prompt = f"根據以下法規回答問題,只用提供的內容,不要編造:\n{context}\n\n問題：{query}"
+model = genai.GenerativeModel("gemini-2.5-flash")
+response = model.generate_content(prompt)
+print(response.text)</code></pre>
+                    <p>RAG 的關鍵：「只用提供的法規回答，不要編造」這句 prompt 減少幻覺。top_k=3 就夠，不用全部塞。cosine_similarity 越高 = 越相關。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 5: RAG 進階 — Reranker -->
+        <h3 class="section-title"><i class="fa-solid fa-arrow-up-wide-short"></i> RAG 進階 — Reranker</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-triangle-exclamation"></i> Embedding 搜尋的問題</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">「客服」與「配送」的向量可能相近 → 搜尋「如何聯絡客服」可能排到「國際配送」前面。</p>
+                <ul class="note-points">
+                    <li><strong>Embedding：</strong>快速粗篩，捕捉語意空間中的距離</li>
+                    <li><strong>Reranker：</strong>精準重排，用 LLM 理解語意相關性</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 類比：</strong>Embedding 像是用關鍵字搜尋，Reranker 像是請專家逐一審閱搜尋結果後重新排序。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-ranking-star"></i> Reranker 用 Gemini 重新打分</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">用 Gemini 直接評估「問題和 FAQ 內容的相關度」0-100 分。</p>
+                <ul class="note-points">
+                    <li><strong>兩階段：</strong>Embedding 快速篩選（粗排） → Reranker 精準重排（精排）</li>
+                    <li><strong>效果：</strong>修正後「如何聯絡客服」→ 正確排到第 1 名（100 分）</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop：Reranker 改善</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">理解 Reranker 的運作原理與實務平衡。</p>
+                <div class="alert-box">
+                    <p><strong>Embedding 的限制：</strong>它捕捉的是「語意空間中的距離」，有時候不同主題但都跟「服務」相關的 FAQ 會被誤判為相似。</p>
+                    <p><strong>Reranker 解法：</strong>讓 LLM 逐一評估「這個 FAQ 是否直接回答了使用者的問題」——這是語意理解而非向量距離。</p>
+                    <p><strong>代價：</strong>Reranker 需要對每個候選都呼叫一次 LLM，速度較慢（N 個候選 = N 次 API 呼叫）。</p>
+                    <p><strong>實務平衡：</strong>Embedding 粗篩取 top 5 → Reranker 精排取 top 2 → 只送最相關的給 LLM 回答。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 6: LangChain Document Loader（補充） -->
+        <h3 class="section-title"><i class="fa-solid fa-file-import"></i> LangChain Document Loader（補充）</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-folder-open"></i> 各種格式讀取</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">LangChain 提供多種 Document Loader，支援不同格式的文件讀取。</p>
+                <ul class="note-points">
+                    <li><strong>PyPDFLoader：</strong>讀取 PDF 文件</li>
+                    <li><strong>CSVLoader：</strong>讀取 CSV / Google Sheet</li>
+                    <li><strong>WebBaseLoader：</strong>讀取網頁內容</li>
+                    <li><strong>TextSplitter：</strong>切段（chunk_size=500, chunk_overlap=50 避免切斷語意）</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 完整 LangChain RAG Pipeline：</strong>讀文件 → 切段 → embedding → 向量 DB → 搜尋 → LLM 回答。LangChain 把這些步驟都封裝好了，但底層邏輯跟我們今天手刻的一模一樣。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 7: 課程回顧 -->
+        <h3 class="section-title"><i class="fa-solid fa-clipboard-check"></i> 課程回顧</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-sitemap"></i> 今日學習架構</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">今天從原生 API 到框架封裝，完整走過 LLM 整合的核心技術。</p>
+                <ul class="note-points">
+                    <li><strong>Function Calling：</strong>讓 LLM 決定呼叫函式，兩段式流程（LLM 選擇 → 你執行）</li>
+                    <li><strong>OpenAI API：</strong>第二種 API 選擇，語法不同但邏輯相同</li>
+                    <li><strong>RAG：</strong>先找再答，減少幻覺，讓 LLM 能引用真實文件</li>
+                    <li><strong>Reranker：</strong>精準重排，解決 Embedding 粗篩的誤判問題</li>
+                    <li><strong>LangChain：</strong>框架封裝，把手刻流程包成現成元件</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 核心觀念：</strong>LLM 不直接操作系統，透過 Function Calling + RAG 間接使用外部資源。Function Calling 處理「動態操作」，RAG 處理「靜態知識」，兩者結合就是完整的 LLM 應用架構。
+                </div>
             </div>
         </div>
 

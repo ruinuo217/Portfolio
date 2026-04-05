@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI大數據養成班 - 4/9 LLM 大型語言模型</title>
+    <title>AI大數據養成班 - 4/9 LangChain 與 AI Agent 整合</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="dashboard.css">
 </head>
@@ -221,7 +221,7 @@
 
         <div class="top-bar">
             <div class="breadcrumb">
-                首頁 > Week 14: 實務應用 > <span>LLM 大型語言模型</span>
+                首頁 > Week 14: 實務應用 > <span>LangChain 與 AI Agent 整合</span>
             </div>
             <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
                 <i class="fas fa-home"></i> 回首頁
@@ -230,20 +230,412 @@
 
         <div class="banner">
             <div>
-                <h1>LLM 大型語言模型</h1>
+                <h1>LangChain 與 AI Agent 整合</h1>
                 <p>4/9 課程筆記</p>
             </div>
             <i class="fa-solid fa-robot banner-icon"></i>
         </div>
 
-        <h3 class="section-title">課程筆記：LLM 大型語言模型</h3>
+        <!-- Section 1: 行為層 — Orchestration 概念 -->
+        <h3 class="section-title"><i class="fa-solid fa-layer-group"></i> 行為層 — Orchestration 概念</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-compass"></i> 誰決定AI下一步</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">系統偵測到違規——要查法規？發通知？記錄？步驟的順序和條件由<strong>行為層</strong>決定。</p>
+                <ul class="note-points">
+                    <li><strong>Chain（固定流程）：</strong>預先定義好的步驟順序，A &rarr; B &rarr; C</li>
+                    <li><strong>Agent（動態決策）：</strong>LLM 根據情境自己決定下一步</li>
+                    <li><strong>Tool（LLM 與系統的邊界）：</strong>LLM 不該直接控制系統——透過 Tool 間接操作</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 核心原則：</strong>LLM 不該直接控制系統——透過 Tool 間接操作，確保安全與可控性。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code-branch"></i> Chain vs Agent</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">兩種編排策略的核心差異比較：</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>特性</th><th>Chain</th><th>Agent</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>流程</strong></td><td>固定步驟</td><td>動態決策</td></tr>
+                        <tr><td><strong>執行方式</strong></td><td>A &rarr; B &rarr; C</td><td>LLM 決定下一步</td></tr>
+                        <tr><td><strong>穩定性</strong></td><td>可預測</td><td>靈活但不穩定</td></tr>
+                        <tr><td><strong>適用場景</strong></td><td>流程明確的任務</td><td>需要推理的任務</td></tr>
+                    </tbody>
+                </table>
+                <ul class="note-points">
+                    <li><strong>Chain 適合：</strong>報表生成 / 資料清洗 / 固定流程</li>
+                    <li><strong>Agent 適合：</strong>問答系統 / 複雜判斷 / 需要工具的任務</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 2: LangChain 基礎 -->
+        <h3 class="section-title"><i class="fa-solid fa-link"></i> LangChain 基礎</h3>
         <div class="dashboard-grid notes-section">
             <div class="card note-card" style="grid-column: 1 / -1;">
                 <div class="note-header">
-                    <h4><i class="fa-solid fa-robot"></i> 筆記待補</h4>
-                    <span class="status-badge pending">待補</span>
+                    <h4><i class="fa-solid fa-cubes"></i> LangChain 是什麼</h4>
+                    <span class="status-badge important">觀念</span>
                 </div>
-                <p class="note-desc">課程內容稍後補充。</p>
+                <p class="note-desc">LLM 應用開發框架，提供統一介面串接各種 LLM 與外部工具。</p>
+                <ul class="note-points">
+                    <li><strong>Model：</strong>呼叫 LLM（Gemini / OpenAI / HuggingFace）</li>
+                    <li><strong>Prompt Template：</strong>動態生成 prompt</li>
+                    <li><strong>Chain：</strong>串接多步驟</li>
+                    <li><strong>Tool：</strong>讓 LLM 呼叫外部功能</li>
+                    <li><strong>Agent：</strong>讓 LLM 自己決定用什麼工具</li>
+                    <li><strong>Memory：</strong>對話記憶</li>
+                </ul>
+                <p class="note-desc"><strong>安裝：</strong></p>
+                <pre><code>pip install langchain langchain-google-genai langchain-openai</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-file-code"></i> Prompt Template</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">動態插入變數而非硬編 prompt，讓同一個模板適用不同情境。</p>
+                <pre><code>from langchain.prompts import ChatPromptTemplate
+
+template = ChatPromptTemplate.from_messages([
+    ("system", "你是{role}"),
+    ("human", "{question}")
+])
+
+prompt = template.invoke({
+    "role": "工安專家",
+    "question": "安全帽規定"
+})</code></pre>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 重點：</strong>用變數取代硬編，讓 prompt 可重複使用、易於維護。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrows-spin"></i> LangChain Chain</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">用 LCEL（LangChain Expression Language）語法，把 prompt 生成 &rarr; 模型呼叫 &rarr; 輸出解析串成一條線。</p>
+                <pre><code># LCEL 語法：用 | 串接各元件
+chain = prompt | model | output_parser
+
+# 一行搞定：prompt 生成 → 模型呼叫 → 輸出解析
+result = chain.invoke({
+    "role": "工安專家",
+    "question": "安全帽規定"
+})</code></pre>
+            </div>
+        </div>
+
+        <!-- Section 3: LangChain Tool -->
+        <h3 class="section-title"><i class="fa-solid fa-wrench"></i> LangChain Tool</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-screwdriver-wrench"></i> Tool 定義</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">用 <code>@tool</code> 裝飾器把普通 function 變成 LangChain Tool。</p>
+                <pre><code>from langchain.tools import tool
+
+@tool
+def check_regulation(violation_type: str) -&gt; str:
+    """查詢違規法規"""
+    # 實作查詢邏輯
+    return f"{violation_type} 的相關法規..."</code></pre>
+                <p class="note-desc">跟 Gemini Function Calling 的關係：Tool 是框架封裝，底層邏輯一樣（LLM 選擇 &rarr; 你執行 &rarr; 送回）。</p>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> 自訂 Tool 範例</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">跟 Gemini 原生 FC 的差異：<code>@tool</code> 取代 docstring + type hint，LangChain 自動處理兩段式流程（不需手動 while loop）。</p>
+                <pre><code>@tool
+def check_regulation(violation_type: str) -&gt; str:
+    """查詢違規法規"""
+    regulations = {
+        "未戴安全帽": "職安法第6條...",
+        "未穿反光背心": "營造安全衛生設施標準第11條..."
+    }
+    return regulations.get(violation_type, "查無相關法規")
+
+@tool
+def send_alert(message: str) -&gt; str:
+    """發送告警通知"""
+    return f"已發送告警: {message}"</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop：Tool 實作</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc"><strong>LangChain Tool vs Gemini Function Calling 比較：</strong></p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 關鍵差異：</strong><br><br>
+                    <strong>Gemini 原生：</strong>手動定義 docstring + 手動 while loop 處理兩段式 + 手動送回 function_response。<br><br>
+                    <strong>LangChain：</strong>@tool 裝飾器自動從 docstring 提取 schema + Agent 自動執行工具 + 自動處理結果。<br><br>
+                    <strong>LangChain 的價值：</strong>把 Gemini FC 那 20 行 while loop 簡化成 3 行。但你必須先懂原生 FC，才能 debug LangChain 出問題時發生了什麼。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: LangChain Agent -->
+        <h3 class="section-title"><i class="fa-solid fa-robot"></i> LangChain Agent</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-brain"></i> Agent 概念</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc"><strong>Agent = LLM + Tools + 決策循環</strong></p>
+                <p class="note-desc">ReAct 模式的運作流程：</p>
+                <ul class="note-points">
+                    <li><strong>Thought（思考）：</strong>分析目前的狀況</li>
+                    <li><strong>Action（呼叫工具）：</strong>選擇並執行適當的工具</li>
+                    <li><strong>Observation（觀察結果）：</strong>接收工具回傳的結果</li>
+                    <li><strong>重複：</strong>直到有最終答案為止</li>
+                </ul>
+                <pre><code>from langchain.agents import create_react_agent
+
+agent = create_react_agent(model, tools)</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-gears"></i> Agent 實作</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">Agent 自動決定用哪個工具、什麼順序。</p>
+                <pre><code>from langchain.agents import create_react_agent
+
+agent = create_react_agent(
+    model,
+    tools=[check_regulation, send_alert]
+)
+
+result = agent.invoke({
+    "input": "A區有人沒戴安全帽"
+})
+# Agent 自動：
+# 1. 思考 → 需要查法規
+# 2. 呼叫 check_regulation("未戴安全帽")
+# 3. 觀察結果 → 需要發通知
+# 4. 呼叫 send_alert("A區違規...")
+# 5. 回傳最終結果</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-triangle-exclamation"></i> Agent 的風險</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">Agent 雖然靈活，但在生產環境需要特別注意以下風險：</p>
+                <ul class="note-points">
+                    <li><strong>不穩定：</strong>同一問題不同次可能選不同工具 / 不同順序</li>
+                    <li><strong>成本高：</strong>每個決策都呼叫 LLM，Token 消耗大</li>
+                    <li><strong>安全風險：</strong>Agent 可能呼叫不該呼叫的工具</li>
+                </ul>
+                <p class="note-desc"><strong>緩解策略：</strong></p>
+                <ul class="note-points">
+                    <li>限制可用工具數量與範圍</li>
+                    <li>設定最大步數（max_iterations）</li>
+                    <li>加入人工審核（Human-in-the-loop）</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-circle-info"></i> 重要：</strong>Agent 適合探索性任務，不適合需要 100% 一致性的生產系統——生產系統用 Chain 更穩定。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 5: LangChain RAG -->
+        <h3 class="section-title"><i class="fa-solid fa-database"></i> LangChain RAG</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-diagram-project"></i> LangChain RAG Pipeline</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">LangChain 提供完整的 RAG 管線，從讀文件到生成回答一條龍。</p>
+                <pre><code># 1. 讀文件
+from langchain.document_loaders import PyPDFLoader, CSVLoader, WebBaseLoader
+loader = PyPDFLoader("safety_regulations.pdf")
+docs = loader.load()
+
+# 2. 切段
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+splitter = RecursiveCharacterTextSplitter(
+    chunk_size=500,
+    chunk_overlap=50
+)
+chunks = splitter.split_documents(docs)
+
+# 3. 向量 DB
+from langchain.vectorstores import Chroma  # 或 FAISS
+vectorstore = Chroma.from_documents(chunks, embedding_model)
+
+# 4. 檢索
+retriever = vectorstore.as_retriever(
+    search_kwargs={"k": 3}
+)
+
+# 5. 生成
+from langchain.chains import RetrievalQA
+qa_chain = RetrievalQA.from_chain_type(
+    llm=model,
+    retriever=retriever
+)</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-scale-balanced"></i> vs 手寫 RAG</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">兩種 RAG 實作方式的比較：</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>特性</th><th>手寫 RAG</th><th>LangChain RAG</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>相似度計算</strong></td><td>自己算 cosine similarity</td><td>自動處理 embedding + 搜尋</td></tr>
+                        <tr><td><strong>Prompt 組裝</strong></td><td>自己組 prompt</td><td>自動處理 prompt</td></tr>
+                        <tr><td><strong>優點</strong></td><td>靈活但繁瑣</td><td>簡潔但黑盒</td></tr>
+                    </tbody>
+                </table>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 建議：</strong>先學手寫理解原理，再用 LangChain 提高效率。出問題時才知道該從哪裡 debug。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 6: 狀態與流程層概念 -->
+        <h3 class="section-title"><i class="fa-solid fa-arrows-turn-to-dots"></i> 狀態與流程層概念</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-memory"></i> State 是什麼</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc"><strong>LLM 沒有記憶</strong>——每次呼叫都是獨立的。系統需要 State 追蹤：</p>
+                <ul class="note-points">
+                    <li>累積的違規紀錄</li>
+                    <li>對話歷史</li>
+                    <li>流程進度</li>
+                </ul>
+                <pre><code>class SafetyState:
+    violations: list    # 違規紀錄列表
+    alert_count: int    # 告警次數
+
+# Function Calling 結果存進 State
+# → 系統有記憶</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-diagram-project"></i> Chain vs Graph</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">從線性流程進化到有狀態的圖形結構：</p>
+                <ul class="note-points">
+                    <li><strong>Chain：</strong>A &rarr; B &rarr; C 固定流程</li>
+                    <li><strong>Graph：</strong>根據狀態決定下一步（可能 A &rarr; B &rarr; A &rarr; C）</li>
+                    <li><strong>LangGraph：</strong>有狀態的 Agent——每個節點是一個步驟，邊是條件判斷</li>
+                </ul>
+                <p class="note-desc"><strong>適合：</strong>多步驟流程 / 需要回退 / 需要人工審核的系統。</p>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-user-tag"></i> 語意角色 vs Chatbot</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">兩種不同的 AI 互動模式：</p>
+                <ul class="note-points">
+                    <li><strong>Chatbot：</strong>開放式聊天，難以控制品質</li>
+                    <li><strong>語意角色（Semantic Role）：</strong>引導使用者完成特定流程（報稅 / 申請 / 檢核）</li>
+                </ul>
+                <p class="note-desc"><strong>語意角色的系統設計：</strong></p>
+                <ul class="note-points">
+                    <li><strong>明確的狀態：</strong>使用者在哪一步</li>
+                    <li><strong>明確的動作：</strong>下一步該做什麼</li>
+                    <li><strong>明確的邊界：</strong>什麼時候需要人工介入</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 7: LLM 四日課程總回顧 -->
+        <h3 class="section-title"><i class="fa-solid fa-graduation-cap"></i> LLM 四日課程總回顧</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-sitemap"></i> 知識架構</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">四天 LLM 課程的完整知識地圖：</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>日期</th><th>主題層</th><th>核心內容</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>3/26</strong></td><td>模型層</td><td>LLM 角色 / Inference / Embedding / HuggingFace / 模型風險</td></tr>
+                        <tr><td><strong>3/31</strong></td><td>感知層</td><td>多模態 / Gemini 圖片文件 / Structured Output / 生成參數</td></tr>
+                        <tr><td><strong>4/1</strong></td><td>行為層</td><td>Function Calling / OpenAI API / RAG / Reranker</td></tr>
+                        <tr><td><strong>4/9</strong></td><td>編排層</td><td>LangChain Chain / Tool / Agent / RAG Pipeline / State / LangGraph 概念</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-layer-group"></i> 五層架構回顧</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">從底層到頂層的完整 LLM 系統架構：</p>
+                <ul class="note-points">
+                    <li><strong>模型層：</strong>LLM 能做什麼、不能做什麼</li>
+                    <li><strong>感知層：</strong>多模態輸入轉結構化</li>
+                    <li><strong>行為層：</strong>Function Calling / RAG 讓 LLM 與系統互動</li>
+                    <li><strong>編排層：</strong>Chain / Agent / Tool 決定流程</li>
+                    <li><strong>狀態層：</strong>State / Graph 管理記憶與流程</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 核心觀念：</strong>LLM 不是系統，是系統中的元件。
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 整合思考題 + HW</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc"><strong>題目：</strong>設計一個「工地安全 AI 助手」的完整系統架構。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 完整系統設計：</strong><br><br>
+                    <strong>(1) 感知層：</strong>YOLO 偵測安全帽 / 背心 &rarr; Event JSON（class / confidence / bbox / timestamp）<br><br>
+                    <strong>(2) 模型層：</strong>Gemini 分析圖片內容（Structured Output 保證 JSON 格式）；Embedding 將法規轉向量存入向量 DB<br><br>
+                    <strong>(3) 行為層：</strong>Function Calling 定義 3 個工具（check_regulation / send_alert / log_incident）；RAG 搜尋相關法規段落塞進 prompt<br><br>
+                    <strong>(4) 編排層：</strong>用 Chain 固定流程（偵測 &rarr; 查法規 &rarr; 發告警 &rarr; 記錄）而非 Agent（生產系統要穩定）；每步結果存入 SafetyState<br><br>
+                    <strong>(5) 狀態層：</strong>SafetyState 追蹤累積違規 / 告警次數 / 處理歷史。N 次違規升級告警嚴重度。<br><br>
+                    <strong>(6) API 層：</strong>FastAPI 接收圖片（POST /detect）&rarr; Schema 驗證 &rarr; Service 處理 &rarr; Guardrail 防呆 &rarr; 回傳決策<br><br>
+                    <strong>(7) 防護：</strong>System prompt 設定角色邊界 + 輸入過濾攻擊模式 + 輸出檢查敏感資訊<br><br>
+                    <strong>技術選型：</strong>YOLO（感知）+ Gemini（多模態分析 + FC）+ RAG（法規搜尋）+ FastAPI（API 入口）+ Pydantic（Schema 驗證）+ LangChain Chain（流程編排）。<br><br>
+                    <strong>核心原則：</strong>LLM 不直接操作系統，透過 Tool 間接使用；生產系統用 Chain 不用 Agent；Schema 驗證在 handler 前執行；每個決策都是事件，都要記錄。
+                </div>
             </div>
         </div>
 

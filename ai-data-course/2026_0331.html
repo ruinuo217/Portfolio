@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI大數據養成班 - 3/31 LLM 大型語言模型</title>
+    <title>AI大數據養成班 - 3/31 多模態 AI 與 Gemini 實戰</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="dashboard.css">
 </head>
@@ -221,7 +221,7 @@
 
         <div class="top-bar">
             <div class="breadcrumb">
-                首頁 > Week 13: LLM 與整合 > <span>LLM 大型語言模型</span>
+                首頁 > Week 13: LLM 與整合 > <span>多模態 AI 與 Gemini 實戰</span>
             </div>
             <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
                 <i class="fas fa-home"></i> 回首頁
@@ -230,20 +230,295 @@
 
         <div class="banner">
             <div>
-                <h1>LLM 大型語言模型</h1>
+                <h1>多模態 AI 與 Gemini 實戰</h1>
                 <p>3/31 課程筆記</p>
             </div>
             <i class="fa-solid fa-robot banner-icon"></i>
         </div>
 
-        <h3 class="section-title">課程筆記：LLM 大型語言模型</h3>
+        <!-- Section 1: 多模態概念 -->
+        <h3 class="section-title"><i class="fa-solid fa-layer-group"></i> 多模態概念</h3>
         <div class="dashboard-grid notes-section">
             <div class="card note-card" style="grid-column: 1 / -1;">
                 <div class="note-header">
-                    <h4><i class="fa-solid fa-robot"></i> 筆記待補</h4>
-                    <span class="status-badge pending">待補</span>
+                    <h4><i class="fa-solid fa-brain"></i> 什麼是多模態</h4>
+                    <span class="status-badge important">觀念</span>
                 </div>
-                <p class="note-desc">課程內容稍後補充。</p>
+                <p class="note-desc"><strong>單模態：</strong>文字 → 模型 → 文字。<strong>多模態：</strong>文字 + 圖像 + 影片 + 音訊 → 模型 → 文字 / 結構化資料。多模態模型能同時理解多種輸入格式，大幅擴展 AI 的應用場景。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>模型</th><th>支援輸入</th><th>特點</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>GPT-4V</td><td>文字 + 圖像</td><td>強大但貴</td></tr>
+                        <tr><td>Gemini</td><td>文字 + 圖像 + 影片 + 音訊</td><td>最全面</td></tr>
+                        <tr><td>Claude</td><td>文字 + 圖像</td><td>長文本強</td></tr>
+                        <tr><td>LLaVA</td><td>文字 + 圖像</td><td>開源</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section 2: Gemini 基礎 -->
+        <h3 class="section-title"><i class="fa-solid fa-wand-magic-sparkles"></i> Gemini 基礎</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-gear"></i> Gemini 安裝與設定</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">安裝 Google Generative AI SDK 並設定 API Key。</p>
+                <pre><code># 安裝套件
+pip install google-generativeai
+
+# 設定環境變數
+export GOOGLE_API_KEY="your-key"</code></pre>
+                <ul class="note-points">
+                    <li><strong>取得 Key：</strong><a href="https://makersuite.google.com/app/apikey" target="_blank">makersuite.google.com/app/apikey</a></li>
+                    <li><strong>支援格式：</strong>文字 / 圖片（JPG、PNG）/ PDF / 影片（MP4）/ 音訊（MP3、WAV）</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-comments"></i> 基本文字問答</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">使用 Gemini 進行最基本的文字生成。</p>
+                <pre><code>import google.generativeai as genai
+
+model = genai.GenerativeModel("gemini-2.5-flash")
+response = model.generate_content("什麼是PPE?")
+print(response.text)</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-image"></i> 圖像分析</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">將圖片與文字提示一起送入模型，讓 Gemini「看懂」圖片。</p>
+                <pre><code>from PIL import Image
+
+image = Image.open("workplace.jpg")
+response = model.generate_content([
+    "描述這張工地照片的安全狀況", image
+])
+print(response.text)</code></pre>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 有效提示技巧：</strong>具體明確（列出人員、檢查 PPE、指出隱患）遠比「描述這張圖片」效果好。具體 prompt 會得到結構化分析，模糊 prompt 只會得到泛泛描述。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop：圖像分析</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">設計 PPE 檢查 prompt，體驗多模態的實際價值。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check-circle"></i> 解答：</strong>設計 PPE 檢查 prompt：「這是一張工地照片。請：1. 列出畫面中所有人員 2. 檢查每人是否配戴安全帽、反光背心 3. 指出任何安全隱患 4. 用表格格式輸出」。具體提示比模糊提示好 10 倍——「描述圖片」會得到泛泛描述，「檢查 PPE 配戴」會得到結構化分析。多模態的價值：監控攝影機的圖片不是文字，傳統 NLP 處理不了，Gemini 可以直接「看懂」圖片並輸出結構化結果。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: 文件輸入與摘要 -->
+        <h3 class="section-title"><i class="fa-solid fa-file-lines"></i> 文件輸入與摘要</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-file-pdf"></i> PDF 處理</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">透過 <code>genai.upload_file()</code> 上傳文件，讓 Gemini 讀取並摘要。</p>
+                <pre><code>pdf_file = genai.upload_file("regulation.pdf")
+response = model.generate_content([
+    "摘要這份法規的PPE規定", pdf_file
+])
+print(response.text)</code></pre>
+                <ul class="note-points">
+                    <li><strong>支援格式：</strong>PDF / Word / 圖片 / 影片 / 音訊</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop：文件摘要</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">上傳 PDF 後使用 Gemini 進行文件理解與摘要。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check-circle"></i> 解答：</strong>上傳 PDF 後 Gemini 可以：(1) 摘要重點 (2) 提取特定條文 (3) 回答關於文件的問題。prompt 設計：「請摘要這份工安法規的重點，特別是關於 PPE 的規定，用條列式輸出」。注意：Gemini 會如實說明文件內容——如果 PDF 不是工安法規（如範例中的專題計畫書），它會明確指出而非硬編。這反而證明模型「沒有幻覺」。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: Structured Output（結構化輸出） -->
+        <h3 class="section-title"><i class="fa-solid fa-code"></i> Structured Output（結構化輸出）</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-scale-balanced"></i> prompt-based vs schema-based</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">兩種方式讓 LLM 輸出 JSON，但可靠度天差地別。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>方式</th><th>做法</th><th>成功率</th><th>格式保證</th><th>適用場景</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>prompt-based</td><td>prompt 寫「只輸出 JSON」</td><td>80-90%</td><td>無</td><td>快速測試</td></tr>
+                        <tr><td>schema-based</td><td>設定 response_schema</td><td>100%</td><td>Gemini 強制遵守</td><td>正式系統</td></tr>
+                    </tbody>
+                </table>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-triangle-exclamation"></i> 重點：</strong>跑 10 次有 1-2 次 <code>json.loads()</code> 爆掉 → 正式系統不能接受 prompt-based。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-diagram-project"></i> response_schema 用法</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">透過 schema 定義（type / properties / required / enum），強制 Gemini 輸出符合格式的 JSON。</p>
+                <pre><code>import json
+
+schema = {
+    "type": "object",
+    "properties": {
+        "person_count": {"type": "integer"},
+        "violations": {"type": "array", "items": {
+            "type": "object",
+            "properties": {
+                "type": {"type": "string"},
+                "severity": {"type": "string"}
+            }
+        }}
+    },
+    "required": ["person_count", "violations"]
+}
+
+model = genai.GenerativeModel(
+    "gemini-2.5-flash",
+    generation_config=genai.GenerationConfig(
+        response_mime_type="application/json",
+        response_schema=schema
+    )
+)
+
+response = model.generate_content(["分析這張照片的安全狀況", image])
+data = json.loads(response.text)  # 一定成功</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-cube"></i> Pydantic 定義 Schema</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">用 Pydantic BaseModel 定義 schema，可與 FastAPI 共用同一套 model。</p>
+                <pre><code>from pydantic import BaseModel
+from typing import List
+
+class Violation(BaseModel):
+    type: str
+    severity: str
+    description: str
+
+class SafetyReport(BaseModel):
+    person_count: int
+    violations: List[Violation]
+
+# 直接把 Pydantic model 當 schema 傳給 Gemini</code></pre>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>方式</th><th>定義方式</th><th>型別檢查</th><th>適用場景</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>dict schema</td><td>手寫 dict</td><td>無</td><td>簡單結構</td></tr>
+                        <tr><td>Pydantic</td><td>Python class</td><td>自動驗證 + IDE 支援</td><td>正式系統</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop：結構化輸出</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">實作 schema-based 結構化輸出，比較 prompt-based 的可靠度差異。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check-circle"></i> 解答：</strong>
+                    <pre><code>schema = {
+    'type': 'object',
+    'properties': {
+        'person_count': {'type': 'integer'},
+        'violations': {'type': 'array', 'items': {
+            'type': 'object',
+            'properties': {
+                'type': {'type': 'string', 'enum': ['no_helmet', 'no_vest', 'other']},
+                'severity': {'type': 'string', 'enum': ['high', 'medium', 'low']}
+            },
+            'required': ['type', 'severity']
+        }},
+        'recommendations': {'type': 'array', 'items': {'type': 'string'}}
+    },
+    'required': ['person_count', 'violations']
+}
+
+model = genai.GenerativeModel('gemini-2.5-flash',
+    generation_config=genai.GenerationConfig(
+        response_mime_type='application/json',
+        response_schema=schema))</code></pre>
+                    跑 10 次比較：prompt-based 約 8/10 成功（2 次多了 markdown 標記導致 <code>json.loads</code> 失敗），schema-based 10/10 成功。正式系統必須用 schema-based。<code>enum</code> 限制值的範圍，<code>required</code> 確保必填——跟 FastAPI 的 Pydantic 一模一樣。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 5: HuggingFace 文字生成（進階） -->
+        <h3 class="section-title"><i class="fa-solid fa-microchip"></i> HuggingFace 文字生成（進階）</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-terminal"></i> AutoModel 生成</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">使用 HuggingFace Transformers 的 AutoModel 進行本地文字生成。</p>
+                <pre><code>from transformers import AutoModelForCausalLM, AutoTokenizer
+
+tokenizer = AutoTokenizer.from_pretrained("gpt2")
+model = AutoModelForCausalLM.from_pretrained("gpt2")
+
+inputs = tokenizer("AI is transforming", return_tensors="pt")
+outputs = model.generate(
+    **inputs,
+    max_length=100,
+    temperature=0.7,
+    do_sample=True,
+    num_return_sequences=3
+)
+
+for i, output in enumerate(outputs):
+    print(f"--- 序列 {i+1} ---")
+    print(tokenizer.decode(output, skip_special_tokens=True))</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop：生成參數比較</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">比較不同 temperature 與 do_sample 設定對生成結果的影響。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check-circle"></i> 解答：</strong>
+                    <ul class="note-points">
+                        <li><strong>temperature=0.1：</strong>輸出保守重複，每次幾乎相同</li>
+                        <li><strong>temperature=1.5：</strong>輸出多樣發散，每次不同但可能不連貫</li>
+                        <li><strong>do_sample=False：</strong>每次完全相同（deterministic），適合需要一致性的場景</li>
+                        <li><strong>do_sample=True：</strong>有隨機性，適合需要變化的場景</li>
+                    </ul>
+                    實務選擇：分類/擷取 → temperature=0 + do_sample=False；創意寫作 → temperature=0.7~1.0 + do_sample=True。
+                </div>
             </div>
         </div>
 
