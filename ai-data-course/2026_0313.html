@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI大數據養成班 - 3/13 Python 應用</title>
+    <title>AI大數據養成班 - 3/13 FastAPI 進階與 AI 系統整合</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="dashboard.css">
 </head>
@@ -221,7 +221,7 @@
 
         <div class="top-bar">
             <div class="breadcrumb">
-                首頁 > Week 10: NoSQL 與 Python > <span>Python 應用</span>
+                首頁 > Week 10: NoSQL 與 Python > <span>FastAPI 進階與 AI 系統整合</span>
             </div>
             <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
                 <i class="fas fa-home"></i> 回首頁
@@ -230,20 +230,549 @@
 
         <div class="banner">
             <div>
-                <h1>Python 應用</h1>
+                <h1>FastAPI 進階與 AI 系統整合</h1>
                 <p>3/13 課程筆記</p>
             </div>
-            <i class="fa-brands fa-python banner-icon"></i>
+            <i class="fa-solid fa-bolt banner-icon"></i>
         </div>
 
-        <h3 class="section-title">課程筆記：Python 應用</h3>
+        <!-- Section 1: 專案結構 — 模組化開發 -->
+        <h3 class="section-title"><i class="fa-solid fa-folder-tree"></i> 專案結構 — 模組化開發</h3>
         <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-layer-group"></i> 四層架構</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc"><code>main.py</code>(建立 app 掛 router) → <code>routers/</code>(定義 endpoint) → <code>schemas/</code>(Pydantic model) → <code>services/</code>(商業邏輯)。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>層級</th><th>職責</th><th>不做的事</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>main.py</td><td>建立 app、掛載 router</td><td>不寫 endpoint</td></tr>
+                        <tr><td>router</td><td>定義 endpoint、接參數</td><td>不寫邏輯</td></tr>
+                        <tr><td>schema</td><td>定義資料結構</td><td>不寫邏輯</td></tr>
+                        <tr><td>service</td><td>處理商業邏輯</td><td>不碰 HTTP</td></tr>
+                    </tbody>
+                </table>
+                <p class="note-desc"><strong>目錄結構：</strong><code>app/main.py</code> + <code>routers/events.py</code> + <code>schemas/event.py</code> + <code>services/event_service.py</code></p>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code-branch"></i> 為什麼要拆</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">拆開不是為了好看，是為了<strong>可讀、可測、可協作</strong>。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>情境</th><th>單檔</th><th>模組化</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>改 Schema</td><td>diff 顯示 main.py</td><td>diff 顯示 schemas/event.py</td></tr>
+                        <tr><td>兩人同改</td><td>conflict</td><td>各改各的</td></tr>
+                        <tr><td>測 service</td><td>import 整個 app</td><td>只 import service function</td></tr>
+                        <tr><td>找 bug</td><td>在 800 行翻</td><td>看檔名就知道在哪</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
             <div class="card note-card" style="grid-column: 1 / -1;">
                 <div class="note-header">
-                    <h4><i class="fa-brands fa-python"></i> 筆記待補</h4>
-                    <span class="status-badge pending">待補</span>
+                    <h4><i class="fa-solid fa-pencil"></i> 練習：重構為模組化</h4>
+                    <span class="status-badge info">練習</span>
                 </div>
-                <p class="note-desc">課程內容稍後補充。</p>
+                <p class="note-desc"><strong>題目：</strong>將單檔 FastAPI 應用重構為四層模組化結構。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check"></i> 回答：</strong>四個檔案各司其職：
+                    <p><strong>schemas/event.py</strong> — 只定義結構：</p>
+<pre><code>from pydantic import BaseModel, Field
+from typing import Any, Dict
+
+class EventPayload(BaseModel):
+    user_id: int = Field(gt=0)
+    timestamp: str = Field(min_length=1)
+    payload: Dict[str, Any]</code></pre>
+                    <p><strong>services/event_service.py</strong> — 只處理邏輯：</p>
+<pre><code>def handle_event(event_type, event, debug):
+    response = {"status": "accepted", "event_type": event_type,
+                "user_id": event.user_id, "timestamp": event.timestamp}
+    if debug:
+        response["payload"] = event.payload
+    return response</code></pre>
+                    <p><strong>routers/events.py</strong> — 只定義 endpoint：</p>
+<pre><code>from fastapi import APIRouter, Body
+from schemas.event import EventPayload
+from services.event_service import handle_event
+
+router = APIRouter(prefix="/events")
+
+@router.post("/{event_type}")
+def receive_event(event_type: str, debug: bool = False,
+                  event: EventPayload = Body()):
+    return handle_event(event_type, event, debug)</code></pre>
+                    <p><strong>main.py</strong> — 只負責組裝：</p>
+<pre><code>from fastapi import FastAPI
+from routers.events import router
+
+app = FastAPI(title="Event API")
+app.include_router(router)</code></pre>
+                    <p>驗收：API 行為完全不變 — 同樣 request 同樣 response。重構的目的是改善內部結構，不是改變外部行為。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Error Handling — 系統邊界的錯誤處理 -->
+        <h3 class="section-title"><i class="fa-solid fa-triangle-exclamation"></i> Error Handling — 系統邊界的錯誤處理</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-stairs"></i> 錯誤的層級</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">Request → Schema(422) → Validation(422) → Service(400/404) → 未預期(500)。FastAPI 自動處理前兩層(422)，Service 層需自己處理。</p>
+                <ul class="note-points">
+                    <li><strong>「世界的錯」：</strong>400(事件不合理) / 404(對象不存在) / 422(格式不對)</li>
+                    <li><strong>「系統的錯」：</strong>500(系統 bug)</li>
+                    <li><strong>重要：</strong>500 不是正常錯誤回應，代表系統出問題</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> 自訂 Exception</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc"><code>class EventRejected(Exception): reason, event_type</code>。<strong>raise 不是 return</strong> — 錯誤是中斷不是回傳。</p>
+                <ul class="note-points">
+                    <li><strong>註冊 handler：</strong><code>@app.exception_handler(EventRejected)</code> 回傳統一 JSON</li>
+                    <li><strong>覆寫 422：</strong><code>@app.exception_handler(RequestValidationError)</code> 統一格式</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-equals"></i> 統一錯誤格式</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">所有錯誤同一結構：<code>{"status":"rejected", "event_type":"...", "reason":"...", "code":"EVENT_TYPE_NOT_SUPPORTED"}</code></p>
+                <ul class="note-points">
+                    <li>下游系統只看 <code>status</code> 就知道結果</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pencil"></i> 練習：Error Handling</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc"><strong>題目：</strong>實作三種錯誤的統一處理格式。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check"></i> 回答：</strong>
+<pre><code>class EventRejected(Exception):
+    def __init__(self, reason: str, event_type: str = "unknown"):
+        self.reason = reason
+        self.event_type = event_type
+
+class EventNotFound(Exception):
+    def __init__(self, event_id: str):
+        self.event_id = event_id
+
+@app.exception_handler(EventRejected)
+async def handle_rejected(request, exc):
+    return JSONResponse(status_code=400,
+        content={"status": "rejected", "event_type": exc.event_type,
+                 "reason": exc.reason})
+
+@app.exception_handler(EventNotFound)
+async def handle_not_found(request, exc):
+    return JSONResponse(status_code=404,
+        content={"status": "rejected",
+                 "reason": f"Event {exc.event_id} not found"})
+
+@app.exception_handler(RequestValidationError)
+async def handle_validation(request, exc):
+    return JSONResponse(status_code=422,
+        content={"status": "rejected",
+                 "reason": "Event does not match schema",
+                 "details": exc.errors()})</code></pre>
+                    <p>三種錯誤統一格式：Schema 錯(422) → status:rejected + details。邏輯錯(400) → status:rejected + reason。找不到(404) → status:rejected + reason。正常(200) → status:accepted。下游只看 status 欄位即可判斷。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: AI 系統的防呆層 (Guardrail) -->
+        <h3 class="section-title"><i class="fa-solid fa-shield-halved"></i> AI 系統的防呆層 (Guardrail)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-brain"></i> 模型負責算，系統負責決定</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">Guardrail 在模型後面，審查輸出不是過濾輸入。模型回傳的 confidence 是參考數字不是決策。</p>
+                <ul class="note-points">
+                    <li><strong>門檻分流：</strong>≥0.9 自動處理 / 0.6~0.9 人工審核 / &lt;0.6 不做判斷</li>
+                    <li><strong>門檻值由系統決定：</strong>根據風險承受度，同模型用在醫療 vs 推薦門檻不同</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-database"></i> Pydantic 定義決策結構</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">兩個 model 分開：<strong>Prediction 是模型的事，Decision 是系統的事。</strong></p>
+                <ul class="note-points">
+                    <li><strong>Prediction：</strong><code>label: str, confidence: float</code> (0~1)</li>
+                    <li><strong>RiskLevel enum：</strong>HIGH / MEDIUM / LOW</li>
+                    <li><strong>Action enum：</strong>AUTO_BLOCK / REQUIRE_REVIEW / DEFER</li>
+                    <li><strong>DecisionResponse：</strong>prediction / confidence / risk_level / action / reason</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> evaluate() 純函式</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc"><code>THRESHOLDS = {"auto": 0.9, "review": 0.6}</code> 集中管理。純函式不碰 HTTP 不碰 DB。</p>
+                <ul class="note-points">
+                    <li><strong>決策也是事件：</strong>DecisionEvent 記錄每次 AI 判斷供追蹤回溯</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pencil"></i> 練習：Guardrail</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc"><strong>題目：</strong>實作 AI 防呆層的門檻分流邏輯。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check"></i> 回答：</strong>
+<pre><code>from enum import Enum
+
+class RiskLevel(str, Enum):
+    HIGH = "high"
+    MEDIUM = "medium"
+    LOW = "low"
+
+class Action(str, Enum):
+    AUTO_BLOCK = "auto_block"
+    REQUIRE_REVIEW = "require_review"
+    DEFER = "defer"
+
+THRESHOLDS = {"auto": 0.9, "review": 0.6}
+
+def evaluate(prediction):
+    if prediction.confidence >= THRESHOLDS["auto"]:
+        return DecisionResponse(
+            risk_level=RiskLevel.HIGH,
+            action=Action.AUTO_BLOCK,
+            reason="信心值足夠，系統自動處理", ...)
+    elif prediction.confidence >= THRESHOLDS["review"]:
+        return DecisionResponse(
+            risk_level=RiskLevel.MEDIUM,
+            action=Action.REQUIRE_REVIEW,
+            reason="信心值不足以自動處理，轉人工審核", ...)
+    else:
+        return DecisionResponse(
+            risk_level=RiskLevel.LOW,
+            action=Action.DEFER,
+            reason="信心值過低，系統不做判斷", ...)</code></pre>
+                    <ul class="note-points">
+                        <li><strong>confidence=0.95</strong> → auto_block（高風險自動處理）</li>
+                        <li><strong>confidence=0.68</strong> → require_review（轉人工）</li>
+                        <li><strong>confidence=0.42</strong> → defer（不做判斷）</li>
+                        <li>門檻集中在 THRESHOLDS，調整時只改一處</li>
+                        <li><code>evaluate()</code> 是純函式可單獨 unit test</li>
+                        <li>Guardrail 回 200 不是錯誤 — 「我不確定」是合法回應</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: 事件資料流 — FastAPI x Pandas -->
+        <h3 class="section-title"><i class="fa-solid fa-table"></i> 事件資料流 — FastAPI x Pandas</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrows-left-right"></i> Event vs DataFrame</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc"><strong>Event</strong> = 一次性事實（發生過就存在）。<strong>DataFrame</strong> = 觀察角度（同事件不同整理方式）。</p>
+                <ul class="note-points">
+                    <li><strong>流程：</strong>User 查詢 → FastAPI → Service → Event Store/CSV → Pandas 整理 → Response</li>
+                    <li>Pandas 不直接面對使用者，在 service 裡安靜整理好交給上層回傳</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-floppy-disk"></i> 為什麼先存再整理</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">Event 是永久的，DataFrame 是暫時的。</p>
+                <ul class="note-points">
+                    <li><strong>系統會重啟：</strong>記憶體 DataFrame 消失</li>
+                    <li><strong>規則會改：</strong>需用新規則重跑歷史</li>
+                    <li><strong>出事需 audit：</strong>回放每筆事件</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-chart-bar"></i> Pandas 整理歷史</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc"><code>get_user_summary()</code>: <code>pd.read_csv</code> → <code>df[df["user_id"]==user_id]</code> → <code>len/sum/mean</code>。</p>
+                <ul class="note-points">
+                    <li><strong>邊界處理：</strong><code>user_df.empty</code> → 回傳安全結構（不是 error）</li>
+                    <li><strong>get_event_breakdown()：</strong><code>groupby("event_type").agg(count/sum/mean)</code></li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pencil"></i> 練習：Pandas 整合</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc"><strong>題目：</strong>實作使用者歷史事件摘要 API。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check"></i> 回答：</strong>
+<pre><code>import pandas as pd
+
+def get_user_summary(user_id: int) -> dict:
+    df = pd.read_csv("events.csv")
+    user_df = df[df["user_id"] == user_id]
+    if user_df.empty:
+        return {"user_id": user_id, "total_events": 0,
+                "total_amount": 0, "avg_confidence": None,
+                "note": "no historical events"}
+    return {"user_id": user_id,
+            "total_events": len(user_df),
+            "total_amount": float(user_df["amount"].sum()),
+            "avg_confidence": round(float(
+                user_df["confidence"].mean()), 2)}
+
+@app.get("/users/{user_id}/summary")
+def user_summary(user_id: int):
+    return get_user_summary(user_id)</code></pre>
+                    <ul class="note-points">
+                        <li><strong>User 123（有資料）：</strong><code>{"total_events":3, "total_amount":2500.0, "avg_confidence":0.79}</code></li>
+                        <li><strong>User 999（無資料）：</strong><code>{"total_events":0, "note":"no historical events"}</code></li>
+                        <li>查不到不是 error 是「系統還沒紀錄」</li>
+                        <li>Pandas 操作全在 service，endpoint 只呼叫 + 回傳</li>
+                        <li><code>groupby</code> + <code>agg</code> 是最常用組合：一行搞定按 X 分組算 Y 的總和/平均/次數</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 5: LLM 管道 — FastAPI x AI Pipeline -->
+        <h3 class="section-title"><i class="fa-solid fa-robot"></i> LLM 管道 — FastAPI x AI Pipeline</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-user-lock"></i> AI 是使用者不是主人</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">Web App / Mobile / Bot / AI 都是 client，透過 API 使用系統。<strong>AI 不該有特權</strong>，走同一套 Schema / Validation / 防呆。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>方式</th><th>直接碰 DB</th><th>透過 API</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>驗證</td><td>跳過驗證</td><td>完整驗證</td></tr>
+                        <tr><td>控管</td><td>無法控管</td><td>Service 控制</td></tr>
+                        <tr><td>紀錄</td><td>難 audit</td><td>有紀錄</td></tr>
+                        <tr><td>安全</td><td>AI 出錯直接影響資料</td><td>被防呆攔住</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-diagram-project"></i> 三種 Pipeline</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">每個 endpoint 背後不同 pipeline，對 AI 來說都只是「呼叫 API」。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>類型</th><th>用途</th><th>工具</th><th>輸出</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>推論 Inference</td><td>判斷風險</td><td>AI 模型</td><td>risk_level + action</td></tr>
+                        <tr><td>摘要 Summary</td><td>回顧歷史</td><td>Pandas + LLM</td><td>統計 + 敘述</td></tr>
+                        <tr><td>任務觸發 Action</td><td>請系統做事</td><td>Service</td><td>task_id + status</td></tr>
+                    </tbody>
+                </table>
+                <ul class="note-points">
+                    <li><strong>推論：</strong>prepare_features → ai_predict → guardrail</li>
+                    <li><strong>摘要：</strong>prepare_features → 可選 LLM 語言化（?llm=true）</li>
+                    <li><strong>任務：</strong>回傳 pending 不是 done，系統排程後才執行</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-route"></i> 三條 Endpoint</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">每個 endpoint 背後不同 pipeline，對 AI 來說都只是「呼叫 API」。</p>
+                <ul class="note-points">
+                    <li><strong>POST /risk/evaluate</strong> — 推論</li>
+                    <li><strong>GET /users/{id}/summary?llm=false</strong> — 摘要</li>
+                    <li><strong>POST /tasks/review</strong> — 任務觸發</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pencil"></i> 練習：AI Pipeline</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc"><strong>題目：</strong>說明三種 Pipeline 的實作重點。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check"></i> 回答：</strong>三種 Pipeline 實作重點：
+                    <ul class="note-points">
+                        <li><strong>推論型：</strong><code>prepare_features</code> 從 CSV 整理特徵 → <code>fake_ai_predict</code> 模擬模型 → <code>evaluate</code> 防呆（confidence ≥0.8 → auto_flag, ≥0.6 → require_review, &lt;0.6 → defer）。AI 拿到整理好的特徵不是 raw event，系統控制 AI 看到什麼。</li>
+                        <li><strong>摘要型：</strong><code>?llm=true</code> 才觸發 LLM 語言化，結構化資料永遠回傳，自然語言是加值。LLM 不碰 DB / 不碰 Pandas，只是最後一層翻譯。</li>
+                        <li><strong>任務型：</strong>回傳 pending 不是 done，系統排程後才執行。AI 只能請求不能執行 — 跟人類使用者的權限一樣。</li>
+                        <li><strong>共通原則：</strong>所有 Pipeline 走同一套 Schema + Validation + Error Handling，AI 不該有特權通道。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 6: 綜合 Workshop — AI 交易風險評估系統 -->
+        <h3 class="section-title"><i class="fa-solid fa-flask-vial"></i> 綜合 Workshop — AI 交易風險評估系統</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-list-check"></i> 系統需求</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">5 個階段串起所有學過的概念：</p>
+                <ul class="note-points">
+                    <li><strong>(1) 專案結構：</strong>模組化 4 層</li>
+                    <li><strong>(2) 事件入口：</strong>POST /transactions/{tx_type}/evaluate, Schema + Validation</li>
+                    <li><strong>(3) 歷史分析：</strong>Pandas 從 CSV 讀取 user 歷史</li>
+                    <li><strong>(4) 風險評分：</strong>rule-based: base = amount/10000, 歷史 risk &gt; 0.5 加 0.2, 交易 &lt; 3 筆加 0.1</li>
+                    <li><strong>(5) 決策防呆：</strong>risk &lt; 0.3 → auto_approve, 0.3~0.7 → require_review, &gt; 0.7 → auto_block</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-vial"></i> 預期輸出範例</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">不同情境的 API 回應：</p>
+                <ul class="note-points">
+                    <li><strong>低風險（user456, amount 200）：</strong>risk_score = 0.12, action = auto_approve</li>
+                    <li><strong>高風險（user123, amount 50000）：</strong>risk_score = 0.95, action = auto_block</li>
+                    <li><strong>不支援 type：</strong>status = rejected, 400</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pencil"></i> 練習：完整系統</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc"><strong>題目：</strong>實作 AI 交易風險評估系統。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check"></i> 回答：</strong>開發順序建議：先結構 → 先 hardcode → 加歷史 → 加評分 → 加防呆，每階段 Swagger 測試確認。核心程式碼：
+<pre><code># services/risk_service.py
+def calculate_risk(amount, history):
+    score = min(amount / 10000, 0.5)
+    if history.get("avg_risk", 0) > 0.5:
+        score += 0.2
+    if history.get("tx_count", 0) < 3:
+        score += 0.1
+    return min(score, 1.0)
+
+def decide(risk_score):
+    if risk_score > 0.7:
+        return "auto_block", "高風險自動擋下"
+    if risk_score > 0.3:
+        return "require_review", "轉人工審核"
+    return "auto_approve", "低風險自動通過"</code></pre>
+                    <p>這串起了所有學過的概念：Schema 擋格式 → Validation 擋語意 → Error Handling 統一錯誤 → Pandas 查歷史 → 風險評分 → 防呆決策 → 事件記錄。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 7: 補充 — Flask vs FastAPI 與現代 API 框架 -->
+        <h3 class="section-title"><i class="fa-solid fa-scale-balanced"></i> 補充 — Flask vs FastAPI 與現代 API 框架</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code-compare"></i> Flask vs FastAPI</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">兩者各有適用場景，選擇取決於專案需求。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>面向</th><th>Flask</th><th>FastAPI</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>定位</td><td>成熟穩定</td><td>現代高效</td></tr>
+                        <tr><td>非同步</td><td>同步為主</td><td>原生 async</td></tr>
+                        <tr><td>文件</td><td>手動寫文件</td><td>自動 Swagger</td></tr>
+                        <tr><td>驗證</td><td>手動驗證</td><td>Pydantic 自動驗證</td></tr>
+                        <tr><td>資源</td><td>學習資源豐富</td><td>效能更好</td></tr>
+                        <tr><td>適合</td><td>傳統 Web 應用</td><td>AI/ML 系統 + 微服務</td></tr>
+                    </tbody>
+                </table>
+                <ul class="note-points">
+                    <li><strong>Flask 優點：</strong>生態系龐大（Flask-Login / Flask-SQLAlchemy）、部署方案成熟、社群大</li>
+                    <li><strong>FastAPI 優點：</strong>型別提示 = 文件 = 驗證、async 原生、效能接近 Node.js</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-globe"></i> 現代 API 框架概覽</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">不同語言生態的主流 API 框架比較：</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>框架</th><th>語言</th><th>適合場景</th><th>特點</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Flask</td><td>Python</td><td>傳統 Web</td><td>成熟穩定</td></tr>
+                        <tr><td>FastAPI</td><td>Python</td><td>AI + 微服務</td><td>高效能 + 自動文件</td></tr>
+                        <tr><td>Django REST</td><td>Python</td><td>企業級</td><td>全功能但重</td></tr>
+                        <tr><td>Express.js</td><td>Node.js</td><td>全端 JavaScript</td><td>靈活輕量</td></tr>
+                        <tr><td>Gin</td><td>Go</td><td>高併發</td><td>極高效能</td></tr>
+                        <tr><td>Spring Boot</td><td>Java</td><td>企業級</td><td>重但完整</td></tr>
+                    </tbody>
+                </table>
+                <ul class="note-points">
+                    <li><strong>選擇建議：</strong>AI/ML 系統 → FastAPI, 傳統 Web → Flask/Django, 高併發 → Gin/FastAPI, 企業 Java 生態 → Spring Boot</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pencil"></i> 練習：框架選擇</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc"><strong>題目：</strong>如何選擇適合的 API 框架？</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check"></i> 回答：</strong>選擇 API 框架的決策邏輯：
+                    <ul class="note-points">
+                        <li><strong>(1) AI/ML 系統選 FastAPI</strong> — Pydantic 自動驗證 AI 輸入輸出，async 處理模型推論不阻塞，Swagger 讓資料科學家自助測試</li>
+                        <li><strong>(2) 傳統 Web 應用選 Flask</strong> — 生態成熟（Flask-Login / SQLAlchemy / WTForms），模板渲染方便，學習資源最多</li>
+                        <li><strong>(3) 需要 GraphQL</strong> 選 FastAPI + Strawberry 或 Node.js + Apollo</li>
+                        <li><strong>(4) 超高併發</strong>選 Go Gin 或 Rust Actix</li>
+                        <li><strong>Flask → FastAPI 遷移成本低：</strong>路由語法類似（<code>@app.route</code> → <code>@app.get</code>），主要改動是加 Pydantic model 和改 async</li>
+                        <li><strong>兩者可並存：</strong>Flask 處理傳統頁面，FastAPI 處理 API — 用反向代理（Nginx）分流</li>
+                    </ul>
+                </div>
             </div>
         </div>
 

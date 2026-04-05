@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI大數據養成班 - 3/9 NoSQL 資料庫</title>
+    <title>AI大數據養成班 - 3/9 MongoDB 基礎與 CRUD 操作</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="dashboard.css">
 </head>
@@ -221,7 +221,7 @@
 
         <div class="top-bar">
             <div class="breadcrumb">
-                首頁 > Week 10: NoSQL 與 Python > <span>NoSQL 資料庫</span>
+                首頁 > Week 10: NoSQL 與 Python > <span>MongoDB 基礎與 CRUD 操作</span>
             </div>
             <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
                 <i class="fas fa-home"></i> 回首頁
@@ -230,20 +230,558 @@
 
         <div class="banner">
             <div>
-                <h1>NoSQL 資料庫</h1>
+                <h1>MongoDB 基礎與 CRUD 操作</h1>
                 <p>3/9 課程筆記</p>
             </div>
             <i class="fa-solid fa-database banner-icon"></i>
         </div>
 
-        <h3 class="section-title">課程筆記：NoSQL 資料庫</h3>
+        <!-- Section 1: MongoDB 簡介 -->
+        <h3 class="section-title"><i class="fa-solid fa-leaf"></i> MongoDB 簡介</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-database"></i> 什麼是 MongoDB</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">文件導向（Document-Oriented）NoSQL 資料庫，以靈活的文件模型取代傳統關聯式表格。</p>
+                <ul class="note-points">
+                    <li><strong>BSON 格式儲存：</strong>Binary JSON，支援更多資料型別（日期、二進位等）</li>
+                    <li><strong>彈性 Schema：</strong>不需預先定義欄位，同一集合中的文件可有不同結構</li>
+                    <li><strong>水平擴展：</strong>分散式架構 + 自動分片（Sharding），輕鬆應對大量資料</li>
+                    <li><strong>豐富查詢：</strong>支援聚合管線（Aggregation Pipeline）、地理位置查詢等進階功能</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrows-left-right"></i> SQL vs MongoDB 術語對照</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">從 SQL 世界過渡到 MongoDB，首先要對照核心術語的差異。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>SQL 術語</th><th>MongoDB 術語</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Database</td><td>Database</td></tr>
+                        <tr><td>Table</td><td>Collection</td></tr>
+                        <tr><td>Row</td><td>Document</td></tr>
+                        <tr><td>Column</td><td>Field</td></tr>
+                        <tr><td>Primary Key</td><td>_id</td></tr>
+                        <tr><td>Index</td><td>Index</td></tr>
+                        <tr><td>JOIN</td><td>嵌入文件或參照（$lookup）</td></tr>
+                    </tbody>
+                </table>
+                <ul class="note-points">
+                    <li><strong>資料結構：</strong>SQL 固定欄位 vs MongoDB 彈性欄位</li>
+                    <li><strong>關聯處理：</strong>SQL 外鍵 + JOIN vs MongoDB 嵌入文件 / 參照</li>
+                    <li><strong>Schema 設計：</strong>SQL 必須 CREATE TABLE vs MongoDB 直接插入</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-file-code"></i> 文件模型概念</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">SQL 以表格（行列）儲存資料，MongoDB 以 JSON-like 文件儲存，每筆文件是一個獨立物件。</p>
+                <ul class="note-points">
+                    <li><strong>文件範例（台北市政府餐廳資料）：</strong></li>
+                    <li><code>_id</code>：自動產生的 ObjectId</li>
+                    <li><code>統一編號</code>：唯一識別碼</li>
+                    <li><code>商業名稱</code>：公司名稱</li>
+                    <li><code>商業地址</code>：完整地址</li>
+                    <li><code>Longitude / Latitude</code>：經緯度，便於地圖查詢</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 觀察：</strong>政府真實資料中，統一編號為唯一識別碼，經緯度便於地圖查詢，_id 由 MongoDB 自動產生。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-bullseye"></i> 適用場景</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">MongoDB 與 SQL 各有擅長的應用場景，選擇取決於資料特性與需求。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>MongoDB 適合</th><th>SQL 更適合</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>資料結構多變</td><td>結構固定</td></tr>
+                        <tr><td>階層嵌套資料</td><td>複雜多表 JOIN</td></tr>
+                        <tr><td>水平擴展需求</td><td>ACID 保證（財務/訂單）</td></tr>
+                        <tr><td>地理位置查詢</td><td>嚴格資料完整性</td></tr>
+                        <tr><td>高寫入場景</td><td>交易一致性要求高</td></tr>
+                    </tbody>
+                </table>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 本課程案例：</strong>台北市餐廳地圖（20,000+ 筆開放資料），資料結構多變且需要地理位置查詢，非常適合 MongoDB。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：MongoDB 概念</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">思考 MongoDB Collection 與 SQL Table 的差異，以及校園美食地圖為何適合 MongoDB。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 優秀回答：</strong>MongoDB 的 Collection 與 SQL 的 Table 主要差異：(1) Collection 不需要預先定義 Schema，同一個 Collection 裡的文件可以有不同欄位，而 Table 的每一列必須遵循相同結構。(2) Collection 的文件可以包含嵌套物件和陣列（如評論列表），SQL 需要建立額外的表格再用 JOIN 關聯。(3) Collection 新增欄位不需要 ALTER TABLE，直接插入含新欄位的文件即可。校園美食地圖適合 MongoDB：資料結構多變（不同餐廳欄位不同）、需要地理位置查詢（附近餐廳）、需要快速迭代開發。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: 環境建立 — MongoDB Atlas -->
+        <h3 class="section-title"><i class="fa-solid fa-cloud"></i> 環境建立 — MongoDB Atlas</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-cloud-arrow-up"></i> Atlas 雲端環境優勢</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">MongoDB Atlas 是官方提供的雲端資料庫服務，大幅降低學習門檻。</p>
+                <ul class="note-points">
+                    <li><strong>免安裝：</strong>不需在本機安裝 MongoDB Server</li>
+                    <li><strong>跨平台一致：</strong>Windows / Mac / Linux 都能使用相同環境</li>
+                    <li><strong>免費方案：</strong>M0 免費提供 512MB 儲存空間</li>
+                    <li><strong>內建監控備份圖表：</strong>自動備份、效能監控、視覺化圖表</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-list-check"></i> 註冊與建立叢集</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">從零開始建立 Atlas 雲端叢集，約 3-5 分鐘即可完成。</p>
+                <ul class="note-points">
+                    <li>註冊 Atlas 帳號（可用 Google 登入）</li>
+                    <li>驗證 Email</li>
+                    <li>選擇 Shared 免費方案</li>
+                    <li>雲端供應商選 GCP asia-east1（台灣）</li>
+                    <li>方案選 M0 免費（512MB）</li>
+                    <li>叢集命名為 Cluster0</li>
+                    <li>等待 3-5 分鐘部署完成</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-shield-halved"></i> 安全設定</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">設定資料庫存取權限與網路白名單，取得連線字串。</p>
+                <ul class="note-points">
+                    <li><strong>Database Access：</strong>建立使用者 admin / Password / Read and write to any database</li>
+                    <li><strong>Network Access：</strong>Allow Access from Anywhere（0.0.0.0/0）</li>
+                    <li><strong>取得連線字串：</strong><code>mongodb+srv://admin:password@cluster0.xxxxx.mongodb.net/</code></li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 注意：</strong>務必記下密碼！生產環境應限制 IP，不應使用 0.0.0.0/0。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-compass"></i> 安裝 MongoDB Compass</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">Compass 是 MongoDB 官方 GUI 工具，提供視覺化操作介面。</p>
+                <ul class="note-points">
+                    <li>下載安裝 MongoDB Compass</li>
+                    <li>貼上連線字串 → Connect</li>
+                    <li>成功後可看到 admin / local / config 系統資料庫</li>
+                    <li><strong>介面導覽：</strong>左側資料庫清單，主區域包含 Documents / Aggregations / Schema / Indexes</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 3: 建立資料庫與集合 -->
+        <h3 class="section-title"><i class="fa-solid fa-folder-plus"></i> 建立資料庫與集合</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-database"></i> 建立 food_map 資料庫</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">在 Compass 中建立課程所需的資料庫與集合。</p>
+                <ul class="note-points">
+                    <li>Compass → Create Database</li>
+                    <li>Database Name：<code>food_map</code></li>
+                    <li>Collection Name：<code>restaurants</code></li>
+                    <li><strong>資料庫</strong> = 最高層容器</li>
+                    <li><strong>集合（Collection）</strong> = 類似表格</li>
+                    <li><strong>文件（Document）</strong> = 類似資料列</li>
+                    <li>建立後結構：food_map → restaurants（0 documents）</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-circle-check"></i> 驗證環境</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">確認所有環境設定皆已完成，可開始進行 CRUD 操作。</p>
+                <ul class="note-points">
+                    <li>Atlas 叢集正常運作 ✅</li>
+                    <li>使用者已設定 ✅</li>
+                    <li>網路已開放 ✅</li>
+                    <li>Compass 已連線 ✅</li>
+                    <li>food_map + restaurants 已建立 ✅</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 4: CRUD — 新增操作 (Insert) -->
+        <h3 class="section-title"><i class="fa-solid fa-circle-plus"></i> CRUD — 新增操作 (Insert)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-file-circle-plus"></i> insertOne 單筆新增</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">透過 Compass 的 ADD DATA → Insert Document 插入單筆文件。</p>
+                <ul class="note-points">
+                    <li><strong>範例：</strong>統一編號 00000624 / 烹派餐飲有限公司 / 南港區 / 座標</li>
+                    <li><strong>_id（ObjectId）：</strong>MongoDB 自動產生，由時間戳 + 機器 ID + 程序 ID + 計數器組成</li>
+                    <li>ObjectId 可反推文件建立的大致時間</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-copy"></i> insertMany 批次新增</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">使用陣列格式 [{...}, {...}] 一次新增多筆文件。</p>
+                <ul class="note-points">
+                    <li><strong>範例：</strong>一次新增 3 筆（川富 / 晙碩 / 欣欣韓友）</li>
+                    <li>文件最大 16MB</li>
+                    <li>避免使用 <code>$</code> 和 <code>.</code> 開頭的欄位名稱</li>
+                    <li>_id 重複會導致插入失敗</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：新增資料</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">比較 insertOne 與 insertMany 的差異，理解 ObjectId 的結構。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 優秀回答：</strong>使用 insertMany 批次新增比逐筆 insertOne 更有效率，減少網路往返次數。MongoDB 自動產生的 _id (ObjectId) 包含時間戳記，所以可以大致知道文件的建立時間。中文欄位名稱在 MongoDB 完全支援，與政府開放資料欄位保持一致有助於資料對應。insertMany 預設 ordered:true，遇到錯誤會停止；設 ordered:false 可跳過錯誤繼續插入其餘文件。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 5: CRUD — 查詢操作 (Find) -->
+        <h3 class="section-title"><i class="fa-solid fa-magnifying-glass"></i> CRUD — 查詢操作 (Find)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-filter"></i> find 基本查詢</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">在 Compass 的 Filter 欄位輸入查詢條件，篩選符合的文件。</p>
+                <ul class="note-points">
+                    <li><code>{}</code> — 查詢全部文件</li>
+                    <li><code>{"商業名稱":"烹派餐飲有限公司"}</code> — 精確查詢</li>
+                    <li><code>{"統一編號":"00000624"}</code> — 按統編查詢</li>
+                    <li><code>{"Longitude":{"$gt":121.55}}</code> — 條件查詢</li>
+                </ul>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>比較運算子</th><th>意義</th><th>範例</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>$gt</code></td><td>大於</td><td><code>{"age":{"$gt":25}}</code></td></tr>
+                        <tr><td><code>$gte</code></td><td>大於等於</td><td><code>{"age":{"$gte":25}}</code></td></tr>
+                        <tr><td><code>$lt</code></td><td>小於</td><td><code>{"age":{"$lt":25}}</code></td></tr>
+                        <tr><td><code>$lte</code></td><td>小於等於</td><td><code>{"age":{"$lte":25}}</code></td></tr>
+                        <tr><td><code>$eq</code></td><td>等於</td><td><code>{"age":{"$eq":25}}</code></td></tr>
+                        <tr><td><code>$ne</code></td><td>不等於</td><td><code>{"age":{"$ne":25}}</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-sliders"></i> 投影、排序、分頁</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">控制查詢結果的欄位、順序與數量。</p>
+                <ul class="note-points">
+                    <li><strong>Project（投影）：</strong><code>{"商業名稱":1, "商業地址":1, "_id":0}</code> — 選擇顯示欄位</li>
+                    <li><strong>Sort（排序）：</strong><code>{"Longitude":1}</code> 升序 / <code>{"Longitude":-1}</code> 降序</li>
+                    <li><strong>Limit + Skip（分頁）：</strong>第 2 頁每頁 10 筆 → Limit=10, Skip=10</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 6: CRUD — 更新操作 (Update) -->
+        <h3 class="section-title"><i class="fa-solid fa-pen"></i> CRUD — 更新操作 (Update)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-file-pen"></i> updateOne 與 $set</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">更新單筆文件，可在 Compass 中點編輯圖示直接修改，或使用程式化方式。</p>
+                <ul class="note-points">
+                    <li><strong>Compass：</strong>點擊編輯圖示直接修改欄位值</li>
+                    <li><strong>程式化：</strong><code>updateOne(filter, {"$set": {...}})</code></li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 重要：</strong>務必使用 $set！不用 $set 整個文件會被替換，其他欄位將遺失。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrows-rotate"></i> updateMany 批次更新</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">一次更新所有符合條件的文件，適合批次資料處理。</p>
+                <ul class="note-points">
+                    <li><strong>範例：</strong>為所有大安區餐廳新增「區域」欄位</li>
+                    <li><code>updateMany({"商業地址":{"$regex":"大安區"}}, {"$set":{"區域":"大安區"}})</code></li>
+                    <li><strong>結果：</strong>回傳 matchedCount（符合筆數）/ modifiedCount（實際修改筆數）</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 7: CRUD — 刪除操作 (Delete) -->
+        <h3 class="section-title"><i class="fa-solid fa-trash-can"></i> CRUD — 刪除操作 (Delete)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-eraser"></i> deleteOne 與 deleteMany</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">刪除文件或整個集合，操作不可逆。</p>
+                <ul class="note-points">
+                    <li><strong>Compass：</strong>點擊垃圾桶圖示刪除單筆</li>
+                    <li><code>deleteMany({})</code> — 清空整個集合（危險！）</li>
+                    <li><code>drop()</code> — 刪除整個集合</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 警告：</strong>刪除無法復原！刪除前務必先用 find() 確認要刪除的文件。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：CRUD 綜合</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">整理 CRUD 四大操作的要點與 SQL 對照。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 優秀回答：</strong>CRUD 操作要點：(1) Insert: insertMany 比逐筆更有效率 (2) Find: 比較運算子 $gt/$lt 用於數值篩選，$regex 用於模糊查詢 (3) Update: 務必用 $set 避免文件被替換，updateMany 批次處理效率高 (4) Delete: 刪除前一定先 find 確認。SQL vs MongoDB 對照：INSERT INTO → insertOne/Many, SELECT WHERE → find(filter), UPDATE SET WHERE → updateOne/Many + $set, DELETE WHERE → deleteOne/Many。MongoDB 優勢：不需 ALTER TABLE 就能新增欄位，彈性 Schema 讓資料增強更容易。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 8: SQL vs MongoDB 操作對比 -->
+        <h3 class="section-title"><i class="fa-solid fa-code-compare"></i> SQL vs MongoDB 操作對比</h3>
         <div class="dashboard-grid notes-section">
             <div class="card note-card" style="grid-column: 1 / -1;">
                 <div class="note-header">
-                    <h4><i class="fa-solid fa-database"></i> 筆記待補</h4>
-                    <span class="status-badge pending">待補</span>
+                    <h4><i class="fa-solid fa-table-columns"></i> 完整對照表</h4>
+                    <span class="status-badge important">觀念</span>
                 </div>
-                <p class="note-desc">課程內容稍後補充。</p>
+                <p class="note-desc">SQL 與 MongoDB 的 CRUD 操作完整對應，方便從 SQL 背景過渡。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>操作</th><th>SQL</th><th>MongoDB</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>新增單筆</td><td>INSERT INTO table VALUES(...)</td><td>insertOne({...})</td></tr>
+                        <tr><td>新增多筆</td><td>INSERT INTO table VALUES(...),(...)</td><td>insertMany([{...},{...}])</td></tr>
+                        <tr><td>查全部</td><td>SELECT * FROM table</td><td>find({})</td></tr>
+                        <tr><td>條件查詢</td><td>SELECT * WHERE col = val</td><td>find({field: value})</td></tr>
+                        <tr><td>排序</td><td>ORDER BY col ASC/DESC</td><td>sort({field: 1/-1})</td></tr>
+                        <tr><td>限制筆數</td><td>LIMIT n</td><td>limit(n)</td></tr>
+                        <tr><td>更新單筆</td><td>UPDATE SET col=val WHERE...</td><td>updateOne(filter, {$set:{...}})</td></tr>
+                        <tr><td>更新多筆</td><td>UPDATE SET col=val WHERE...</td><td>updateMany(filter, {$set:{...}})</td></tr>
+                        <tr><td>刪除單筆</td><td>DELETE FROM WHERE...</td><td>deleteOne(filter)</td></tr>
+                        <tr><td>刪除多筆</td><td>DELETE FROM WHERE...</td><td>deleteMany(filter)</td></tr>
+                    </tbody>
+                </table>
+                <ul class="note-points">
+                    <li><strong>不需預定義 Schema：</strong>MongoDB 不需要 CREATE TABLE，直接插入即可</li>
+                    <li><strong>更新需用運算子：</strong>必須使用 $set 等運算子，否則整份文件被替換</li>
+                    <li><strong>新增欄位非常容易：</strong>直接在 update 中加入新欄位，不需 ALTER TABLE</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 9: 真實資料處理與增強（Unit 2上） -->
+        <h3 class="section-title"><i class="fa-solid fa-wand-magic-sparkles"></i> 真實資料處理與增強（Unit 2上）</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-chart-gantt"></i> 政府開放資料 vs 應用需求</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">政府開放資料提供基礎欄位，但消費者導向應用需要更多資訊，因此需要「資料增強」（Data Enrichment）。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>欄位</th><th>政府資料</th><th>應用需求</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>商業名稱</td><td>豪派餐飲有限公司</td><td>需要消費者友好店名</td></tr>
+                        <tr><td>分類</td><td>無</td><td>需要餐廳類型</td></tr>
+                        <tr><td>評價</td><td>無</td><td>需要評分 / 評論</td></tr>
+                        <tr><td>價格</td><td>無</td><td>需要價格區間</td></tr>
+                        <tr><td>營業資訊</td><td>無</td><td>需要營業時間 / 推薦菜色</td></tr>
+                        <tr><td>地理資訊</td><td>✅ 完整</td><td>可直接使用</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-gears"></i> 資料增強實作流程</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">從 5 個欄位增強到 14 個欄位，讓原始政府資料變成消費者友好的應用資料。</p>
+                <ul class="note-points">
+                    <li><strong>步驟 1：</strong>匯入 5 筆原始資料到 restaurants_raw</li>
+                    <li><strong>步驟 2：</strong>新增「店名」欄位（Compass 逐筆編輯）</li>
+                    <li><strong>步驟 3：</strong>批次新增「類型」（mongosh updateOne）</li>
+                    <li><strong>步驟 4：</strong>批次新增「評分」「評論數」（updateMany 先設預設值再逐筆更新）</li>
+                    <li><strong>步驟 5：</strong>新增「價格區間」「營業時間」「推薦菜色」「特色標籤」（陣列欄位）</li>
+                    <li><strong>步驟 6：</strong>用 $push 新增「評論」（嵌入式文件陣列）</li>
+                    <li><strong>步驟 7：</strong>驗證增強結果（從 5 欄位 → 14 欄位）</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-screwdriver-wrench"></i> 關鍵運算子</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">資料增強過程中常用的 MongoDB 更新運算子。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>運算子</th><th>功能</th><th>範例</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>$set</code></td><td>新增 / 修改欄位</td><td><code>{"$set": {"店名": "好吃小館"}}</code></td></tr>
+                        <tr><td><code>$push</code></td><td>新增元素到陣列</td><td><code>{"$push": {"評論": {內容}}}</code></td></tr>
+                        <tr><td><code>$inc</code></td><td>增加數值</td><td><code>{"$inc": {"評論數": 1}}</code></td></tr>
+                        <tr><td><code>$pull</code></td><td>從陣列移除元素</td><td><code>{"$pull": {"標籤": "過期"}}</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section 10: 進階查詢 -->
+        <h3 class="section-title"><i class="fa-solid fa-magnifying-glass-plus"></i> 進階查詢</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code-branch"></i> 比較與邏輯運算子</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">MongoDB 提供豐富的比較與邏輯運算子，對應 SQL 的 WHERE 條件。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>類型</th><th>運算子</th><th>說明</th><th>SQL 對應</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td rowspan="6">比較</td><td><code>$eq</code></td><td>等於</td><td>=</td></tr>
+                        <tr><td><code>$ne</code></td><td>不等於</td><td>!=</td></tr>
+                        <tr><td><code>$gt</code></td><td>大於</td><td>&gt;</td></tr>
+                        <tr><td><code>$gte</code></td><td>大於等於</td><td>&gt;=</td></tr>
+                        <tr><td><code>$lt</code></td><td>小於</td><td>&lt;</td></tr>
+                        <tr><td><code>$lte</code></td><td>小於等於</td><td>&lt;=</td></tr>
+                        <tr><td rowspan="4">邏輯</td><td><code>$and</code></td><td>多條件並列（預設 AND）</td><td>AND</td></tr>
+                        <tr><td><code>$or</code></td><td>任一符合</td><td>OR</td></tr>
+                        <tr><td><code>$not</code></td><td>反轉條件</td><td>NOT</td></tr>
+                        <tr><td><code>$nor</code></td><td>都不符合</td><td>NOT ... AND NOT ...</td></tr>
+                        <tr><td rowspan="2">包含</td><td><code>$in</code></td><td>包含在列表中</td><td>IN</td></tr>
+                        <tr><td><code>$nin</code></td><td>不包含在列表中</td><td>NOT IN</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-text-slash"></i> 正則表達式查詢</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">使用 $regex 進行模糊查詢，類似 SQL 的 LIKE。</p>
+                <ul class="note-points">
+                    <li><code>{"店名":{"$regex":"小館"}}</code> — 找含「小館」的店名</li>
+                    <li><code>{"商業地址":{"$regex":"大安區"}}</code> — 找大安區的餐廳</li>
+                    <li><code>$options: "i"</code> — 不區分大小寫</li>
+                </ul>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>模式</th><th>意義</th><th>範例</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>^</code></td><td>開頭匹配</td><td><code>{"店名":{"$regex":"^好"}}</code></td></tr>
+                        <tr><td><code>$</code></td><td>結尾匹配</td><td><code>{"店名":{"$regex":"小館$"}}</code></td></tr>
+                        <tr><td><code>.*</code></td><td>任意字元</td><td><code>{"店名":{"$regex":"好.*館"}}</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-layer-group"></i> 陣列與嵌入文件查詢</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">MongoDB 的文件可包含陣列與嵌入文件，查詢語法也相應豐富。</p>
+                <ul class="note-points">
+                    <li><strong>陣列包含：</strong><code>{"特色標籤":"外帶"}</code> — 陣列中是否含有該值</li>
+                    <li><strong>$all 同時包含：</strong><code>{"特色標籤":{"$all":["內用","外帶"]}}</code></li>
+                    <li><strong>$size 陣列長度：</strong><code>{"推薦菜色":{"$size":3}}</code></li>
+                    <li><strong>$elemMatch 複雜條件：</strong><code>{"評論":{"$elemMatch":{"評分":5}}}</code></li>
+                    <li><strong>點記法查嵌入文件：</strong><code>{"座標.Longitude":{"$gt":121.54}}</code></li>
+                    <li><strong>$exists 檢查欄位存在：</strong><code>{"評論":{"$exists":true}}</code></li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：進階查詢</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">整理進階查詢的技巧與常見錯誤。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 優秀回答：</strong>進階查詢技巧整理：(1) 多條件預設是 AND，不需明確寫 $and；$or 需要明確寫 (2) $in 類似 SQL 的 IN 運算子，查詢多個值之一 (3) $regex 用於字串模糊查詢，$options:'i' 不區分大小寫 (4) 陣列查詢：直接寫值會搜尋陣列是否包含該值，$all 要求同時包含所有值 (5) $elemMatch 用於陣列元素是物件時的複合條件查詢 (6) 點記法 'parent.child' 查詢嵌入文件，整個路徑要用引號包起來 (7) $exists 在彈性 Schema 環境特別有用，因為不是所有文件都有相同欄位。常見錯誤：運算子忘記 $ 開頭、$in 值不是陣列、$regex 不能用在數字欄位。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 11: 常見錯誤總結 -->
+        <h3 class="section-title"><i class="fa-solid fa-triangle-exclamation"></i> 常見錯誤總結</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-bug"></i> 錯誤排查指南</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">初學 MongoDB 時最容易犯的錯誤與解決方式。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>常見錯誤</th><th>錯誤寫法</th><th>正確寫法</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>運算子缺 $</td><td><code>{"age":{"gt":25}}</code></td><td><code>{"age":{"$gt":25}}</code></td></tr>
+                        <tr><td>點記法缺引號</td><td><code>{座標.Longitude:121}</code></td><td><code>{"座標.Longitude":121}</code></td></tr>
+                        <tr><td>$in 值非陣列</td><td><code>{"type":{"$in":"A"}}</code></td><td><code>{"type":{"$in":["A"]}}</code></td></tr>
+                        <tr><td>$regex 用在數字欄位</td><td><code>{"age":{"$regex":"2"}}</code></td><td>改用 $gt/$lt 等比較運算子</td></tr>
+                        <tr><td>$set 忘記用</td><td><code>updateOne(f, {"name":"X"})</code></td><td><code>updateOne(f, {"$set":{"name":"X"}})</code></td></tr>
+                        <tr><td>_id 重複插入</td><td>手動指定已存在的 _id</td><td>讓 MongoDB 自動產生 _id</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 

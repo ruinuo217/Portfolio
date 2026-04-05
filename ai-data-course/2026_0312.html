@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI大數據養成班 - 3/12 Python 應用</title>
+    <title>AI大數據養成班 - 3/12 FastAPI 基礎與事件驅動 API</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="dashboard.css">
 </head>
@@ -221,7 +221,7 @@
 
         <div class="top-bar">
             <div class="breadcrumb">
-                首頁 > Week 10: NoSQL 與 Python > <span>Python 應用</span>
+                首頁 > Week 10: NoSQL 與 Python > <span>FastAPI 基礎與事件驅動 API</span>
             </div>
             <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
                 <i class="fas fa-home"></i> 回首頁
@@ -230,20 +230,457 @@
 
         <div class="banner">
             <div>
-                <h1>Python 應用</h1>
+                <h1>FastAPI 基礎與事件驅動 API</h1>
                 <p>3/12 課程筆記</p>
             </div>
-            <i class="fa-brands fa-python banner-icon"></i>
+            <i class="fa-solid fa-bolt banner-icon"></i>
         </div>
 
-        <h3 class="section-title">課程筆記：Python 應用</h3>
+        <!-- Section 1: 什麼是事件 API -->
+        <h3 class="section-title"><i class="fa-solid fa-satellite-dish"></i> 什麼是事件 API</h3>
         <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrows-left-right"></i> 函式呼叫 vs 事件思維</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">函式：參數不對改了重跑，可控可重來。API：request 送出事情就已發生，不能撤回。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>比較項目</th><th>函式呼叫</th><th>事件 API</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>範圍</strong></td><td>你的程式裡</td><td>跨系統跨網路</td></tr>
+                        <tr><td><strong>可重來</strong></td><td>可重跑</td><td>送出就發生</td></tr>
+                        <tr><td><strong>錯誤處理</strong></td><td>try-except</td><td>需記錄 + 回溯</td></tr>
+                        <tr><td><strong>記錄</strong></td><td>不記錄</td><td>每次都該記錄</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-eye"></i> 把 API 看成事件</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">每個 API 呼叫都該問三個問題：什麼事件（endpoint 名稱）、內容是什麼（request body）、系統怎麼回應（response）。</p>
+                <ul class="note-points">
+                    <li><strong>POST /login</strong> = 使用者嘗試登入</li>
+                    <li><strong>POST /upload-image</strong> = 上傳圖片</li>
+                    <li><strong>GET /recommendations</strong> = 請求推薦</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 重點：</strong>連 GET 都是事件 —— 「使用者在這個時間點請求了這個資料」值得記錄。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-brain"></i> 為什麼 AI 系統需要事件思維</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">如果只是「呼叫 → 回傳」，事後分析全做不到；每次 request 當事件記錄 = 完整 audit trail。</p>
+                <ul class="note-points">
+                    <li><strong>模型會錯</strong> → 需知道當時輸入</li>
+                    <li><strong>模型會改版</strong> → 需舊資料重跑比較</li>
+                    <li><strong>行為會漂移</strong> → 需長期追蹤</li>
+                </ul>
+            </div>
+
             <div class="card note-card" style="grid-column: 1 / -1;">
                 <div class="note-header">
-                    <h4><i class="fa-brands fa-python"></i> 筆記待補</h4>
-                    <span class="status-badge pending">待補</span>
+                    <h4><i class="fa-solid fa-pencil"></i> 練習：事件分析</h4>
+                    <span class="status-badge info">練習</span>
                 </div>
-                <p class="note-desc">課程內容稍後補充。</p>
+                <p class="note-desc"><strong>題目：</strong>POST /transactions/evaluate、GET /users/123/history、POST /alerts/dismiss 各是什麼事件？不記錄的風險？</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check"></i> 回答：</strong>
+                    <ul class="note-points">
+                        <li><strong>POST /transactions/evaluate</strong> = 交易風險評估請求事件，內容含 user_id / amount / timestamp，不記錄 → 無法回溯模型當時輸入，出錯時無法復盤。</li>
+                        <li><strong>GET /users/123/history</strong> = 查詢使用者歷史事件，內容含 query params（時間範圍），不記錄 → 不知道誰在什麼時候查了什麼（資安稽核空白）。</li>
+                        <li><strong>POST /alerts/dismiss</strong> = 關閉警報事件，內容含 alert_id / reason，不記錄 → 無法追蹤誰關了警報為什麼關（責任歸屬不明）。</li>
+                        <li><strong>連 GET 都該記錄的原因：</strong>追蹤存取模式、偵測異常查詢行為、滿足合規要求。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: FastAPI 快速上手 -->
+        <h3 class="section-title"><i class="fa-solid fa-rocket"></i> FastAPI 快速上手</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-download"></i> 安裝與最小 API</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">FastAPI = 框架（定義怎麼處理 request），Uvicorn = ASGI server（負責收發）。</p>
+                <ul class="note-points">
+                    <li><strong>安裝：</strong><code>pip install fastapi uvicorn</code></li>
+                    <li><strong>最小 3 行：</strong><code>app = FastAPI()</code>、<code>@app.get("/")</code>、<code>return {"message": "alive"}</code></li>
+                    <li><strong>啟動：</strong><code>uvicorn main:app --reload</code></li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-book-open"></i> Swagger UI 自動文件</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc"><code>http://127.0.0.1:8000/docs</code> 自動產生互動式 API 文件。</p>
+                <ul class="note-points">
+                    <li>不用 curl / Postman，直接瀏覽器測</li>
+                    <li>後續每個 workshop 都可用 Swagger 驗證</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-reply"></i> POST endpoint 接收資料</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc"><code>@app.post("/echo") def echo(data: dict = Body()): return {"received": data}</code> — POST /echo 接收 JSON body 原封不動回傳 = 最簡單的「收事件」。</p>
+                <ul class="note-points">
+                    <li><strong>JSON 解析：</strong>body → dict（自動）</li>
+                    <li><strong>JSON 序列化：</strong>dict → JSON response（自動）</li>
+                    <li><strong>HTTP status code：</strong>200 / 422（自動）</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pencil"></i> 練習：FastAPI 啟動</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc"><strong>題目：</strong>啟動服務、Swagger 測 GET /、POST /echo 送 <code>{"event_type": "test", "user_id": 1}</code></p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check"></i> 回答：</strong>
+                    <ul class="note-points">
+                        <li><strong>啟動：</strong><code>uvicorn main:app --reload</code>，瀏覽器開 <code>http://127.0.0.1:8000</code> 看到 <code>{"message": "alive"}</code>。</li>
+                        <li><strong>Swagger：</strong><code>http://127.0.0.1:8000/docs</code>，點 GET / → Try it out → Execute，回傳 <code>{"message": "alive"}</code>。</li>
+                        <li><strong>POST /echo：</strong>點 POST /echo → Try it out → 填入 <code>{"event_type": "test", "user_id": 1}</code> → Execute，回傳 <code>{"received": {"event_type": "test", "user_id": 1}}</code>。</li>
+                        <li><strong>--reload</strong> 是開發模式，改 code 自動重啟。FastAPI 自動做 JSON 解析（body → dict）和序列化（return dict → JSON）。422 是 FastAPI 的驗證失敗代碼，格式不對會自動回 422。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: HTTP Request 三層結構 -->
+        <h3 class="section-title"><i class="fa-solid fa-layer-group"></i> HTTP Request 三層結構</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-id-card"></i> Path — 資源的身份證</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc"><code>@app.get("/drinks/{drink_id}")</code> — 判斷標準：拿掉這個參數 API 還有意義嗎？沒有 → 放 Path。</p>
+                <ul class="note-points">
+                    <li><strong>多層 Path：</strong><code>/menu/{item_id}/reviews/{review_id}</code></li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-filter"></i> Query — 篩選與選項</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc"><code>@app.get("/drinks") def list_drinks(category: str = None, max_price: int = None)</code> — 判斷：拿掉還能用嗎？可以 → 放 Query。</p>
+                <ul class="note-points">
+                    <li><strong>FastAPI 規則：</strong>有預設值 + 不在 URL path → 自動變 Query</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-box"></i> Body — 寄送資料包裹</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc"><code>@app.post("/orders") def create_order(order: dict = Body(...))</code> — 不是在「看」是在「送」資料。</p>
+                <ul class="note-points">
+                    <li><strong>三層一起用：</strong><code>@app.post("/drinks/{drink_id}/customize")</code> path = 哪杯, query = debug 選項, body = 客製化內容</li>
+                </ul>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>層級</th><th>用途</th><th>判斷依據</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Path</strong></td><td>身份證</td><td>拿掉不知講誰</td></tr>
+                        <tr><td><strong>Query</strong></td><td>篩選選項</td><td>拿掉還能用</td></tr>
+                        <tr><td><strong>Body</strong></td><td>資料包裹</td><td>要送資料給 server</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pencil"></i> 練習：學生餐廳 API</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc"><strong>題目：</strong>GET /menu, GET /menu/{item_id}, GET /menu/{item_id}/reviews/{review_id}, GET /menu?category=飯類&amp;max_price=75, POST /orders</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check"></i> 回答：</strong>
+<pre><code>from fastapi import FastAPI, Body
+app = FastAPI()
+MENU = {"fried-rice": {"name": "炒飯", "price": 80, "category": "飯類"},
+        "chicken-cutlet": {"name": "雞排", "price": 60, "category": "炸物"}}
+
+@app.get("/menu")
+def list_menu(category: str = None, max_price: int = None):
+    results = {k: v for k, v in MENU.items()
+               if (not category or v["category"] == category)
+               and (not max_price or v["price"] &lt;= max_price)}
+    return results
+
+@app.get("/menu/{item_id}")
+def get_item(item_id: str, lang: str = "zh"):
+    item = MENU[item_id]
+    if lang == "en":
+        return {"item_id": item_id, "name": "Fried Rice", "price": item["price"]}
+    return {"item_id": item_id, **item}
+
+@app.get("/menu/{item_id}/reviews/{review_id}")
+def get_review(item_id: str, review_id: int):
+    return {"item_id": item_id, "review_id": review_id,
+            "comment": "好好吃！", "rating": 5}
+
+@app.post("/orders")
+def create_order(order: dict = Body(...)):
+    item = MENU[order["item_id"]]
+    return {"message": "訂餐成功", "order_id": 1,
+            "total": item["price"] * order["quantity"]}</code></pre>
+                    <ul class="note-points">
+                        <li><strong>Path</strong> 放 item_id 因為拿掉不知道在問哪道菜。</li>
+                        <li><strong>Query</strong> 放 category / max_price 因為拿掉菜單還是菜單只是沒篩選。</li>
+                        <li><strong>Body</strong> 放訂單內容因為是完整資料包裹。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: 非同步 — 不要卡住 API -->
+        <h3 class="section-title"><i class="fa-solid fa-arrows-spin"></i> 非同步 — 不要卡住 API</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-road"></i> Event Loop 與阻塞</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">FastAPI 跑在 event loop 上 = 單線道，所有 request 排隊。<code>time.sleep(5)</code> = 堵死 5 秒誰都不能動。<code>await asyncio.sleep(5)</code> = 暫時讓出，其他 request 可以先走。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>比較項目</th><th>time.sleep</th><th>await asyncio.sleep</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Event Loop</strong></td><td>堵住</td><td>繼續跑</td></tr>
+                        <tr><td><strong>其他 request</strong></td><td>等 5 秒</td><td>正常回應</td></tr>
+                        <tr><td><strong>整體影響</strong></td><td>整個 API 卡死</td><td>只有這個 request 等</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-triangle-exclamation"></i> async def 不等於非阻塞</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc"><code>async def</code> 只是告訴 Python「可以被 await」，如果裡面用 <code>time.sleep</code>（同步 DB / 同步 HTTP request）一樣堵住。</p>
+                <ul class="note-points">
+                    <li><strong>規則：</strong>如果在 async function 裡呼叫的東西不是 await，它就是阻塞的</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 陷阱：</strong><code>async def sync_api()</code> 明明有 async 為什麼還阻塞？因為裡面的 <code>time.sleep</code> 不是 await 操作。
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pencil"></i> 練習：阻塞測試</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc"><strong>題目：</strong>兩個 terminal 測 /sync + /ping 和 /async + /ping</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check"></i> 回答：</strong>
+                    <ul class="note-points">
+                        <li><strong>/sync + /ping →</strong> 打 /sync 時 /ping 要等 5 秒才回（被堵住）。</li>
+                        <li><strong>/async + /ping →</strong> 打 /async 時 /ping 馬上回 pong（event loop 沒被堵）。</li>
+                        <li><strong>修正方法：</strong>把 <code>time.sleep(5)</code> 改成 <code>await asyncio.sleep(5)</code>。</li>
+                        <li><strong>實務應用：</strong>呼叫外部 API 用 <code>httpx.AsyncClient</code> 而非 <code>requests</code>（requests 是同步會阻塞）；資料庫操作用 <code>asyncpg</code> 而非 <code>psycopg2</code>（同步驅動會阻塞）。</li>
+                        <li><strong>判斷法則：</strong>在 async def 裡，所有 IO 操作都要用 await 版本。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 5: Pydantic Schema — 合約 -->
+        <h3 class="section-title"><i class="fa-solid fa-file-contract"></i> Pydantic Schema — 合約</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-shield-halved"></i> Schema = 合約</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc"><code>dict</code> 什麼都吃 → <code>usre_id: "abc"</code>, <code>amout: -100</code> 照收 → 下游 AI 炸掉。Schema 宣告：user_id（int）、amount（float）、currency（str）三個都不能少。</p>
+                <ul class="note-points">
+                    <li><strong>定義：</strong><code>class TransactionEvent(BaseModel): user_id: int, amount: float, currency: str</code></li>
+                    <li><strong>Fail-Fast：</strong>驗證在 handler 前執行，不合法資料永遠碰不到商業邏輯</li>
+                    <li><strong>合法 → 200</strong>，缺欄位 / 型別錯 → <strong>422</strong></li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-book"></i> Swagger 自動文件</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">定義 Schema → Swagger 自動顯示欄位名稱 / 型別 / required。不用另外寫 API 文件，Schema 就是文件。</p>
+                <ul class="note-points">
+                    <li>handler 裡可放心用資料，不需 <code>if event.user_id is None</code> 防禦</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pencil"></i> 練習：Schema 定義</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc"><strong>題目：</strong>定義 TransactionEvent, POST /transactions, Swagger 測試合法 / 缺欄位 / 型別錯</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check"></i> 回答：</strong>
+<pre><code>from pydantic import BaseModel
+
+class TransactionEvent(BaseModel):
+    user_id: int
+    amount: float
+    currency: str
+
+@app.post("/transactions")
+def receive(event: TransactionEvent):
+    return {"status": "accepted", "event": event.model_dump()}</code></pre>
+                    <ul class="note-points">
+                        <li><strong>合法</strong> <code>{"user_id": 123, "amount": 500, "currency": "TWD"}</code> → 200。</li>
+                        <li><strong>缺 currency →</strong> 422 <code>{"detail": [{"loc": ["body", "currency"], "msg": "Field required"}]}</code>。</li>
+                        <li><strong>user_id = "abc" →</strong> 422 型別錯。</li>
+                        <li><strong>Schema 的價值：</strong>handler 執行時 event.user_id 保證是 int，不需防禦性程式碼。Swagger 自動產生文件不用另外維護。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 6: Validation — 擋語意 -->
+        <h3 class="section-title"><i class="fa-solid fa-spell-check"></i> Validation — 擋語意</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-scale-balanced"></i> Schema vs Validation</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">Schema 問「格式對嗎」（型別 / 是否存在），Validation 問「合理嗎」（數值範圍 / 長度）。<code>amount = -9999</code> 格式正確但語意不合理。</p>
+                <ul class="note-points">
+                    <li><strong>Field(gt=0)</strong> = 必須 &gt; 0</li>
+                    <li><strong>Field(min_length=3, max_length=3)</strong> = 剛好 3 字元</li>
+                    <li><strong>Optional[str] = None</strong> = 可不給</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-list-check"></i> Field 驗證規則</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">Validation 也在 handler 前執行，與 Schema 一起構成兩層防線。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>規則</th><th>說明</th><th>範例</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>gt=0</strong></td><td>最小值</td><td>金額 &gt; 0</td></tr>
+                        <tr><td><strong>lt=1000000</strong></td><td>最大值</td><td>單筆上限</td></tr>
+                        <tr><td><strong>min_length=3 / max_length=3</strong></td><td>字串長度</td><td>貨幣代碼</td></tr>
+                        <tr><td><strong>pattern=r"^[A-Z]{3}$"</strong></td><td>正則</td><td>三碼大寫</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pencil"></i> 練習：Validation</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc"><strong>題目：</strong>加上 user_id &gt; 0, amount &gt; 0, currency 三字元，測試 4 種情境</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check"></i> 回答：</strong>
+<pre><code>from pydantic import BaseModel, Field
+from typing import Optional
+
+class TransactionEvent(BaseModel):
+    user_id: int = Field(gt=0)
+    amount: float = Field(gt=0)
+    currency: str = Field(min_length=3, max_length=3)
+    note: Optional[str] = None</code></pre>
+                    <ul class="note-points">
+                        <li><strong>合法</strong> <code>{"user_id": 123, "amount": 500, "currency": "TWD"}</code> → 200。</li>
+                        <li><strong>user_id = -1 →</strong> 422 "Input should be greater than 0"。</li>
+                        <li><strong>amount = -9999 →</strong> 422。</li>
+                        <li><strong>currency = "TD"（2 字元）→</strong> 422 "String should have at least 3 characters"。</li>
+                        <li><strong>Schema 擋結構</strong>（型別 / 存在），<strong>Validation 擋語意</strong>（範圍 / 長度）—— 兩層防線都在 handler 前執行，商業邏輯永遠收到乾淨資料。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 7: Workshop — 設計事件型 API -->
+        <h3 class="section-title"><i class="fa-solid fa-hammer"></i> Workshop — 設計事件型 API</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-clipboard-list"></i> Workshop 需求</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">AI 行為分析公司：統一事件入口 API。<code>POST /events/{event_type}?debug=false</code></p>
+                <ul class="note-points">
+                    <li><strong>Path：</strong>event_type（click / transaction / login）</li>
+                    <li><strong>Query：</strong>debug（選填）</li>
+                    <li><strong>Body：</strong>EventPayload（user_id: int &gt; 0, timestamp: str, payload: dict）</li>
+                    <li><strong>debug=true</strong> 回傳 payload，<strong>false</strong> 不回傳</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pencil"></i> 練習：完整實作</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check"></i> 回答：</strong>
+<pre><code>from fastapi import FastAPI, Body, HTTPException
+from pydantic import BaseModel, Field
+from typing import Any, Dict
+
+app = FastAPI()
+SUPPORTED = ["click", "transaction", "login"]
+
+class EventPayload(BaseModel):
+    user_id: int = Field(gt=0)
+    timestamp: str = Field(min_length=1)
+    payload: Dict[str, Any]
+
+@app.post("/events/{event_type}")
+def receive_event(event_type: str, debug: bool = False,
+                  event: EventPayload = Body()):
+    if event_type not in SUPPORTED:
+        raise HTTPException(status_code=400,
+                            detail=f"Unsupported: {event_type}")
+    response = {"status": "accepted", "event_type": event_type,
+                "user_id": event.user_id, "timestamp": event.timestamp}
+    if debug:
+        response["payload"] = event.payload
+    return response</code></pre>
+                    <ul class="note-points">
+                        <li><strong>event_type 放 Path</strong> 因為它定義這是什麼事件，拿掉就不知道在處理什麼。</li>
+                        <li><strong>debug 放 Query</strong> 因為是選項，拿掉 API 還能用。</li>
+                        <li><strong>payload 放 Body</strong> 因為是完整資料包裹。</li>
+                        <li><strong>三層各司其職：</strong>Path = 身份，Query = 選項，Body = 資料。</li>
+                    </ul>
+                </div>
             </div>
         </div>
 

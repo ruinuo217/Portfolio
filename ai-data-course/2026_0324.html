@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI大數據養成班 - 3/24 SQL 資料庫</title>
+    <title>AI大數據養成班 - 3/24 PostgreSQL 視窗函數與商業分析</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="dashboard.css">
 </head>
@@ -221,7 +221,7 @@
 
         <div class="top-bar">
             <div class="breadcrumb">
-                首頁 > Week 12: 資料庫與 LLM > <span>SQL 資料庫</span>
+                首頁 > Week 12: 資料庫與 LLM > <span>PostgreSQL 視窗函數與商業分析</span>
             </div>
             <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
                 <i class="fas fa-home"></i> 回首頁
@@ -230,20 +230,323 @@
 
         <div class="banner">
             <div>
-                <h1>SQL 資料庫</h1>
+                <h1>PostgreSQL 視窗函數與商業分析</h1>
                 <p>3/24 課程筆記</p>
             </div>
             <i class="fa-solid fa-database banner-icon"></i>
         </div>
 
-        <h3 class="section-title">課程筆記：SQL 資料庫</h3>
+        <!-- Section 1: 視窗函數概念 -->
+        <h3 class="section-title"><i class="fa-solid fa-window-maximize"></i> 視窗函數概念</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-scale-balanced"></i> 視窗函數 vs GROUP BY</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">GROUP BY 壓縮明細只留彙總，視窗函數保留每筆明細並附帶統計。</p>
+                <ul class="note-points">
+                    <li><strong>需求判斷：</strong>「每個客戶總消費」= GROUP BY 夠用；「保留每筆訂單並附帶客戶總消費」= 需要視窗函數</li>
+                    <li><strong>三大元素：</strong><code>FUNCTION() OVER (PARTITION BY ... ORDER BY ...)</code></li>
+                    <li><strong>PARTITION BY：</strong>分組（不壓縮行數）</li>
+                    <li><strong>ORDER BY：</strong>排序</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 核心差異：</strong>GROUP BY 壓縮行數（10 筆變 1 筆），視窗函數保留行數（10 筆還是 10 筆，每筆多一欄統計值）。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-database"></i> Olist 資料集基線</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">本次課程使用的 Olist 巴西電商資料集概覽。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>資料表</th><th>筆數</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>olist_orders</td><td>99,441</td></tr>
+                        <tr><td>customers</td><td>99,441</td></tr>
+                        <tr><td>order_items</td><td>112,650</td></tr>
+                        <tr><td>order_payments</td><td>103,886</td></tr>
+                        <tr><td>order_reviews</td><td>98,410</td></tr>
+                    </tbody>
+                </table>
+                <ul class="note-points">
+                    <li><strong>訂單時間：</strong>2016-09-04 ~ 2018-10-17</li>
+                    <li><strong>狀態分布：</strong>delivered 96,478 / shipped 1,107 / canceled 625</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 2: 一對多 JOIN 倍增陷阱 -->
+        <h3 class="section-title"><i class="fa-solid fa-triangle-exclamation"></i> 一對多 JOIN 倍增陷阱</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-bomb"></i> 倍增問題說明</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">orders 對 items 一對多，對 payments 也一對多。同時 JOIN 兩個一對多表再 SUM，items 列數 x payments 列數 = 金額倍增！</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-triangle-exclamation"></i> 警告：</strong>這是最常見的分析陷阱，先分別聚合再合併是黃金法則。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-check-double"></i> 正確做法：先聚合再合併</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">使用 CTE 分別聚合後再合併，避免倍增問題。</p>
+                <ul class="note-points">
+                    <li><strong>CTE 1 — order_items_agg：</strong>SUM(price), SUM(freight), COUNT(items)</li>
+                    <li><strong>CTE 2 — order_payments_agg：</strong>SUM(payment_value)</li>
+                    <li><strong>合併：</strong>LEFT JOIN 回 orders 主表</li>
+                    <li><strong>結果：</strong>每筆 delivered 訂單只有一列，不倍增</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-layer-group"></i> order_fact 共用分析基底</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">建立後續所有視窗函數範例共用的分析基底 CTE 模板。</p>
+                <ul class="note-points">
+                    <li><strong>order_items_agg：</strong>先聚合 items 到訂單級別</li>
+                    <li><strong>order_fact：</strong>合併 customers + orders + items_agg，只取 delivered</li>
+                    <li><strong>包含欄位：</strong>customer_unique_id / order_date / amount</li>
+                    <li><strong>用途：</strong>後續所有視窗函數範例都基於此基底</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 3: 排名函數 -->
+        <h3 class="section-title"><i class="fa-solid fa-ranking-star"></i> 排名函數</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-medal"></i> 三種排名函數</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">三種排名函數的差異與適用場景。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>函數</th><th>行為</th><th>範例 (90,85,85,80)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>ROW_NUMBER()</td><td>嚴格流水號，不重複</td><td>1, 2, 3, 4</td></tr>
+                        <tr><td>RANK()</td><td>同分跳號</td><td>1, 2, 2, 4</td></tr>
+                        <tr><td>DENSE_RANK()</td><td>同分不跳號</td><td>1, 2, 2, 3</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-city"></i> 實作：城市 TOP 消費客戶</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">使用 ROW_NUMBER() 找出每個城市消費前 10 名客戶。</p>
+                <ul class="note-points">
+                    <li><strong>語法：</strong><code>ROW_NUMBER() OVER (PARTITION BY customer_city ORDER BY total_amount DESC) as city_rank</code></li>
+                    <li><strong>篩選：</strong><code>WHERE city_rank &lt;= 10</code> 找出每城市前 10 名</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：排名函數</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-star"></i> 優秀回答：</strong>「三種排名函數的選擇邏輯：ROW_NUMBER() 每行唯一編號，適合需要嚴格排序的場景（如分頁顯示）。RANK() 同分跳號，適合比賽排名（第1名，並列第2名，第4名）。DENSE_RANK() 同分不跳，適合需要連續排名的報表（第1名，並列第2名，第3名）。PARTITION BY customer_city 讓排名在每個城市內獨立計算——台北的第1名和高雄的第1名是不同客戶。ORDER BY total_amount DESC 決定排名依據。配合 WHERE rank &lt;= N 可以取出每組的 TOP N。」
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: 時序函數 LAG/LEAD -->
+        <h3 class="section-title"><i class="fa-solid fa-clock-rotate-left"></i> 時序函數 LAG / LEAD</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrows-left-right"></i> LAG 與 LEAD</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">跨行讀取資料的時序函數。</p>
+                <ul class="note-points">
+                    <li><strong>LAG(欄位, N)：</strong>取前 N 筆的值（回顧）</li>
+                    <li><strong>LEAD(欄位, N)：</strong>取後 N 筆的值（前瞻）</li>
+                    <li><strong>核心用途：</strong>計算前後筆資料的差異</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-rotate"></i> 實作：客戶回購間隔</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">使用 LAG 計算客戶兩次購買之間的天數間隔。</p>
+                <ul class="note-points">
+                    <li><strong>語法：</strong><code>LAG(order_date) OVER (PARTITION BY customer_unique_id ORDER BY order_date) as prev_order_date</code></li>
+                    <li><strong>回購間隔：</strong><code>order_date - prev_order_date</code></li>
+                    <li><strong>注意：</strong>第一筆訂單的 prev_order_date 是 NULL（沒有前一筆）</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-chart-line"></i> Running Sum 累積加總</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">觀察客戶累積消費金額隨時間的變化趨勢。</p>
+                <ul class="note-points">
+                    <li><strong>語法：</strong><code>SUM(amount) OVER (PARTITION BY customer ORDER BY order_date ROWS UNBOUNDED PRECEDING)</code></li>
+                    <li><strong>效果：</strong>從第一筆到當前筆的累加金額</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：時序分析</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-star"></i> 優秀回答：</strong>「LAG/LEAD 的核心價值是『跨行計算』——在當前行讀取其他行的值。回購間隔計算：order_date - LAG(order_date) OVER (PARTITION BY customer ORDER BY order_date)。第一筆訂單的 LAG 結果是 NULL（沒有前一筆），可用 COALESCE 處理。LEAD 可用於計算『距離下次購買還有幾天』。Running Sum：SUM(amount) OVER (... ROWS UNBOUNDED PRECEDING) 表示『從第一筆到當前筆的累加』。商業價值：回購間隔 &gt;90 天可標記為流失風險；累積消費圖可觀察客戶價值成長軌跡。」
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 5: Materialized View 物化視圖 -->
+        <h3 class="section-title"><i class="fa-solid fa-eye"></i> Materialized View 物化視圖</h3>
         <div class="dashboard-grid notes-section">
             <div class="card note-card" style="grid-column: 1 / -1;">
                 <div class="note-header">
-                    <h4><i class="fa-solid fa-database"></i> 筆記待補</h4>
-                    <span class="status-badge pending">待補</span>
+                    <h4><i class="fa-solid fa-bolt"></i> VIEW vs MATERIALIZED VIEW</h4>
+                    <span class="status-badge important">觀念</span>
                 </div>
-                <p class="note-desc">課程內容稍後補充。</p>
+                <p class="note-desc">兩種視圖的差異與適用場景。</p>
+                <ul class="note-points">
+                    <li><strong>VIEW：</strong>每次查詢重新計算（即時但慢）</li>
+                    <li><strong>MATERIALIZED VIEW：</strong>預計算並儲存結果（快但需手動 REFRESH）</li>
+                    <li><strong>建立語法：</strong><code>CREATE MATERIALIZED VIEW mv_name AS SELECT ...</code></li>
+                    <li><strong>更新語法：</strong><code>REFRESH MATERIALIZED VIEW mv_name</code></li>
+                    <li><strong>適合場景：</strong>日報 / 週報等不需即時更新的報表</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 6: RFM 客戶分群模型 -->
+        <h3 class="section-title"><i class="fa-solid fa-users-gear"></i> RFM 客戶分群模型</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-chart-pie"></i> RFM 概念</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">RFM 是客戶價值分群的經典模型，透過三個維度評估客戶。</p>
+                <ul class="note-points">
+                    <li><strong>R (Recency)：</strong>最近一次購買距今天數（越小越好）</li>
+                    <li><strong>F (Frequency)：</strong>購買次數（越多越好）</li>
+                    <li><strong>M (Monetary)：</strong>總消費金額（越高越好）</li>
+                    <li><strong>打分方式：</strong>用 NTILE(5) 分成 5 等份打 1-5 分</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> RFM 分群實作</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">透過 CTE 逐步建立 RFM 分群模型。</p>
+                <ul class="note-points">
+                    <li><strong>Step 1：</strong>order_fact 基底</li>
+                    <li><strong>Step 2：</strong>計算每位客戶 RFM 原始值</li>
+                    <li><strong>Step 3：</strong>NTILE(5) 打分</li>
+                    <li><strong>Step 4：</strong>分群判定</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 分群邏輯：</strong>555 = VIP 頂級客戶，R=1 = 沉睡高風險，M=5 + R=1 = 高價值沉睡（最值得喚回）。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-bell"></i> 高價值沉睡客喚回</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">篩選「過去高消費（M 分 4-5）但近期沉睡（R 分 1-2）」的客戶。</p>
+                <ul class="note-points">
+                    <li><strong>商業價值：</strong>喚回成本遠低於獲客成本</li>
+                    <li><strong>輸出欄位：</strong>customer_id / 最後購買日 / 總消費 / 購買次數</li>
+                    <li><strong>應用：</strong>交給行銷團隊精準推播</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：RFM 分群</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-star"></i> 優秀回答：</strong>「RFM 模型的完整流程：(1) 建立 order_fact 基底 CTE——先聚合 order_items 避免倍增，JOIN customers 取客戶維度 (2) 計算原始指標：R=CURRENT_DATE - MAX(order_date), F=COUNT(DISTINCT order_id), M=SUM(amount) (3) NTILE(5) 打分：將客戶分成 5 等份，分數 1-5。注意 R 是越小越好所以排序相反 (4) 分群應用：555=VIP（高頻高消費近期活躍），M 分高 + R 分低 = 高價值沉睡（最值得喚回——喚回成本 $5-10 vs 新客獲取成本 $50-100）。Materialized View 適合固化 RFM 報表：CREATE MATERIALIZED VIEW mv_rfm AS SELECT ...，每天 REFRESH 一次供行銷團隊查詢。」
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 7: PostgreSQL 課程總回顧 -->
+        <h3 class="section-title"><i class="fa-solid fa-graduation-cap"></i> PostgreSQL 課程總回顧</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-sitemap"></i> 知識架構</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">四堂 PostgreSQL 課程的完整知識架構。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>階段</th><th>內容</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>前置篇</td><td>PG vs MySQL / 基礎概念 / 層級結構</td></tr>
+                        <tr><td>第一堂</td><td>Olist 資料集 / COPY 匯入 / 建表</td></tr>
+                        <tr><td>第二堂</td><td>COALESCE / CAST / TO_CHAR / CTE / JSONB</td></tr>
+                        <tr><td>第三堂</td><td>視窗函數 / JOIN 倍增 / 排名 / LAG / LEAD / Running Sum</td></tr>
+                        <tr><td>第四堂</td><td>Materialized View / RFM 分群 / 沉睡客喚回</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrows-left-right"></i> 三大資料庫比較</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">根據場景選擇合適的資料庫，三者不互斥。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>資料庫</th><th>擅長場景</th><th>特色</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>MySQL</td><td>簡單 CRUD / Web 應用</td><td>入門友好</td></tr>
+                        <tr><td>MongoDB</td><td>NoSQL 文件 / 彈性 Schema</td><td>地理查詢</td></tr>
+                        <tr><td>PostgreSQL</td><td>複雜分析 / 視窗函數</td><td>JSONB / 企業級</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 整合思考題</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">假設你是電商數據分析師，老闆要找出「過去半年消費超過 $500 但最近 3 個月沒回購」的客戶名單。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-star"></i> 優秀回答：</strong>「(1) 建立 order_fact 基底 CTE——先聚合 order_items 到訂單級別避免 JOIN 倍增，JOIN customers 取得客戶維度，只取 delivered 訂單 (2) 計算 RFM：R = CURRENT_DATE - MAX(order_date) 天數, F = COUNT(DISTINCT order_id), M = SUM(amount) (3) 篩選：M &gt; 500 AND R &gt; 90 (4) 用 NTILE(5) 打分，篩選 M 分數 4-5（高消費）且 R 分數 1-2（沉睡） (5) 輸出含 customer_id、last_order_date、total_spent、order_count，交行銷做精準推播 (6) 固化為 MATERIALIZED VIEW 每日 REFRESH 供團隊使用。關鍵避坑：order_items 和 payments 不能同時 JOIN 後 SUM——先各自聚合再合併是黃金法則。NTILE(5) 分組時 R 用 ASC 排序（天數少=分高=活躍），M 用 DESC 排序（金額高=分高=高價值）。」
+                </div>
             </div>
         </div>
 

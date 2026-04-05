@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI大數據養成班 - 3/11 NoSQL 資料庫</title>
+    <title>AI大數據養成班 - 3/11 MongoDB Python 整合與應用</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="dashboard.css">
 </head>
@@ -118,7 +118,7 @@
             <ul>
                 <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0309.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/9 (一)</span><span class="topic">NoSQL 資料庫</span></a></li>
                 <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0310.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/10 (二)</span><span class="topic">NoSQL 資料庫</span></a></li>
-                <li class="active"><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0311.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/11 (三)</span><span class="topic">NoSQL 資料庫</span></a></li>
+                <li class="active"><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0311.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/11 (三)</span><span class="topic">MongoDB Python 整合與應用</span></a></li>
                 <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0312.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/12 (四)</span><span class="topic">Python 應用</span></a></li>
                 <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0313.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/13 (五)</span><span class="topic">Python 應用</span></a></li>
             </ul>
@@ -221,7 +221,7 @@
 
         <div class="top-bar">
             <div class="breadcrumb">
-                首頁 > Week 10: NoSQL 與 Python > <span>NoSQL 資料庫</span>
+                首頁 > Week 10: NoSQL 與 Python > <span>MongoDB Python 整合與應用</span>
             </div>
             <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
                 <i class="fas fa-home"></i> 回首頁
@@ -230,21 +230,381 @@
 
         <div class="banner">
             <div>
-                <h1>NoSQL 資料庫</h1>
+                <h1>MongoDB Python 整合與應用</h1>
                 <p>3/11 課程筆記</p>
             </div>
             <i class="fa-solid fa-database banner-icon"></i>
         </div>
 
-        <h3 class="section-title">課程筆記：NoSQL 資料庫</h3>
+        <!-- Section 1: Atlas Dashboard 視覺化（延伸） -->
+        <h3 class="section-title"><i class="fa-solid fa-chart-pie"></i> Atlas Dashboard 視覺化（延伸）</h3>
         <div class="dashboard-grid notes-section">
-            <div class="card note-card" style="grid-column: 1 / -1;">
+
+            <div class="card note-card">
                 <div class="note-header">
-                    <h4><i class="fa-solid fa-database"></i> 筆記待補</h4>
-                    <span class="status-badge pending">待補</span>
+                    <h4><i class="fa-solid fa-chart-column"></i> Atlas Charts 功能介紹</h4>
+                    <span class="status-badge important">觀念</span>
                 </div>
-                <p class="note-desc">課程內容稍後補充。</p>
+                <p class="note-desc">Atlas Charts 可將資料庫資料直接轉換為圖表，無需撰寫任何程式碼，適合快速視覺化與管理報告。</p>
+                <ul class="note-points">
+                    <li>適用場景：管理階層數據報告、監控評分變化、展示資料分布</li>
+                    <li>操作流程：Atlas &rarr; Charts &rarr; Activate Now &rarr; Create Dashboard</li>
+                    <li>建立「美食地圖儀表板」Dashboard</li>
+                    <li>Add Chart &rarr; 選擇資料來源 <code>food_map.restaurants_raw</code></li>
+                    <li>Charts 會自動偵測欄位類型，提供適合的圖表建議</li>
+                </ul>
             </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-wrench"></i> 建立圖表實作</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">實作四種常用圖表類型，從不同角度分析餐廳資料。</p>
+                <ul class="note-points">
+                    <li><strong>長條圖（各類型餐廳數量）：</strong>X 軸 = 類型，Y 軸 = COUNT，快速看出哪種餐廳最多</li>
+                    <li><strong>圓餅圖（價格區間分布）：</strong>展示 $/$$/$$$ 各佔比例，了解市場定位</li>
+                    <li><strong>散佈圖（評分 vs 評論數）：</strong>觀察評分與評論數量的關聯性</li>
+                    <li><strong>地理熱力圖（餐廳位置分布）：</strong>利用 GeoJSON 座標在地圖上顯示餐廳密集區域</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：Dashboard 設計</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">設計一個完整的美食地圖儀表板，包含至少四種不同類型的圖表。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-star"></i> 優秀回答：</strong>建立了 4 種圖表：(1) 長條圖顯示各類型餐廳數量——台式料理最多，咖啡廳次之 (2) 圓餅圖顯示價格區間分布——$$ 佔 60% 是主流 (3) 散佈圖發現高評分不一定高評論數，川富餐廳評分 4.5 但評論 256 則，森林咖啡評分 4.0 只有 89 則 (4) Dashboard 可分享給團隊，資料更新時圖表自動反映。Dashboard 適合快速原型和管理報告，但複雜分析需要 Python + 聚合管道。圖表選擇原則：比較用長條圖、佔比用圓餅、關係用散佈、趨勢用折線。
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Section 2: Python PyMongo 基礎 -->
+        <h3 class="section-title"><i class="fa-brands fa-python"></i> Python PyMongo 基礎</h3>
+        <div class="dashboard-grid notes-section">
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-plug"></i> PyMongo 連線設定</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">透過 PyMongo 套件從 Python 連線 MongoDB Atlas，建立資料操作的基礎環境。</p>
+                <ul class="note-points">
+                    <li>安裝套件：<code>pip install pymongo</code></li>
+                    <li>建立連線：<code>from pymongo import MongoClient</code></li>
+                    <li>連線字串：<code>client = MongoClient("mongodb+srv://user:pass@cluster.mongodb.net/")</code></li>
+                    <li>選擇資料庫：<code>db = client["food_map"]</code></li>
+                    <li>選擇集合：<code>collection = db["restaurants_raw"]</code></li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-triangle-exclamation"></i> 注意：</strong>連線字串應存在環境變數或 .env 檔案中，不要寫死在程式碼裡！密碼中若有特殊字元（如 @、#）需進行 URL encode 處理。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> Python CRUD 操作</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">PyMongo 的 CRUD 方法與 mongosh 語法高度對應，但有 Python 特有的命名規範。</p>
+                <table class="concept-table">
+                    <tr><th>操作</th><th>方法</th></tr>
+                    <tr><td>新增單筆</td><td><code>insert_one(dict)</code></td></tr>
+                    <tr><td>新增多筆</td><td><code>insert_many([list])</code></td></tr>
+                    <tr><td>查詢多筆</td><td><code>find(filter)</code></td></tr>
+                    <tr><td>查詢單筆</td><td><code>find_one(filter)</code></td></tr>
+                    <tr><td>更新單筆</td><td><code>update_one(filter, {"$set": {...}})</code></td></tr>
+                    <tr><td>更新多筆</td><td><code>update_many(filter, {"$set": {...}})</code></td></tr>
+                    <tr><td>刪除單筆</td><td><code>delete_one(filter)</code></td></tr>
+                    <tr><td>刪除多筆</td><td><code>delete_many(filter)</code></td></tr>
+                </table>
+                <ul class="note-points">
+                    <li>Python 使用 <code>dict {}</code> 而非 JSON 格式</li>
+                    <li>方法名使用底線命名：<code>insert_one</code> 而非 <code>insertOne</code></li>
+                    <li><code>find()</code> 回傳 Cursor 物件，需用 <code>for</code> 迴圈或 <code>list()</code> 取出資料</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：PyMongo CRUD</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">使用 PyMongo 對 restaurants_raw 集合進行完整的 CRUD 操作練習。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-star"></i> 優秀回答：</strong>PyMongo 與 mongosh 語法幾乎一致但有差異：(1) Python 用 dict 而非 JSON (2) 方法名用底線如 insert_one 而非 insertOne (3) find() 回傳 Cursor 物件需用 for 迴圈取出。範例：<code>for doc in collection.find({'評分': {'$gt': 4}}): print(doc['店名'])</code> 列出所有評分 > 4 的餐廳。insert_many 比逐筆 insert_one 效率高。update_one 要記得用 $set 否則整份文件被替換。連線字串最佳實踐：<code>import os; uri = os.environ.get('MONGO_URI')</code> 從環境變數讀取。
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Section 3: Python 聚合管道 -->
+        <h3 class="section-title"><i class="fa-solid fa-filter"></i> Python 聚合管道</h3>
+        <div class="dashboard-grid notes-section">
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-layer-group"></i> 在 Python 中執行聚合</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">Python 的聚合管道就是 list of dict，與 mongosh 寫法直接對應，無需額外學習語法。</p>
+                <ul class="note-points">
+                    <li>呼叫方式：<code>collection.aggregate([pipeline])</code></li>
+                    <li>pipeline 是 list of dict，每個 dict 代表一個聚合階段</li>
+                    <li>範例 — 統計各類型平均評分：</li>
+                </ul>
+                <pre style="background:#f4f4f4;padding:12px;border-radius:8px;font-size:0.9em;overflow-x:auto;"><code>pipeline = [
+    {"$group": {"_id": "$類型", "avg": {"$avg": "$評分"}}},
+    {"$sort": {"avg": -1}}
+]
+results = collection.aggregate(pipeline)
+for doc in results:
+    print(f"{doc['_id']}: {doc['avg']:.1f}")</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-map-location-dot"></i> Python 地理位置查詢</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">結合 MongoDB 地理查詢與 Python folium 套件，在地圖上視覺化附近餐廳。</p>
+                <ul class="note-points">
+                    <li>$near 查詢附近 1 公里內餐廳：</li>
+                </ul>
+                <pre style="background:#f4f4f4;padding:12px;border-radius:8px;font-size:0.9em;overflow-x:auto;"><code>nearby = collection.find({
+    "位置": {
+        "$near": {
+            "$geometry": {
+                "type": "Point",
+                "coordinates": [121.5398, 25.0173]
+            },
+            "$maxDistance": 1000
+        }
+    }
+})</code></pre>
+                <ul class="note-points">
+                    <li>搭配 <code>folium</code> 套件將結果繪製在互動式地圖上</li>
+                    <li>每筆結果用 <code>folium.Marker</code> 標記位置與餐廳資訊</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：Python 聚合 + 地理查詢</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">綜合運用 Python 聚合管道與地理位置查詢，實作餐廳分析與地圖視覺化。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-star"></i> 優秀回答：</strong>Python 聚合管道就是 list of dict，與 mongosh 語法完全對應。統計各類型餐廳：<code>pipeline = [{'$group': {'_id': '$類型', '平均評分': {'$avg': '$評分'}, '數量': {'$sum': 1}}}, {'$sort': {'平均評分': -1}}]</code>。地理查詢配合 folium 可以在地圖上標示附近餐廳：<code>import folium; m = folium.Map(location=[25.0173, 121.5398])</code>；對每筆結果 <code>folium.Marker([lat, lng]).add_to(m)</code>。進階：用 $geoNear 聚合階段可同時取得距離值，方便做距離排序的推薦系統。
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Section 4: 批次資料處理 -->
+        <h3 class="section-title"><i class="fa-solid fa-gears"></i> 批次資料處理</h3>
+        <div class="dashboard-grid notes-section">
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-file-import"></i> 大量資料匯入</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">處理 20000+ 筆政府開放資料的實際匯入流程，掌握三種主要匯入方式。</p>
+                <ul class="note-points">
+                    <li><strong>Compass Import Data：</strong>一鍵匯入 CSV/JSON 檔案，最簡單直覺</li>
+                    <li><strong>Python 批次插入：</strong>讀取 CSV &rarr; 轉 dict &rarr; <code>insert_many</code> 批次插入</li>
+                    <li><strong>mongoimport 命令列工具：</strong>快速匯入大量資料，適合自動化腳本</li>
+                    <li>實際處理 20000+ 筆政府開放資料的完整流程</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-wand-magic-sparkles"></i> Python 批次資料增強</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">用 Python 邏輯批次為文件添加計算欄位，比手動逐筆操作效率高 100 倍。</p>
+                <ul class="note-points">
+                    <li>讀取 restaurants_raw 全部文件</li>
+                    <li>用 Python 邏輯判斷添加類型、評分等欄位</li>
+                    <li>批次 <code>update_many</code> 更新所有符合條件的文件</li>
+                    <li>範例：地址包含「大安區」&rarr; 自動標記區域欄位</li>
+                    <li>比手動逐筆操作效率高 100 倍</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：批次處理</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">比較三種批次處理方式的優劣，並實作 Python 批次資料增強。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-star"></i> 優秀回答：</strong>批次處理三種方式比較：(1) Compass Import Data——最簡單，一鍵匯入 CSV，適合初次匯入 (2) Python insert_many——可在匯入前用 Python 邏輯預處理資料（清洗/轉換/增強） (3) mongoimport——命令列工具，適合自動化腳本和 CI/CD。Python 批次增強範例：<code>for doc in collection.find(): if '大安區' in doc.get('商業地址',''): collection.update_one({'_id':doc['_id']}, {'$set':{'區域':'大安區'}})</code>。但更好的做法是用 update_many 一次處理：<code>collection.update_many({'商業地址': {'$regex': '大安區'}}, {'$set': {'區域': '大安區'}})</code>——一行搞定。
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Section 5: 本地建模預測 -->
+        <h3 class="section-title"><i class="fa-solid fa-brain"></i> 本地建模預測</h3>
+        <div class="dashboard-grid notes-section">
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-bolt"></i> 技術架構</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">捨棄雲端 AutoML 方案，改用 Scikit-learn 本地訓練，將 2 小時雲端流程縮短至 1 秒完成。</p>
+                <ul class="note-points">
+                    <li>雲端 AutoML 訓練需要約 2 小時等待時間</li>
+                    <li>本地 Scikit-learn 訓練僅需 1 秒——速度差 7200 倍</li>
+                    <li>無需等待雲端資源配置與模型部署</li>
+                    <li>適合教學場景與快速迭代驗證</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-diagram-project"></i> 關鍵技術流程</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">從特徵工程到模型持久化的完整機器學習流程。</p>
+                <ul class="note-points">
+                    <li><strong>特徵工程：</strong>One-Hot Encoding 處理類別型資料（如行政區），將「大安區」轉化為 [1,0,0,...] 向量矩陣</li>
+                    <li><strong>演算法選擇：</strong>隨機森林回歸（Random Forest Regressor），集成學習處理非線性關係</li>
+                    <li><strong>模型持久化：</strong>joblib 序列化為 .pkl 檔案，一次訓練多次調用</li>
+                    <li>Random Forest 優勢：不需大量調參、訓練快速、能處理非線性關係（如房價與坪數非簡單正比）</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-sliders"></i> 互動式預測介面</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">使用 ipywidgets 在 Colab 內建即時 UI，無需額外前端網頁代碼即可與模型互動。</p>
+                <ul class="note-points">
+                    <li>ipywidgets 提供滑桿、下拉選單等互動元件</li>
+                    <li>使用者調整參數後即時顯示預測結果</li>
+                    <li>適合原型展示與教學演示</li>
+                    <li>不需要任何前端網頁開發知識</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-scale-balanced"></i> 方案優勢對比</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">本地建模方案在延遲、開發速度、成本三個面向均優於雲端方案。</p>
+                <table class="concept-table">
+                    <tr><th>面向</th><th>本地方案</th><th>雲端方案</th></tr>
+                    <tr><td>預測延遲</td><td>模型駐記憶體，&lt;1ms</td><td>REST API，100-500ms</td></tr>
+                    <tr><td>開發敏捷</td><td>即時修改參數重新驗證</td><td>需重新部署 Endpoint</td></tr>
+                    <tr><td>成本</td><td>無額外費用</td><td>Endpoint 閒置持續計費</td></tr>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：ML 整合思考</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">比較本地建模與雲端 AutoML 的優劣，分析 Random Forest 與 One-Hot Encoding 的選擇理由。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-star"></i> 優秀回答：</strong>本地建模 vs 雲端 AutoML：(1) 本地 Scikit-learn 訓練 1 秒完成，雲端 AutoML 需 2 小時——速度差 7200 倍 (2) 本地模型駐留記憶體預測延遲 &lt;1ms，雲端 REST API 需 100-500ms 網路延遲 (3) 本地無閒置費用，雲端 Endpoint 持續計費 (4) 但雲端適合大型模型和團隊協作。Random Forest 選擇理由：集成學習處理非線性關係（房價與坪數不是簡單正比）、不需大量調參、訓練快。One-Hot Encoding 將「大安區」變成 [1,0,0,...] 向量，讓數學模型理解類別差異。joblib 序列化讓模型可重複使用——訓練一次，部署多處。
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Section 6: MongoDB 前端應用概念 -->
+        <h3 class="section-title"><i class="fa-solid fa-globe"></i> MongoDB 前端應用概念</h3>
+        <div class="dashboard-grid notes-section">
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-sitemap"></i> 前端整合架構</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">從前端到資料庫的完整資料流架構，可部署到 GCP Cloud Run 無伺服器環境。</p>
+                <ul class="note-points">
+                    <li>靜態 HTML + JavaScript 作為前端介面</li>
+                    <li>呼叫 Python Flask / FastAPI 後端 API</li>
+                    <li>後端透過 PyMongo 查詢 MongoDB</li>
+                    <li>回傳 JSON 資料給前端渲染</li>
+                    <li>可部署到 GCP Cloud Run（無伺服器，按需計費）</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-map"></i> 地圖應用示範</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">結合 Leaflet.js 地圖前端與 MongoDB $near 地理查詢，實作即時附近餐廳搜尋。</p>
+                <ul class="note-points">
+                    <li>Leaflet.js 顯示互動式地圖</li>
+                    <li>後端使用 <code>$near</code> 查詢附近餐廳</li>
+                    <li>前端標記 Marker 顯示餐廳位置</li>
+                    <li>使用者點擊地圖 &rarr; 取得座標 &rarr; API 查詢 &rarr; 顯示附近餐廳卡片</li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- Section 7: MongoDB 三日課程總回顧 -->
+        <h3 class="section-title"><i class="fa-solid fa-clipboard-check"></i> MongoDB 三日課程總回顧</h3>
+        <div class="dashboard-grid notes-section">
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-sitemap"></i> 知識架構回顧</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">三天 MongoDB 課程從基礎概念到 Python 整合應用的完整知識架構。</p>
+                <table class="concept-table">
+                    <tr><th>日期</th><th>單元</th><th>核心內容</th></tr>
+                    <tr><td>3/9</td><td>Unit 1</td><td>MongoDB 簡介 + Atlas + Compass + CRUD 四大操作 + SQL 對比</td></tr>
+                    <tr><td>3/9</td><td>Unit 2 上</td><td>資料增強 + 進階查詢 + 正則 / 陣列 / $elemMatch</td></tr>
+                    <tr><td>3/10</td><td>Unit 2 下</td><td>聚合管道 $match / $group / $sort / $project / $unwind + 地理位置 2dsphere / $near</td></tr>
+                    <tr><td>3/10</td><td>Unit 3 上</td><td>Atlas Dashboard + PyMongo 基礎</td></tr>
+                    <tr><td>3/11</td><td>Unit 3 下</td><td>Python 聚合 + 批次處理 + 本地 ML + 前端整合</td></tr>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code-compare"></i> MongoDB vs SQL 最終比較</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">經過三天深入學習後，全面比較 MongoDB 與傳統 SQL 資料庫的差異與適用場景。</p>
+                <table class="concept-table">
+                    <tr><th>比較項目</th><th>MongoDB</th><th>SQL 資料庫</th></tr>
+                    <tr><td>資料模型</td><td>文件導向（Document）</td><td>表格（Table）</td></tr>
+                    <tr><td>Schema</td><td>彈性 Schema</td><td>固定 Schema</td></tr>
+                    <tr><td>擴展方式</td><td>水平分片（Sharding）</td><td>垂直擴展</td></tr>
+                    <tr><td>查詢語法</td><td>JSON 運算子</td><td>SQL 語法</td></tr>
+                    <tr><td>適用場景</td><td>快速迭代 / 地理查詢 / 嵌套資料</td><td>事務一致性 / 複雜 JOIN</td></tr>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-lightbulb"></i> 整合思考題</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">假設要建立一個「即時美食推薦 APP」，從資料庫設計到前端展示的完整方案。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-star"></i> 優秀回答：</strong>完整方案設計：(1) 資料庫：MongoDB Atlas M0 免費方案，food_map 資料庫含 restaurants（嵌入式設計：基本資訊 + 位置 GeoJSON + 評分 + 推薦菜色陣列 + 評論子文件）和 users（收藏清單 + 搜尋歷史）。(2) 資料來源：政府開放資料 20000+ 筆用 Python 批次匯入 + 增強（添加店名/類型/評分）。(3) 後端 API：Python FastAPI + PyMongo，核心端點：GET /restaurants/nearby?lat=25&amp;lng=121&amp;radius=1000（用 $near + $match 組合查詢）、GET /restaurants/top（聚合管道 $group + $sort）、POST /reviews（用 $push 添加評論 + $inc 增加評論數）。(4) 前端：React/Vue + Leaflet.js 地圖，搜尋框 + 地圖 + 餐廳卡片列表。(5) 部署：前端 Cloud Storage 靜態託管，後端 Cloud Run 無伺服器，MongoDB Atlas 雲端。(6) 成本：Atlas 免費 + Cloud Run 閒置 $0，預估月費 &lt;$5。
+                </div>
+            </div>
+
         </div>
 
     </main>

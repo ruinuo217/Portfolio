@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI大數據養成班 - 3/23 SQL 資料庫</title>
+    <title>AI大數據養成班 - 3/23 PostgreSQL 基礎與資料處理</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="dashboard.css">
 </head>
@@ -221,7 +221,7 @@
 
         <div class="top-bar">
             <div class="breadcrumb">
-                首頁 > Week 12: 資料庫與 LLM > <span>SQL 資料庫</span>
+                首頁 > Week 12: 資料庫與 LLM > <span>PostgreSQL 基礎與資料處理</span>
             </div>
             <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
                 <i class="fas fa-home"></i> 回首頁
@@ -230,20 +230,369 @@
 
         <div class="banner">
             <div>
-                <h1>SQL 資料庫</h1>
+                <h1>PostgreSQL 基礎與資料處理</h1>
                 <p>3/23 課程筆記</p>
             </div>
             <i class="fa-solid fa-database banner-icon"></i>
         </div>
 
-        <h3 class="section-title">課程筆記：SQL 資料庫</h3>
+        <!-- Section 1: PostgreSQL vs MySQL -->
+        <h3 class="section-title"><i class="fa-solid fa-scale-balanced"></i> PostgreSQL vs MySQL — 為什麼選 PostgreSQL</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-trophy"></i> 四大優勢場景</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">PostgreSQL 在以下四大場景中明顯優於 MySQL，是企業級分析的首選。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>#</th><th>場景</th><th>PostgreSQL 優勢</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td>複雜查詢</td><td>視窗函數 + CTE 完整支援</td></tr>
+                        <tr><td>2</td><td>JSON 半結構化</td><td>JSONB 比 MySQL JSON 快 20-50 倍</td></tr>
+                        <tr><td>3</td><td>陣列型別</td><td>原生 TEXT[] / INTEGER[] 支援</td></tr>
+                        <tr><td>4</td><td>精細權限</td><td>Schema 隔間，部門級隔離</td></tr>
+                    </tbody>
+                </table>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-circle-info"></i> 注意：</strong>MySQL 8.0 才補上 CTE 和視窗函數，但仍有限制（不支援 GROUPS / EXCLUDE / IGNORE NULLS）。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrows-left-right"></i> MySQL → PostgreSQL 差異速查</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">從 MySQL 轉換到 PostgreSQL 時，需要注意以下語法差異。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>項目</th><th>MySQL</th><th>PostgreSQL</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>大小寫</td><td>不區分</td><td>區分 → 全用小寫</td></tr>
+                        <tr><td>日期格式化</td><td>DATE_FORMAT()</td><td>TO_CHAR()</td></tr>
+                        <tr><td>自動遞增</td><td>AUTO_INCREMENT</td><td>SERIAL</td></tr>
+                        <tr><td>字串引號</td><td>單引號或雙引號</td><td>必須單引號</td></tr>
+                        <tr><td>字串連接</td><td>CONCAT()</td><td>|| 運算子</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-list-check"></i> 決策表</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">根據不同需求場景，選擇合適的資料庫。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>需求場景</th><th>推薦</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>簡單 CRUD</td><td>都可以</td></tr>
+                        <tr><td>複雜分析</td><td>PostgreSQL</td></tr>
+                        <tr><td>JSON 處理</td><td>PostgreSQL</td></tr>
+                        <tr><td>高效能簡單查詢</td><td>MySQL</td></tr>
+                        <tr><td>企業級應用</td><td>PostgreSQL</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-compass"></i> MySQL vs PostgreSQL 選擇考量</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">根據團隊現狀與未來發展方向做出最佳選擇。</p>
+                <ul class="note-points">
+                    <li><strong>適合 MySQL：</strong>標準 Web CRUD / 讀寫單純 / 團隊既有經驗</li>
+                    <li><strong>適合 PostgreSQL：</strong>交易 + 分析混合 / CTE 視窗函數 / JSONB / 彈性索引 / 長期演進</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 結論：</strong>PostgreSQL 同一套引擎可同時做交易與分析，SQL 完整可擴充，開源不被綁死。
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：PostgreSQL vs MySQL</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-star"></i> 優秀回答：</strong>「選擇 PostgreSQL 的核心理由：(1) 視窗函數完整支援——計算排名、累計、環比不需要複雜子查詢 (2) CTE 讓複雜查詢模組化——80 行巢狀子查詢變成 3 個各 10 行的清晰步驟 (3) JSONB 比 MySQL JSON 快 20-50 倍——預分類 + GIN 索引 (4) Schema 層級權限隔離——銷售部看不到物流部資料。MySQL 8.0 雖補上視窗函數但仍有限制（不支援 GROUPS / EXCLUDE / IGNORE NULLS）。兩者 SQL 語法 90% 相同，主要差異：大小寫敏感（全用小寫避免）、TO_CHAR 取代 DATE_FORMAT、SERIAL 取代 AUTO_INCREMENT、字串必須單引號（安全特性防 SQL 注入）。」
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: PostgreSQL 必知基礎 -->
+        <h3 class="section-title"><i class="fa-solid fa-cubes"></i> PostgreSQL 必知基礎</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-sitemap"></i> 層級結構</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">用公司比喻理解 PostgreSQL 的六層架構，vs MySQL 無 Schema 隔間。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>PG 層級</th><th>公司比喻</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Server</td><td>公司總部</td></tr>
+                        <tr><td>Database</td><td>部門</td></tr>
+                        <tr><td>Schema</td><td>團隊</td></tr>
+                        <tr><td>Table</td><td>檔案夾</td></tr>
+                        <tr><td>Row</td><td>文件</td></tr>
+                        <tr><td>Column</td><td>項目</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-shapes"></i> 資料型別</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">PostgreSQL 獨有的進階型別，讓資料處理更靈活。</p>
+                <ul class="note-points">
+                    <li><strong>JSONB：</strong>直接存取 + 查詢 JSON，建 GIN 索引，使用 <code>-></code> / <code>->></code> 操作子</li>
+                    <li><strong>TEXT[] / INTEGER[]：</strong>原生陣列型別，用 <code>ANY()</code> 查詢</li>
+                    <li><strong>基本型別：</strong>INT / TEXT / VARCHAR(255) / TIMESTAMP / DECIMAL / BOOLEAN</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-user-shield"></i> 使用者與權限</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">透過 CREATE USER 和 GRANT 精細控管每位使用者的存取範圍。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>指令</th><th>用途</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>CREATE USER</td><td>建立新使用者</td></tr>
+                        <tr><td>GRANT SELECT</td><td>授予查詢權限</td></tr>
+                        <tr><td>GRANT INSERT</td><td>授予新增權限</td></tr>
+                        <tr><td>REVOKE</td><td>撤銷權限</td></tr>
+                        <tr><td>ALTER ROLE</td><td>修改角色屬性</td></tr>
+                    </tbody>
+                </table>
+                <ul class="note-points">
+                    <li><strong>場景：</strong>分析師只給 SELECT，部門間用 Schema 隔離</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-table"></i> 表的生命週期</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">從建表到查詢的完整流程。</p>
+                <ul class="note-points">
+                    <li><strong>CREATE TABLE：</strong>定義欄位、PRIMARY KEY、FOREIGN KEY</li>
+                    <li><strong>ALTER TABLE：</strong>ADD COLUMN / DROP COLUMN 修改結構</li>
+                    <li><strong>INSERT INTO：</strong>新增資料</li>
+                    <li><strong>SELECT...WHERE：</strong>條件查詢</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 觀念：</strong>PRIMARY KEY = 唯一識別碼，像身份證號一樣確保每筆資料都能被精確定位。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-magnifying-glass-chart"></i> 索引與 EXPLAIN</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">CREATE INDEX 可加速查詢 100 倍，EXPLAIN 用來診斷效能。</p>
+                <ul class="note-points">
+                    <li><strong>EXPLAIN 診斷：</strong>Seq Scan（慢，全表掃描）→ Index Scan（快，索引查找）</li>
+                    <li><strong>何時建索引：</strong>常用 WHERE / JOIN / ORDER BY 的欄位</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：PostgreSQL 基礎</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-star"></i> 優秀回答：</strong>「PostgreSQL 層級結構的實務價值：Database（銷售部）→ Schema（零售團隊 / 批發團隊）→ Table（日報 / 客戶檔案）。分析師小王只有銷售部的 SELECT 權限，(1) 可查詢銷售紀錄 ✅ (2) 不能刪除訂單 ❌（無 DELETE 權限）(3) 看不到物流部 ❌（無該 DB 權限）。PRIMARY KEY 像身份證號——100 個叫『張三』的客戶中用 customer_id=1001 精確定位。索引像書籍目錄：無索引 = 逐頁翻（10 秒），有索引 = 查目錄直接跳（0.1 秒）。EXPLAIN 輸出 Seq Scan 代表需要建索引。」
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: 第一堂課 — 建立數據基地與大數據匯入 -->
+        <h3 class="section-title"><i class="fa-solid fa-file-import"></i> 第一堂課 — 建立數據基地與大數據匯入</h3>
         <div class="dashboard-grid notes-section">
             <div class="card note-card" style="grid-column: 1 / -1;">
                 <div class="note-header">
-                    <h4><i class="fa-solid fa-database"></i> 筆記待補</h4>
-                    <span class="status-badge pending">待補</span>
+                    <h4><i class="fa-solid fa-cart-shopping"></i> Olist 電商資料集</h4>
+                    <span class="status-badge important">觀念</span>
                 </div>
-                <p class="note-desc">課程內容稍後補充。</p>
+                <p class="note-desc">巴西最大電商平台的真實資料，涵蓋 <strong>100,063 筆訂單</strong> / <strong>32,951 位客戶</strong> / <strong>73,099 件評論</strong>，時間跨度 2016-2018。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>資料表</th><th>主要欄位</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>orders</td><td>order_id / customer_id / status / timestamps</td></tr>
+                        <tr><td>customers</td><td>customer_id / city / state</td></tr>
+                        <tr><td>order_items</td><td>order_id / product_id / price</td></tr>
+                        <tr><td>order_payments</td><td>order_id / payment_type / payment_value</td></tr>
+                        <tr><td>order_reviews</td><td>order_id / review_score / comment</td></tr>
+                    </tbody>
+                </table>
+                <ul class="note-points">
+                    <li><strong>關聯結構：</strong>customers ← orders → items / payments / reviews</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-server"></i> 環境設定</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">三種環境擇一建置 PostgreSQL 實作環境。</p>
+                <ul class="note-points">
+                    <li><strong>GCP Cloud SQL（推薦）：</strong>全託管服務，免維護</li>
+                    <li><strong>Docker：</strong><code>docker run postgres:15</code>，本地快速啟動</li>
+                    <li><strong>GCP VM：</strong><code>apt install postgresql</code>，完整控制</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-bolt"></i> COPY vs INSERT</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">批量匯入與逐筆寫入的效能差異高達 3000 倍。</p>
+                <ul class="note-points">
+                    <li><strong>INSERT 逐筆：</strong>每筆讀取 → 驗證 → 寫入 → 確認，100K 筆 = 6+ 小時</li>
+                    <li><strong>COPY 批量：</strong>一次讀取整個 CSV，100K 筆 = 5-10 秒，快 3000 倍</li>
+                    <li><strong>語法：</strong><code>COPY table FROM '/path.csv' WITH (FORMAT csv, HEADER true)</code></li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-triangle-exclamation"></i> 匯入順序重要！</strong>先 customers → orders → items / payments / reviews（外鍵參照）
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> 建表 SQL</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">7 個 CREATE TABLE 含 PRIMARY KEY / FOREIGN KEY / VARCHAR / TIMESTAMP / DECIMAL。</p>
+                <ul class="note-points">
+                    <li><strong>Cloud SQL：</strong>使用 GCS Import 匯入資料</li>
+                    <li><strong>常見錯誤：</strong>Permission denied / Invalid encoding / 欄位不符</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：資料匯入</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-star"></i> 優秀回答：</strong>「COPY vs INSERT 效能差異的根本原因：INSERT 每筆都經歷完整的讀取 → 解析 → 驗證 → 寫入 → 確認循環（5 個步驟 x 100,000 筆 = 500,000 次 IO 操作）。COPY 批量處理：一次讀取整個檔案到記憶體 → 批量解析 → 批量驗證 → 批量寫入（只做 4 次大型 IO）。匯入順序遵循外鍵依賴：customers 先（被 orders 參照）→ orders 次（被 items / payments / reviews 參照）。建表時 FOREIGN KEY (customer_id) REFERENCES olist_customers(customer_id) 確保每筆訂單的 customer_id 都存在於客戶表——防止資料孤兒。Cloud SQL 匯入用 GCS bucket：上傳 CSV → Console Import → 選擇目標表。」
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: 第二堂課 — 數據清洗與半結構化資料 -->
+        <h3 class="section-title"><i class="fa-solid fa-broom"></i> 第二堂課 — 數據清洗與半結構化資料</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-shield-halved"></i> COALESCE 空值替代</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">NULL 不等於 0、不等於空字串、不等於 false，它是「沒有值」。NULL 具有傳染性：100 + NULL = NULL。</p>
+                <ul class="note-points">
+                    <li><strong>COALESCE(值1, 值2, ...)：</strong>按順序找第一個非 NULL 的值</li>
+                    <li><strong>範例：</strong><code>COALESCE(delivered_date, estimated_date, approved_at, purchase_timestamp)</code></li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-right-left"></i> CAST 型別轉換</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">確保數值運算正確，避免文字拼接的陷阱。</p>
+                <ul class="note-points">
+                    <li><strong>語法：</strong><code>CAST(value AS DECIMAL)</code> 或 <code>value::DECIMAL</code></li>
+                    <li><strong>不轉換：</strong>'299.99' + '150.00' = '299.99150.00'（文字拼接）❌</li>
+                    <li><strong>轉換後：</strong>299.99 + 150.00 = 449.99 ✅</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-calendar-days"></i> TO_CHAR 日期格式化</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">將時間戳轉換為可讀的日期字串格式。</p>
+                <ul class="note-points">
+                    <li><strong>語法：</strong><code>TO_CHAR(ts, 'YYYY-MM')</code> → '2023-03'</li>
+                    <li><strong>季度：</strong><code>'YYYY"Q"Q'</code> → '2023Q1'</li>
+                </ul>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>格式碼</th><th>說明</th><th>範例</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>YYYY</td><td>四位年份</td><td>2023</td></tr>
+                        <tr><td>MM</td><td>月份</td><td>03</td></tr>
+                        <tr><td>DD</td><td>日期</td><td>23</td></tr>
+                        <tr><td>HH24</td><td>24 小時制</td><td>14</td></tr>
+                        <tr><td>MI</td><td>分鐘</td><td>30</td></tr>
+                        <tr><td>SS</td><td>秒</td><td>45</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-layer-group"></i> CTE (WITH 語法)</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">巢狀子查詢像俄羅斯套娃（難讀 / 難維護），CTE 讓查詢模組化（清晰 / 可逐步驗證）。</p>
+                <ul class="note-points">
+                    <li><strong>語法：</strong><code>WITH cte1 AS (...), cte2 AS (...) SELECT ...</code></li>
+                    <li><strong>實戰：</strong>3 步 CTE 計算客戶購買次數 + 總支出</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-brackets-curly"></i> JSONB 操作</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">PostgreSQL 獨有的 JSONB 型別，讓半結構化資料查詢效能飛躍。</p>
+                <ul class="note-points">
+                    <li><strong><code>-></code> 提取 JSONB，<code>->></code> 提取文字</strong></li>
+                    <li><strong>巢狀存取：</strong><code>specs->'cpu'</code></li>
+                    <li><strong>陣列查詢：</strong><code>@></code> 包含查詢</li>
+                    <li><strong>GIN 索引：</strong>&lt;50ms vs JSON 純文字 5000ms+</li>
+                    <li><strong>JSONB vs JSON：</strong>JSONB 二進制預處理（快），JSON 純文字每次解析（慢）</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：數據清洗</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-star"></i> 優秀回答：</strong>「數據清洗三大工具實戰：(1) COALESCE 處理 NULL——COALESCE(delivered_date, estimated_date, purchase_timestamp) 確保永遠有日期值，避免報表出現空白。實務中 80% 訂單有 delivery 日期，15% 只有 estimated，5% 只有 purchase (2) CAST 防止型別錯誤——payment_value 可能被存為 TEXT，'299.99' + '150.00' 會變成文字拼接不是數學加法 (3) TO_CHAR 統一日期格式——GROUP BY TO_CHAR(ts, 'YYYY-MM') 做月度統計。CTE 的威力：把 SELECT...FROM (SELECT...FROM (SELECT...)) 三層巢狀拆成 WITH step1 AS (...), step2 AS (...), step3 AS (...) 三個清晰步驟，每步可獨立執行驗證。JSONB 效能關鍵：建 GIN 索引後查詢 &lt;50ms，不建索引可能 5000ms+，差 100 倍。」
+                </div>
             </div>
         </div>
 

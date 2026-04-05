@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI大數據養成班 - 3/10 NoSQL 資料庫</title>
+    <title>AI大數據養成班 - 3/10 MongoDB 聚合分析與 Python 整合</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="dashboard.css">
 </head>
@@ -221,7 +221,7 @@
 
         <div class="top-bar">
             <div class="breadcrumb">
-                首頁 > Week 10: NoSQL 與 Python > <span>NoSQL 資料庫</span>
+                首頁 > Week 10: NoSQL 與 Python > <span>MongoDB 聚合分析與 Python 整合</span>
             </div>
             <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
                 <i class="fas fa-home"></i> 回首頁
@@ -230,20 +230,440 @@
 
         <div class="banner">
             <div>
-                <h1>NoSQL 資料庫</h1>
+                <h1>MongoDB 聚合分析與 Python 整合</h1>
                 <p>3/10 課程筆記</p>
             </div>
             <i class="fa-solid fa-database banner-icon"></i>
         </div>
 
-        <h3 class="section-title">課程筆記：NoSQL 資料庫</h3>
+        <!-- Section 1: 聚合管道概念 -->
+        <h3 class="section-title"><i class="fa-solid fa-layer-group"></i> 聚合管道概念</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-industry"></i> 什麼是聚合管道</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">Aggregation Pipeline = 資料處理框架。類比<strong>工廠生產線</strong>：原料(文件) &rarr; 加工站(階段) &rarr; 成品(結果)。</p>
+                <ul class="note-points">
+                    <li>資料庫層級完成計算，比應用程式端處理更高效</li>
+                    <li>可組合多個階段，每個階段的輸出是下一階段的輸入</li>
+                    <li>語法清晰，易於理解與維護</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-list-ol"></i> 常用聚合階段</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">聚合管道的每個階段對應 SQL 的常見操作。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>聚合階段</th><th>功能</th><th>對應 SQL</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>$match</code></td><td>篩選文件</td><td>WHERE</td></tr>
+                        <tr><td><code>$group</code></td><td>分組統計</td><td>GROUP BY</td></tr>
+                        <tr><td><code>$sort</code></td><td>排序</td><td>ORDER BY</td></tr>
+                        <tr><td><code>$project</code></td><td>選擇欄位</td><td>SELECT</td></tr>
+                        <tr><td><code>$limit</code></td><td>限制數量</td><td>LIMIT</td></tr>
+                        <tr><td><code>$skip</code></td><td>跳過筆數</td><td>OFFSET</td></tr>
+                        <tr><td><code>$count</code></td><td>計數</td><td>COUNT(*)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-calculator"></i> 常用聚合函數</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">在 <code>$group</code> 階段中使用的聚合運算子。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>聚合函數</th><th>功能</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>$sum</code></td><td>總和或計數</td></tr>
+                        <tr><td><code>$avg</code></td><td>平均值</td></tr>
+                        <tr><td><code>$max</code></td><td>最大值</td></tr>
+                        <tr><td><code>$min</code></td><td>最小值</td></tr>
+                        <tr><td><code>$first</code></td><td>第一筆</td></tr>
+                        <tr><td><code>$last</code></td><td>最後一筆</td></tr>
+                        <tr><td><code>$push</code></td><td>收集成陣列</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section 2: 聚合管道實作 -->
+        <h3 class="section-title"><i class="fa-solid fa-code"></i> 聚合管道實作</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-filter"></i> $match 篩選</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">類似 <code>find()</code> 的條件篩選，放在管道第一階段。</p>
+                <ul class="note-points">
+                    <li>範例：<code>{"$match": {"評分": {"$gte": 4.0}}}</code></li>
+                    <li>最佳實踐：放在管道前面以利用索引</li>
+                    <li>減少後續階段需要處理的資料量</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-object-group"></i> $group 分組統計</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">語法：<code>{"$group": {"_id": "$分組欄位", "統計欄位": {"聚合函數": ...}}}</code></p>
+                <ul class="note-points">
+                    <li>統計各類型餐廳數量：<code>_id: "$類型", 餐廳數量: {"$sum": 1}</code></li>
+                    <li>計算各類型平均評分：<code>平均評分: {"$avg": "$評分"}</code></li>
+                    <li>全體統計（不分組）：<code>_id: null</code>，搭配 <code>$sum</code>、<code>$avg</code>、<code>$max</code>、<code>$min</code></li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> Tip:</strong> <code>_id</code> 中的 <code>$</code> 表示引用欄位值；<code>$sum: 1</code> 表示每筆計數為 1。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrow-up-wide-short"></i> $sort + $project</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">排序與欄位選擇，美化輸出結果。</p>
+                <ul class="note-points">
+                    <li><code>$sort</code>：1 = 升序，-1 = 降序</li>
+                    <li><code>$project</code>：選擇欄位（1 顯示 / 0 隱藏）</li>
+                    <li>重新命名：<code>"餐廳類型": "$_id"</code></li>
+                    <li>計算新欄位：使用 <code>$multiply</code>、<code>$sqrt</code> 等運算子</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-diagram-project"></i> 多階段管道組合</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">完整範例：找出評分最高的餐廳類型，5 個階段串接。</p>
+                <ul class="note-points">
+                    <li><strong>Stage 1</strong> <code>$match</code>：篩選評分 &ge; 4 分</li>
+                    <li><strong>Stage 2</strong> <code>$group</code>：按類型分組，計算平均評分、數量、總評論數</li>
+                    <li><strong>Stage 3</strong> <code>$sort</code>：按平均評分降序排列</li>
+                    <li><strong>Stage 4</strong> <code>$limit</code>：取前 3 名</li>
+                    <li><strong>Stage 5</strong> <code>$project</code>：美化欄位名稱</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-expand"></i> $unwind 展開陣列</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">將陣列展開成多筆文件，常搭配 <code>$group</code> 做統計。</p>
+                <ul class="note-points">
+                    <li>範例：<code>{"推薦菜色": ["滷肉飯", "牛腩", "青菜"]}</code> 展開為 3 筆文件，各含一道菜</li>
+                    <li>用途：統計所有推薦菜色出現次數</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：聚合管道</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 優秀回答：</strong>聚合管道的關鍵理解：(1) 每個階段的輸出是下一階段的輸入，像工廠生產線 (2) <code>$match</code> 放前面利用索引提升效能 (3) <code>$group</code> 的 <code>_id</code> 用 <code>$</code> 引用欄位值，聚合函數也要用 <code>$</code> 引用欄位 (4) <code>_id: null</code> 表示不分組統計全體 (5) <code>$unwind</code> 把一筆含陣列的文件拆成多筆，常搭配 <code>$group</code> 做統計。對應 SQL：<code>$match</code>=WHERE, <code>$group</code>=GROUP BY, <code>$sort</code>=ORDER BY, <code>$project</code>=SELECT, <code>$limit</code>=LIMIT。常見錯誤：<code>$group</code> 中欄位忘記加 <code>$</code>、<code>$avg</code> 寫成 <code>'rating'</code> 而非 <code>'$rating'</code>。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Compass 聚合管道操作 -->
+        <h3 class="section-title"><i class="fa-solid fa-compass"></i> Compass 聚合管道操作</h3>
         <div class="dashboard-grid notes-section">
             <div class="card note-card" style="grid-column: 1 / -1;">
                 <div class="note-header">
-                    <h4><i class="fa-solid fa-database"></i> 筆記待補</h4>
-                    <span class="status-badge pending">待補</span>
+                    <h4><i class="fa-solid fa-desktop"></i> Compass Aggregations 功能</h4>
+                    <span class="status-badge done">實作</span>
                 </div>
-                <p class="note-desc">課程內容稍後補充。</p>
+                <p class="note-desc">使用 Compass 的圖形介面建立聚合管道。</p>
+                <ul class="note-points">
+                    <li>點選 <strong>Aggregations</strong> 標籤</li>
+                    <li>點選 <strong>New Pipeline</strong></li>
+                    <li>點選 <strong>Add Stage</strong> &rarr; 選擇階段類型 &rarr; 輸入參數</li>
+                    <li>點選 <strong>Run</strong> 執行管道</li>
+                    <li>每新增一個階段，右側即時顯示結果，方便逐步驗證</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 4: 地理位置查詢 -->
+        <h3 class="section-title"><i class="fa-solid fa-map-location-dot"></i> 地理位置查詢</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-globe"></i> 地理位置查詢概念</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">MongoDB 原生支援地理位置查詢，適用於 LBS 應用。</p>
+                <ul class="note-points">
+                    <li>用途：查詢附近餐廳、某範圍內地點、計算距離</li>
+                    <li>台北座標範圍：經度 121.4~121.6，緯度 24.9~25.2</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-map-pin"></i> 建立地理索引</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">兩步驟建立地理查詢所需的索引。</p>
+                <ul class="note-points">
+                    <li><strong>步驟 1</strong>：調整座標格式，新增「位置」欄位（GeoJSON 格式：<code>type: "Point", coordinates: [Longitude, Latitude]</code>）</li>
+                    <li>使用 <code>updateMany</code> + 聚合管道 <code>$set</code> 批次更新</li>
+                    <li><strong>步驟 2</strong>：建立 2dsphere 索引：<code>createIndex({"位置": "2dsphere"})</code></li>
+                    <li>也可在 Compass 的 Indexes 標籤建立</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> Tip:</strong> 座標順序是 <code>[經度, 緯度]</code> 不是 <code>[緯度, 經度]</code>！
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-location-crosshairs"></i> $near 附近查詢</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">查詢指定座標附近一定距離內的文件。</p>
+                <ul class="note-points">
+                    <li>語法：<code>{"位置": {"$near": {"$geometry": {"type": "Point", "coordinates": [經度, 緯度]}, "$maxDistance": 距離(公尺)}}}</code></li>
+                    <li>範例：台大附近 1000m &mdash; <code>coordinates: [121.5398, 25.0173]</code></li>
+                    <li><code>$near</code> 自動按距離排序，配合 <code>limit(3)</code> 取最近 3 間</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：地理位置查詢</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 優秀回答：</strong>地理位置查詢要點：(1) 必須先建立 2dsphere 索引，否則報錯 (2) 座標格式是 GeoJSON：<code>type: 'Point', coordinates: [經度, 緯度]</code>&mdash;&mdash;注意是經度在前！(3) <code>$maxDistance</code> 單位是公尺（1000 = 1 公里）(4) <code>$near</code> 自動按距離排序，不需額外 sort (5) 可組合地理查詢與普通查詢：同時篩選附近 + 評分 + 類型。台北 101 座標 <code>[121.5645, 25.0340]</code> 附近 500m 查詢，配合評分 &ge; 4 和類型篩選，就是美食外送平台的推薦邏輯。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 5: 業界實例 -->
+        <h3 class="section-title"><i class="fa-solid fa-building"></i> 業界實例</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-utensils"></i> 美食外送平台推薦系統</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">推薦邏輯：距離 2000m 內 + 評分 &ge; 4 + 評論 &ge; 50 + 按綜合指標排序。</p>
+                <ul class="note-points">
+                    <li><strong>Stage 1</strong> <code>$geoNear</code>：地理篩選 + 計算距離</li>
+                    <li><strong>Stage 2</strong> <code>$match</code>：評分 / 評論篩選</li>
+                    <li><strong>Stage 3</strong> <code>$addFields</code>：計算綜合指標 = 評分 &times; &radic;評論數</li>
+                    <li><strong>Stage 4</strong> <code>$sort</code>：綜合指標降序</li>
+                    <li><strong>Stage 5</strong> <code>$limit</code>：前 10 名</li>
+                    <li><strong>Stage 6</strong> <code>$project</code>：格式化輸出</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 6: Atlas Dashboard 視覺化 -->
+        <h3 class="section-title"><i class="fa-solid fa-chart-pie"></i> Atlas Dashboard 視覺化</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-chart-column"></i> Atlas Charts 功能</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">將資料庫資料轉成圖表，無需程式碼。</p>
+                <ul class="note-points">
+                    <li>管理階層查看數據</li>
+                    <li>監控評分變化</li>
+                    <li>展示使用者分布</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-wrench"></i> 建立圖表實作</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">步驟：Atlas &rarr; Charts &rarr; Activate &rarr; Create Dashboard（美食地圖儀表板）&rarr; Add Chart &rarr; 選資料來源（food_map.restaurants_raw）。</p>
+                <ul class="note-points">
+                    <li><strong>長條圖</strong>：各類型餐廳數量</li>
+                    <li><strong>圓餅圖</strong>：價格區間分布</li>
+                    <li><strong>散佈圖</strong>：評分 vs 評論數</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：Dashboard</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 優秀回答：</strong>Atlas Dashboard 是內建視覺化工具，優勢：(1) 直接從資料庫讀取，不需匯出資料 (2) 圖表即時更新，資料變動自動反映 (3) 可分享給團隊成員。建立了三種圖表：長條圖看各類型餐廳數量分布、圓餅圖看價格區間佔比（$$ 最多）、散佈圖看評分與評論數的關係（高評分不一定高評論數）。Dashboard 適合快速原型驗證和管理報告，但複雜分析還是需要 Python + 聚合管道。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 7: Python 整合 — PyMongo -->
+        <h3 class="section-title"><i class="fa-brands fa-python"></i> Python 整合 &mdash; PyMongo</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-plug"></i> PyMongo 基礎</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">Python 操作 MongoDB 的官方套件。</p>
+                <ul class="note-points">
+                    <li>安裝：<code>pip install pymongo</code></li>
+                    <li>連線：<code>MongoClient(連線字串)</code></li>
+                    <li>選資料庫：<code>client["food_map"]</code></li>
+                    <li>選集合：<code>db["restaurants_raw"]</code></li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-terminal"></i> Python CRUD 操作</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">PyMongo 提供與 mongosh 語法幾乎一致的方法。</p>
+                <ul class="note-points">
+                    <li><code>insert_one()</code> / <code>insert_many()</code></li>
+                    <li><code>find()</code> / <code>find_one()</code></li>
+                    <li><code>update_one()</code> / <code>update_many()</code></li>
+                    <li><code>delete_one()</code> / <code>delete_many()</code></li>
+                    <li>範例：<code>for doc in collection.find({"評分": {"$gt": 4}}): print(doc["店名"])</code></li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-gears"></i> Python 聚合管道</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">使用 <code>collection.aggregate([pipeline])</code> 執行聚合管道。</p>
+                <ul class="note-points">
+                    <li>範例：統計各類型平均評分</li>
+                    <li><code>pipeline = [{"$group": {"_id": "$類型", "avg": {"$avg": "$評分"}}}, {"$sort": {"avg": -1}}]</code></li>
+                    <li>聚合管道在 Python 中就是一個 list of dict</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：Python 整合</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 優秀回答：</strong>PyMongo 操作與 Compass/mongosh 的語法幾乎一致，差異：(1) Python 用字典 <code>{}</code> 而非 JSON (2) 方法名用底線分隔如 <code>insert_one</code> 而非 <code>insertOne</code> (3) <code>find()</code> 回傳的是 Cursor 物件，需要用 for 迴圈或 <code>list()</code> 取出。連線字串中的密碼如果有特殊字元需要 URL encode。最佳實踐：連線字串存在環境變數或 .env 檔案，不要寫死在程式碼中。聚合管道在 Python 中就是一個 list of dict，與 mongosh 的寫法對應直接。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 8: 本地建模預測 -->
+        <h3 class="section-title"><i class="fa-solid fa-brain"></i> 本地建模預測</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-microchip"></i> 技術架構</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">捨棄雲端 AutoML，改用 Scikit-learn 本地訓練。</p>
+                <ul class="note-points">
+                    <li>2 小時雲端流程縮短至 1 秒</li>
+                    <li>本地模型駐記憶體，即時預測</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-sitemap"></i> 關鍵技術流程</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">從特徵工程到模型持久化的完整流程。</p>
+                <ul class="note-points">
+                    <li><strong>特徵工程</strong>：One-Hot Encoding 處理類別型資料（如行政區）&rarr; 轉化為矩陣</li>
+                    <li><strong>演算法</strong>：隨機森林回歸（Random Forest Regressor），集成學習處理非線性關係</li>
+                    <li><strong>模型持久化</strong>：joblib 序列化為 <code>.pkl</code> 檔案，一次訓練多次調用</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-sliders"></i> 互動式預測介面</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">ipywidgets 在 Colab 內建即時 UI。</p>
+                <ul class="note-points">
+                    <li>滑桿 + 下拉選單與模型互動</li>
+                    <li>不需前端網頁代碼，「輸入即所得」</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-scale-balanced"></i> 方案優勢對比</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">本地方案與雲端方案的比較。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>優勢</th><th>說明</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>極低延遲</td><td>模型駐記憶體，優於 REST API</td></tr>
+                        <tr><td>開發敏捷</td><td>即時修改參數重新驗證</td></tr>
+                        <tr><td>成本優化</td><td>無需雲端 Endpoint 閒置費用</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section 9: MongoDB 兩日課程總回顧 -->
+        <h3 class="section-title"><i class="fa-solid fa-flag-checkered"></i> MongoDB 兩日課程總回顧</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-sitemap"></i> 知識架構回顧</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">MongoDB 兩日課程涵蓋的完整知識體系。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>單元</th><th>內容</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Unit 1 上</td><td>MongoDB 簡介 + Atlas 環境 + Compass</td></tr>
+                        <tr><td>Unit 1 下</td><td>CRUD 四大操作 + SQL 對比</td></tr>
+                        <tr><td>Unit 2 上</td><td>資料增強 + 進階查詢 + 正則/陣列/嵌入</td></tr>
+                        <tr><td>Unit 2 下</td><td>聚合管道 + 地理位置查詢 + 索引</td></tr>
+                        <tr><td>Unit 3 上</td><td>Atlas Dashboard + Python PyMongo</td></tr>
+                        <tr><td>Unit 3 下</td><td>前端應用 + 本地 ML 預測</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 整合思考題</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">假設你要為學校建立一個「校園美食推薦系統」，請設計完整的 MongoDB 方案。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 優秀回答：</strong>(1) 資料庫設計：food_map 資料庫含 restaurants（餐廳）、users（使用者）、reviews（評論）三個 Collection。restaurants 使用嵌入式設計存基本資訊 + 位置 + 評分，reviews 獨立 Collection 存大量評論資料（避免文件超過 16MB）。(2) 資料來源：匯入政府開放資料作為基底，用 <code>updateMany</code> + <code>$set</code> 批次增強店名/類型/評分等欄位。(3) 核心功能：用 2dsphere 索引 + <code>$near</code> 實現「附近餐廳」；用聚合管道 <code>$group</code> + <code>$sort</code> 做「熱門排行榜」；用 <code>$elemMatch</code> 查詢特定評分的評論。(4) 技術棧：MongoDB Atlas 免費方案 + Python PyMongo 後端 API + 靜態前端。(5) 成本：Atlas M0 免費 512MB 足夠存數萬筆餐廳資料，Python 部署到 Cloud Run 閒置 $0。
+                </div>
             </div>
         </div>
 
@@ -251,11 +671,10 @@
 
     <script>
         function toggleSidebar() {
-            const sidebar = document.querySelector('.sidebar');
-            const overlay = document.querySelector('.overlay');
-            sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
+            document.querySelector('.sidebar').classList.toggle('active');
+            document.querySelector('.overlay').classList.toggle('active');
         }
     </script>
+
 </body>
 </html>
