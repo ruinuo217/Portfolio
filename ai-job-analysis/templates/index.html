@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Job Intelligence · 職缺競爭力分析平台</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="logo">
+    <div class="logo-mark">AI</div>
+    <div class="logo-name">ai<em>_job</em></div>
+  </div>
+  <div class="topbar-right">
+    <div class="mvp-pill">MVP Demo</div>
+    <div class="api-badge">
+      <div class="api-dot"></div>
+      <div class="api-label">API Live · :3939</div>
+    </div>
+  </div>
+</header>
+
+<!-- TAB NAV -->
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('intro',this)">專案總覽</button>
+  <button class="tab-btn" onclick="switchTab('overview',this)">市場總覽 <span class="tab-badge">3</span></button>
+  <button class="tab-btn" onclick="switchTab('tools',this)">AI 分析工具 <span class="tab-badge">2</span></button>
+  <button class="tab-btn" onclick="switchTab('tableau',this)">Tableau 深度分析 <span class="tab-badge">7</span></button>
+  <button class="tab-btn" onclick="switchTab('tech',this)">技術架構</button>
+</nav>
+
+<main>
+
+<!-- ═══════════════════════════════════
+     TAB 1 · 專案總覽
+═══════════════════════════════════ -->
+<div class="page active" id="page-intro">
+
+  <!-- Hero -->
+  <div class="hero-block">
+    <div class="hero-left anim-ready anim-d1">
+      <div class="hero-kicker">Final Project · Big Data &amp; AI Engineering</div>
+      <h1 class="hero-title">台灣工程師<br><em>職缺競爭力</em><br>分析系統</h1>
+      <p class="hero-desc">
+        台灣工程師求職資訊高度分散，技能需求與薪資透明度不足。
+        本專案整合六大求職平台、機器學習模型與即時 API，
+        協助求職者精準掌握市場定位與技能缺口。
+      </p>
+      <div class="hero-pills">
+        <span class="hero-pill">6 大平台爬蟲</span>
+        <span class="hero-pill">12,297 筆職缺</span>
+        <span class="hero-pill">3 支 AI API</span>
+        <span class="hero-pill">Tableau 7 故事頁</span>
+      </div>
+    </div>
+    <div class="hero-right anim-ready anim-d2">
+      <div class="kpi-grid">
+        <div class="kpi-card kpi-accent">
+          <div class="kpi-num" data-target="12297">12,297</div>
+          <div class="kpi-lbl">筆職缺資料</div>
+          <div class="kpi-sub">104 · 1111 · Yes123 · Cake · 518 · Yourator</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-num" data-target="15">15</div>
+          <div class="kpi-lbl">工程師職類</div>
+          <div class="kpi-sub">AI / 前端 / 後端 / 雲端 / 韌體…</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-num" data-target="77">77</div>
+          <div class="kpi-lbl">技能維度</div>
+          <div class="kpi-sub">語言 · 框架 · 工具</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-num" data-target="3">3</div>
+          <div class="kpi-lbl">API 端點</div>
+          <div class="kpi-sub">推薦 · Skill Gap · 薪資預測</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 解題架構 -->
+  <div class="sdiv anim-ready">Problem → Solution → Impact</div>
+  <div class="psi-grid">
+    <div class="psi-card psi-problem anim-ready anim-d1">
+      <div class="psi-icon">⚠</div>
+      <div class="psi-tag" style="color:var(--red)">痛點為何</div>
+      <h3 class="psi-title">求職資訊碎片化</h3>
+      <ul class="psi-list">
+        <li>六大平台資料格式不一，難以橫向比較</li>
+        <li>技能需求與薪資透明度低，面議比例高達 44%</li>
+        <li>缺乏客觀的「技能缺口」量化工具</li>
+      </ul>
+    </div>
+    <div class="psi-arrow">→</div>
+    <div class="psi-card psi-solution anim-ready anim-d2">
+      <div class="psi-icon">⚙</div>
+      <div class="psi-tag" style="color:var(--accent)">解決方案</div>
+      <h3 class="psi-title">端對端 AI 數據管線</h3>
+      <ul class="psi-list">
+        <li>統一爬取、ETL 清洗、MySQL 入庫</li>
+        <li>K-Means 技能分群 + XGBoost 薪資迴歸</li>
+        <li>Flask RESTful API + Tableau 視覺化</li>
+      </ul>
+    </div>
+    <div class="psi-arrow">→</div>
+    <div class="psi-card psi-impact anim-ready anim-d3">
+      <div class="psi-icon">✦</div>
+      <div class="psi-tag" style="color:var(--green)">成果呈現</div>
+      <h3 class="psi-title">即時可互動的分析平台</h3>
+      <ul class="psi-list">
+        <li>輸入技能組合，秒算 Skill Gap 與適配職類</li>
+        <li>AI 預測月薪區間，精準度持續可優化</li>
+        <li>Tableau 7 頁故事，完整呈現市場結構</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 團隊分工 -->
+  <div class="sdiv anim-ready">Team · 四人分工</div>
+  <div class="team-grid">
+
+    <!-- Reyna -->
+    <div class="member-card mc-a anim-ready anim-d1">
+      <div class="mc-top">
+        <div class="member-avatar">R</div>
+        <div class="mc-header">
+          <div class="mc-name">Reyna</div>
+          <div class="mc-role-title">系統架構師 · 資料工程師 · BI 負責人</div>
+        </div>
+      </div>
+      <div class="mc-core">
+        專案組長，統籌全組分工排程，主導架構設計、資料管線建置與 BI 視覺化
+      </div>
+      <div class="mc-highlights">
+        <div class="mc-hl">
+          <span class="mc-hl-dot"></span>
+          <span>組長職責：主題確認、任務分工、工作時程制定、資料來源確認，建立專案資料夾架構與<strong>簡報製作</strong>統籌</span>
+        </div>
+        <div class="mc-hl">
+          <span class="mc-hl-dot"></span>
+          <span>設計 MySQL <strong>3 表 Schema</strong>，制定 12 欄爬蟲規格與技能白名單，規範全員開發標準</span>
+        </div>
+        <div class="mc-hl">
+          <span class="mc-hl-dot"></span>
+          <span>ETL 清洗整合 <strong>12,297 筆</strong>跨平台資料，部署本地 MySQL + GCP Cloud SQL 雙備援</span>
+        </div>
+        <div class="mc-hl">
+          <span class="mc-hl-dot"></span>
+          <span>規劃主導 Tableau <strong>7 頁</strong>敘事架構，直連 MySQL 即時呈現市場洞察</span>
+        </div>
+      </div>
+      <div class="mc-footer">
+        <div class="mc-scope">
+          <span class="mc-scope-tag">專案管理</span>
+          <span class="mc-scope-tag">DB Schema</span>
+          <span class="mc-scope-tag">ETL</span>
+          <span class="mc-scope-tag">GCP</span>
+          <span class="mc-scope-tag">Tableau</span>
+        </div>
+        <div class="mc-phase">P0 · 1 · 2 · 4 · 5 · 6</div>
+      </div>
+    </div>
+
+    <!-- Asher -->
+    <div class="member-card mc-b anim-ready anim-d2">
+      <div class="mc-top">
+        <div class="member-avatar">A</div>
+        <div class="mc-header">
+          <div class="mc-name">Asher</div>
+          <div class="mc-role-title">AI 工程師（職類分群模型）</div>
+        </div>
+      </div>
+      <div class="mc-core">
+        建構職缺推薦核心：技能向量化 → 分群 → 監督式職類分類
+      </div>
+      <div class="mc-highlights">
+        <div class="mc-hl">
+          <span class="mc-hl-dot"></span>
+          <span><strong>77 種技能</strong> NLP 向量化 → K-Means（n=15）→ GradientBoosting，從無監督改為監督式架構</span>
+        </div>
+        <div class="mc-hl">
+          <span class="mc-hl-dot"></span>
+          <span>APP工程師 <strong>F1=0.69</strong>、前端 F1=0.60、AI工程師 F1=0.58，整體準確率 46.64%</span>
+        </div>
+        <div class="mc-hl">
+          <span class="mc-hl-dot"></span>
+          <span>輸出 <strong>encoder.pkl</strong> 供薪資預測模型共用，完成 cluster_skills_mapping.json 技術文件</span>
+        </div>
+      </div>
+      <div class="mc-footer">
+        <div class="mc-scope">
+          <span class="mc-scope-tag">NLP</span>
+          <span class="mc-scope-tag">K-Means</span>
+          <span class="mc-scope-tag">GradientBoosting</span>
+        </div>
+        <div class="mc-phase">P0 · 1 · 3 · 5 · 6</div>
+      </div>
+    </div>
+
+    <!-- Ryan -->
+    <div class="member-card mc-c anim-ready anim-d3">
+      <div class="mc-top">
+        <div class="member-avatar">R</div>
+        <div class="mc-header">
+          <div class="mc-name">Ryan</div>
+          <div class="mc-role-title">AI 工程師（薪資預測模型）</div>
+        </div>
+      </div>
+      <div class="mc-core">
+        排除面議職缺，以真實公開薪資訓練 XGBoost 迴歸預測模型
+      </div>
+      <div class="mc-highlights">
+        <div class="mc-hl">
+          <span class="mc-hl-dot"></span>
+          <span>特徵工程：職稱 One-Hot + 工作年資 + 技能 MultiLabelBinarizer，三類特徵矩陣合併</span>
+        </div>
+        <div class="mc-hl">
+          <span class="mc-hl-dot"></span>
+          <span>XGBoost Regressor：<strong>RMSE 18,287</strong>、<strong>R² 0.6215</strong>，5-fold CV RMSE 18,144（穩定）</span>
+        </div>
+        <div class="mc-hl">
+          <span class="mc-hl-dot"></span>
+          <span>輸出 <strong>salary_prediction.pkl</strong> + title_columns.pkl，與 Asher 共用 encoder.pkl</span>
+        </div>
+      </div>
+      <div class="mc-footer">
+        <div class="mc-scope">
+          <span class="mc-scope-tag">特徵工程</span>
+          <span class="mc-scope-tag">XGBoost</span>
+          <span class="mc-scope-tag">5-fold CV</span>
+        </div>
+        <div class="mc-phase">P0 · 1 · 3 · 5 · 6</div>
+      </div>
+    </div>
+
+    <!-- Cosmos -->
+    <div class="member-card mc-d anim-ready anim-d4">
+      <div class="mc-top">
+        <div class="member-avatar">C</div>
+        <div class="mc-header">
+          <div class="mc-name">Cosmos</div>
+          <div class="mc-role-title">後端工程師 · 系統整合負責人</div>
+        </div>
+      </div>
+      <div class="mc-core">
+        封裝全系統 Flask API，串接兩支 AI 模型，完成三個 Demo 點整合
+      </div>
+      <div class="mc-highlights">
+        <div class="mc-hl">
+          <span class="mc-hl-dot"></span>
+          <span>Flask 封裝 <strong>3 支 RESTful API</strong>（/recommend · /salary · /top-skills），載入全部 .pkl 模型</span>
+        </div>
+        <div class="mc-hl">
+          <span class="mc-hl-dot"></span>
+          <span>Flasgger Swagger UI 自動文件 + <strong>Streamlit</strong> 互動前端，同時支援 API 與 UI 兩種 Demo 形式</span>
+        </div>
+        <div class="mc-hl">
+          <span class="mc-hl-dot"></span>
+          <span>全系統整合測試，驗證 <strong>GCP 備援切換</strong>，確保 Demo 當天三個 Demo 點順暢執行</span>
+        </div>
+      </div>
+      <div class="mc-footer">
+        <div class="mc-scope">
+          <span class="mc-scope-tag">Flask</span>
+          <span class="mc-scope-tag">Swagger</span>
+          <span class="mc-scope-tag">Streamlit</span>
+        </div>
+        <div class="mc-phase">P0 · 1 · 2 · 4 · 5 · 6</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 六大開發階段 -->
+  <div class="sdiv anim-ready">Development Phases · 六大開發階段</div>
+  <div class="phases-track">
+
+    <div class="phase-item anim-ready">
+      <div class="phase-dot ph-a"></div>
+      <div class="phase-body">
+        <div class="phase-num">Phase 0</div>
+        <div class="phase-title">專案啟動與環境建置 <span class="phase-who who-a">Reyna</span> <span class="phase-who who-all">全員協作</span></div>
+        <p class="phase-desc">Reyna 主導專案規劃與架構設計，包含主題確認、任務分工、工作時程制定、資料來源確認。<br>建立 GitHub Repo（<code style="font-family:var(--f-mono);font-size:11px;color:var(--accent)">ai-job-analysis-pipeline</code>）並完成專案骨架：<code style="font-family:var(--f-mono);font-size:11px">.env.example · .gitignore · README.md · requirements.txt · data/ · scrapers/</code>。<br>同步設計三張 MySQL 資料表（jobs / skills / job_skills_mapping），制定 12 欄爬蟲欄位規格與技能白名單字典，發布 DevOps SOP 供全員遵循。</p>
+        <div class="phase-model-grid" style="margin-top:10px">
+          <div class="phase-model-card">
+            <div class="phase-model-who who-a-bg">專案規劃</div>
+            <div class="phase-model-algo">主題確認 → 任務分工 → 時程排定 → 資料源確認</div>
+            <div class="phase-kpi">製作 WBS 甘特圖 → <a href="https://docs.google.com/spreadsheets/d/1rDB1XtEPrEyuqTv9U_eOjt_jWK_ngqysRBLftRBaDFc/edit?usp=sharing" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px;">開啟 Google Sheets ↗</a></div>
+          </div>
+          <div class="phase-model-card">
+            <div class="phase-model-who who-a-bg">資料庫 &amp; DevOps 設計</div>
+            <div class="phase-model-algo">ER Diagram · 3 張表 Schema · 12 欄爬蟲規格 · GitHub SOP</div>
+            <div class="phase-kpi">Output：GitHub Repo · .env.example · DB Schema · 爬蟲規格書</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-item anim-ready">
+      <div class="phase-dot ph-all"></div>
+      <div class="phase-body">
+        <div class="phase-num">Phase 1</div>
+        <div class="phase-title">資料蒐集 <span class="phase-who who-all">全員</span></div>
+        <p class="phase-desc">爬取 104、1111、Yes123、CakeResume、518、Yourator，每人負責 3,000+ 筆，格式統一為乾淨 CSV。</p>
+        <div class="phase-kpi">KPI：總計 12,000 筆以上</div>
+      </div>
+    </div>
+
+    <div class="phase-item anim-ready">
+      <div class="phase-dot ph-a"></div>
+      <div class="phase-body">
+        <div class="phase-num">Phase 2</div>
+        <div class="phase-title">資料整合入庫 <span class="phase-who who-a">Reyna</span> <span class="phase-who who-d">Cosmos 協助</span></div>
+        <p class="phase-desc">Reyna 主導 CSV 合併去重、ETL 清洗、寫入 MySQL，同步建立 GCP 雲端備援，輸出 all_jobs_perfect.csv 至 GitHub data/。Cosmos 協助檢查檔案清洗無誤與資料庫確認。</p>
+        <div class="phase-kpi">Output：黃金訓練集 .csv</div>
+      </div>
+    </div>
+
+    <div class="phase-item anim-ready">
+      <div class="phase-dot ph-bc"></div>
+      <div class="phase-body">
+        <div class="phase-num">Phase 3</div>
+        <div class="phase-title">AI 模型訓練 <span class="phase-who who-b">Asher</span> <span class="phase-who who-c">Ryan</span></div>
+        <div class="phase-model-grid">
+          <div class="phase-model-card">
+            <div class="phase-model-who who-b-bg">Asher · 分群模型</div>
+            <div class="phase-model-algo">MultiLabelBinarizer → K-Means（n=15）→ GradientBoosting</div>
+            <p class="phase-desc" style="margin-bottom:8px">77 種技能 One-Hot → K-Means 壓縮成 15 維距離特徵 → GradientBoosting 監督式分類 15 個核心職類。首次嘗試 KMeans 職缺分群（雙層無監督）因前端與 AI 技能向量過近放棄，改為監督式架構。</p>
+            <div class="phase-model-metrics">
+              <span class="pm-badge">整體準確率 46.64%</span>
+              <span class="pm-badge pm-good">APP工程師 F1=0.69</span>
+              <span class="pm-badge pm-good">前端 F1=0.60</span>
+              <span class="pm-badge pm-good">AI工程師 F1=0.58</span>
+            </div>
+            <div class="phase-kpi" style="margin-top:10px">Output：encoder.pkl · skill_clusters.pkl · job_classifier.pkl · label_encoder.pkl · cluster_skills_mapping.json · predict_example.py</div>
+          </div>
+          <div class="phase-model-card">
+            <div class="phase-model-who who-c-bg">Ryan · 薪資預測模型</div>
+            <div class="phase-model-algo">One-Hot（職稱）+ 年資 + MultiLabelBinarizer（技能）→ XGBRegressor</div>
+            <p class="phase-desc" style="margin-bottom:8px">排除面議職缺（is_negotiable=0），目標變數為（min+max）/2 平均月薪。特徵矩陣合併職稱 One-Hot、工作年資、技能 MLB 三類。最終採用 XGBRegressor，以 5-fold 交叉驗證評估泛化穩定性，K-Fold 平均 RMSE 18,144 表現穩定。</p>
+            <div class="phase-model-metrics">
+              <span class="pm-badge pm-good">XGBoost RMSE 18,287</span>
+              <span class="pm-badge pm-good">R² 0.6215</span>
+              <span class="pm-badge pm-good">K-Fold RMSE 18,144 ✓</span>
+            </div>
+            <div class="phase-kpi" style="margin-top:10px">Output：salary_prediction.pkl · title_columns.pkl　（encoder.pkl 由 Asher 提供共用）</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-item anim-ready">
+      <div class="phase-dot ph-d"></div>
+      <div class="phase-body">
+        <div class="phase-num">Phase 4</div>
+        <div class="phase-title">後端 API &amp; 前端 <span class="phase-who who-d">Cosmos</span> <span class="phase-who who-a">Reyna 前端支援</span></div>
+        <p class="phase-desc">Cosmos 主導：讀取 models/ 中所有 .pkl，封裝成 3 支 Flask API，Swagger 自動文件，Streamlit 前端介面，全系統整合測試。Reyna 協助前端介面開發與視覺呈現。</p>
+        <div class="phase-kpi">Output：/recommend · /salary · /top-skills</div>
+      </div>
+    </div>
+
+    <div class="phase-item anim-ready">
+      <div class="phase-dot ph-all"></div>
+      <div class="phase-body">
+        <div class="phase-num">Phase 5</div>
+        <div class="phase-title">Tableau &amp; 簡報製作 <span class="phase-who who-a">Reyna 規劃主導</span> <span class="phase-who who-all">全員協作</span></div>
+        <p class="phase-desc">Reyna 統籌規劃 Tableau 敘事架構與簡報分工，主導直連 MySQL 建置 Dashboard 框架；Asher / Ryan / Cosmos 依分工協作完成各頁圖表製作，共同討論敘事角度（資料來源、公司分析、薪資分布、技能四象限、市場趨勢）。全員共同完成 P1–P14 簡報製作。</p>
+        <div class="phase-kpi">Output：Tableau Public 7 Story Points · 簡報 P1–P14</div>
+      </div>
+    </div>
+
+    <div class="phase-item anim-ready">
+      <div class="phase-dot ph-all"></div>
+      <div class="phase-body">
+        <div class="phase-num">Phase 6</div>
+        <div class="phase-title">專案收斂交付 <span class="phase-who who-all">全員</span></div>
+        <p class="phase-desc">GitHub 統整、製作 P1–P14 簡報、Live Demo 彩排，確認三個 Demo 點（API / Tableau / GCP 切換）順暢執行。</p>
+        <div class="phase-kpi">Deliverable：簡報 + Live Demo + GitHub</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════
+     TAB 2 · 市場總覽
+═══════════════════════════════════ -->
+<div class="page" id="page-overview">
+
+  <div class="ph">
+    <div class="ph-kicker">AI Job Competency Analysis System · MVP Demo</div>
+    <div class="ph-title">工程師職缺<em>市場分析</em></div>
+    <p class="ph-desc">整合 104、1111、Yes123、CakeResume、518、Yourator 六大平台共 <strong>12,297 筆</strong>工程師職缺，涵蓋 15 種職類與 <strong>77</strong> 項技能維度，提供即時的市場趨勢分析。</p>
+  </div>
+
+  <div class="metrics">
+    <div class="mc"><div class="mc-icon">📊</div><div class="mc-lbl">Total Records</div><div class="mc-num">12,297</div><div class="mc-sub">筆職缺 · 6 大平台</div></div>
+    <div class="mc"><div class="mc-icon">🗂</div><div class="mc-lbl">Job Categories</div><div class="mc-num">15</div><div class="mc-sub">種工程師職類</div></div>
+    <div class="mc"><div class="mc-icon">⚡</div><div class="mc-lbl">Skill Dimensions</div><div class="mc-num">77</div><div class="mc-sub">語言 / 框架 / 工具</div></div>
+    <div class="mc"><div class="mc-icon">🔗</div><div class="mc-lbl">API Endpoints</div><div class="mc-num">3</div><div class="mc-sub">推薦 / Gap / 薪資</div></div>
+  </div>
+
+  <div class="sdiv">Market Charts · Live API</div>
+  <div class="chart-grid" id="dashboard">
+    <!-- Skeleton loaders -->
+    <div class="skeleton-card">
+      <div class="skeleton-line" style="width:60%"></div>
+      <div class="skeleton-line" style="width:35%"></div>
+      <div class="skeleton-chart"></div>
+    </div>
+    <div class="skeleton-card">
+      <div class="skeleton-line" style="width:60%"></div>
+      <div class="skeleton-line" style="width:35%"></div>
+      <div class="skeleton-chart"></div>
+    </div>
+    <div class="skeleton-card chart-full">
+      <div class="skeleton-line" style="width:50%"></div>
+      <div class="skeleton-line" style="width:30%"></div>
+      <div class="skeleton-chart"></div>
+    </div>
+  </div>
+
+  <div class="sdiv">Key Findings · 資料洞察</div>
+  <div class="ig">
+    <div class="ic c-cyan anim-ready anim-d1"><div class="ic-lbl">Top Demand Skill</div><div class="ic-val">Python — 1,516 listings</div><div class="ic-desc">市場需求第一，占 AI 工程師職缺 76%；Git（1,035）、Excel（1,387）、AutoCAD（1,229）緊追其後</div></div>
+    <div class="ic c-green anim-ready anim-d2"><div class="ic-lbl">Highest Salary Ceiling</div><div class="ic-val">全端 &amp; 後端工程師</div><div class="ic-desc">兩者薪資分布最廣（Box plot P75 最高），突破天花板機率遠高於其他職類</div></div>
+    <div class="ic c-amber anim-ready anim-d3"><div class="ic-lbl">Fresh Graduate Demand</div><div class="ic-val">製造 / 設備 · 營建工程</div><div class="ic-desc">0 年缺分別達 1,134 & 843 筆，遠超其他職類，新鮮人最容易切入</div></div>
+    <div class="ic c-red anim-ready anim-d4"><div class="ic-lbl">Salary Growth Trap</div><div class="ic-val">多數職類 0→3yr &lt; NT$3K</div><div class="ic-desc">大多數職類 0→3 年薪資成長不到 NT$3K；例外：後端 NT$49K→NT$72K，跳槽效益遠大於等待調薪</div></div>
+    <div class="ic c-purple anim-ready anim-d5"><div class="ic-lbl">High ROI Skills — 最值得學</div><div class="ic-val">Docker · Kubernetes · Go</div><div class="ic-desc">這三項同時滿足「需求量高於市場中位數」+「薪資高於市場平均」，學了既好找工作又加薪，投資報酬率最高</div></div>
+    <div class="ic c-blue anim-ready anim-d6"><div class="ic-lbl">Salary Transparency</div><div class="ic-val">56.14% 職缺明碼標價</div><div class="ic-desc">43.86% 仍為面議；製造 / 設備、電子 / 電機面議比例最高，軟體職類透明度相對最高</div></div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════
+     TAB 3 · AI 分析工具
+═══════════════════════════════════ -->
+<div class="page" id="page-tools">
+
+  <div class="ph">
+    <div class="ph-kicker">Powered by KMeans + XGBoost</div>
+    <div class="ph-title">AI <em>互動分析工具</em></div>
+    <p class="ph-desc">輸入你的技能組合，AI 模型即時分析你的市場定位、技能缺口，並預測對應的薪資區間。</p>
+  </div>
+
+  <div class="tool-guide-wrap">
+    <div class="tg-card">
+      <div class="tg-card-head">
+        <span class="tg-card-icon">🎯</span>
+        <div>
+          <div class="tg-card-title">職缺推薦 &amp; Skill Gap 分析</div>
+          <div class="tg-card-sub">KMeans + GradientBoosting</div>
+        </div>
+      </div>
+      <div class="tg-step-list">
+        <div class="tg-step"><span class="tg-step-num">01</span><div><div class="tg-step-title">選擇模式</div><div class="tg-step-desc"><strong>Explore</strong>：AI 根據技能推薦 Top 3 職類；<strong>Target</strong>：選好目標職稱，直接列技能缺口。</div></div></div>
+        <div class="tg-step"><span class="tg-step-num">02</span><div><div class="tg-step-title">勾選你的技能</div><div class="tg-step-desc">Explore 模式<strong>至少選 3 項</strong>。建議只勾核心技術技能，勾太多通用技能（如 Excel、Scrum）會稀釋模型判斷。</div></div></div>
+        <div class="tg-step"><span class="tg-step-num">03</span><div><div class="tg-step-title">看懂結果</div><div class="tg-step-desc"><strong class="tc-green">綠色 tag</strong> = 已有技能；<strong class="tc-red">紅色 tag</strong> = 缺口（Skill Gap）。Explore 模式會顯示每個推薦職類的匹配數量。</div></div></div>
+      </div>
+    </div>
+    <div class="tg-card">
+      <div class="tg-card-head">
+        <span class="tg-card-icon">💰</span>
+        <div>
+          <div class="tg-card-title">AI 薪資預測</div>
+          <div class="tg-card-sub">XGBoost Regression Model</div>
+        </div>
+      </div>
+      <div class="tg-step-list">
+        <div class="tg-step"><span class="tg-step-num">01</span><div><div class="tg-step-title">選職稱與年資</div><div class="tg-step-desc">從下拉選擇<strong>目標職稱</strong>，再拉動年資滑桿（0–5 年）。模型已排除「面議」職缺，數字來自真實公開薪資。</div></div></div>
+        <div class="tg-step"><span class="tg-step-num">02</span><div><div class="tg-step-title">勾選核心技能</div><div class="tg-step-desc">技能清單會自動切換為<strong>該職類常見技能</strong>。只勾真正熟悉的核心技術，避免勾太多稀釋特徵權重。</div></div></div>
+        <div class="tg-step"><span class="tg-step-num">03</span><div><div class="tg-step-title">解讀預測薪資</div><div class="tg-step-desc">結果為 XGBoost 預測的<strong>月薪均值（TWD/月）</strong>。年資超過 3 年者實際談薪空間通常更高，可作市場底線參考。</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tool-grid">
+    <div class="card">
+      <div class="card-head">
+        <div><div class="card-title">職缺推薦 &amp; Skill Gap 分析</div><div class="card-sub">KMeans + GradientBoosting</div></div>
+        <div class="card-icon cyan">🎯</div>
+      </div>
+      <div class="form-row">
+        <label class="form-label">Target Job Title</label>
+        <select id="rec_job_title" class="form-control"></select>
+      </div>
+      <div class="form-row">
+        <div class="row-between">
+          <label class="form-label" style="margin:0">Current Skills</label>
+          <button class="btn-ghost" onclick="clearSkills('rec_skills','rec_count')">Clear All</button>
+        </div>
+        <div class="skills-wrap" style="margin-top:9px">
+          <div class="skills-header">
+            <input class="skills-search" type="text" placeholder="Search skills..." oninput="filterSkills(this,'rec_skills')">
+            <span class="skill-count" id="rec_count">0 / 77</span>
+          </div>
+          <div class="skills-list" id="rec_skills"></div>
+        </div>
+      </div>
+      <button id="btn_recommend" class="btn-primary" onclick="submitRecommend()">Run Analysis →</button>
+      <div id="rec_result" class="result-box"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div><div class="card-title">AI 薪資預測</div><div class="card-sub">XGBoost Regression Model</div></div>
+        <div class="card-icon purple">💰</div>
+      </div>
+      <div class="form-row">
+        <label class="form-label">Job Title</label>
+        <select id="sal_job_title" class="form-control" onchange="updateSalSkills()"></select>
+      </div>
+      <div class="form-row">
+        <div class="row-between">
+          <label class="form-label" style="margin:0">Years of Experience <span class="tip" data-tip="模型訓練資料已排除「面議」職缺。年資 > 3 年者實際談薪空間通常高於此預測值。"><span class="tip-mark">?</span></span></label>
+          <span class="range-val" id="sal_exp_display">0 yr</span>
+        </div>
+        <input type="range" id="sal_exp_years" min="0" max="5" step="1" value="0" style="margin-top:12px" oninput="document.getElementById('sal_exp_display').textContent=this.value+' yr'">
+      </div>
+      <div class="form-row">
+        <div class="row-between">
+          <label class="form-label" style="margin:0">Core Skills <span class="tip" data-tip="建議只勾選核心技術技能。勾選過多通用技能可能稀釋模型特徵權重。"><span class="tip-mark">?</span></span></label>
+          <button class="btn-ghost" onclick="clearSkills('sal_skills','sal_count')">Clear All</button>
+        </div>
+        <div class="skills-wrap" style="margin-top:9px">
+          <div class="skills-header">
+            <input class="skills-search" type="text" placeholder="Search skills..." oninput="filterSkills(this,'sal_skills')">
+            <span class="skill-count" id="sal_count">0 / 77</span>
+          </div>
+          <div class="skills-list" id="sal_skills"></div>
+        </div>
+      </div>
+      <button id="btn_salary" class="btn-primary" onclick="submitSalary()">Predict Salary →</button>
+      <div id="sal_result" class="result-box"></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════
+     TAB 4 · Tableau
+═══════════════════════════════════ -->
+<div class="page" id="page-tableau">
+
+  <div class="ph">
+    <div class="ph-kicker">Interactive Visualization · 7 Story Points</div>
+    <div class="ph-title">Tableau <em>深度分析儀表板</em></div>
+    <p class="ph-desc">以 7 個敘事頁面完整呈現台灣工程師市場，涵蓋公司分析、薪資分布、技能四象限等深度洞察。</p>
+  </div>
+
+  <div class="tableau-wrap">
+    <div class="tableau-head">
+      <div>
+        <div class="tbl-title">15 種工程師職缺完整分析</div>
+        <div class="tbl-sub">資料來源：104 · 1111 · Yes123 · CakeResume · 518 · Yourator &nbsp;|&nbsp; 12,297 筆 · Tableau Public 互動呈現</div>
+      </div>
+    </div>
+    <div class="story-area">
+      <div class="story-lbl">Story Points · 點擊圖表內箭頭切換分頁</div>
+      <div class="story-chips">
+        <div class="chip"><b>P1 · 從哪裡來？市場要誰？</b><span>資料來源分布 + 年資需求結構</span></div>
+        <div class="chip"><b>P2 · 哪些公司在招人？</b><span>Google、TSMC 職缺結構比較</span></div>
+        <div class="chip"><b>P3 · 新鮮人去哪？薪資分布</b><span>15 職類缺比與薪資天花板</span></div>
+        <div class="chip"><b>P4 · 哪些職位薪資標準？</b><span>透明度 vs 面議比例分析</span></div>
+      </div>
+      <div class="story-chips-bottom">
+        <div class="chip chip-p5"><b>P5 · 市場要什麼技能？</b><span>Treemap + 職類高頻技能占比 <span class="chip-filter-tag">含篩選器</span></span></div>
+        <div class="chip"><b>P6 · 最值得學的技能？</b><span>高薪 × 高需求四象限分析</span></div>
+        <div class="chip"><b>P7 · 最值得放棄的技能？</b><span>普及低薪 vs 加分區地圖</span></div>
+      </div>
+    </div>
+    <div class="hint-bar">▶ <span>嵌入式版本：使用圖表內左右箭頭切換分析頁，每頁支援 hover 互動；P5「市場要什麼技能？」頁面另有職稱篩選器可互動篩選</span></div>
+    <div class="tableau-embed-wrap">
+      <div class='tableauPlaceholder' id='viz1774510431463' style='position:relative;width:100%'>
+        <noscript><a href='#'><img alt='15種工程師職缺分析' src='https://public.tableau.com/static/images/ai/ai_job_17745101715630/15/1_rss.png' style='border:none'/></a></noscript>
+        <object class='tableauViz' style='display:none;'>
+          <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F'/>
+          <param name='embed_code_version' value='3'/>
+          <param name='path' value='views&#47;ai_job_all_0404&#47;15?:language=zh-TW&amp;:embed=true&amp;publish=yes&amp;:sid=&amp;:redirect=auth'/>
+          <param name='toolbar' value='yes'/>
+          <param name='animate_transition' value='yes'/>
+          <param name='display_static_image' value='yes'/>
+          <param name='display_spinner' value='yes'/>
+          <param name='display_count' value='yes'/>
+          <param name='language' value='zh-TW'/>
+          <param name='filter' value='publish=yes'/>
+        </object>
+      </div>
+      <script type='text/javascript'>
+        (function(){
+          var d=document.getElementById('viz1774510431463');
+          var v=d.getElementsByTagName('object')[0];
+          v.style.width='1600px'; v.style.height='927px';
+          var s=document.createElement('script');
+          s.src='https://public.tableau.com/javascripts/api/viz_v1.js';
+          v.parentNode.insertBefore(s,v);
+        })();
+      </script>
+    </div>
+    <div class="tbl-foot">
+      <a href="https://public.tableau.com/app/profile/reyna.g8629/viz/ai_job_all_0404/15" target="_blank" rel="noopener noreferrer" class="ext-link">↗ Open full version on Tableau Public</a>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════
+     TAB 5 · 技術架構
+═══════════════════════════════════ -->
+<div class="page" id="page-tech">
+
+  <div class="ph">
+    <div class="ph-kicker">End-to-End Data Pipeline</div>
+    <div class="ph-title">技術架構 <em>System Overview</em></div>
+    <p class="ph-desc">從資料爬取、清洗、模型訓練到 API 服務與視覺化呈現，完整的端對端 AI 數據管線。</p>
+  </div>
+
+  <div class="sdiv" style="margin-top:0">System Architecture · 系統架構圖</div>
+  <div class="arch-wrap">
+    <img src="../static/SystemDiagram.png" alt="職缺分析系統架構圖" style="width:100%;border-radius:var(--r);display:block;">
+    <div class="arch-legend">
+      <div class="legend-item"><span class="leg-dot" style="background:rgba(59,130,246,.25);border:1.5px solid #3B82F6"></span>資料清洗 / 入庫</div>
+      <div class="legend-item"><span class="leg-dot" style="background:rgba(234,179,8,.25);border:1.5px solid #CA8A04"></span>本地 MySQL 資料庫</div>
+      <div class="legend-item"><span class="leg-dot" style="background:rgba(168,85,247,.12);border:1.5px dashed #9333EA"></span>GCP 備援資料庫</div>
+      <div class="legend-item"><span class="leg-dot" style="background:rgba(249,115,22,.2);border:1.5px solid #EA580C"></span>Clustering 模型</div>
+      <div class="legend-item"><span class="leg-dot" style="background:rgba(139,92,246,.2);border:1.5px solid #7C3AED"></span>Regression 模型</div>
+      <div class="legend-item"><span class="leg-dot" style="background:rgba(34,197,94,.15);border:1.5px solid #16A34A"></span>Flask API</div>
+      <div class="legend-item"><span class="leg-dot" style="background:rgba(20,184,166,.15);border:1.5px solid #0D9488"></span>展示層 / BI</div>
+    </div>
+  </div>
+
+  <div class="pipeline-card">
+    <div class="sdiv" style="margin-top:0;margin-bottom:0">Pipeline Flow</div>
+    <div class="pipeline-steps">
+      <div class="ps"><div class="ps-num">01 · Ingest</div><div class="ps-title">資料爬取</div><div class="ps-desc">Selenium + BeautifulSoup 爬取 6 大平台（104 · 1111 · Yes123 · Cake · 518 · Yourator），格式統一後存入 MySQL</div></div>
+      <div class="ps"><div class="ps-num">02 · Train</div><div class="ps-title">模型訓練</div><div class="ps-desc">K-Means 技能分群 + GradientBoosting 職類分類（Asher）· XGBoost 薪資預測迴歸（Ryan）</div></div>
+      <div class="ps"><div class="ps-num">03 · Serve</div><div class="ps-title">Flask RESTful API</div><div class="ps-desc">3 支 API 端點 · Swagger 自動文件 · PyMySQL 即時查詢</div></div>
+      <div class="ps"><div class="ps-num">04 · Visualize</div><div class="ps-title">視覺化</div><div class="ps-desc">Chart.js 即時圖表 · Tableau Public 7 頁故事分析</div></div>
+    </div>
+  </div>
+
+  <div class="sdiv">Technology Stack</div>
+  <div class="tech-grid">
+    <div class="tc anim-ready anim-d1"><div class="tc-badge b-scrape">Scrape</div><div class="tc-name">Selenium + BS4</div><div class="tc-role">網路爬蟲 · 6 大招募平台</div></div>
+    <div class="tc anim-ready anim-d2"><div class="tc-badge b-store">Storage</div><div class="tc-name">MySQL（本地 :3306）</div><div class="tc-role">結構化職缺資料庫 · Linux 主機部署</div></div>
+    <div class="tc anim-ready anim-d3"><div class="tc-badge b-store">Cloud</div><div class="tc-name">GCP 雲端備援</div><div class="tc-role">Cloud SQL · Demo 日切換備援</div></div>
+    <div class="tc anim-ready anim-d4"><div class="tc-badge b-proc">Processing</div><div class="tc-name">Pandas + scikit-learn</div><div class="tc-role">資料清洗 · 特徵工程</div></div>
+    <div class="tc anim-ready anim-d5"><div class="tc-badge b-model">Model</div><div class="tc-name">K-Means + GBoost</div><div class="tc-role">技能分群 · 職類分類</div></div>
+    <div class="tc anim-ready anim-d6"><div class="tc-badge b-model">Model</div><div class="tc-name">XGBoost</div><div class="tc-role">薪資預測迴歸模型</div></div>
+    <div class="tc anim-ready anim-d1"><div class="tc-badge b-api">API</div><div class="tc-name">Flask + Flasgger</div><div class="tc-role">RESTful API · Swagger 文件</div></div>
+    <div class="tc anim-ready anim-d2"><div class="tc-badge b-viz">Frontend</div><div class="tc-name">Chart.js</div><div class="tc-role">即時互動圖表</div></div>
+    <div class="tc anim-ready anim-d3"><div class="tc-badge b-viz">BI</div><div class="tc-name">Tableau Public</div><div class="tc-role">深度視覺化 · 故事頁面</div></div>
+  </div>
+
+</div>
+
+</main>
+
+<script>
+/* ══════════════════════════════════════════
+   1. TAB SWITCH
+══════════════════════════════════════════ */
+function switchTab(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  btn.classList.add('active');
+  // Trigger animation for newly visible page
+  setTimeout(() => observeAll(), 50);
+}
+
+/* ══════════════════════════════════════════
+   2. INTERSECTION OBSERVER — fade-in
+══════════════════════════════════════════ */
+function observeAll() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('anim-in');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.page.active .anim-ready:not(.anim-in)').forEach(el => {
+    observer.observe(el);
+  });
+}
+// Run on load
+document.addEventListener('DOMContentLoaded', () => setTimeout(observeAll, 80));
+
+/* ══════════════════════════════════════════
+   3. KPI COUNT-UP ANIMATION
+══════════════════════════════════════════ */
+function countUp(el) {
+  const target = parseInt(el.dataset.target, 10);
+  if (!target || el.dataset.counted) return;
+  el.dataset.counted = '1';
+  const duration = 900;
+  const start = performance.now();
+  const update = (now) => {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    // ease-out cubic
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = Math.round(eased * target);
+    el.textContent = current.toLocaleString();
+    if (progress < 1) requestAnimationFrame(update);
+  };
+  requestAnimationFrame(update);
+}
+
+// Observe KPI cards
+const kpiObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.kpi-num[data-target]').forEach(countUp);
+      kpiObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.kpi-grid').forEach(g => kpiObserver.observe(g));
+
+/* ══════════════════════════════════════════
+   4. STATIC DATA (CHART FALLBACK)
+══════════════════════════════════════════ */
+const FALLBACK_DATA = {
+  top_demand_skills: [
+    { skill_name: 'Python',  demand_count: 1516 },
+    { skill_name: 'Excel',   demand_count: 1387 },
+    { skill_name: 'AutoCAD', demand_count: 1229 },
+    { skill_name: 'Git',     demand_count: 1035 },
+    { skill_name: 'SQL',     demand_count: 984  }
+  ],
+  top_salary_skills: [
+    { skill_name: 'Go',         avg_salary: 82000 },
+    { skill_name: 'Kubernetes', avg_salary: 79500 },
+    { skill_name: 'Docker',     avg_salary: 77200 },
+    { skill_name: 'React',      avg_salary: 71000 },
+    { skill_name: 'TypeScript', avg_salary: 68500 }
+  ],
+  top_job_titles: [
+    { job_title: '製造/設備工程', opening_count: 2341 },
+    { job_title: '電子/電機工程', opening_count: 1872 },
+    { job_title: '後端工程師',    opening_count: 1534 },
+    { job_title: '前端工程師',    opening_count: 1187 },
+    { job_title: 'AI工程師',      opening_count: 956  }
+  ]
+};
+
+/* ══════════════════════════════════════════
+   6. STATIC FORM DATA
+══════════════════════════════════════════ */
+const JOBS = ["AI工程師","APP工程師","MIS/IT工程師","QA/品管工程師","全端工程師","前端工程師","後端工程師","營建/水電工程","硬體工程師","系統工程師","製造/設備工程","資料工程師","雲端/DevOps工程師","電子/電機工程","韌體工程師"];
+const SKILLS = ["Agile","Altium","APQP","ARM","AutoCAD","AWS","Azure","BIOS","C","C#","C++","CI/CD","CSS","Docker","ERP","Excel","Flutter","FMEA","FPGA","GCP","Git","Go","Hadoop","HTML","ISO 14001","ISO 9001","Java","JavaScript","Jira","Kotlin","Kubernetes","LabVIEW","Linux","MATLAB","MCU","MES","MySQL","Next.js","Node.js","NoSQL","OpenAI API","OrCAD","PADS","Pandas","PCB","PHP","PLC","PostgreSQL","Power BI","PPAP","Pro/E","Python","PyTorch","QA","QC","React","RTOS","Ruby","Rust","R語言","Scrum","SEO","Six Sigma","SolidWorks","Spark","SPC","SQL","Swift","Tableau","TCP/IP","TensorFlow","TypeScript","UI/UX設計","Verilog","VHDL","Vue.js","Windows Server"];
+
+function buildSkills(id, arr, countId) {
+  document.getElementById(id).innerHTML = arr.map(s =>
+    `<label class="skill-item"><input type="checkbox" value="${s}" onchange="updateCount('${id}','${countId || ''}')"> ${s}</label>`
+  ).join('');
+}
+
+function updateCount(listId, countId) {
+  if (!countId) return;
+  const el = document.getElementById(countId);
+  if (!el) return;
+  const total = document.querySelectorAll(`#${listId} input`).length;
+  const selected = document.querySelectorAll(`#${listId} input:checked`).length;
+  el.textContent = `${selected} / ${total}`;
+  el.classList.toggle('has-selected', selected > 0);
+}
+
+function initForms() {
+  document.getElementById('rec_job_title').innerHTML =
+    `<option value="">— Explore mode (no target) —</option>` +
+    JOBS.map(j => `<option>${j}</option>`).join('');
+  document.getElementById('sal_job_title').innerHTML = JOBS.map(j => `<option>${j}</option>`).join('');
+  buildSkills('rec_skills', SKILLS, 'rec_count');
+  updateSalSkills();
+}
+
+function filterSkills(input, id) {
+  const q = input.value.toLowerCase().trim();
+  document.getElementById(id).querySelectorAll('label').forEach(l => {
+    let ok=true, i=0, t=l.textContent.toLowerCase();
+    for (const c of q) { const x=t.indexOf(c,i); if(x>-1) i=x+1; else { ok=false; break; } }
+    l.style.display = ok ? '' : 'none';
+  });
+}
+
+function clearSkills(id, countId) {
+  document.getElementById(id).querySelectorAll('input').forEach(c => c.checked=false);
+  updateCount(id, countId);
+}
+
+function getChecked(id) {
+  return Array.from(document.querySelectorAll(`#${id} input:checked`)).map(c => c.value);
+}
+
+async function updateSalSkills() {
+  const c = document.getElementById('sal_skills');
+  const job = document.getElementById('sal_job_title').value;
+  if (!job) return;
+  c.innerHTML = '<div style="padding:12px;font-size:11px;color:var(--text3)">Loading…</div>';
+  try {
+    const r = await fetch('/job/recommend', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ skills:[], target_job_title:job })
+    });
+    const d = await r.json();
+    if (d.mode === 'target' && d.required_skills?.length) {
+      buildSkills('sal_skills', d.required_skills, 'sal_count');
+      updateCount('sal_skills', 'sal_count');
+    } else {
+      c.innerHTML = '<div style="padding:12px;font-size:11px;color:var(--text3)">No data.</div>';
+    }
+  } catch(e) {
+    c.innerHTML = `<div style="padding:12px;font-size:11px;color:var(--red)">${e.message}</div>`;
+  }
+}
+
+async function submitRecommend() {
+  const btn=document.getElementById('btn_recommend'), box=document.getElementById('rec_result');
+  const target=document.getElementById('rec_job_title').value, skills=getChecked('rec_skills');
+  if (!target && skills.length < 3) {
+    box.innerHTML='<div class="result-row"><span class="warn-text">⚠ Explore mode requires at least 3 skills.</span></div>';
+    box.style.display='block'; return;
+  }
+  btn.disabled=true; btn.textContent='Running…'; box.style.display='none';
+  try {
+    const r=await fetch('/job/recommend',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({skills,target_job_title:target||null})});
+    const d=await r.json();
+    let h='<div class="result-ttl">Analysis Result</div>';
+    if (d.mode==='target') {
+      h+=`<div class="result-row"><b>Target:</b> ${d.target_job_title}</div>`;
+      h+=`<div class="result-row"><b>Required:</b><br>${d.required_skills.map(s=>`<span class="tag tag-b">${s}</span>`).join('')||'—'}</div>`;
+      h+=`<div class="result-row"><b>Matched:</b><br>${d.user_has.map(s=>`<span class="tag tag-g">${s}</span>`).join('')||'—'}</div>`;
+      h+=`<div class="result-row"><b>Gap:</b><br>${d.skill_gap.map(s=>`<span class="tag tag-r">${s}</span>`).join('')||'Full match!'}</div>`;
+    } else if (Array.isArray(d)) {
+      d.forEach(c=>{ h+=`<div class="result-row"><b>${c.recommended_cluster}</b><span style="float:right;font-weight:800;color:var(--accent)">${c.matched_skills_count}/${c.total_required_skills}</span><br>${c.matched_skills.map(s=>`<span class="tag tag-g">${s}</span>`).join('')||'—'}</div>`; });
+    } else { h+=`<div class="result-row" style="color:var(--red)">${d.error||'Unknown error'}</div>`; }
+    box.innerHTML=h; box.style.display='block';
+  } catch(e) {
+    box.innerHTML=`<div class="result-row" style="color:var(--red)">Request failed: ${e.message}</div>`;
+    box.style.display='block';
+  } finally { btn.disabled=false; btn.textContent='Run Analysis →'; }
+}
+
+async function submitSalary() {
+  const btn=document.getElementById('btn_salary'), box=document.getElementById('sal_result');
+  const job=document.getElementById('sal_job_title').value;
+  const exp=parseInt(document.getElementById('sal_exp_years').value,10)||0;
+  const skills=getChecked('sal_skills');
+  btn.disabled=true; btn.textContent='Predicting…'; box.style.display='none';
+  try {
+    const r=await fetch('/job/salary',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({job_title:job,experience_years:exp,skills})});
+    const d=await r.json();
+    let h='<div class="result-ttl">Prediction Result</div>';
+    if (d.error) { h+=`<div class="result-row" style="color:var(--red)">${d.error}</div>`; }
+    else {
+      h+=`<div class="result-row"><b>職稱</b> ${d.job_title} · <b>年資</b> ${d.experience_years} yr · <b>技能</b> ${d.skills.length} 項</div>`;
+      h+=`<div class="salary-big"><div class="salary-num">NT$ ${d.predicted_salary.toLocaleString()}</div><div class="salary-lbl">預估月薪 · ${d.unit}</div></div>`;
+    }
+    box.innerHTML=h; box.style.display='block';
+  } catch(e) {
+    box.innerHTML=`<div class="result-row" style="color:var(--red)">Request failed: ${e.message}</div>`;
+    box.style.display='block';
+  } finally { btn.disabled=false; btn.textContent='Predict Salary →'; }
+}
+
+/* ══════════════════════════════════════════
+   7. CHARTS — with fallback data
+══════════════════════════════════════════ */
+Chart.defaults.color='#6B6860';
+Chart.defaults.font.family="'Manrope', sans-serif";
+Chart.defaults.font.weight='600';
+Chart.defaults.font.size=12;
+Chart.defaults.scale.grid.color='rgba(20,20,16,0.05)';
+Chart.defaults.scale.border={display:false};
+
+function mkChartCard(title, unit, badge, full) {
+  const d = document.createElement('div');
+  d.className = 'chart-card' + (full ? ' chart-full' : '');
+  d.innerHTML = `<div class="cc-header"><div class="cc-title">${title}</div>${badge?`<div class="cc-badge">${badge}</div>`:''}</div><div class="cc-unit">${unit}</div><div class="chart-wrap"><canvas></canvas></div>`;
+  return d;
+}
+
+function mkChart(canvas, labels, values, color, axis, unit) {
+  new Chart(canvas.getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        data: values,
+        backgroundColor: color+'18',
+        borderColor: color,
+        borderWidth: 1.5,
+        borderRadius: 7,
+        hoverBackgroundColor: color+'35'
+      }]
+    },
+    options: {
+      indexAxis: axis,
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#141410',
+          borderColor: 'rgba(20,20,16,0.12)',
+          borderWidth: 1,
+          padding: 13,
+          cornerRadius: 9,
+          displayColors: false,
+          titleFont: { size:13, weight:'700', family:"'Bricolage Grotesque',sans-serif" },
+          bodyFont: { size:13, weight:'500' },
+          callbacks: { label: ctx => { const v=ctx.parsed[axis==='y'?'x':'y']; return ` ${v.toLocaleString()} ${unit}`; } }
+        }
+      },
+      scales: {
+        x: { grid:{display:axis==='y'}, ticks:{color:'#6B6860',font:{size:12,weight:'600'}} },
+        y: { grid:{display:axis==='x'}, ticks:{color:'#6B6860',font:{size:12,weight:'600'}} }
+      }
+    }
+  });
+}
+
+function renderCharts(d) {
+  const db = document.getElementById('dashboard');
+  db.innerHTML = '';
+  const isFallback = d._fallback;
+
+  const c1 = mkChartCard(
+    'Top 5 High-Demand Skills',
+    '需求量（次）',
+    isFallback ? '靜態資料' : 'Demand'
+  );
+  db.appendChild(c1);
+  mkChart(c1.querySelector('canvas'), d.top_demand_skills.map(i=>i.skill_name), d.top_demand_skills.map(i=>i.demand_count), '#0077AA', 'x', '次');
+
+  const c2 = mkChartCard(
+    'Top 5 High-Salary Skills',
+    '平均薪資（TWD/月）',
+    isFallback ? '靜態資料' : 'Salary'
+  );
+  db.appendChild(c2);
+  mkChart(c2.querySelector('canvas'), d.top_salary_skills.map(i=>i.skill_name), d.top_salary_skills.map(i=>i.avg_salary), '#1A7A40', 'x', 'TWD/月');
+
+  const c3 = mkChartCard(
+    'Top 5 Job Titles by Volume',
+    '開缺數量（則）',
+    isFallback ? '靜態資料' : 'Volume',
+    true
+  );
+  db.appendChild(c3);
+  mkChart(c3.querySelector('canvas'), d.top_job_titles.map(i=>i.job_title), d.top_job_titles.map(i=>i.opening_count), '#6030B0', 'y', '則');
+
+  if (isFallback) {
+    const notice = document.createElement('div');
+    notice.style.cssText = 'grid-column:1/-1;font-family:var(--f-mono);font-size:10px;color:var(--amber);text-align:center;padding:8px 0;';
+    notice.textContent = '⚠ API 離線中 — 圖表顯示靜態樣本資料，Demo 當天連線 Flask 後自動切換為即時資料';
+    db.appendChild(notice);
+  }
+}
+
+async function loadCharts() {
+  try {
+    const r = await fetch('/job/top-skills');
+    if (!r.ok) throw new Error(r.status);
+    const d = await r.json();
+    renderCharts(d);
+  } catch(e) {
+    // Silently fall back to static data
+    renderCharts({ ...FALLBACK_DATA, _fallback: true });
+  }
+}
+
+/* ══════════════════════════════════════════
+   8. TOOLTIP EDGE-AWARE POSITIONING
+══════════════════════════════════════════ */
+document.addEventListener('mouseover', e => {
+  const tip = e.target.closest('[data-tip]');
+  if (!tip) return;
+  // Use JS to position the ::after via a custom property trick
+  // We inject inline style to reposition if near edge
+  const rect = tip.getBoundingClientRect();
+  const tooltipW = 218;
+  const left = rect.left + rect.width / 2 - tooltipW / 2;
+  const clamped = Math.max(8, Math.min(left, window.innerWidth - tooltipW - 8));
+  const top = rect.top - 8; // will go above via translateY in CSS
+  tip.style.setProperty('--tip-left', clamped + 'px');
+  tip.style.setProperty('--tip-top', (rect.top - 10) + 'px');
+});
+
+/* Override CSS ::after positioning with JS-computed values */
+const tipStyle = document.createElement('style');
+tipStyle.textContent = `
+  [data-tip]::after {
+    left: var(--tip-left, 50%) !important;
+    top: var(--tip-top, auto) !important;
+    transform: translateY(-100%) !important;
+  }
+`;
+document.head.appendChild(tipStyle);
+
+/* ══════════════════════════════════════════
+   INIT
+══════════════════════════════════════════ */
+initForms();
+loadCharts();
+</script>
+</body>
+</html>
