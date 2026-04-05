@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI大數據養成班 - 3/4 雲端平台入門</title>
+    <title>AI大數據養成班 - 3/4 AWS 雲端平台（CloudFront + ALB）</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="dashboard.css">
 </head>
@@ -221,7 +221,7 @@
 
         <div class="top-bar">
             <div class="breadcrumb">
-                首頁 > Week 9: 雲端平台 > <span>雲端平台入門</span>
+                首頁 > Week 9: 雲端平台 > <span>AWS 雲端平台（CloudFront + ALB）</span>
             </div>
             <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
                 <i class="fas fa-home"></i> 回首頁
@@ -230,20 +230,448 @@
 
         <div class="banner">
             <div>
-                <h1>雲端平台入門</h1>
+                <h1>AWS 雲端平台（CloudFront + ALB）</h1>
                 <p>3/4 課程筆記</p>
             </div>
             <i class="fa-solid fa-cloud banner-icon"></i>
         </div>
 
-        <h3 class="section-title">課程筆記：雲端平台入門</h3>
+        <!-- Section 1: 為什麼需要 CDN -->
+        <h3 class="section-title"><i class="fa-solid fa-circle-question"></i> 為什麼需要 CDN</h3>
         <div class="dashboard-grid notes-section">
-            <div class="card note-card" style="grid-column: 1 / -1;">
+            <div class="card note-card">
                 <div class="note-header">
-                    <h4><i class="fa-solid fa-cloud"></i> 筆記待補</h4>
-                    <span class="status-badge pending">待補</span>
+                    <h4><i class="fa-solid fa-triangle-exclamation"></i> S3 直連的四個問題</h4>
+                    <span class="status-badge important">觀念</span>
                 </div>
-                <p class="note-desc">課程內容稍後補充。</p>
+                <p class="note-desc">當 S3 作為唯一的靜態資源來源時，會遇到以下四個瓶頸。</p>
+                <ul class="note-points">
+                    <li><strong>跨區延遲高：</strong>S3 在東京，歐洲用戶繞半個地球，延遲 200-500ms</li>
+                    <li><strong>無快取機制：</strong>同一張圖片請求 100 次就回源 100 次，流量成本持續累積</li>
+                    <li><strong>Origin 壓力大：</strong>尖峰時所有請求直衝 S3</li>
+                    <li><strong>無路徑控制：</strong>所有檔案同一套規則，無法分別處理靜態 vs 動態</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-globe"></i> CloudFront 解決方案</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">AWS CloudFront 是全球 CDN 服務，透過邊緣節點解決上述問題。</p>
+                <ul class="note-points">
+                    <li><strong>全球 400+ 邊緣節點：</strong>就近取資源，大幅降低延遲</li>
+                    <li><strong>快取機制：</strong>首次回源後 Edge Cache 返回，後續請求不再回源</li>
+                    <li><strong>降低 Origin 壓力：</strong>大量請求由邊緣節點攔截</li>
+                    <li><strong>路徑分流（Multiple Behaviors）：</strong>不同路徑可套用不同規則</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 2: CloudFront 核心名詞 -->
+        <h3 class="section-title"><i class="fa-solid fa-book"></i> CloudFront 核心名詞</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-list-check"></i> 五大概念</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">建立 CloudFront 前必須掌握的五個核心名詞。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>名詞</th><th>說明</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Distribution</td><td>分發配置，自動分配 d123abc.cloudfront.net</td></tr>
+                        <tr><td>Origin</td><td>內容來源，本單元使用 S3</td></tr>
+                        <tr><td>Behavior</td><td>請求行為規則，按路徑前綴處理</td></tr>
+                        <tr><td>Cache Key</td><td>快取鍵，URL path + query string</td></tr>
+                        <tr><td>Edge Location</td><td>全球邊緣節點</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-server"></i> Origin 選擇比較</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">CloudFront 可搭配多種 Origin 類型，依需求選擇。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>Origin 類型</th><th>適用場景</th><th>特性</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>S3 Bucket</td><td>靜態資源</td><td>穩定、自動擴展</td></tr>
+                        <tr><td>EC2 / ELB</td><td>動態 API</td><td>需自行管理</td></tr>
+                        <tr><td>ALB</td><td>多 EC2 負載平衡</td><td>高可用</td></tr>
+                        <tr><td>Custom HTTP</td><td>外部伺服器</td><td>彈性最大</td></tr>
+                        <tr><td>Lambda Function URL</td><td>Serverless</td><td>免管理主機</td></tr>
+                    </tbody>
+                </table>
+                <div class="alert-box"><strong><i class="fa-solid fa-lightbulb"></i> Tip:</strong> 靜態用 S3，動態用 ALB + EC2，混合用 Multiple Behaviors 分流。</div>
+            </div>
+        </div>
+
+        <!-- Section 3: OAC 與快取失效 -->
+        <h3 class="section-title"><i class="fa-solid fa-shield-halved"></i> OAC 與快取失效</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-lock"></i> OAC (Origin Access Control)</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">讓 S3 只接受 CloudFront 請求，拒絕直接訪問。</p>
+                <ul class="note-points">
+                    <li><strong>工作原理 4 步：</strong>
+                        <ol>
+                            <li>CloudFront 建立 OAC identity</li>
+                            <li>S3 Bucket Policy 設定只允許 OAC</li>
+                            <li>CloudFront 帶簽名請求</li>
+                            <li>S3 驗證通過才回應</li>
+                        </ol>
+                    </li>
+                    <li><strong>不設 OAC 的風險：</strong>繞過 CDN 快取、盜連消耗流量</li>
+                    <li><strong>OAC vs 舊版 OAI：</strong>OAC 是新版推薦，支援 SSE-KMS 加密</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-rotate"></i> 快取失效 (Invalidation)</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">情境：更新 S3 的 hero.jpg 但用戶仍看舊版（Edge Cache 未過期）。每月前 1000 次免費。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>方式</th><th>做法</th><th>成本/延遲</th><th>適用情境</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Invalidation</td><td>保持原檔名，手動清除快取</td><td>成本高、有延遲</td><td>緊急修正</td></tr>
+                        <tr><td>版本化檔名</td><td>hero-v2.jpg</td><td>無成本、即時生效</td><td>正常發布</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section 4: CloudFront 建立實作 -->
+        <h3 class="section-title"><i class="fa-solid fa-hammer"></i> CloudFront 建立實作</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-1"></i> Step A: 建立 Distribution</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">建立 CloudFront Distribution 並設定 OAC。</p>
+                <ul class="note-points">
+                    <li><strong>Origin domain：</strong>選 S3 bucket</li>
+                    <li><strong>Origin access：</strong>選 OAC（Create new OAC: aws12h-u3-s3-oac, Sign requests）</li>
+                    <li><strong>Default Cache Behavior：</strong>Redirect HTTP to HTTPS, GET/HEAD only, CachingOptimized policy</li>
+                    <li><strong>等待部署：</strong>3-10 分鐘</li>
+                    <li><strong>記下 domain：</strong>d123abc.cloudfront.net</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-2"></i> Step B: 更新 S3 Bucket Policy</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">整合兩個 Statement：EC2 Role 的 PutObject/GetObject（Unit2 既有）+ CloudFront 的 GetObject（新增，用 Condition 限定 SourceArn）。</p>
+                <div class="alert-box"><strong><i class="fa-solid fa-lightbulb"></i> Tip:</strong> 重點：是整合不是覆蓋！</div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-3"></i> Step C: 確認 Block Public Access</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">4 個選項全部 On。</p>
+                <ul class="note-points">
+                    <li><strong>測試：</strong>CloudFront URL = 200 OK</li>
+                    <li><strong>測試：</strong>S3 直連 URL = 403 Forbidden</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-4"></i> Step D: Flask 改用 CloudFront URL</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">在 Flask 應用中整合 CloudFront domain。</p>
+                <ul class="note-points">
+                    <li><strong>新增環境變數：</strong>CLOUDFRONT_DOMAIN</li>
+                    <li><strong>新函數 make_cdn_url()：</strong>優先使用 CloudFront domain，fallback 到 make_s3_url()</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-5"></i> Step E: Cache Invalidation 實作</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">CloudFront Console → Distribution → Invalidations → Create：路徑填 /uploads/* 或 /*</p>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> 練習：CloudFront 驗證</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">測試 CloudFront URL 可顯示圖片（200），S3 直連被拒（403）。</p>
+                <div class="alert-box"><strong><i class="fa-solid fa-lightbulb"></i> 優秀回答：</strong>CloudFront URL 回傳 200 OK，Response Header 中 X-Cache 顯示 Miss from cloudfront（首次）或 Hit from cloudfront（快取命中）。S3 直連回傳 403 AccessDenied，代表 OAC 保護生效。這確保：(1) 所有流量經過 CloudFront 邊緣節點加速 (2) S3 不被直接訪問消耗流量 (3) 可統一管理存取策略與快取。若 CloudFront 仍 403，排查：確認 Distribution ID 正確 → Resource ARN 有 /* 結尾 → Bucket Policy JSON 語法正確 → 等待 1-2 分鐘傳播。</div>
+            </div>
+        </div>
+
+        <!-- Section 5: CloudFront 常見錯誤排查 -->
+        <h3 class="section-title"><i class="fa-solid fa-bug"></i> CloudFront 常見錯誤排查</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-wrench"></i> 排查指南</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">CloudFront 設定過程中常見的錯誤與排查方式。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>問題</th><th>排查方向</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>403 AccessDenied</td><td>檢查 OAC / Bucket Policy / Distribution ID</td></tr>
+                        <tr><td>S3 直連仍可訪問</td><td>檢查 Block Public Access / 是否有其他公開 Statement</td></tr>
+                        <tr><td>EC2 無法上傳 S3</td><td>覆蓋了原有 Statement，要整合</td></tr>
+                        <tr><td>快取未更新</td><td>做 Invalidation 或用版本化檔名</td></tr>
+                        <tr><td>Origin domain 填錯</td><td>用下拉選單不要手動輸入</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section 6: 高可用架構概念（Unit 4） -->
+        <h3 class="section-title"><i class="fa-solid fa-server"></i> 高可用架構概念（Unit 4）</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-triangle-exclamation"></i> 單機架構的天花板</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">單機架構在面對真實流量時會遇到四個核心問題。</p>
+                <ul class="note-points">
+                    <li><strong>單點故障：</strong>主機掛掉全站不可用</li>
+                    <li><strong>無法水平擴展：</strong>流量超過單機極限</li>
+                    <li><strong>零停機困難：</strong>更新部署需停機</li>
+                    <li><strong>無法跨 AZ 容災：</strong>單一可用區域故障即全掛</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrows-left-right"></i> Scale Up vs Scale Out</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">兩種擴展策略的差異與選擇。</p>
+                <ul class="note-points">
+                    <li><strong>Scale Up（垂直擴展）：</strong>加大單機（換更大 instance），有物理極限</li>
+                    <li><strong>Scale Out（水平擴展）：</strong>增加機器數量，理論上無上限</li>
+                    <li><strong>ALB + ASG 實現 Scale Out：</strong>自動增減 EC2 數量應對流量變化</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 7: ALB 核心概念 -->
+        <h3 class="section-title"><i class="fa-solid fa-network-wired"></i> ALB 核心概念</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-sitemap"></i> ALB 三大核心元件</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">Application Load Balancer 的核心架構與流量路徑。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>元件</th><th>說明</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>ALB</td><td>Application Load Balancer，接收流量入口</td></tr>
+                        <tr><td>Listener</td><td>監聽 Port，如 80 / 443</td></tr>
+                        <tr><td>Rule</td><td>路由規則，決定轉發到哪個 Target Group</td></tr>
+                        <tr><td>Target Group</td><td>一群 EC2，被分配流量</td></tr>
+                    </tbody>
+                </table>
+                <ul class="note-points">
+                    <li><strong>流量路徑：</strong>Client → ALB DNS → Listener:80 → Rule 判斷 → Target Group → EC2s</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-heartbeat"></i> Target Group 與 Health Check</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">Target Group 設定與健康檢查機制。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>設定項</th><th>值</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Target type</td><td>instance</td></tr>
+                        <tr><td>Protocol</td><td>HTTP</td></tr>
+                        <tr><td>Port</td><td>80</td></tr>
+                        <tr><td>Health check path</td><td>/health</td></tr>
+                        <tr><td>Healthy threshold</td><td>2</td></tr>
+                        <tr><td>Unhealthy threshold</td><td>3</td></tr>
+                        <tr><td>Interval</td><td>30s</td></tr>
+                    </tbody>
+                </table>
+                <div class="alert-box"><strong><i class="fa-solid fa-lightbulb"></i> Tip:</strong> 用 /health 而非 / 做健康檢查。/health 只驗證 Web process 存活不依賴外部服務，快速切分問題。Flask /health route: return "ok", 200</div>
+            </div>
+        </div>
+
+        <!-- Section 8: Launch Template + Auto Scaling -->
+        <h3 class="section-title"><i class="fa-solid fa-rocket"></i> Launch Template + Auto Scaling</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-file-lines"></i> Launch Template</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">啟動範本定義了 EC2 的建立規格，ASG 依此建立新 EC2。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>設定項</th><th>說明</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>AMI</td><td>從現有 EC2 建立自有 AMI</td></tr>
+                        <tr><td>Instance type</td><td>t3.micro</td></tr>
+                        <tr><td>Security Group</td><td>指定安全群組</td></tr>
+                        <tr><td>IAM Instance Profile</td><td>賦予 EC2 存取權限</td></tr>
+                        <tr><td>Key pair</td><td>SSH 金鑰</td></tr>
+                    </tbody>
+                </table>
+                <ul class="note-points">
+                    <li><strong>User Data：</strong>開機自動執行安裝腳本（apt install / pip install / systemctl start）</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-chart-line"></i> Auto Scaling Group (ASG)</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">ASG 透過 Target Group 與 ALB 串接，自動管理 EC2 數量。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>關鍵數字</th><th>建議值</th><th>說明</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Minimum</td><td>1</td><td>最少幾台</td></tr>
+                        <tr><td>Desired</td><td>2</td><td>期望幾台</td></tr>
+                        <tr><td>Maximum</td><td>4</td><td>最多幾台</td></tr>
+                    </tbody>
+                </table>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>Scaling 策略</th><th>說明</th><th>特性</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Target Tracking</td><td>CPU 維持 50%</td><td>最簡單</td></tr>
+                        <tr><td>Step Scaling</td><td>階梯式加減</td><td>精細控制</td></tr>
+                        <tr><td>Scheduled</td><td>排程（如促銷前先擴）</td><td>可預期流量</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section 9: ALB + ASG 建置實作 -->
+        <h3 class="section-title"><i class="fa-solid fa-gears"></i> ALB + ASG 建置實作</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-1"></i> Step A: 建立 ALB Security Group</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">名稱：aws12h-u4-alb-sg</p>
+                <ul class="note-points">
+                    <li><strong>入站規則：</strong>HTTP:80 from 0.0.0.0/0</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-2"></i> Step B: 修改 EC2 Security Group</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">Port 80 來源改為 ALB SG（不再直接對外），這樣只有 ALB 能轉發到 EC2。</p>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-3"></i> Step C: 建立 Target Group</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">名稱：aws12h-u4-tg</p>
+                <ul class="note-points">
+                    <li><strong>Target type：</strong>instance</li>
+                    <li><strong>Health check：</strong>/health</li>
+                    <li><strong>註冊現有 EC2</strong></li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-4"></i> Step D: 建立 ALB</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">名稱：aws12h-u4-alb</p>
+                <ul class="note-points">
+                    <li><strong>Scheme：</strong>Internet-facing</li>
+                    <li><strong>Subnet：</strong>選 2+ 個 AZ 的 Subnet</li>
+                    <li><strong>Security Group：</strong>aws12h-u4-alb-sg</li>
+                    <li><strong>Listener：</strong>HTTP:80 → aws12h-u4-tg</li>
+                    <li><strong>記下 ALB DNS Name 測試</strong></li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> 練習：ALB + ASG 驗證</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">用 ALB DNS 訪問網站，確認正常。</p>
+                <div class="alert-box"><strong><i class="fa-solid fa-lightbulb"></i> 優秀回答：</strong>透過 ALB DNS 訪問網站成功，代表流量路徑為：瀏覽器 → ALB(aws12h-u4-alb) → Listener:80 → Target Group(aws12h-u4-tg) → EC2。與單機架構的差異：(1) ALB 提供統一入口，後端 EC2 可動態增減 (2) Health Check 自動偵測不健康的 EC2 並停止轉發 (3) 搭配 ASG 可根據 CPU/流量自動擴縮 (4) 跨 AZ 部署提供容災能力。EC2 的 SG 改為只接受 ALB SG 來源，確保流量必須經過 ALB，不能直接連 EC2。</div>
+            </div>
+        </div>
+
+        <!-- Section 10: 架構演進總結 -->
+        <h3 class="section-title"><i class="fa-solid fa-layer-group"></i> 架構演進總結</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-stairs"></i> 從單機到高可用</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">四個 Unit 的架構演進對照。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>階段</th><th>架構</th><th>解決的問題</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Unit 1</td><td>單機 EC2 + Nginx + Flask + MySQL</td><td>快速上線</td></tr>
+                        <tr><td>Unit 2</td><td>+ S3</td><td>圖片外移降低 EBS 負擔</td></tr>
+                        <tr><td>Unit 3</td><td>+ CloudFront</td><td>CDN 加速 + OAC 保護</td></tr>
+                        <tr><td>Unit 4</td><td>+ ALB + ASG</td><td>高可用 + 自動擴展</td></tr>
+                    </tbody>
+                </table>
+                <div class="alert-box"><strong><i class="fa-solid fa-lightbulb"></i> Tip:</strong> 業界真實路線：先做出可運行版本，再逐步升級架構。</div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-brain"></i> 整合思考題</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">如果你是架構師，現在要把這個留言板系統交給正式營運團隊，你會建議哪些改進？</p>
+                <div class="alert-box"><strong><i class="fa-solid fa-lightbulb"></i> 優秀回答：</strong>(1) MySQL 從 EC2 搬到 RDS：避免資料庫單點故障，RDS 提供自動備份 / Multi-AZ / Read Replica (2) HTTPS：用 ACM 申請免費憑證，ALB Listener 加 443 (3) 域名：Route53 管理 DNS，指向 ALB / CloudFront (4) 監控告警：CloudWatch 設 CPU>80% / 5xx 錯誤率告警通知 Slack (5) CI/CD：GitHub Actions 自動部署，避免手動 SSH 更新 (6) 資料庫密碼：改用 Secrets Manager，不要寫死在程式碼。</div>
             </div>
         </div>
 

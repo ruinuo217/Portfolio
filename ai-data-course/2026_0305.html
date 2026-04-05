@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI大數據養成班 - 3/5 雲端平台入門</title>
+    <title>AI大數據養成班 - 3/5 GCP 雲端平台（運算與儲存）</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="dashboard.css">
 </head>
@@ -108,7 +108,7 @@
                 <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0302.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/2 (一)</span><span class="topic">數據視覺化分析平台</span></a></li>
                 <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0303.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/3 (二)</span><span class="topic">雲端平台入門</span></a></li>
                 <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0304.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/4 (三)</span><span class="topic">雲端平台入門</span></a></li>
-                <li class="active"><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0305.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/5 (四)</span><span class="topic">雲端平台入門</span></a></li>
+                <li class="active"><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0305.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/5 (四)</span><span class="topic">GCP 雲端平台（運算與儲存）</span></a></li>
                 <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0306.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/6 (五)</span><span class="topic">雲端平台入門</span></a></li>
             </ul>
         </div>
@@ -221,7 +221,7 @@
 
         <div class="top-bar">
             <div class="breadcrumb">
-                首頁 > Week 9: 雲端平台 > <span>雲端平台入門</span>
+                首頁 > Week 9: 雲端平台 > <span>GCP 雲端平台（運算與儲存）</span>
             </div>
             <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
                 <i class="fas fa-home"></i> 回首頁
@@ -230,20 +230,845 @@
 
         <div class="banner">
             <div>
-                <h1>雲端平台入門</h1>
+                <h1>GCP 雲端平台（運算與儲存）</h1>
                 <p>3/5 課程筆記</p>
             </div>
             <i class="fa-solid fa-cloud banner-icon"></i>
         </div>
 
-        <h3 class="section-title">課程筆記：雲端平台入門</h3>
+        <!-- Section 0: 課程資源 -->
+        <h3 class="section-title"><i class="fa-solid fa-link"></i> 課程資源</h3>
         <div class="dashboard-grid notes-section">
-            <div class="card note-card" style="grid-column: 1 / -1;">
+            <div class="card note-card">
                 <div class="note-header">
-                    <h4><i class="fa-solid fa-cloud"></i> 筆記待補</h4>
-                    <span class="status-badge pending">待補</span>
+                    <h4><i class="fa-solid fa-globe"></i> 互動式學習網站</h4>
+                    <span class="status-badge info">資源</span>
                 </div>
-                <p class="note-desc">課程內容稍後補充。</p>
+                <p class="note-desc">本課程的互動式學習網站，此網站本身就是用 Cloud Storage 靜態網站託管建立的。</p>
+                <ul class="note-points">
+                    <li>連結：<a href="https://storage.googleapis.com/my-portfolio-2026-03/index.html" target="_blank">https://storage.googleapis.com/my-portfolio-2026-03/index.html</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 1: GCP 平台架構 -->
+        <h3 class="section-title"><i class="fa-solid fa-sitemap"></i> Unit 01 - GCP 平台架構</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-layer-group"></i> 雲端運算三種服務模式</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">雲端服務依照使用者管理範圍的不同，分為三種模式。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr>
+                            <th>模式</th>
+                            <th>全稱</th>
+                            <th>GCP 代表服務</th>
+                            <th>使用者負責</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>IaaS</td>
+                            <td>基礎架構即服務</td>
+                            <td>Compute Engine / Cloud Storage</td>
+                            <td>管理 OS 與應用程式</td>
+                        </tr>
+                        <tr>
+                            <td>PaaS</td>
+                            <td>平台即服務</td>
+                            <td>App Engine / Cloud Run</td>
+                            <td>只需部署程式碼</td>
+                        </tr>
+                        <tr>
+                            <td>SaaS</td>
+                            <td>軟體即服務</td>
+                            <td>Gmail / Google Workspace</td>
+                            <td>瀏覽器直接使用</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-map"></i> GCP 服務分類地圖</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">GCP 將服務依功能分為多個核心類別，以下為常用分類。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr>
+                            <th>類別</th>
+                            <th>代表服務</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>運算</td>
+                            <td>Compute Engine / GKE / Cloud Run</td>
+                        </tr>
+                        <tr>
+                            <td>儲存</td>
+                            <td>Cloud Storage / Persistent Disk</td>
+                        </tr>
+                        <tr>
+                            <td>網路</td>
+                            <td>VPC / Load Balancing</td>
+                        </tr>
+                        <tr>
+                            <td>資料庫</td>
+                            <td>Cloud SQL / Firestore</td>
+                        </tr>
+                        <tr>
+                            <td>管理</td>
+                            <td>IAM / Cloud Monitoring</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-folder-tree"></i> 專案與資源層級</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">GCP 資源以階層結構組織：組織 → 資料夾 → 專案 → 資源。</p>
+                <ul class="note-points">
+                    <li><strong>專案 ID</strong>：全球唯一，建立後不可更改</li>
+                    <li><strong>專案名稱</strong>：可隨時修改</li>
+                    <li><strong>專案編號</strong>：系統自動產生的數字 ID</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 2: GCP 帳號設定實作 -->
+        <h3 class="section-title"><i class="fa-solid fa-user-gear"></i> GCP 帳號設定實作</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-gift"></i> 啟用免費試用</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">GCP 提供 $300 美元 / 90 天免費試用額度，不會自動扣款。</p>
+                <ul class="note-points">
+                    <li>前往 Google Cloud 官網 → 開始免費使用</li>
+                    <li>填寫帳單資訊（信用卡驗證不扣款）</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-folder-plus"></i> 建立第一個專案</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">在 Console 頂部專案選擇器建立新專案。</p>
+                <ul class="note-points">
+                    <li>Console 頂部專案選擇器 → 新增專案</li>
+                    <li>填寫專案名稱 / ID / 位置</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-compass"></i> Console 介面導覽</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">熟悉 GCP Console 的三大區域。</p>
+                <ul class="note-points">
+                    <li><strong>頂部導覽列</strong>：專案選擇 / 搜尋 / Cloud Shell</li>
+                    <li><strong>左側選單</strong>：服務分類</li>
+                    <li><strong>主要內容區</strong>：服務操作介面</li>
+                    <li>釘選 Compute Engine / Cloud Storage / IAM 到導覽列</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：GCP 帳號設定</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">啟用 GCP 免費試用並完成初始設定。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 優秀回答：</strong>
+                    成功啟用 GCP 免費試用並建立專案，Console 右上角確認 Region 與專案名稱。Cloud Shell 執行 gcloud config list 顯示當前專案 ID。將 Compute Engine、Cloud Storage、IAM 釘選到導覽選單頂部，方便後續操作。專案 ID 建議加入日期或個人識別碼避免重複，例如 gcp-learn-20260305。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-triangle-exclamation"></i> 常見錯誤排查</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">帳號設定常見問題與解決方式。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr>
+                            <th>問題</th>
+                            <th>解決方式</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>專案配額上限</td>
+                            <td>免費帳號限 12 個，刪除不用的專案</td>
+                        </tr>
+                        <tr>
+                            <td>找不到服務</td>
+                            <td>需先啟用對應的 API</td>
+                        </tr>
+                        <tr>
+                            <td>帳單驗證失敗</td>
+                            <td>確認信用卡支援國際交易</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section 3: IAM 權限管理 -->
+        <h3 class="section-title"><i class="fa-solid fa-shield-halved"></i> IAM 權限管理</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-key"></i> IAM 三大要素</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">IAM（Identity and Access Management）由三大要素組成。</p>
+                <ul class="note-points">
+                    <li><strong>主體（Principal）</strong>：Google 帳號 / 服務帳號 / 群組</li>
+                    <li><strong>角色（Role）</strong>：Owner / Editor / Viewer / 預先定義 / 自訂</li>
+                    <li><strong>資源（Resource）</strong>：專案 / 服務 / 單一資源</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 權限繼承：</strong>
+                    組織 → 資料夾 → 專案 → 資源，子層級繼承父層級權限且無法移除。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-users-gear"></i> 基本角色 vs 預先定義角色</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">基本角色權限範圍較廣，預先定義角色可精細控制。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr>
+                            <th>基本角色</th>
+                            <th>權限</th>
+                            <th>適用對象</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Viewer</td>
+                            <td>只能檢視</td>
+                            <td>稽核人員</td>
+                        </tr>
+                        <tr>
+                            <td>Editor</td>
+                            <td>可建立、修改、刪除</td>
+                            <td>開發人員</td>
+                        </tr>
+                        <tr>
+                            <td>Owner</td>
+                            <td>完整控制（含 IAM）</td>
+                            <td>專案管理員</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <ul class="note-points">
+                    <li>預先定義角色範例：compute.admin、storage.objectViewer 等</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 注意：</strong>
+                    基本角色權限過大，不建議在生產環境使用，應改用預先定義角色。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-robot"></i> 服務帳號</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">供應用程式或 VM 使用的特殊帳號。</p>
+                <ul class="note-points">
+                    <li>格式：<code>name@project-id.iam.gserviceaccount.com</code></li>
+                    <li>建議用 GCP 管理金鑰（VM 自動附加）</li>
+                    <li>避免下載 JSON 金鑰（容易外洩）</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：IAM 操作</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">檢視 IAM 設定、建立服務帳號 demo-vm-service-account（授予 Storage Object Viewer）。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 優秀回答：</strong>
+                    在 IAM 頁面看到我的 Google 帳號為 Owner，還有 Compute Engine 和 App Engine 的預設服務帳號。建立了 demo-vm-service-account 並授予 roles/storage.objectViewer，遵循最小權限原則——只給需要的讀取權限。服務帳號優先使用 VM 附加方式，避免下載 JSON 金鑰，若金鑰外洩需立即停用並檢查 Cloud Logging 異常存取。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: Compute Engine 虛擬機 -->
+        <h3 class="section-title"><i class="fa-solid fa-server"></i> Compute Engine 虛擬機</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-microchip"></i> 機器類型選擇</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">依照工作負載選擇合適的機器系列。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr>
+                            <th>系列</th>
+                            <th>特性</th>
+                            <th>適用場景</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>E2</td>
+                            <td>成本優化，e2-micro 免費方案可用</td>
+                            <td>學習用</td>
+                        </tr>
+                        <tr>
+                            <td>N2</td>
+                            <td>穩定效能</td>
+                            <td>生產環境</td>
+                        </tr>
+                        <tr>
+                            <td>C2</td>
+                            <td>運算優化</td>
+                            <td>CPU 密集型工作</td>
+                        </tr>
+                        <tr>
+                            <td>M2</td>
+                            <td>記憶體優化</td>
+                            <td>記憶體內資料庫</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <ul class="note-points">
+                    <li>學習 → e2-micro</li>
+                    <li>小型 Web → e2-small / e2-medium</li>
+                    <li>生產環境 → n2-standard-2 起</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-hard-drive"></i> 磁碟類型</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">開機磁碟（含 OS，必須指定）vs 永久磁碟（可獨立於 VM）。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr>
+                            <th>類型</th>
+                            <th>IOPS</th>
+                            <th>成本</th>
+                            <th>適用場景</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Standard PD (HDD)</td>
+                            <td>低</td>
+                            <td>最低</td>
+                            <td>冷資料</td>
+                        </tr>
+                        <tr>
+                            <td>Balanced PD (SSD)</td>
+                            <td>中</td>
+                            <td>中</td>
+                            <td>一般應用</td>
+                        </tr>
+                        <tr>
+                            <td>SSD PD</td>
+                            <td>高</td>
+                            <td>高</td>
+                            <td>資料庫</td>
+                        </tr>
+                        <tr>
+                            <td>Extreme PD</td>
+                            <td>極高</td>
+                            <td>最高</td>
+                            <td>關鍵系統</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-terminal"></i> 連線方式比較</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">Compute Engine VM 支援多種連線方式。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr>
+                            <th>方式</th>
+                            <th>特色</th>
+                            <th>需求</th>
+                            <th>適用場景</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>瀏覽器 SSH</td>
+                            <td>最簡易</td>
+                            <td>點擊即連</td>
+                            <td>快速檢視</td>
+                        </tr>
+                        <tr>
+                            <td>gcloud CLI</td>
+                            <td>可自動化</td>
+                            <td>需安裝 SDK</td>
+                            <td>腳本化操作</td>
+                        </tr>
+                        <tr>
+                            <td>標準 SSH</td>
+                            <td>進階功能</td>
+                            <td>需管理金鑰</td>
+                            <td>本機整合</td>
+                        </tr>
+                        <tr>
+                            <td>Windows RDP</td>
+                            <td>圖形介面</td>
+                            <td>需設密碼</td>
+                            <td>Windows Server</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-lock"></i> SSH 金鑰登入</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">使用 SSH 金鑰對進行安全登入。</p>
+                <ul class="note-points">
+                    <li><code>ssh-keygen -t ed25519</code> 生成金鑰對</li>
+                    <li>公鑰加入 GCP Metadata SSH Keys</li>
+                    <li>私鑰登入：<code>ssh -i key ubuntu@IP</code></li>
+                    <li>原理：公鑰加密驗證</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 5: VM 建置實作 -->
+        <h3 class="section-title"><i class="fa-solid fa-gears"></i> VM 建置實作</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-plus-circle"></i> 建立第一個 VM</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">建立 Compute Engine 虛擬機實例。</p>
+                <ul class="note-points">
+                    <li>名稱：demo-web-server</li>
+                    <li>區域：us-central1-a</li>
+                    <li>類型：e2-micro</li>
+                    <li>OS：Ubuntu 22.04 LTS</li>
+                    <li>磁碟：10GB Balanced PD</li>
+                    <li>防火牆：允許 HTTP + HTTPS</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-globe"></i> SSH 連線與部署 Nginx</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">透過瀏覽器 SSH 連線並安裝 Web Server。</p>
+                <ul class="note-points">
+                    <li>瀏覽器 SSH 連線</li>
+                    <li><code>apt update</code></li>
+                    <li><code>apt install nginx</code></li>
+                    <li>echo 自訂首頁內容</li>
+                    <li>瀏覽器打開 VM 外部 IP 驗證</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-fire"></i> 防火牆規則</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">建立允許 HTTP 流量的防火牆規則。</p>
+                <ul class="note-points">
+                    <li>名稱：allow-http-from-internet</li>
+                    <li>方向：輸入（Ingress）</li>
+                    <li>目標：所有執行個體</li>
+                    <li>來源：0.0.0.0/0</li>
+                    <li>Port：TCP 80</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-terminal"></i> gcloud CLI 管理</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">使用 gcloud 指令管理 VM 實例。</p>
+                <ul class="note-points">
+                    <li><code>gcloud compute instances list</code></li>
+                    <li><code>gcloud compute instances start [NAME]</code></li>
+                    <li><code>gcloud compute instances stop [NAME]</code></li>
+                    <li><code>gcloud compute instances delete [NAME]</code></li>
+                    <li><code>gcloud compute ssh [NAME]</code></li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：VM 部署驗證</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">驗證 VM 建立成功並確認 Nginx 部署正常。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 優秀回答：</strong>
+                    VM 建立成功，外部 IP 為 34.x.x.x，瀏覽器打開看到 Hello from GCP! 頁面。架構：Internet → VM(Compute Engine) → SSH:22(管理) + HTTP:80(對外)。hostname 顯示 demo-web-server，whoami 顯示使用者名稱，cat /etc/os-release 確認 Ubuntu 22.04。若無法存取網站，排查順序：(1) systemctl status nginx 確認服務 (2) curl localhost 測本機 (3) 確認防火牆規則有開 TCP:80 (4) 確認使用的是外部 IP 而非內部 IP(10.x.x.x)。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 6: 資源管理與成本控制 -->
+        <h3 class="section-title"><i class="fa-solid fa-coins"></i> 資源管理與成本控制</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-tags"></i> 資源標籤</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">鍵值對（Key-Value）用於分類、追蹤成本和自動化。</p>
+                <ul class="note-points">
+                    <li>成本追蹤：<code>department:marketing</code></li>
+                    <li>自動化：<code>auto-shutdown:true</code></li>
+                    <li>資源清查：<code>data-classification:confidential</code></li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 標籤 vs 網路標記：</strong>
+                    標籤用於管理與帳單分類，網路標記用於防火牆流量控制。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-bell"></i> 預算警示</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">設定預算避免超額支出。</p>
+                <ul class="note-points">
+                    <li>設定每月預算金額</li>
+                    <li>警示門檻：50% / 90% / 100%</li>
+                    <li>Email 通知</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-trash-can"></i> 刪除資源完整流程</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">刪除 VM 後需逐一檢查所有相關資源。</p>
+                <ul class="note-points">
+                    <li>VM 執行個體</li>
+                    <li>永久磁碟</li>
+                    <li>外部 IP</li>
+                    <li>快照</li>
+                    <li>映像檔</li>
+                    <li>防火牆規則</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 注意：</strong>
+                    刪除 VM 不等於刪除所有相關資源！靜態 IP 即使未使用也計費，永久磁碟未附加也計費。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：資源管理</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">為 VM 加標籤、建預算警示、正確刪除 VM。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 優秀回答：</strong>
+                    為 demo-web-server 加入 environment=development 和 owner=student 標籤，可在帳單報表依標籤分組分析成本。設定 $50/月預算，警示門檻 50%/90%/100%。刪除 VM 後還需檢查：gcloud compute disks list（未附加磁碟）、gcloud compute addresses list（靜態 IP）、gcloud compute snapshots list（快照）。標籤資料同步到帳單需 24-48 小時。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 7: Cloud Storage 核心概念 -->
+        <h3 class="section-title"><i class="fa-solid fa-bucket"></i> Unit 02 - Cloud Storage 核心概念</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-cloud-arrow-up"></i> 為什麼用 Cloud Storage</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">相比傳統虛擬主機：空間無限制 / 自動擴展 / 免維護 / 內建 CDN / 支援生命週期管理。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr>
+                            <th>需求</th>
+                            <th>建議服務</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>圖片、影片、備份</td>
+                            <td>Cloud Storage</td>
+                        </tr>
+                        <tr>
+                            <td>靜態網站</td>
+                            <td>Cloud Storage</td>
+                        </tr>
+                        <tr>
+                            <td>VM 硬碟</td>
+                            <td>Persistent Disk</td>
+                        </tr>
+                        <tr>
+                            <td>SQL 資料</td>
+                            <td>Cloud SQL</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-cubes"></i> 三大核心概念</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">Bucket、Object、Storage Class 是 Cloud Storage 的三大核心。</p>
+                <ul class="note-points">
+                    <li><strong>Bucket</strong>：雲端倉庫，全球唯一名稱，建立後不可改名</li>
+                    <li><strong>Object</strong>：實際檔案，路徑如 <code>gs://bucket/css/style.css</code></li>
+                </ul>
+                <table class="concept-table">
+                    <thead>
+                        <tr>
+                            <th>Storage Class</th>
+                            <th>定位</th>
+                            <th>存取頻率</th>
+                            <th>成本</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Standard</td>
+                            <td>熱資料</td>
+                            <td>頻繁存取</td>
+                            <td>最貴</td>
+                        </tr>
+                        <tr>
+                            <td>Nearline</td>
+                            <td>溫資料</td>
+                            <td>每月 1-2 次</td>
+                            <td>省 50%</td>
+                        </tr>
+                        <tr>
+                            <td>Coldline</td>
+                            <td>冷資料</td>
+                            <td>每季 1 次</td>
+                            <td>省 80%</td>
+                        </tr>
+                        <tr>
+                            <td>Archive</td>
+                            <td>封存</td>
+                            <td>幾乎不存取</td>
+                            <td>最便宜</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 注意：</strong>
+                    Cloud Storage 實際是扁平結構，「資料夾」只是檔案名稱的一部分。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 8: Cloud Storage 實作 -->
+        <h3 class="section-title"><i class="fa-solid fa-flask"></i> Cloud Storage 實作</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-database"></i> 建立 Bucket</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">建立 Cloud Storage Bucket 的設定要點。</p>
+                <ul class="note-points">
+                    <li>命名規則：小寫 / 數字 / 連字號，3-63 字元</li>
+                    <li>位置選擇：Region asia-east1（成本低 / 個人網站用）vs Multi-region ASIA（高可用 / 企業用）</li>
+                    <li>儲存類別：Standard</li>
+                    <li>存取控制：統一（Uniform）</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-upload"></i> 上傳與管理檔案</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">透過 Console 或 gsutil 指令管理檔案。</p>
+                <ul class="note-points">
+                    <li>Console 上傳：單檔 / 資料夾 / 拖放</li>
+                    <li><code>gsutil cp</code>：上傳/下載檔案</li>
+                    <li><code>gsutil ls</code>：列出檔案</li>
+                    <li><code>gsutil rm</code>：刪除檔案</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 常見錯誤：</strong>
+                    中文檔名可能造成問題（建議用英文），Content-Type 錯誤時需檢查 MIME type。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-unlock"></i> 設定公開存取</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">將 Bucket 設為公開可讀。</p>
+                <ul class="note-points">
+                    <li>權限分頁 → 授予存取權</li>
+                    <li>主體：allUsers</li>
+                    <li>角色：Storage Object Viewer</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 安全風險：</strong>
+                    任何人都能看所有檔案，不要放 API 金鑰 / 密碼 / 用戶資料在公開 Bucket。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-globe"></i> 靜態網站託管</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">使用 Cloud Storage 託管靜態網站。</p>
+                <ul class="note-points">
+                    <li>編輯網站設定：Index page = index.html</li>
+                    <li>404 page = 404.html</li>
+                    <li>網址：<code>https://storage.googleapis.com/bucket-name/index.html</code></li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：Cloud Storage 操作</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">建立 Bucket、上傳檔案、設定公開存取與靜態網站。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 優秀回答：</strong>
+                    建立 Bucket 時選 asia-east1（台灣）降低延遲，命名全球唯一如 my-portfolio-2026-03。上傳 index.html/css/images 後設定 allUsers=Storage Object Viewer 公開存取。靜態網站託管設定 index.html 為主頁。四種 Storage Class 差異：Standard 適合頻繁存取的網站檔案；Nearline 適合每月偶爾存取的舊作品（省 50%）；Coldline 適合備份（省 80%）；Archive 適合法規保存（最便宜但取回慢）。Bucket 是扁平結構不是資料夾，存取控制選 Uniform 統一管理最簡單。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 9: 生命週期管理與成本優化 -->
+        <h3 class="section-title"><i class="fa-solid fa-recycle"></i> 生命週期管理與成本優化</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrows-rotate"></i> 自動儲存類別轉換</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">設定生命週期規則自動降級儲存類別以節省成本。</p>
+                <ul class="note-points">
+                    <li>90 天後 → Nearline（省 50%）</li>
+                    <li>365 天後 → Coldline（省 80%）</li>
+                    <li>也可設定自動刪除（如暫存檔 30 天後刪除）</li>
+                    <li>每 24 小時執行一次，不立即生效</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 注意：</strong>
+                    刪除是永久性的，建議先在測試 Bucket 驗證規則。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-diagram-project"></i> 進階：自訂域名架構</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">透過 HTTPS Load Balancer + Backend bucket 實現自訂域名。</p>
+                <ul class="note-points">
+                    <li>架構：使用者 → https://www.myportfolio.com → GCP HTTPS LB → Backend bucket → Cloud Storage bucket</li>
+                    <li>優點：自訂域名 / 自動 HTTPS / CDN 加速 / 不需 VM</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 10: 整合思考題 -->
+        <h3 class="section-title"><i class="fa-solid fa-brain"></i> 整合思考題</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-right-left"></i> GCP vs AWS 概念對照</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">兩大雲端平台的服務對照表。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr>
+                            <th>AWS</th>
+                            <th>GCP</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>EC2</td>
+                            <td>Compute Engine</td>
+                        </tr>
+                        <tr>
+                            <td>S3</td>
+                            <td>Cloud Storage</td>
+                        </tr>
+                        <tr>
+                            <td>Security Group</td>
+                            <td>防火牆規則</td>
+                        </tr>
+                        <tr>
+                            <td>IAM User</td>
+                            <td>IAM 主體</td>
+                        </tr>
+                        <tr>
+                            <td>EBS</td>
+                            <td>Persistent Disk</td>
+                        </tr>
+                        <tr>
+                            <td>AMI</td>
+                            <td>映像檔</td>
+                        </tr>
+                        <tr>
+                            <td>CloudFront</td>
+                            <td>Cloud CDN</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 思考題</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">你的公司要建立一個內部知識庫網站，需要存放文件（PDF）和影片教學，請設計儲存方案。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 優秀回答：</strong>
+                    (1) 建立兩個 Bucket：docs-bucket（PDF 文件，Standard，Region asia-east1）和 videos-bucket（影片，Standard 轉 Nearline）。(2) 權限：不用 allUsers 公開，改用 IAM 群組控制（如 knowledge-readers@company.com 授予 Storage Object Viewer）。(3) 生命週期：影片 90 天後轉 Nearline（省 50%），365 天後轉 Coldline（省 80%）；PDF 文件保持 Standard（頻繁查閱）。(4) 成本估算：100GB PDF + 500GB 影片，Standard 約 $12/月，套用生命週期後降至 $5/月。(5) 與 VM 方案比較：VM 需 $25+/月且要維護，Cloud Storage 免維護且可搭配 Cloud CDN 加速。
+                </div>
             </div>
         </div>
 

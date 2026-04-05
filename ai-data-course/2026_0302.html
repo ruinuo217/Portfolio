@@ -236,14 +236,233 @@
             <i class="fa-solid fa-chart-pie banner-icon"></i>
         </div>
 
-        <h3 class="section-title">課程筆記：數據視覺化分析平台</h3>
+        <!-- Section 1: 專案概覽 -->
+        <h3 class="section-title"><i class="fa-solid fa-train-subway"></i> 專案概覽：台北捷運人流分析</h3>
         <div class="dashboard-grid notes-section">
             <div class="card note-card" style="grid-column: 1 / -1;">
                 <div class="note-header">
-                    <h4><i class="fa-solid fa-chart-pie"></i> 筆記待補</h4>
-                    <span class="status-badge pending">待補</span>
+                    <h4><i class="fa-solid fa-bullseye"></i> 專案主題與資料</h4>
+                    <span class="status-badge important">觀念</span>
                 </div>
-                <p class="note-desc">課程內容稍後補充。</p>
+                <p class="note-desc">本次 Power BI 實作課程以<strong>台北捷運進出站人流</strong>為分析主題，透過儀表板呈現運量趨勢、站點排名、平假日差異及異常診斷。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>資料檔案</th><th>涵蓋期間</th><th>格式</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>202310_cht.xlsx</td><td>2023 年 10 月</td><td>Excel</td></tr>
+                        <tr><td>202311_cht.xlsx</td><td>2023 年 11 月</td><td>Excel</td></tr>
+                        <tr><td>202410_cht.xlsx</td><td>2024 年 10 月</td><td>Excel</td></tr>
+                        <tr><td>202411_cht.xlsx</td><td>2024 年 11 月</td><td>Excel</td></tr>
+                    </tbody>
+                </table>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 分析目標：</strong>以 2023 vs 2024 同期（10-11 月）比較為核心，從敘述性分析（看清概況）進階到診斷性分析（找出異常原因），最終上台簡報。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: 第一階段 — 敘述性分析 -->
+        <h3 class="section-title"><i class="fa-solid fa-chart-line"></i> 第一階段：敘述性分析儀表板</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-id-card"></i> 圖表 1：卡片 / 多列卡片 (Card)</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">放在儀表板最上方，呈現核心 KPI，讓觀眾第一眼就掌握關鍵數字。</p>
+                <ul class="note-points">
+                    <li><strong>總進出人次：</strong>四份資料的加總進出站人數</li>
+                    <li><strong>2024 YoY 年增率：</strong>對比 2023 同期的成長/衰退百分比</li>
+                    <li><strong>平均每日運量：</strong>整體日均人流量</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 技巧：</strong>Card 是專業儀表板的第一眼重點，直接告訴觀眾最關鍵的數字，不需要再去看圖表才能理解。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-chart-line"></i> 圖表 2：折線圖 (Line Chart)</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">跨年度同期的總體趨勢比較，找出異常波峰/波谷。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>軸</th><th>設定</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>X 軸</strong></td><td>10/1 ~ 11/30 的日期</td></tr>
+                        <tr><td><strong>Y 軸</strong></td><td>每日總人次</td></tr>
+                        <tr><td><strong>圖例</strong></td><td>2023 與 2024 兩條線疊加比較</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-chart-bar"></i> 圖表 3：群組長條圖 (Clustered Bar Chart)</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">清晰比較各站點的量級差異，篩選全台北運量最高 Top 10 車站。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>軸</th><th>設定</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Y 軸</strong></td><td>車站名稱</td></tr>
+                        <tr><td><strong>X 軸</strong></td><td>總人次</td></tr>
+                        <tr><td><strong>篩選</strong></td><td>Top 10 車站（如台北車站為第一名，觀察二、三名拉鋸）</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-circle-dot"></i> 圖表 4：環圈圖 (Donut Chart)</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">將總運量區分為「平日」與「假日」的佔比。</p>
+                <ul class="note-points">
+                    <li><strong>前置作業：</strong>需在資料處理時新增「平假日」欄位</li>
+                    <li><strong>中間挖空：</strong>可放上總人數，版面更有現代感</li>
+                    <li><strong>效果：</strong>圓餅圖進階版，一眼看出平假日運量差異</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-map-location-dot"></i> 圖表 5：地圖 (Map)</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">視覺張力最強的圖表！將台北捷運各站點標示在地圖上，用氣泡大小代表總運量。</p>
+                <ul class="note-points">
+                    <li><strong>氣泡大小：</strong>代表該站點的總運量</li>
+                    <li><strong>搭配切片器：</strong>點選「假日」時，可看到大氣泡從商業區（內科、松江南京）往景區（西門町、淡水）移動</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 視覺效果：</strong>地圖氣泡的動態切換是簡報時最吸睛的環節之一！
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-table-cells"></i> 圖表 6：矩陣熱力圖 (Matrix + 條件式格式化)</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">做出類似 Heatmap 的效果，一眼看出特定車站在哪些日子人特別多。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>維度</th><th>設定</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>欄</strong></td><td>星期一 ~ 星期日</td></tr>
+                        <tr><td><strong>列</strong></td><td>車站名稱</td></tr>
+                        <tr><td><strong>值</strong></td><td>平均人次（以顏色深淺呈現）</td></tr>
+                    </tbody>
+                </table>
+                <ul class="note-points">
+                    <li>中山站 → 週末顏色深（人潮多，逛街購物）</li>
+                    <li>科技大樓站 → 平日顏色深（上班通勤族）</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 3: 第二階段 — 診斷性分析 -->
+        <h3 class="section-title"><i class="fa-solid fa-magnifying-glass-chart"></i> 第二階段：診斷性分析儀表板</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-cloud-rain"></i> 圖表 7：散佈圖 (Scatter Plot)</h4>
+                    <span class="status-badge important">進階</span>
+                </div>
+                <p class="note-desc">結合氣象局 Open Data，用趨勢線證明「雨下越大，搭捷運的人越少」。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>軸</th><th>設定</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>X 軸</strong></td><td>單日降雨量 (mm)</td></tr>
+                        <tr><td><strong>Y 軸</strong></td><td>單日總運量</td></tr>
+                        <tr><td><strong>外部資料</strong></td><td>政府資料開放平台 — 台北市 10-11 月降雨量</td></tr>
+                    </tbody>
+                </table>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 背景：</strong>10-11 月台北常有秋颱或東北季風，降雨與捷運運量的負相關是非常真實的診斷分析。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-ribbon"></i> 圖表 8：緞帶圖 (Ribbon Chart)</h4>
+                    <span class="status-badge important">進階</span>
+                </div>
+                <p class="note-desc">追蹤觀光商圈車站（中山、西門、市政府等）在 10-11 月每週的運量排名變化。</p>
+                <ul class="note-points">
+                    <li><strong>不只看大小：</strong>還能看出排名交叉的軌跡</li>
+                    <li><strong>案例：</strong>萬聖節那一週某站排名突然像緞帶一樣衝到第一名，事後又掉下來</li>
+                    <li><strong>效果：</strong>增加畫面的動態感與故事性</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-robot"></i> 圖表 9：分解樹 / 關鍵影響因素 (AI 視覺效果)</h4>
+                    <span class="status-badge info">選做</span>
+                </div>
+                <p class="note-desc">Power BI 內建的 AI 視覺效果，設定分析目標為「總運量」，自動層層拆解原因。</p>
+                <ul class="note-points">
+                    <li><strong>分解樹 (Decomposition Tree)：</strong>第一層拆年份 → 第二層拆是否為颱風假 → 第三層拆車站</li>
+                    <li><strong>關鍵影響因素 (Key Influencers)：</strong>讓模型自動找出哪些因素最影響運量</li>
+                    <li><strong>簡報效果：</strong>上台時可直接點「＋」號讓樹狀圖動態展開，畫面非常吸睛</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-circle-info"></i> 備註：</strong>此圖表為選做項目，可視時間決定是否納入。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: 組員分工 -->
+        <h3 class="section-title"><i class="fa-solid fa-users"></i> 組員分工</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-user-gear"></i> 組員 A：大盤總覽</h4>
+                    <span class="status-badge done">分工</span>
+                </div>
+                <p class="note-desc">負責儀表板的基礎定調與核心數據呈現（共 4 張圖表）。</p>
+                <ul class="note-points">
+                    <li><strong>圖表 1 — 卡片 (Card)：</strong>拉出「總運量」、「YoY 年增率」等核心 KPI</li>
+                    <li><strong>圖表 2 — 折線圖 (Line Chart)：</strong>畫出 2023 vs 2024 的兩條總運量趨勢線</li>
+                    <li><strong>圖表 6 — 矩陣熱力圖 (Matrix)：</strong>處理星期一到星期日的站點人次深淺變化</li>
+                    <li><strong>圖表 9 — 分解樹 (Decomposition Tree)：</strong>展示 Power BI 的 AI 拆解火力（選做）</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-user-pen"></i> 組員 B：空間分佈與排名</h4>
+                    <span class="status-badge done">分工</span>
+                </div>
+                <p class="note-desc">負責視覺亮點與排名動態（共 4 張圖表）。</p>
+                <ul class="note-points">
+                    <li><strong>圖表 3 — 群組長條圖 (Clustered Bar Chart)：</strong>進出站總人次 Top 10 排行榜</li>
+                    <li><strong>圖表 4 — 環圈圖 (Donut Chart)：</strong>平日與假日運量佔比</li>
+                    <li><strong>圖表 5 — 地圖 (Map)：</strong>最吸睛的地圖視覺效果，氣泡大小與顏色呈現捷運熱區</li>
+                    <li><strong>圖表 8 — 緞帶圖 (Ribbon Chart)：</strong>追蹤商圈站點的排名交叉變化</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-user-secret"></i> 組員 C：異常診斷與簡報主講</h4>
+                    <span class="status-badge done">分工</span>
+                </div>
+                <p class="note-desc">負責外部資料整合與上台簡報統籌（2 張圖表 + 外部任務）。</p>
+                <ul class="note-points">
+                    <li><strong>圖表 7 — 散佈圖 (Scatter Plot)：</strong>下載政府開放資料「台北市 10-11 月降雨量」，畫出降雨量與運量關係圖</li>
+                    <li><strong>簡報統籌：</strong>把大家做好的儀表板截圖或直接操作軟體，安排上台報告動線</li>
+                </ul>
             </div>
         </div>
 

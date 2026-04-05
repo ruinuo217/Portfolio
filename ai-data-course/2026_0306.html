@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI大數據養成班 - 3/6 雲端平台入門</title>
+    <title>AI大數據養成班 - 3/6 GCP 無伺服器架構</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="dashboard.css">
 </head>
@@ -109,7 +109,7 @@
                 <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0303.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/3 (二)</span><span class="topic">雲端平台入門</span></a></li>
                 <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0304.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/4 (三)</span><span class="topic">雲端平台入門</span></a></li>
                 <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0305.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/5 (四)</span><span class="topic">雲端平台入門</span></a></li>
-                <li class="active"><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0306.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/6 (五)</span><span class="topic">雲端平台入門</span></a></li>
+                <li class="active"><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0306.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/6 (五)</span><span class="topic">GCP 無伺服器架構</span></a></li>
             </ul>
         </div>
 
@@ -221,7 +221,7 @@
 
         <div class="top-bar">
             <div class="breadcrumb">
-                首頁 > Week 9: 雲端平台 > <span>雲端平台入門</span>
+                首頁 > Week 9: 雲端平台 > <span>GCP 無伺服器架構</span>
             </div>
             <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
                 <i class="fas fa-home"></i> 回首頁
@@ -230,20 +230,647 @@
 
         <div class="banner">
             <div>
-                <h1>雲端平台入門</h1>
+                <h1>GCP 無伺服器架構</h1>
                 <p>3/6 課程筆記</p>
             </div>
-            <i class="fa-solid fa-cloud banner-icon"></i>
+            <i class="fa-solid fa-cloud-bolt banner-icon"></i>
         </div>
 
-        <h3 class="section-title">課程筆記：雲端平台入門</h3>
+        <!-- Section 1: 無伺服器架構入門 -->
+        <h3 class="section-title"><i class="fa-solid fa-rocket"></i> 無伺服器架構入門</h3>
         <div class="dashboard-grid notes-section">
-            <div class="card note-card" style="grid-column: 1 / -1;">
+            <div class="card note-card">
                 <div class="note-header">
-                    <h4><i class="fa-solid fa-cloud"></i> 筆記待補</h4>
-                    <span class="status-badge pending">待補</span>
+                    <h4><i class="fa-solid fa-scale-balanced"></i> 傳統架構 vs 無伺服器</h4>
+                    <span class="status-badge important">觀念</span>
                 </div>
-                <p class="note-desc">課程內容稍後補充。</p>
+                <p class="note-desc">「無伺服器」不是沒有伺服器，而是開發者不需要管理伺服器。雲端平台自動處理所有基礎設施，開發者只需專注於程式碼。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr>
+                            <th>比較項目</th>
+                            <th>傳統架構 (VM)</th>
+                            <th>無伺服器 (Serverless)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>伺服器啟動</td>
+                            <td>手動建立 VM</td>
+                            <td>自動</td>
+                        </tr>
+                        <tr>
+                            <td>OS 更新</td>
+                            <td>手動</td>
+                            <td>平台處理</td>
+                        </tr>
+                        <tr>
+                            <td>擴展</td>
+                            <td>手動增加 VM</td>
+                            <td>自動擴展到數千</td>
+                        </tr>
+                        <tr>
+                            <td>閒置成本</td>
+                            <td>持續計費</td>
+                            <td>趨近 $0</td>
+                        </tr>
+                        <tr>
+                            <td>部署方式</td>
+                            <td>SSH 上傳</td>
+                            <td>直接上傳程式碼</td>
+                        </tr>
+                        <tr>
+                            <td>適用場景</td>
+                            <td>長時間運行</td>
+                            <td>事件驅動 / 流量不穩定</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-question"></i> 為什麼需要無伺服器</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">以相簿系統為範例，說明無伺服器的核心價值。</p>
+                <ul class="note-points">
+                    <li><strong>流量不穩定問題：</strong>平常 10 req/hr = VM 閒置 99%；爆紅 10,000 req/hr = VM 當機。無伺服器自動擴展，完美應對兩種情境</li>
+                    <li><strong>自動化任務：</strong>上傳照片自動產生縮圖 — 只在事件發生時執行，其他時間成本 $0</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code-compare"></i> Cloud Functions vs Cloud Run</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">GCP 提供兩種無伺服器運算服務，各有適用場景。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr>
+                            <th>比較項目</th>
+                            <th>Cloud Functions</th>
+                            <th>Cloud Run</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>程式結構</td>
+                            <td>單一函數</td>
+                            <td>完整應用</td>
+                        </tr>
+                        <tr>
+                            <td>觸發方式</td>
+                            <td>事件驅動</td>
+                            <td>任何框架 (Flask / FastAPI / Express)</td>
+                        </tr>
+                        <tr>
+                            <td>執行時間上限</td>
+                            <td>最長 9 分鐘</td>
+                            <td>最長 60 分鐘</td>
+                        </tr>
+                        <tr>
+                            <td>記憶體上限</td>
+                            <td>最大 8GB</td>
+                            <td>支援 Docker 容器</td>
+                        </tr>
+                        <tr>
+                            <td>適用場景</td>
+                            <td>圖片處理、通知等</td>
+                            <td>Web API、資料處理</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section 2: 課程情境 — 智慧相簿系統 -->
+        <h3 class="section-title"><i class="fa-solid fa-images"></i> 課程情境 — 智慧相簿系統</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-diagram-project"></i> 系統架構設計</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">智慧相簿系統的完整無伺服器架構流程。</p>
+                <ul class="note-points">
+                    <li><strong>(1)</strong> 使用者瀏覽相簿 → 靜態網頁 (Cloud Storage)</li>
+                    <li><strong>(2)</strong> 上傳照片 → 呼叫 Cloud Run API</li>
+                    <li><strong>(3)</strong> API 儲存原圖 → 原圖 Bucket</li>
+                    <li><strong>(4)</strong> Storage 事件觸發 → Cloud Functions 縮圖處理</li>
+                    <li><strong>(5)</strong> 縮圖儲存 → 縮圖 Bucket</li>
+                    <li><strong>(6)</strong> 網頁顯示縮圖</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-coins"></i> VM 方案 vs 無伺服器方案</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">兩種方案的全面比較，突顯無伺服器的優勢。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr>
+                            <th>比較項目</th>
+                            <th>VM 方案</th>
+                            <th>無伺服器方案</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>建置時間</td>
+                            <td>10-15 分鐘</td>
+                            <td>2-5 分鐘</td>
+                        </tr>
+                        <tr>
+                            <td>擴展</td>
+                            <td>手動</td>
+                            <td>自動 0 到數千</td>
+                        </tr>
+                        <tr>
+                            <td>閒置成本</td>
+                            <td>$7/月 (e2-micro)</td>
+                            <td>$0</td>
+                        </tr>
+                        <tr>
+                            <td>維護</td>
+                            <td>需更新 OS、套件</td>
+                            <td>無需</td>
+                        </tr>
+                        <tr>
+                            <td>流量暴增</td>
+                            <td>可能當機</td>
+                            <td>自動應對</td>
+                        </tr>
+                        <tr>
+                            <td>部署</td>
+                            <td>SSH 上傳</td>
+                            <td>直接上傳 / Git 整合</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section 3: Cloud Functions 基礎 -->
+        <h3 class="section-title"><i class="fa-solid fa-bolt"></i> Cloud Functions 基礎</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-puzzle-piece"></i> 函數組成三要素</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">每個 Cloud Function 由三個核心元素組成。</p>
+                <ul class="note-points">
+                    <li><strong>(1) 觸發器：</strong>HTTP 觸發（接收 HTTP 請求）、Storage 觸發（檔案上傳/刪除時）、Pub/Sub 觸發（接收訊息）</li>
+                    <li><strong>(2) 執行環境：</strong>Python 3.11、Node.js 20、Go、Java 等</li>
+                    <li><strong>(3) 資源配置：</strong>記憶體 128MB ~ 8GB，逾時最長 540 秒（9 分鐘）</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-temperature-half"></i> 冷啟動 vs 熱啟動</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">Cloud Functions 的啟動機制直接影響回應速度。</p>
+                <ul class="note-points">
+                    <li><strong>冷啟動：</strong>首次呼叫或閒置後，需 1-3 秒建立環境</li>
+                    <li><strong>熱啟動：</strong>重複呼叫使用現有實例，延遲 &lt;100ms</li>
+                    <li><strong>回收機制：</strong>閒置 10-15 分鐘後回收實例</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 4: 第一個 Cloud Function 實作 -->
+        <h3 class="section-title"><i class="fa-solid fa-code"></i> 第一個 Cloud Function 實作</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-image"></i> 建立圖片資訊讀取函數</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">建立一個 Cloud Function，讀取 Cloud Storage 中的圖片並回傳圖片資訊。</p>
+                <ul class="note-points">
+                    <li><strong>準備：</strong>建立 Bucket [專案ID]-photos，上傳測試圖片</li>
+                    <li><strong>函數名稱：</strong>get-image-info</li>
+                    <li><strong>世代：</strong>Gen2</li>
+                    <li><strong>Region：</strong>asia-east1</li>
+                    <li><strong>Runtime：</strong>Python 3.11</li>
+                    <li><strong>Entry point：</strong>get_image_info</li>
+                    <li><strong>驗證：</strong>允許公開存取</li>
+                    <li><strong>Memory：</strong>256 MiB</li>
+                    <li><strong>Timeout：</strong>60s</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-file-code"></i> 程式碼重點</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">Cloud Function 的核心程式碼邏輯與依賴套件。</p>
+                <ul class="note-points">
+                    <li><code>@functions_framework.http</code> 標記 HTTP 觸發</li>
+                    <li><code>request.args.get('file')</code> 解析 URL 參數</li>
+                    <li><code>storage.Client()</code> 連接 Cloud Storage</li>
+                    <li><code>blob.download_as_bytes()</code> 下載到記憶體</li>
+                    <li><code>Image.open(io.BytesIO())</code> 用 Pillow 讀取圖片資訊</li>
+                    <li><strong>requirements.txt：</strong>google-cloud-storage、Pillow、functions-framework</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-vial"></i> 測試與驗證</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">部署完成後進行功能測試。</p>
+                <ul class="note-points">
+                    <li>瀏覽器打開 <code>https://FUNCTION-URL?file=test.jpg</code></li>
+                    <li>預期回傳 JSON 含 filename / size_bytes / width / height / format</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：Cloud Function</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">實作 Cloud Function 並驗證圖片資訊讀取功能。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 優秀回答：</strong>
+                    建立 get-image-info 函數後，用瀏覽器呼叫 ?file=test.jpg 回傳 JSON 包含圖片寬高、大小、格式。Cloud Functions Gen2 自動建立 HTTPS endpoint，部署後狀態為 Active。關鍵程式碼：@functions_framework.http 標記 HTTP 觸發，storage.Client() 透過服務帳號自動取得權限（不需手動設定金鑰）。冷啟動約 1-3 秒，連續呼叫走熱啟動 &lt;100ms。常見錯誤：Bucket not found（名稱錯）、Access denied（服務帳號缺 Storage 權限）、Module not found PIL（requirements.txt 要寫 Pillow 不是 PIL）。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-bug"></i> 常見錯誤排查</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">Cloud Function 開發常見錯誤與解決方案。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr>
+                            <th>錯誤訊息</th>
+                            <th>原因</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Bucket not found</td>
+                            <td>Bucket 名稱錯誤</td>
+                        </tr>
+                        <tr>
+                            <td>Access denied</td>
+                            <td>服務帳號缺 Storage 權限</td>
+                        </tr>
+                        <tr>
+                            <td>Module not found PIL</td>
+                            <td>requirements.txt 要寫 Pillow 不是 PIL</td>
+                        </tr>
+                        <tr>
+                            <td>Function timeout</td>
+                            <td>增加逾時或優化程式碼</td>
+                        </tr>
+                        <tr>
+                            <td>檔案不存在</td>
+                            <td>檔名錯誤或未上傳</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section 5: 自動縮圖處理 — Storage 觸發器 -->
+        <h3 class="section-title"><i class="fa-solid fa-wand-magic-sparkles"></i> 自動縮圖處理 — Storage 觸發器</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-compress"></i> 為什麼需要縮圖</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">縮圖大幅減少頁面載入時間與流量消耗。</p>
+                <ul class="note-points">
+                    <li><strong>原圖：</strong>每張 3-5MB，50 張相簿 = 200MB 載入 &gt;30 秒</li>
+                    <li><strong>縮圖：</strong>每張 50KB，50 張 = 2.5MB 載入 &lt;3 秒</li>
+                    <li><strong>效果：</strong>節省 98% 流量</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-bell"></i> Storage 觸發器原理</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">Cloud Storage 事件可自動觸發 Cloud Functions 執行。</p>
+                <ul class="note-points">
+                    <li><strong>finalize：</strong>上傳完成（最常用）</li>
+                    <li><strong>delete：</strong>刪除</li>
+                    <li><strong>archive：</strong>封存</li>
+                    <li><strong>metadataUpdate：</strong>更新</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 重要提醒：</strong>
+                    避免無限迴圈！縮圖存到同一個 Bucket 會再次觸發事件 → 必須檢查路徑跳過 thumbs/ 前綴的檔案。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-gears"></i> 縮圖函數程式碼重點</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">自動縮圖 Cloud Function 的核心邏輯。</p>
+                <ul class="note-points">
+                    <li><code>@functions_framework.cloud_event</code> 標記 Storage 觸發</li>
+                    <li><code>cloud_event.data</code> 取得 bucket / name / contentType</li>
+                    <li>跳過 <code>thumbs/</code> 前綴（防無限迴圈）</li>
+                    <li>只處理 <code>image/</code> 類型</li>
+                    <li><code>image.thumbnail((300, 300))</code> 保持長寬比</li>
+                    <li>RGBA 轉 RGB（JPEG 不支援透明）</li>
+                    <li>儲存到 <code>thumbs/</code> 前綴</li>
+                    <li><strong>資源配置：</strong>記憶體 512 MiB，逾時 120 秒</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-chalkboard-user"></i> 建立步驟（教師示範）</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">在 GCP Console 建立自動縮圖 Cloud Function。</p>
+                <ul class="note-points">
+                    <li><strong>函式名稱：</strong>generate-thumbnail</li>
+                    <li><strong>觸發：</strong>Cloud Storage finalize/create</li>
+                    <li><strong>Bucket：</strong>[專案ID]-photos</li>
+                    <li><strong>Runtime：</strong>Python 3.11</li>
+                    <li><strong>Entry point：</strong>generate_thumbnail</li>
+                    <li><strong>測試：</strong>上傳新圖片 → 等 5-10 秒 → 查看 thumbs/ 資料夾確認縮圖生成</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：縮圖處理</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">實作 Storage 觸發的自動縮圖功能。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 優秀回答：</strong>
+                    上傳 test.jpg（2.3MB）後約 5 秒在 thumbs/ 看到縮圖（45KB），壓縮率 98%。Storage 觸發器使用 finalize 事件，每次檔案上傳完成自動執行。防無限迴圈的關鍵：if file_name.startswith('thumbs/'): return — 因為縮圖存到同 Bucket 的 thumbs/ 會再觸發事件，不跳過就會無限執行。Pillow 的 thumbnail() 保持長寬比，800x600 原圖縮成 300x225。JPEG 不支援透明所以 RGBA 要先 convert('RGB')。記憶體設 512MiB 因為圖片處理比文字處理吃記憶體。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 6: Cloud Run 相簿 API -->
+        <h3 class="section-title"><i class="fa-solid fa-server"></i> Cloud Run 相簿 API</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-cubes"></i> Cloud Run 基礎概念</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">容器化無伺服器平台，可執行任何語言與框架。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr>
+                            <th>比較項目</th>
+                            <th>Cloud Functions</th>
+                            <th>Cloud Run</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>程式結構</td>
+                            <td>單一函數</td>
+                            <td>完整應用</td>
+                        </tr>
+                        <tr>
+                            <td>框架</td>
+                            <td>限制多</td>
+                            <td>任何（Flask / FastAPI）</td>
+                        </tr>
+                        <tr>
+                            <td>執行時間</td>
+                            <td>9 分鐘</td>
+                            <td>60 分鐘</td>
+                        </tr>
+                        <tr>
+                            <td>容器</td>
+                            <td>不需</td>
+                            <td>Docker</td>
+                        </tr>
+                        <tr>
+                            <td>冷啟動</td>
+                            <td>較快</td>
+                            <td>需載入容器</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-plug"></i> 相簿 API 功能</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">使用 Flask 框架建立相簿 API，透過 Cloud Console 直接部署（Source-based deploy 不需 Docker）。</p>
+                <ul class="note-points">
+                    <li><strong>GET /photos：</strong>列出所有照片，回傳 JSON 含原圖 URL + 縮圖 URL</li>
+                    <li><strong>POST /photos：</strong>產生 Signed URL 讓前端直傳 Cloud Storage</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-link"></i> Signed URL 概念</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">讓前端直接上傳到 Cloud Storage，不經過 API 伺服器，節省頻寬。</p>
+                <ul class="note-points">
+                    <li>API 只產生臨時上傳 URL（有效 15 分鐘）</li>
+                    <li>前端拿 URL 直接 PUT 到 Storage</li>
+                    <li><strong>安全性：</strong>URL 過期就失效，限定 Bucket / 路徑 / 操作</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-cloud-arrow-up"></i> 部署步驟</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">透過 Cloud Console 部署 Cloud Run 服務。</p>
+                <ul class="note-points">
+                    <li>Cloud Run → 建立服務</li>
+                    <li><strong>名稱：</strong>album-api</li>
+                    <li><strong>Region：</strong>asia-east1</li>
+                    <li>從原始碼部署</li>
+                    <li>允許未經驗證的叫用</li>
+                    <li><strong>取得 URL：</strong><code>https://album-api-xxxx.asia-east1.run.app</code></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 7: 前後端整合 -->
+        <h3 class="section-title"><i class="fa-solid fa-link"></i> 前後端整合</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-globe"></i> 靜態前端頁面</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">HTML + CSS + JavaScript 部署到 Cloud Storage 靜態網站。</p>
+                <ul class="note-points">
+                    <li>JavaScript 用 <code>fetch()</code> 呼叫 Cloud Run API 取得照片列表</li>
+                    <li>用 Signed URL 直接上傳到 Storage</li>
+                    <li>網格展示縮圖，點擊查看原圖</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-sitemap"></i> 完整架構回顧</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">智慧相簿系統的完整無伺服器架構。</p>
+                <ul class="note-points">
+                    <li>使用者 → Cloud Storage 靜態網頁 → Cloud Run API → Cloud Storage 原圖 Bucket → Cloud Functions 自動縮圖 → Cloud Storage 縮圖 Bucket → 網頁顯示</li>
+                    <li><strong>所有元件都是無伺服器：</strong>無請求時成本 $0、自動擴展、免維護</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 8: 成本分析 -->
+        <h3 class="section-title"><i class="fa-solid fa-calculator"></i> 成本分析</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-dollar-sign"></i> 無伺服器成本計算</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">無伺服器方案在小型應用中的成本優勢極為明顯。</p>
+                <ul class="note-points">
+                    <li><strong>Cloud Functions：</strong>每月 200 萬次免費，超過 $0.40/百萬次</li>
+                    <li><strong>Cloud Run：</strong>每月 200 萬次免費，CPU/記憶體按秒計費</li>
+                    <li><strong>Cloud Storage：</strong>$0.020/GB/月（Standard）</li>
+                    <li><strong>對比 VM 方案：</strong>e2-micro 持續運行 = $7/月，無伺服器小型應用 ≈ $0-2/月</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> Tip:</strong>
+                    無伺服器特別適合流量不穩定的應用 — 沒人用時真的 $0。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 9: GCP 三日課程總回顧 -->
+        <h3 class="section-title"><i class="fa-solid fa-graduation-cap"></i> GCP 三日課程總回顧</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-layer-group"></i> 架構演進對照</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">GCP 三日課程從 VM 到無伺服器的架構演進。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr>
+                            <th>單元</th>
+                            <th>核心服務</th>
+                            <th>特性</th>
+                            <th>適用場景</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Unit 01</td>
+                            <td>Compute Engine VM</td>
+                            <td>手動管理</td>
+                            <td>需完全控制的場景</td>
+                        </tr>
+                        <tr>
+                            <td>Unit 02</td>
+                            <td>Cloud Storage</td>
+                            <td>物件儲存 + 靜態網站</td>
+                            <td>檔案儲存與靜態內容</td>
+                        </tr>
+                        <tr>
+                            <td>Unit 03</td>
+                            <td>Cloud Functions + Cloud Run</td>
+                            <td>無伺服器 + 事件驅動</td>
+                            <td>流量不穩定 + 自動化</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-right-left"></i> GCP vs AWS 服務對照總表</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">GCP 與 AWS 主要服務的對應關係。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr>
+                            <th>GCP</th>
+                            <th>AWS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Compute Engine</td>
+                            <td>EC2</td>
+                        </tr>
+                        <tr>
+                            <td>Cloud Storage</td>
+                            <td>S3</td>
+                        </tr>
+                        <tr>
+                            <td>Cloud Functions</td>
+                            <td>Lambda</td>
+                        </tr>
+                        <tr>
+                            <td>Cloud Run</td>
+                            <td>Fargate / App Runner</td>
+                        </tr>
+                        <tr>
+                            <td>Cloud SQL</td>
+                            <td>RDS</td>
+                        </tr>
+                        <tr>
+                            <td>VPC 防火牆</td>
+                            <td>Security Group</td>
+                        </tr>
+                        <tr>
+                            <td>IAM</td>
+                            <td>IAM</td>
+                        </tr>
+                        <tr>
+                            <td>Cloud CDN</td>
+                            <td>CloudFront</td>
+                        </tr>
+                        <tr>
+                            <td>Cloud Monitoring</td>
+                            <td>CloudWatch</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-lightbulb"></i> 整合思考題</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">假設你要為一家餐廳建立線上點餐系統，請設計使用 GCP 服務的架構方案。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 優秀回答：</strong>
+                    (1) 前端：Cloud Storage 託管靜態菜單頁面（HTML/CSS/JS），搭配 Cloud CDN 加速。(2) 後端 API：Cloud Run 部署 Flask/FastAPI 點餐 API，處理訂單 CRUD，連接 Cloud SQL（MySQL）。(3) 圖片處理：菜品照片存 Cloud Storage，上傳時 Cloud Functions 自動生成縮圖。(4) 通知：Cloud Functions 監聽新訂單事件，透過 Pub/Sub 觸發推播通知（LINE Notify / Email）。(5) 成本：非用餐時段流量低 → Cloud Run 自動縮至 0 實例 → 成本趨近 $0。(6) 與全 VM 方案比較：不需維護 OS、自動擴展尖峰（午餐時段）、閒置不計費，預估月費從 $50+（2台VM）降至 $5-10。
+                </div>
             </div>
         </div>
 

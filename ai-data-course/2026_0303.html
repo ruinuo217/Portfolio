@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI大數據養成班 - 3/3 雲端平台入門</title>
+    <title>AI大數據養成班 - 3/3 AWS 雲端平台（EC2 + S3）</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="dashboard.css">
 </head>
@@ -106,7 +106,7 @@
             <div class="group-title">Week 9: 雲端平台</div>
             <ul>
                 <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0302.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/2 (一)</span><span class="topic">數據視覺化分析平台</span></a></li>
-                <li class="active"><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0303.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/3 (二)</span><span class="topic">雲端平台入門</span></a></li>
+                <li class="active"><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0303.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/3 (二)</span><span class="topic">AWS 雲端平台（EC2 + S3）</span></a></li>
                 <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0304.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/4 (三)</span><span class="topic">雲端平台入門</span></a></li>
                 <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0305.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/5 (四)</span><span class="topic">雲端平台入門</span></a></li>
                 <li><a href="https://ruinuo217.github.io/Portfolio/ai-data-course/2026_0306.html"><span class="date-badge"><i class="far fa-calendar"></i> 3/6 (五)</span><span class="topic">雲端平台入門</span></a></li>
@@ -221,7 +221,7 @@
 
         <div class="top-bar">
             <div class="breadcrumb">
-                首頁 > Week 9: 雲端平台 > <span>雲端平台入門</span>
+                首頁 > Week 9: 雲端平台 > <span>AWS 雲端平台（EC2 + S3）</span>
             </div>
             <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
                 <i class="fas fa-home"></i> 回首頁
@@ -230,20 +230,569 @@
 
         <div class="banner">
             <div>
-                <h1>雲端平台入門</h1>
+                <h1>AWS 雲端平台（EC2 + S3）</h1>
                 <p>3/3 課程筆記</p>
             </div>
             <i class="fa-solid fa-cloud banner-icon"></i>
         </div>
 
-        <h3 class="section-title">課程筆記：雲端平台入門</h3>
+        <!-- Section 1: IAM 身分與權限管理 -->
+        <h3 class="section-title"><i class="fa-solid fa-shield-halved"></i> IAM 身分與權限管理</h3>
         <div class="dashboard-grid notes-section">
             <div class="card note-card" style="grid-column: 1 / -1;">
                 <div class="note-header">
-                    <h4><i class="fa-solid fa-cloud"></i> 筆記待補</h4>
-                    <span class="status-badge pending">待補</span>
+                    <h4><i class="fa-solid fa-key"></i> IAM 核心概念</h4>
+                    <span class="status-badge important">觀念</span>
                 </div>
-                <p class="note-desc">課程內容稍後補充。</p>
+                <p class="note-desc">AWS 帳號就像租一整棟機房，<strong>root</strong> 是總鑰匙（什麼都能開），<strong>IAM User</strong> 是個人門禁卡（只能開被授權的門）。正式環境絕對不用 root 做日常操作，而是為每位工程師建立獨立 IAM 帳號。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>專有名詞</th><th>說明</th><th>比喻</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Root Account</strong></td><td>AWS 帳號的最高權限擁有者</td><td>大樓總鑰匙</td></tr>
+                        <tr><td><strong>IAM User</strong></td><td>獨立的操作身份，可追蹤行為</td><td>個人門禁卡</td></tr>
+                        <tr><td><strong>Policy</strong></td><td>JSON 格式的權限規則（Allow/Deny）</td><td>門禁卡的權限設定</td></tr>
+                        <tr><td><strong>Group</strong></td><td>一組 User 共用同一套 Policy</td><td>部門權限群組</td></tr>
+                        <tr><td><strong>MFA</strong></td><td>多因素認證，登入需額外驗證碼</td><td>門禁卡 + 指紋辨識</td></tr>
+                    </tbody>
+                </table>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 重點：</strong>root 只做帳務與 IAM 初始設定，日常操作一律用 IAM User。離職時停用個人帳號即可，不影響其他人。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-list-check"></i> IAM 實作流程</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">建立 <strong>student-admin</strong> IAM User 的完整 7 步驟：</p>
+                <ul class="note-points">
+                    <li>用 root 帳號登入 AWS Console</li>
+                    <li>進入 IAM → Groups → 建立 Group：<strong>training-admin-group</strong></li>
+                    <li>為 Group 附加 <strong>AdministratorAccess</strong> Policy</li>
+                    <li>建立 User：<strong>student-admin</strong>，加入 training-admin-group</li>
+                    <li>啟用 Console 登入（設定初始密碼）</li>
+                    <li>登出 root，改用 student-admin 重新登入驗證</li>
+                    <li>為 student-admin 啟用 <strong>MFA</strong> 多因素認證</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-triangle-exclamation"></i> 注意：</strong>正式環境不應長期保留 AdministratorAccess，應改為最小權限 Policy。課堂為了方便教學才使用全權限。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：IAM 操作驗證</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">用 student-admin 建立一台 EC2（<strong>iam-check-ec2</strong>），確認 CloudTrail 可追蹤操作到個人身份。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-star"></i> 優秀回答：</strong>我用 student-admin 建立了 iam-check-ec2，在 CloudTrail Event history 中搜尋 RunInstances 事件，可看到 userIdentity.userName 是 student-admin 而非 root。這代表操作可追蹤到個人身份，若發生異常變更能快速鎖定責任人。在正式環境中，每位工程師都應有獨立 IAM 帳號，離職時可單獨停權而不影響其他人。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: EC2 核心知識地圖 -->
+        <h3 class="section-title"><i class="fa-solid fa-server"></i> EC2 核心知識地圖</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-network-wired"></i> EC2 與網路基礎</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">EC2 是 AWS 的雲端主機服務。要讓一台 EC2 能被外部存取，需理解以下核心概念：</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>概念</th><th>說明</th><th>角色</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Region</strong></td><td>AWS 全球資料中心區域（如 ap-northeast-1 東京）</td><td>資源邊界</td></tr>
+                        <tr><td><strong>VPC</strong></td><td>Virtual Private Cloud，你在 AWS 裡的私有雲網路</td><td>私有雲網路</td></tr>
+                        <tr><td><strong>Subnet</strong></td><td>VPC 內的子網路，分 Public / Private</td><td>子網段</td></tr>
+                        <tr><td><strong>IGW</strong></td><td>Internet Gateway，VPC 連外的大門</td><td>對外出口</td></tr>
+                        <tr><td><strong>Route Table</strong></td><td>決定封包流向的路由表（0.0.0.0/0 → igw-xxx）</td><td>流量路由</td></tr>
+                        <tr><td><strong>Security Group</strong></td><td>虛擬防火牆，控制進出流量</td><td>防火牆</td></tr>
+                        <tr><td><strong>Public IP / EIP</strong></td><td>對外 IP 位址（EIP 為固定 IP，需額外綁定）</td><td>對外位址</td></tr>
+                    </tbody>
+                </table>
+                <p class="note-desc"><strong>EC2 可被外部存取的最小判斷 4 點：</strong></p>
+                <ul class="note-points">
+                    <li>EC2 放在 <strong>Public Subnet</strong> 中</li>
+                    <li>EC2 有分配 <strong>Public IPv4</strong> 位址</li>
+                    <li>Subnet 的 <strong>Route Table</strong> 有指向 <strong>IGW</strong> 的路由（0.0.0.0/0 → igw-xxx）</li>
+                    <li><strong>Security Group</strong> 有開放對應的 Port（如 22、80）</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-hard-drive"></i> AMI / EBS / Snapshot</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">三者的關聯與概念流程：<strong>AMI 開 EC2 → 掛 EBS → Snapshot 備份 → 可從 Snapshot 建自有 AMI</strong></p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>項目</th><th>本質</th><th>用途</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>AMI</strong></td><td>作業系統樣板（映像檔）</td><td>建立新 EC2 的模板</td></tr>
+                        <tr><td><strong>EBS</strong></td><td>系統磁碟（Block Storage）</td><td>EC2 的持久化儲存</td></tr>
+                        <tr><td><strong>Snapshot</strong></td><td>EBS 的時間點備份（增量備份）</td><td>災難復原、跨區複製</td></tr>
+                    </tbody>
+                </table>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> Delete on Termination：</strong>勾選 = 終止 EC2 時自動刪除磁碟（課堂用，避免遺留費用）；不勾選 = 磁碟保留（可能產生遺留成本）。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-circle-play"></i> Instance Lifecycle 與計費</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">EC2 的三種主要狀態與計費關係：</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>狀態</th><th>運算費用</th><th>EBS 費用</th><th>說明</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Running</strong></td><td>計費中</td><td>計費中</td><td>主機運行中</td></tr>
+                        <tr><td><strong>Stopped</strong></td><td>不計費</td><td>仍計費</td><td>關機但 EBS 保留</td></tr>
+                        <tr><td><strong>Terminated</strong></td><td>不計費</td><td>預設刪除</td><td>刪除主機</td></tr>
+                    </tbody>
+                </table>
+                <p class="note-desc"><strong>計費模式比較：</strong></p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>模式</th><th>價格</th><th>適用場景</th><th>特性</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>On-Demand</strong></td><td>標準價（按秒計費）</td><td>教學、開發測試</td><td>隨開隨用，無綁約</td></tr>
+                        <tr><td><strong>Spot</strong></td><td>最低可達 1-2 折</td><td>可中斷的批次運算</td><td>便宜但 AWS 可能回收</td></tr>
+                        <tr><td><strong>Reserved</strong></td><td>約 6-7 折（1-3 年）</td><td>長期穩定的正式環境</td><td>綁約承諾</td></tr>
+                    </tbody>
+                </table>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-triangle-exclamation"></i> 注意：</strong>Stop 不等於零成本！EBS 磁碟、Snapshot、閒置 EIP 都可能持續計費。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: EC2 建置實作 -->
+        <h3 class="section-title"><i class="fa-solid fa-screwdriver-wrench"></i> EC2 建置實作</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-clipboard-check"></i> 建置前檢核清單</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">開機前確認以下 5 點：</p>
+                <ul class="note-points">
+                    <li>Console 右上角 <strong>Region</strong> 是否正確（如 ap-northeast-1 東京）</li>
+                    <li><strong>IAM 身分</strong>非 root（應使用 student-admin）</li>
+                    <li>準備好 <strong>Key Pair</strong>（.pem 檔下載到本機）</li>
+                    <li>確認 SSH 來源 IP（選 <strong>My IP</strong>，不要開 0.0.0.0/0）</li>
+                    <li>知道結束後要 <strong>Stop</strong> 還是 <strong>Terminate</strong></li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-shoe-prints"></i> EC2 建立步驟</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">完整 10 步驟建立 EC2 主機：</p>
+                <ul class="note-points">
+                    <li><strong>Step 1：</strong>EC2 Dashboard → Launch instances</li>
+                    <li><strong>Step 2：</strong>Name = <strong>aws12h-u1-web-01</strong></li>
+                    <li><strong>Step 3：</strong>AMI 選 <strong>Ubuntu 22.04 LTS</strong></li>
+                    <li><strong>Step 4：</strong>Instance type = <strong>t3.micro</strong></li>
+                    <li><strong>Step 5：</strong>Key pair → 建立 <strong>aws12h-u1-key</strong>（下載 .pem）</li>
+                    <li><strong>Step 6：</strong>Network → 預設 VPC / Public Subnet / Auto-assign public IP: <strong>Enable</strong></li>
+                    <li><strong>Step 7：</strong>Create security group → <strong>aws12h-u1-web-sg</strong></li>
+                    <li><strong>Step 8：</strong>入站規則：SSH:22（My IP）+ HTTP:80（Anywhere）</li>
+                    <li><strong>Step 9：</strong>Storage: <strong>8 GiB gp3</strong></li>
+                    <li><strong>Step 10：</strong>Launch instance → 等待 Status = Running</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-shield"></i> Security Group 規則</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">入站規則（Inbound Rules）設定：</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>類型</th><th>Port</th><th>來源</th><th>理由</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>SSH</td><td>22</td><td>你的 IP（My IP）</td><td>只讓管理者連線</td></tr>
+                        <tr><td>HTTP</td><td>80</td><td>0.0.0.0/0</td><td>讓網站可被外部瀏覽</td></tr>
+                    </tbody>
+                </table>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-triangle-exclamation"></i> 不要這樣設：</strong>SSH:22 開 0.0.0.0/0（全球都能暴力破解）、MySQL:3306 對外開放（資料庫直接暴露）、所有 Port 全開（形同虛設）。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-terminal"></i> SSH 連線</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">本機終端機連線到 EC2：</p>
+                <ul class="note-points">
+                    <li><code>chmod 400 aws12h-u1-key.pem</code>（設定金鑰權限為唯讀）</li>
+                    <li><code>ssh -i aws12h-u1-key.pem ubuntu@&lt;EC2_PUBLIC_IP&gt;</code></li>
+                </ul>
+                <p class="note-desc"><strong>常見錯誤：</strong></p>
+                <ul class="note-points">
+                    <li><strong>Permission denied：</strong>key 權限不是 400、或使用者名稱打錯（應為 ubuntu）</li>
+                    <li><strong>Connection timed out：</strong>SG 沒開 22、IP 填錯、EC2 不在 Running</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：SSH 驗證</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">SSH 連線後執行 <code>whoami</code> 與 <code>uname -a</code> 驗證環境。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-star"></i> 優秀回答：</strong>SSH 連線成功後 whoami 顯示 ubuntu，uname -a 顯示 Linux 核心版本與 x86_64 架構。架構圖：瀏覽器 → EC2:80(Nginx) → 127.0.0.1:5000(Flask) → MySQL:3306(僅本機)。SG 入站只開 22(限管理IP) 和 80(對外)，3306 不對外是因為資料庫只需本機 Flask 存取，對外會有 SQL Injection 與暴力破解風險。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: 環境安裝與 Flask 實作 -->
+        <h3 class="section-title"><i class="fa-solid fa-download"></i> 環境安裝與 Flask 實作</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-gears"></i> 安裝 Nginx + Python + MySQL</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">SSH 進入 EC2 後依序執行：</p>
+                <ul class="note-points">
+                    <li><code>sudo apt update && sudo apt upgrade -y</code>（更新套件清單與升級）</li>
+                    <li><code>sudo apt install -y nginx python3-venv python3-pip mysql-server</code></li>
+                    <li><code>sudo systemctl enable --now nginx</code>（啟動並設定開機自動啟動）</li>
+                    <li><code>sudo systemctl enable --now mysql</code></li>
+                    <li>驗證：<code>systemctl status nginx</code> 確認 active (running)</li>
+                    <li>驗證：<code>systemctl status mysql</code> 確認 active (running)</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Flask + MySQL 最小留言板</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">建立專案目錄與虛擬環境：</p>
+                <ul class="note-points">
+                    <li><code>mkdir -p ~/myapp && cd ~/myapp</code></li>
+                    <li><code>python3 -m venv venv && source venv/bin/activate</code></li>
+                    <li><code>pip install flask pymysql gunicorn</code></li>
+                </ul>
+                <p class="note-desc"><strong>MySQL 初始化 SQL：</strong></p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-code"></i> SQL 指令：</strong><br>
+                    <code>CREATE DATABASE myapp_db CHARACTER SET utf8mb4;</code><br>
+                    <code>CREATE USER 'myapp_user'@'localhost' IDENTIFIED BY 'password';</code><br>
+                    <code>GRANT ALL PRIVILEGES ON myapp_db.* TO 'myapp_user'@'localhost';</code><br>
+                    <code>FLUSH PRIVILEGES;</code><br>
+                    <code>USE myapp_db;</code><br>
+                    <code>CREATE TABLE messages (id INT AUTO_INCREMENT PRIMARY KEY, author VARCHAR(50), content TEXT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);</code><br>
+                    <code>INSERT INTO messages (author, content) VALUES ('admin', 'Hello World!');</code>
+                </div>
+                <p class="note-desc"><strong>Flask app.py 關鍵邏輯：</strong></p>
+                <ul class="note-points">
+                    <li><strong>DB_CONFIG：</strong>host='localhost', user='myapp_user', database='myapp_db'，連本機 MySQL</li>
+                    <li><strong>get_conn()：</strong>每次請求建立新連線，用完關閉（簡單版）</li>
+                    <li><strong>index() GET /：</strong>SELECT * FROM messages ORDER BY id DESC，查詢並顯示所有留言</li>
+                    <li><strong>add_message() POST /add：</strong>INSERT INTO messages 使用 <strong>%s 參數化查詢</strong>防 SQL Injection，完成後 redirect('/')</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 重點：</strong>永遠用參數化查詢（%s），絕對不要用 f-string 或 + 拼接 SQL 字串，否則會有 SQL Injection 漏洞。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrows-turn-right"></i> Nginx 反向代理</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc"><strong>為什麼不直接讓 Flask 對外？</strong>Flask 開發伺服器不適合生產環境 — 穩定性不足、無法處理大量併發連線、不支援 HTTPS。</p>
+                <ul class="note-points">
+                    <li>啟動 Gunicorn：<code>gunicorn --bind 127.0.0.1:5000 app:app</code></li>
+                    <li>Nginx config 核心：<code>location / { proxy_pass http://127.0.0.1:5000; }</code></li>
+                    <li>建立軟連結：<code>sudo ln -sf /etc/nginx/sites-available/myapp /etc/nginx/sites-enabled/</code></li>
+                    <li>移除預設：<code>sudo rm /etc/nginx/sites-enabled/default</code></li>
+                    <li>測試語法：<code>sudo nginx -t</code></li>
+                    <li>重載設定：<code>sudo systemctl reload nginx</code></li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：502 排查</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">故意停止 gunicorn（<code>pkill gunicorn</code>），觀察瀏覽器出現 502 Bad Gateway，再重啟驗證恢復。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-star"></i> 優秀回答：</strong>停止 gunicorn 後出現 502 Bad Gateway，代表 Nginx 正常接請求但 127.0.0.1:5000 無服務。排查 SOP：(1) ps aux | grep gunicorn 確認進程 (2) ss -lntp | grep :5000 確認 port (3) curl -I http://127.0.0.1:5000 測本機 (4) tail /var/log/nginx/error.log 看日誌。重啟後恢復，一次只改一項才能定位問題。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 5: 排查 SOP 總結 -->
+        <h3 class="section-title"><i class="fa-solid fa-bug"></i> 排查 SOP 總結</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-magnifying-glass"></i> 四步排查順序</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>步驟</th><th>問題</th><th>指令</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>1. 服務在不在</strong></td><td>Process 有沒有跑起來</td><td><code>ps aux | grep gunicorn</code><br><code>systemctl status nginx</code></td></tr>
+                        <tr><td><strong>2. Port 有沒有聽</strong></td><td>服務是否綁定正確的 port</td><td><code>ss -lntp | grep :5000</code><br><code>ss -lntp | grep :80</code></td></tr>
+                        <tr><td><strong>3. 本機請求通不通</strong></td><td>繞過外部網路測試</td><td><code>curl -I http://127.0.0.1:5000</code><br><code>curl -I http://127.0.0.1:80</code></td></tr>
+                        <tr><td><strong>4. 日誌看什麼</strong></td><td>錯誤訊息的具體原因</td><td><code>tail /var/log/nginx/error.log</code><br><code>journalctl -u mysql</code></td></tr>
+                    </tbody>
+                </table>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 黃金法則：</strong>一次只改一項，才能知道哪個設定影響結果。同時改多項會無法判斷是哪個修正生效。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 6: S3 核心概念 -->
+        <h3 class="section-title"><i class="fa-solid fa-box-archive"></i> S3 核心概念</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-triangle-exclamation"></i> 為什麼圖片不該放 EC2</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">圖片直接存在 EC2 的 EBS 上會造成四大實務問題：</p>
+                <ul class="note-points">
+                    <li><strong>磁碟膨脹：</strong>成本不可預期，上傳量成長後 EBS 不夠用</li>
+                    <li><strong>搬遷成本高：</strong>主機重建時要手動搬所有檔案，漏搬就斷圖</li>
+                    <li><strong>多台主機難同步：</strong>多台 EC2 做負載均衡時，圖片不會自動同步</li>
+                    <li><strong>備份綁定：</strong>備份時把程式與靜態檔綁在一起，增加時間和成本</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-book"></i> S3 最小名詞</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>名詞</th><th>說明</th><th>備註</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Bucket</strong></td><td>最上層的儲存容器</td><td>名稱全域唯一</td></tr>
+                        <tr><td><strong>Object</strong></td><td>存在 Bucket 裡的檔案本體</td><td>含 metadata</td></tr>
+                        <tr><td><strong>Key</strong></td><td>Object 的完整路徑字串</td><td>如 uploads/photo.jpg</td></tr>
+                        <tr><td><strong>Prefix</strong></td><td>Key 的路徑前綴，用來做分類</td><td>模擬資料夾結構</td></tr>
+                        <tr><td><strong>Storage Class</strong></td><td>儲存層級（Standard / IA / Glacier）</td><td>先用 Standard</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-lock"></i> 權限模型</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">S3 權限設計原則：<strong>先封閉，再按需求最小開放</strong>。</p>
+                <ul class="note-points">
+                    <li><strong>Block Public Access：</strong>預設先擋住所有公開存取</li>
+                    <li><strong>Bucket Policy：</strong>JSON 格式明確定義誰可以做什麼</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 重點：</strong>即使 Bucket Policy 寫了 Allow，如果 Block Public Access 開著，公開存取仍然會被攔截。先封閉再按需求最小開放。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 7: S3 操作與 Flask 整合 -->
+        <h3 class="section-title"><i class="fa-solid fa-link"></i> S3 操作與 Flask 整合</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-bucket"></i> S3 Console 基本操作</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <ul class="note-points">
+                    <li>建立 Bucket：命名規則 <strong>aws12h-u2-basic-&lt;account-id&gt;</strong>（全小寫、無底線、全球唯一）</li>
+                    <li>建立 Prefix（模擬資料夾）：<strong>uploads/</strong>、<strong>public/</strong>、<strong>private/</strong></li>
+                    <li>基本操作：上傳、下載、刪除 Object</li>
+                    <li>權限檢查：確認 Block Public Access 全部開啟</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-user-shield"></i> EC2 IAM Role 設定</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">建立 <strong>aws12h-u2-ec2-s3-role</strong>，用最小權限 Policy 讓 EC2 存取 S3：</p>
+                <ul class="note-points">
+                    <li>IAM → Roles → Create role → Trusted entity = EC2</li>
+                    <li><strong>s3:ListBucket</strong> — 限定 uploads/* prefix</li>
+                    <li><strong>s3:GetObject</strong> — 限定 uploads/*</li>
+                    <li><strong>s3:PutObject</strong> — 限定 uploads/*</li>
+                    <li>EC2 → Actions → Security → Modify IAM Role → 綁定此 Role</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 重點：</strong>用 IAM Role 而不要把 Access Key 寫死在程式碼中。Role 透過 IMDS 自動輪替臨時憑證，無金鑰外洩風險。
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> Flask + S3 程式碼重點</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">使用 boto3 在 Flask 中操作 S3：</p>
+                <ul class="note-points">
+                    <li><strong>環境變數：</strong>AWS_REGION、S3_BUCKET_NAME</li>
+                    <li><strong>boto3.client('s3')：</strong>建立 S3 客戶端</li>
+                    <li><strong>make_s3_url()：</strong>產生 S3 Object 的公開 URL</li>
+                    <li><strong>upload_fileobj()：</strong>上傳檔案到 S3</li>
+                    <li><strong>list_objects_v2()：</strong>列出 Bucket 中的 Object 清單</li>
+                </ul>
+                <p class="note-desc"><strong>改進版重點：</strong></p>
+                <ul class="note-points">
+                    <li><strong>Lazy Init + @lru_cache：</strong>S3 client 首次使用才初始化，並快取避免重複建立</li>
+                    <li><strong>/health endpoint：</strong>提供健康檢查 API，回傳服務狀態與 S3 連線狀態</li>
+                    <li><strong>Graceful Degradation：</strong>S3 不可用時不讓整頁 500，而是顯示替代訊息</li>
+                    <li><strong>Timeout 設定：</strong>connect_timeout=3, read_timeout=5，避免請求卡死</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pen-to-square"></i> 練習：S3 上傳驗證</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">透過 Flask 網頁上傳一張圖片，確認 Flask 頁面與 S3 Console 都看得到。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-star"></i> 優秀回答：</strong>上傳成功後 Flask 頁面看到圖片卡片與 S3 key，S3 Console 也能看到 Object，EC2 本機沒有新檔案。使用 IAM Role 而非 Access Key：(1) Role 透過 IMDS 自動輪替臨時憑證 (2) 無金鑰外洩風險 (3) 停用只需解除 Role。最小權限 Policy 只允許 uploads/* 的 PutObject/GetObject，即使 EC2 被入侵也無法存取其他 prefix 或刪除檔案。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 8: S3 Block Public Access 詳解（額外補充） -->
+        <h3 class="section-title"><i class="fa-solid fa-shield-halved"></i> S3 Block Public Access 詳解（額外補充）</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-toggle-on"></i> 四個選項解析</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">Block Public Access 分為<strong>兩大類四個選項</strong>，分別攔截 ACL 和 Bucket Policy 的公開設定：</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>類別</th><th>選項</th><th>攔截範圍</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td rowspan="2"><strong>ACL 類</strong></td><td>BlockPublicAcls</td><td>阻擋新建的公開 ACL</td></tr>
+                        <tr><td>IgnorePublicAcls</td><td>忽略所有既有公開 ACL（不管新舊）</td></tr>
+                        <tr><td rowspan="2"><strong>Bucket Policy 類</strong></td><td>BlockPublicPolicy</td><td>阻擋新的公開 Bucket Policy</td></tr>
+                        <tr><td>RestrictPublicBuckets</td><td>忽略所有公開 Policy（限制只能被 AWS 服務存取）</td></tr>
+                    </tbody>
+                </table>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-triangle-exclamation"></i> 補充提醒：</strong>隨身碟 FAT32 / exFAT 不支援權限系統，無法真正設定 chmod 400。建議金鑰存放在 NTFS 格式磁碟上。
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-file-code"></i> Bucket Policy 範例</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">讓 uploads/* 可被公開讀取的 JSON Policy（需先關閉對應的 Block Public Access 選項）：</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-code"></i> JSON Policy：</strong><br>
+                    <code>{</code><br>
+                    <code>&nbsp;&nbsp;"Version": "2012-10-17",</code><br>
+                    <code>&nbsp;&nbsp;"Statement": [{</code><br>
+                    <code>&nbsp;&nbsp;&nbsp;&nbsp;"Sid": "PublicReadUploads",</code><br>
+                    <code>&nbsp;&nbsp;&nbsp;&nbsp;"Effect": "Allow",</code><br>
+                    <code>&nbsp;&nbsp;&nbsp;&nbsp;"Principal": "*",</code><br>
+                    <code>&nbsp;&nbsp;&nbsp;&nbsp;"Action": "s3:GetObject",</code><br>
+                    <code>&nbsp;&nbsp;&nbsp;&nbsp;"Resource": "arn:aws:s3:::aws12h-u2-assets/uploads/*"</code><br>
+                    <code>&nbsp;&nbsp;}]</code><br>
+                    <code>}</code>
+                </div>
+                <ul class="note-points">
+                    <li><strong>Principal: "*"</strong> — 任何人（公開）</li>
+                    <li><strong>Action: s3:GetObject</strong> — 只能讀取，不能上傳或刪除</li>
+                    <li><strong>Resource 限定 uploads/*</strong> — 其他 prefix（如 private/）不受影響</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 9: 成本觀念 + 整合思考題 -->
+        <h3 class="section-title"><i class="fa-solid fa-brain"></i> 成本觀念 + 整合思考題</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-coins"></i> S3 成本三要素</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>計費項目</th><th>說明</th><th>控制策略</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>儲存量</strong></td><td>按 GB/月計費</td><td>去重、刪除垃圾檔案</td></tr>
+                        <tr><td><strong>請求次數</strong></td><td>PUT / GET / LIST 等 API 呼叫次數</td><td>前端用 CDN 快取減少直接 GET</td></tr>
+                        <tr><td><strong>對外流量</strong></td><td>Data Transfer Out（從 S3 傳出到 Internet）</td><td>分冷熱資料，搭配 CloudFront</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-server"></i> Unit 1 思考題</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">設計「可交接給同事」的最小上線說明，包含 SG 規則理由、三層架構角色、502 排查流程與技術債。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-star"></i> 優秀回答：</strong><br>
+                    <strong>SG 入站規則：</strong>SSH:22 限管理者 IP 防暴力破解，HTTP:80 開放讓用戶瀏覽，MySQL:3306 不外露只允許本機。<br><br>
+                    <strong>三層角色：</strong>Nginx 接請求做反向代理；Flask 處理業務邏輯；MySQL 持久化儲存。<br><br>
+                    <strong>502 排查：</strong>(1) ps aux 確認 gunicorn (2) ss -lntp 確認 5000 port (3) curl 測 Flask (4) nginx error.log 看錯誤。<br><br>
+                    <strong>技術債：</strong>圖片仍存 EBS，下一單元搬 S3 解決磁碟膨脹問題。
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-box-archive"></i> Unit 2 思考題</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">公司決定將現有 EC2 上的 uploads/ 圖片全部遷移到 S3，請規劃遷移方案。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-star"></i> 優秀回答：</strong><br>
+                    <strong>盤點：</strong>du -sh 統計 uploads/ 大小，區分使用中（優先搬）與歸檔（後搬）。<br><br>
+                    <strong>避免失效：</strong>採雙寫策略，新上傳走 S3，舊檔分批 aws s3 cp 同步，Flask 同時支援 S3 URL 與本機 fallback。<br><br>
+                    <strong>回滾：</strong>搬移前做 EBS Snapshot，保留本機檔案至少 7 天。<br><br>
+                    <strong>權限：</strong>Block Public Access 全開，Bucket Policy 只允許 EC2 IAM Role 讀寫 uploads/*。
+                </div>
             </div>
         </div>
 
