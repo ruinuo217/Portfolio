@@ -231,7 +231,7 @@
         <div class="banner">
             <div>
                 <h1>MongoDB 聚合與地理查詢</h1>
-                <p>3/10 課程筆記 — 聚合管道 $match/$group/$sort、地理位置 2dsphere 索引、$near 附近查詢、Atlas Dashboard</p>
+                <p>聚合管道 $match/$group/$sort、地理位置 2dsphere 索引、$near 附近查詢、Atlas Dashboard</p>
             </div>
             <i class="fa-solid fa-database banner-icon"></i>
         </div>
@@ -674,6 +674,13 @@
             document.querySelector('.sidebar').classList.toggle('active');
             document.querySelector('.overlay').classList.toggle('active');
         }
+    
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.querySelector('.sidebar li.active');
+            if (active) {
+                active.scrollIntoView({ block: 'center' });
+            }
+        });
     </script>
 
 </body>

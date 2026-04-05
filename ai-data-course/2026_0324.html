@@ -231,7 +231,7 @@
         <div class="banner">
             <div>
                 <h1>PostgreSQL 視窗函數與商業分析</h1>
-                <p>3/24 課程筆記 — 視窗函數 ROW_NUMBER/RANK/LAG、JOIN 倍增陷阱、Materialized View、RFM 客戶分群與沉睡客喚回</p>
+                <p>視窗函數 ROW_NUMBER/RANK/LAG、JOIN 倍增陷阱、Materialized View、RFM 客戶分群與沉睡客喚回</p>
             </div>
             <i class="fa-solid fa-database banner-icon"></i>
         </div>
@@ -559,6 +559,12 @@
             sidebar.classList.toggle('active');
             overlay.classList.toggle('active');
         }
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.querySelector('.sidebar li.active');
+            if (active) {
+                active.scrollIntoView({ block: 'center' });
+            }
+        });
     </script>
 </body>
 </html>

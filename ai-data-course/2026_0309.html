@@ -231,7 +231,7 @@
         <div class="banner">
             <div>
                 <h1>MongoDB 基礎與 CRUD</h1>
-                <p>3/9 課程筆記 — MongoDB 文件模型、Atlas 雲端環境、Compass 操作、CRUD 四大操作、資料增強、進階查詢</p>
+                <p>MongoDB 文件模型、Atlas 雲端環境、Compass 操作、CRUD 四大操作、資料增強、進階查詢</p>
             </div>
             <i class="fa-solid fa-database banner-icon"></i>
         </div>
@@ -794,6 +794,12 @@
             sidebar.classList.toggle('active');
             overlay.classList.toggle('active');
         }
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.querySelector('.sidebar li.active');
+            if (active) {
+                active.scrollIntoView({ block: 'center' });
+            }
+        });
     </script>
 </body>
 </html>

@@ -231,7 +231,7 @@
         <div class="banner">
             <div>
                 <h1>LLM 基礎與模型層</h1>
-                <p>3/26 課程筆記 — LLM 五層架構、Inference 與 Temperature、Embedding 語意搜尋、模型風險與防護、HuggingFace Pipeline</p>
+                <p>LLM 五層架構、Inference 與 Temperature、Embedding 語意搜尋、模型風險與防護、HuggingFace Pipeline</p>
             </div>
             <i class="fa-solid fa-robot banner-icon"></i>
         </div>
@@ -753,6 +753,12 @@ model.encode(query)</code></pre>
             sidebar.classList.toggle('active');
             overlay.classList.toggle('active');
         }
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.querySelector('.sidebar li.active');
+            if (active) {
+                active.scrollIntoView({ block: 'center' });
+            }
+        });
     </script>
 </body>
 </html>

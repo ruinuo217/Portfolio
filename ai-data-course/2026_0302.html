@@ -231,7 +231,7 @@
         <div class="banner">
             <div>
                 <h1>Power BI 捷運人流分析</h1>
-                <p>3/2 課程筆記 — KPI 卡片、折線圖、長條圖、環圈圖、地圖、矩陣熱力圖、散佈圖、緞帶圖</p>
+                <p>KPI 卡片、折線圖、長條圖、環圈圖、地圖、矩陣熱力圖、散佈圖、緞帶圖</p>
             </div>
             <i class="fa-solid fa-chart-pie banner-icon"></i>
         </div>
@@ -475,6 +475,12 @@
             sidebar.classList.toggle('active');
             overlay.classList.toggle('active');
         }
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.querySelector('.sidebar li.active');
+            if (active) {
+                active.scrollIntoView({ block: 'center' });
+            }
+        });
     </script>
 </body>
 </html>

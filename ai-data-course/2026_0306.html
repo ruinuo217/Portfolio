@@ -231,7 +231,7 @@
         <div class="banner">
             <div>
                 <h1>GCP 無伺服器架構</h1>
-                <p>3/6 課程筆記 — Cloud Functions、Storage 觸發器、Cloud Run 容器化、Signed URL、前後端整合、無伺服器成本分析</p>
+                <p>Cloud Functions、Storage 觸發器、Cloud Run 容器化、Signed URL、前後端整合、無伺服器成本分析</p>
             </div>
             <i class="fa-solid fa-cloud-bolt banner-icon"></i>
         </div>
@@ -883,6 +883,12 @@
             sidebar.classList.toggle('active');
             overlay.classList.toggle('active');
         }
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.querySelector('.sidebar li.active');
+            if (active) {
+                active.scrollIntoView({ block: 'center' });
+            }
+        });
     </script>
 </body>
 </html>

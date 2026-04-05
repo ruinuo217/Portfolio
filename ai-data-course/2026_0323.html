@@ -231,7 +231,7 @@
         <div class="banner">
             <div>
                 <h1>PostgreSQL 基礎與資料處理</h1>
-                <p>3/23 課程筆記 — PostgreSQL vs MySQL、層級結構與 Schema、COPY 大數據匯入、COALESCE/CAST/TO_CHAR、CTE 與 JSONB</p>
+                <p>PostgreSQL vs MySQL、層級結構與 Schema、COPY 大數據匯入、COALESCE/CAST/TO_CHAR、CTE 與 JSONB</p>
             </div>
             <i class="fa-solid fa-database banner-icon"></i>
         </div>
@@ -605,6 +605,12 @@
             sidebar.classList.toggle('active');
             overlay.classList.toggle('active');
         }
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.querySelector('.sidebar li.active');
+            if (active) {
+                active.scrollIntoView({ block: 'center' });
+            }
+        });
     </script>
 </body>
 </html>

@@ -231,7 +231,7 @@
         <div class="banner">
             <div>
                 <h1>AWS CloudFront + ALB 高可用</h1>
-                <p>3/4 課程筆記 — CloudFront CDN 加速、OAC 保護 S3、Cache Invalidation、ALB 負載平衡、Auto Scaling、RFM 架構演進</p>
+                <p>CloudFront CDN 加速、OAC 保護 S3、Cache Invalidation、ALB 負載平衡、Auto Scaling、RFM 架構演進</p>
             </div>
             <i class="fa-solid fa-cloud banner-icon"></i>
         </div>
@@ -684,6 +684,12 @@
             sidebar.classList.toggle('active');
             overlay.classList.toggle('active');
         }
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.querySelector('.sidebar li.active');
+            if (active) {
+                active.scrollIntoView({ block: 'center' });
+            }
+        });
     </script>
 </body>
 </html>

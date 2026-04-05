@@ -231,7 +231,7 @@
         <div class="banner">
             <div>
                 <h1>LangChain 與 AI Agent 整合</h1>
-                <p>4/9 課程筆記 — LangChain Chain/Tool/Agent、ReAct 決策模式、LangChain RAG、State 狀態管理、LangGraph 概念</p>
+                <p>LangChain Chain/Tool/Agent、ReAct 決策模式、LangChain RAG、State 狀態管理、LangGraph 概念</p>
             </div>
             <i class="fa-solid fa-robot banner-icon"></i>
         </div>
@@ -648,6 +648,12 @@ qa_chain = RetrievalQA.from_chain_type(
             sidebar.classList.toggle('active');
             overlay.classList.toggle('active');
         }
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.querySelector('.sidebar li.active');
+            if (active) {
+                active.scrollIntoView({ block: 'center' });
+            }
+        });
     </script>
 </body>
 </html>

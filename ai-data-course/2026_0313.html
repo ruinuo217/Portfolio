@@ -231,7 +231,7 @@
         <div class="banner">
             <div>
                 <h1>FastAPI 進階與 AI 整合</h1>
-                <p>3/13 課程筆記 — 模組化四層架構、Error Handling、AI Guardrail 防呆、Pandas 整合、LLM Pipeline、Flask 比較</p>
+                <p>模組化四層架構、Error Handling、AI Guardrail 防呆、Pandas 整合、LLM Pipeline、Flask 比較</p>
             </div>
             <i class="fa-solid fa-bolt banner-icon"></i>
         </div>
@@ -785,6 +785,12 @@ def decide(risk_score):
             sidebar.classList.toggle('active');
             overlay.classList.toggle('active');
         }
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.querySelector('.sidebar li.active');
+            if (active) {
+                active.scrollIntoView({ block: 'center' });
+            }
+        });
     </script>
 </body>
 </html>

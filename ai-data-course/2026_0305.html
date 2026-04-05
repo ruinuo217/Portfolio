@@ -231,7 +231,7 @@
         <div class="banner">
             <div>
                 <h1>GCP 運算與雲端儲存</h1>
-                <p>3/5 課程筆記 — GCP 平台架構、Compute Engine VM、IAM 權限、Cloud Storage、靜態網站託管、生命週期管理</p>
+                <p>GCP 平台架構、Compute Engine VM、IAM 權限、Cloud Storage、靜態網站託管、生命週期管理</p>
             </div>
             <i class="fa-solid fa-cloud banner-icon"></i>
         </div>
@@ -1081,6 +1081,12 @@
             sidebar.classList.toggle('active');
             overlay.classList.toggle('active');
         }
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.querySelector('.sidebar li.active');
+            if (active) {
+                active.scrollIntoView({ block: 'center' });
+            }
+        });
     </script>
 </body>
 </html>

@@ -231,7 +231,7 @@
         <div class="banner">
             <div>
                 <h1>Function Calling 與 RAG</h1>
-                <p>4/1 課程筆記 — Gemini Function Calling、OpenAI API 對照、RAG 向量搜尋、Reranker 精準重排、LangChain Loader</p>
+                <p>Gemini Function Calling、OpenAI API 對照、RAG 向量搜尋、Reranker 精準重排、LangChain Loader</p>
             </div>
             <i class="fa-solid fa-robot banner-icon"></i>
         </div>
@@ -702,6 +702,12 @@ print(response.text)</code></pre>
             sidebar.classList.toggle('active');
             overlay.classList.toggle('active');
         }
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.querySelector('.sidebar li.active');
+            if (active) {
+                active.scrollIntoView({ block: 'center' });
+            }
+        });
     </script>
 </body>
 </html>

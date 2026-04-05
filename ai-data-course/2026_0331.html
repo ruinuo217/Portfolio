@@ -231,7 +231,7 @@
         <div class="banner">
             <div>
                 <h1>多模態 AI 與 Gemini 實戰</h1>
-                <p>3/31 課程筆記 — 多模態輸入、Gemini 圖片分析與文件摘要、Structured Output、response_schema 與 Pydantic</p>
+                <p>多模態輸入、Gemini 圖片分析與文件摘要、Structured Output、response_schema 與 Pydantic</p>
             </div>
             <i class="fa-solid fa-robot banner-icon"></i>
         </div>
@@ -531,6 +531,12 @@ for i, output in enumerate(outputs):
             sidebar.classList.toggle('active');
             overlay.classList.toggle('active');
         }
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.querySelector('.sidebar li.active');
+            if (active) {
+                active.scrollIntoView({ block: 'center' });
+            }
+        });
     </script>
 </body>
 </html>

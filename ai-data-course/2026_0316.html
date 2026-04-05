@@ -231,7 +231,7 @@
         <div class="banner">
             <div>
                 <h1>機器學習基礎與 Scikit-learn</h1>
-                <p>3/16 課程筆記 — AI 演進與系統角色、資料集與特徵工程、Train/Test 切割、KNN 分類器、Confusion Matrix 評估</p>
+                <p>AI 演進與系統角色、資料集與特徵工程、Train/Test 切割、KNN 分類器、Confusion Matrix 評估</p>
             </div>
             <i class="fa-solid fa-brain banner-icon"></i>
         </div>
@@ -724,6 +724,12 @@ for seed in [0, 42, 100, 777]:
             sidebar.classList.toggle('active');
             overlay.classList.toggle('active');
         }
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.querySelector('.sidebar li.active');
+            if (active) {
+                active.scrollIntoView({ block: 'center' });
+            }
+        });
     </script>
 </body>
 </html>

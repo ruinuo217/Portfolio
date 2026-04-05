@@ -741,6 +741,13 @@ bot5.handle_event({<span class="code-string">"source"</span>: <span class="code-
                 overlay.style.display = 'block';
             }
         }
+    
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.querySelector('.sidebar li.active');
+            if (active) {
+                active.scrollIntoView({ block: 'center' });
+            }
+        });
     </script>
 </body>
 </html>

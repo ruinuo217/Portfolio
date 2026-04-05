@@ -231,7 +231,7 @@
         <div class="banner">
             <div>
                 <h1>AWS EC2 + S3 雲端部署</h1>
-                <p>3/3 課程筆記 — IAM 權限管理、EC2 建置與 SSH、Nginx + Flask + MySQL、S3 儲存與靜態網站、Block Public Access</p>
+                <p>IAM 權限管理、EC2 建置與 SSH、Nginx + Flask + MySQL、S3 儲存與靜態網站、Block Public Access</p>
             </div>
             <i class="fa-solid fa-cloud banner-icon"></i>
         </div>
@@ -805,6 +805,12 @@
             sidebar.classList.toggle('active');
             overlay.classList.toggle('active');
         }
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.querySelector('.sidebar li.active');
+            if (active) {
+                active.scrollIntoView({ block: 'center' });
+            }
+        });
     </script>
 </body>
 </html>

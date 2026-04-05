@@ -408,6 +408,13 @@ a = date[<span class="code-string">'contents'</span>]
                 overlay.style.display = 'block';
             }
         }
+    
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.querySelector('.sidebar li.active');
+            if (active) {
+                active.scrollIntoView({ block: 'center' });
+            }
+        });
     </script>
 </body>
 </html>

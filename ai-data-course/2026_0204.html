@@ -441,6 +441,13 @@ Ignore = (confidence < <span class="code-num">0.5</span>)</code></pre>
                 overlay.style.display = 'block';
             }
         }
+    
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.querySelector('.sidebar li.active');
+            if (active) {
+                active.scrollIntoView({ block: 'center' });
+            }
+        });
     </script>
 </body>
 </html>

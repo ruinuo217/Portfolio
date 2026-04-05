@@ -231,7 +231,7 @@
         <div class="banner">
             <div>
                 <h1>MongoDB Python 整合</h1>
-                <p>3/11 課程筆記 — PyMongo CRUD、Python 聚合管道、批次資料處理、Scikit-learn 本地建模、ipywidgets 預測介面</p>
+                <p>PyMongo CRUD、Python 聚合管道、批次資料處理、Scikit-learn 本地建模、ipywidgets 預測介面</p>
             </div>
             <i class="fa-solid fa-database banner-icon"></i>
         </div>
@@ -616,6 +616,12 @@ for doc in results:
             sidebar.classList.toggle('active');
             overlay.classList.toggle('active');
         }
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.querySelector('.sidebar li.active');
+            if (active) {
+                active.scrollIntoView({ block: 'center' });
+            }
+        });
     </script>
 </body>
 </html>

@@ -231,7 +231,7 @@
         <div class="banner">
             <div>
                 <h1>YOLO 物件偵測與事件處理</h1>
-                <p>3/17 課程筆記 — YOLO 安裝與推論、安全帽模型訓練、Event JSON 轉換、IoU 去重、批次偵測與告警</p>
+                <p>YOLO 安裝與推論、安全帽模型訓練、Event JSON 轉換、IoU 去重、批次偵測與告警</p>
             </div>
             <i class="fa-solid fa-eye banner-icon"></i>
         </div>
@@ -709,6 +709,12 @@ with open("results.json", "w") as f:
             sidebar.classList.toggle('active');
             overlay.classList.toggle('active');
         }
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.querySelector('.sidebar li.active');
+            if (active) {
+                active.scrollIntoView({ block: 'center' });
+            }
+        });
     </script>
 </body>
 </html>

@@ -231,7 +231,7 @@
         <div class="banner">
             <div>
                 <h1>FastAPI 事件驅動 API</h1>
-                <p>3/12 課程筆記 — 事件 API 思維、FastAPI 快速上手、HTTP Path/Query/Body、async 非同步、Pydantic Schema 與 Validation</p>
+                <p>事件 API 思維、FastAPI 快速上手、HTTP Path/Query/Body、async 非同步、Pydantic Schema 與 Validation</p>
             </div>
             <i class="fa-solid fa-bolt banner-icon"></i>
         </div>
@@ -693,6 +693,12 @@ def receive_event(event_type: str, debug: bool = False,
             sidebar.classList.toggle('active');
             overlay.classList.toggle('active');
         }
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.querySelector('.sidebar li.active');
+            if (active) {
+                active.scrollIntoView({ block: 'center' });
+            }
+        });
     </script>
 </body>
 </html>

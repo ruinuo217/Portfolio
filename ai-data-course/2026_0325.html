@@ -231,7 +231,7 @@
         <div class="banner">
             <div>
                 <h1>事件規則引擎與 ML 分群</h1>
-                <p>3/25 課程筆記 — YAML 規則引擎、N 幀聚合、Pandas 事件統計、KMeans 非監督分群、資料驅動門檻優化</p>
+                <p>YAML 規則引擎、N 幀聚合、Pandas 事件統計、KMeans 非監督分群、資料驅動門檻優化</p>
             </div>
             <i class="fa-solid fa-brain banner-icon"></i>
         </div>
@@ -666,6 +666,12 @@ if len(alerts) &gt; 0:
             sidebar.classList.toggle('active');
             overlay.classList.toggle('active');
         }
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.querySelector('.sidebar li.active');
+            if (active) {
+                active.scrollIntoView({ block: 'center' });
+            }
+        });
     </script>
 </body>
 </html>
