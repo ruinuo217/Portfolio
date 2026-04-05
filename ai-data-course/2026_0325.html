@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI大數據養成班 - 3/25 資料科學與生成式 AI</title>
+    <title>AI大數據養成班 - 3/25 事件規則引擎與 ML 分群</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="dashboard.css">
 </head>
@@ -221,7 +221,7 @@
 
         <div class="top-bar">
             <div class="breadcrumb">
-                首頁 > Week 12: 資料庫與 LLM > <span>資料科學與生成式 AI</span>
+                首頁 > Week 12: 資料庫與 LLM > <span>事件規則引擎與 ML 分群</span>
             </div>
             <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
                 <i class="fas fa-home"></i> 回首頁
@@ -230,20 +230,430 @@
 
         <div class="banner">
             <div>
-                <h1>資料科學與生成式 AI</h1>
+                <h1>事件規則引擎與 ML 分群</h1>
                 <p>3/25 課程筆記</p>
             </div>
             <i class="fa-solid fa-brain banner-icon"></i>
         </div>
 
-        <h3 class="section-title">課程筆記：資料科學與生成式 AI</h3>
+        <!-- Section 1: Rule-based 事件判斷 -->
+        <h3 class="section-title"><i class="fa-solid fa-gavel"></i> Rule-based 事件判斷</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code-branch"></i> 從 hard-coded 到可配置</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc"><code>if label=="head": has_alert=True</code> 的問題：每次改規則要改 code + 重新部署。解法：<strong>YAML 設定檔</strong>，把規則從程式碼中抽離。</p>
+                <ul class="note-points">
+                    <li><strong>規則格式：</strong>name / event_type / min_confidence / max_confidence / action (alert / warning / ignore / ok) / severity</li>
+                    <li><strong>比對邏輯：</strong>由上往下比對，第一條符合就生效</li>
+                    <li><strong>設計原則：</strong>低信心忽略放最前面，確保 confidence &le; 0.5 的不會誤觸 alert</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-file-code"></i> YAML 規則範例</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">4 條規則，由上往下依序比對：</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>#</th><th>名稱</th><th>event_type</th><th>信心度範圍</th><th>action</th><th>severity</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td>低信心忽略</td><td>-</td><td>max: 0.5</td><td>ignore</td><td>-</td></tr>
+                        <tr><td>2</td><td>沒戴安全帽高信心</td><td>head_detected</td><td>min: 0.7</td><td>alert</td><td>high</td></tr>
+                        <tr><td>3</td><td>沒戴安全帽低信心</td><td>head_detected</td><td>-</td><td>warning</td><td>low</td></tr>
+                        <tr><td>4</td><td>預設</td><td>-</td><td>-</td><td>ok</td><td>-</td></tr>
+                    </tbody>
+                </table>
+                <p class="note-desc"><strong>alert_threshold: 2</strong> — 連續 2 張圖有 alert 才發佈（避免單幀誤判）。</p>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-magnifying-glass"></i> 規則比對邏輯</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc"><code>check_event(event, rules)</code>：逐條檢查 event_type / min_confidence / max_confidence，全部通過則回傳該 rule。</p>
+                <ul class="note-points">
+                    <li><strong>逐條比對：</strong>for rule in rules，第一條全部條件都通過就回傳</li>
+                    <li><strong>條件檢查：</strong>event_type 不符 → continue、confidence 不在範圍 → continue</li>
+                    <li><strong>N 幀聚合：</strong>統計每張圖 alert 數，連續 N 張都有 alert 才發佈（避免單幀誤判）</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-laptop-code"></i> Workshop：規則引擎</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">完成 check_event / process_events / aggregate_alerts 三個函式。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check-circle"></i> 完整解答：</strong>
+<pre><code>import yaml, json
+
+def check_event(event, rules):
+    for rule in rules:
+        if "event_type" in rule and event["event_type"] != rule["event_type"]:
+            continue
+        if "min_confidence" in rule and event["confidence"] &lt; rule["min_confidence"]:
+            continue
+        if "max_confidence" in rule and event["confidence"] &gt; rule["max_confidence"]:
+            continue
+        return rule
+    return None
+
+def process_events(events, rules):
+    results = []
+    for event in events:
+        matched = check_event(event, rules)
+        event["action"] = matched["action"] if matched else "unknown"
+        event["rule"] = matched["name"] if matched else "none"
+        results.append(event)
+    return results
+
+def aggregate_alerts(results, threshold):
+    alert_images = set()
+    for r in results:
+        if r["action"] == "alert":
+            alert_images.add(r["source_image"])
+    return len(alert_images) &gt;= threshold, list(alert_images)</code></pre>
+                    <p>規則順序很重要：低信心忽略放第一條，確保 confidence &le; 0.5 的不會誤觸 alert。N 幀聚合避免單幀誤判：mixed1.jpg 有 5 筆 alert + mixed2.jpg 有 1 筆 = 2 張 &ge; 門檻 2 → 發佈 ALERT。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Pandas 事件分析 -->
+        <h3 class="section-title"><i class="fa-solid fa-table"></i> Pandas 事件分析</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-lightbulb"></i> 為什麼用 Pandas</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">rule_results.json 有 21 筆事件。純 Python 要很多 for loop + dict，Pandas 一行搞定。</p>
+                <ul class="note-points">
+                    <li><strong>value_counts()：</strong>統計分類數量</li>
+                    <li><strong>groupby()：</strong>分組統計</li>
+                    <li><strong>describe()：</strong>數值分佈摘要</li>
+                    <li><strong>DataFrame：</strong>就是表格，每列一筆事件，每欄一個欄位</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-wrench"></i> 常用操作</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">Pandas 核心操作一覽：</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>操作</th><th>語法</th><th>用途</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>讀取</td><td><code>pd.DataFrame(json.load(f))</code></td><td>JSON 轉 DataFrame</td></tr>
+                        <tr><td>看資料</td><td><code>df.head() / len() / columns</code></td><td>預覽、筆數、欄位</td></tr>
+                        <tr><td>統計</td><td><code>df["action"].value_counts()</code></td><td>各分類數量</td></tr>
+                        <tr><td>分組</td><td><code>df.groupby("source_image")["action"].count()</code></td><td>依圖片分組計數</td></tr>
+                        <tr><td>數值</td><td><code>df["confidence"].describe()</code></td><td>統計摘要</td></tr>
+                        <tr><td>篩選</td><td><code>df[df["action"]=="alert"]</code></td><td>條件篩選</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-laptop-code"></i> Workshop：Pandas 統計</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">完成 5 個函式：load_data / count_by_action / count_by_image / confidence_stats / find_violations。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check-circle"></i> 完整解答：</strong>
+<pre><code>import pandas as pd, json
+
+# 1. 讀取資料
+with open("rule_results.json") as f:
+    df = pd.DataFrame(json.load(f))
+print(f"共 {len(df)} 筆")
+
+# 2. 各action數量
+print(df["action"].value_counts())
+# ok 14, alert 6, warning 1
+
+# 3. 每張圖統計
+print(df.groupby("source_image")["action"].count())
+alerts = df[df["action"]=="alert"]
+print(alerts.groupby("source_image")["action"].count())
+# mixed1.jpg: 5 alerts, mixed2.jpg: 1 alert
+
+# 4. 信心度統計
+print(df["confidence"].describe())
+print(df.groupby("event_type")["confidence"].mean())
+# head_detected avg: 0.75, helmet_detected avg: 0.80
+
+# 5. 違規事件
+violations = df[df["action"].isin(["alert","warning"])]
+print(violations[["source_image","event_type","confidence","action"]])
+# 共7筆違規(6 alert + 1 warning)</code></pre>
+                    <p>Pandas 核心：value_counts() 統計分類，groupby() 分組統計，describe() 數值分佈，條件篩選 df[df[...]==...] 找特定事件。這些操作在 2100 筆資料上也只需一行，比 for loop 快且不容易出錯。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Sklearn KMeans 分群 -->
+        <h3 class="section-title"><i class="fa-solid fa-circle-nodes"></i> Sklearn KMeans 分群</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-crosshairs"></i> 為什麼用 KMeans 找門檻</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">rules.yaml 的 min_confidence: 0.7 怎麼來的？人工看幾張圖拍腦袋。KMeans 自動從資料分佈找分群。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>方法</th><th>人工設定門檻</th><th>KMeans 分群</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>依據</td><td>看幾張圖的感覺</td><td>全部資料分佈</td></tr>
+                        <tr><td>客觀性</td><td>主觀</td><td>可重複驗證</td></tr>
+                        <tr><td>擴展性</td><td>看不完大量資料</td><td>自動處理</td></tr>
+                    </tbody>
+                </table>
+                <p class="note-desc"><strong>演算法地圖：</strong>有標籤 → 監督學習 (KNN)，沒標籤 → 非監督學習 → 分群 → KMeans。</p>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrows-spin"></i> KMeans 三步驟</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">KMeans 演算法核心流程：</p>
+                <ul class="note-points">
+                    <li><strong>Step 1：</strong>隨機放 K 個中心點</li>
+                    <li><strong>Step 2：</strong>每筆資料歸到最近中心</li>
+                    <li><strong>Step 3：</strong>重新計算中心 → 重複直到穩定</li>
+                </ul>
+                <p class="note-desc">範例 K=3 結果：低信心群（中心 0.62）/ 中信心群（中心 0.76）/ 高信心群（中心 0.84）。切分點：低/中 &asymp; 0.70，中/高 &asymp; 0.81。</p>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-scale-balanced"></i> 監督 vs 非監督</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">兩種學習方式的比較：</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>比較項目</th><th>監督學習 KNN</th><th>非監督學習 KMeans</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>標籤需求</td><td>需要標籤</td><td>不需要標籤</td></tr>
+                        <tr><td>目的</td><td>預測新資料類別</td><td>找資料自然分群</td></tr>
+                        <tr><td>適用情境</td><td>有歷史標註</td><td>想發現模式</td></tr>
+                    </tbody>
+                </table>
+                <p class="note-desc">我們的情境：沒人標過高/中/低 → 用 KMeans。</p>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-gears"></i> 實作：KMeans 分群</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">使用 sklearn 進行 KMeans 分群的完整流程：</p>
+                <ul class="note-points">
+                    <li><code>from sklearn.cluster import KMeans</code></li>
+                    <li><code>X = df[["confidence"]].values</code> — 取出信心度欄位</li>
+                    <li><code>kmeans = KMeans(n_clusters=3, random_state=42).fit(X)</code></li>
+                    <li><code>cluster_centers_</code> 取得中心點 → 排序 → 算切分點</li>
+                    <li>更新 rules.yaml 的門檻值</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-laptop-code"></i> Workshop：KMeans 找門檻</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">用 KMeans 自動找出信心度的高/中/低切分點。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check-circle"></i> 完整解答：</strong>
+<pre><code>from sklearn.cluster import KMeans
+import pandas as pd, json
+import numpy as np
+
+# 讀取事件資料
+with open("rule_results.json") as f:
+    df = pd.DataFrame(json.load(f))
+X = df[["confidence"]].values
+
+# KMeans分3群
+kmeans = KMeans(n_clusters=3, random_state=42, n_init=10)
+kmeans.fit(X)
+df["cluster"] = kmeans.labels_
+
+# 取得中心點並排序
+centers = sorted(kmeans.cluster_centers_.flatten())
+print(f"群中心: {[round(c,4) for c in centers]}")
+# 例如: [0.5535, 0.7502, 0.8438]
+
+# 計算切分點(相鄰中心的平均)
+thresholds = [(centers[i]+centers[i+1])/2 for i in range(len(centers)-1)]
+print(f"建議門檻: {[round(t,4) for t in thresholds]}")
+# 例如: [0.6519, 0.7970]
+
+# 各群統計
+for i in range(3):
+    cluster_data = df[df["cluster"]==i]["confidence"]
+    print(f"群{i}: n={len(cluster_data)}, range=[{cluster_data.min():.4f}, {cluster_data.max():.4f}]")</code></pre>
+                    <p>KMeans 找出的門檻比人工更客觀：基於全部資料分佈而非幾張圖的感覺。K=3 代表分成低/中/高三群。切分點 = 相鄰群中心的平均值。這些門檻可直接更新到 rules.yaml：第一個切分點 → max_confidence（忽略門檻），第二個切分點 → min_confidence（alert 門檻）。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: 整合管線回顧 -->
+        <h3 class="section-title"><i class="fa-solid fa-diagram-project"></i> 整合管線回顧</h3>
         <div class="dashboard-grid notes-section">
             <div class="card note-card" style="grid-column: 1 / -1;">
                 <div class="note-header">
-                    <h4><i class="fa-solid fa-brain"></i> 筆記待補</h4>
-                    <span class="status-badge pending">待補</span>
+                    <h4><i class="fa-solid fa-sitemap"></i> 完整系統流程</h4>
+                    <span class="status-badge important">觀念</span>
                 </div>
-                <p class="note-desc">課程內容稍後補充。</p>
+                <p class="note-desc">從攝影機到規則優化的完整管線：</p>
+                <ul class="note-points">
+                    <li><strong>攝影機 → YOLO 推論 → Event JSON → 事件去重 → Rule Engine（YAML 規則）→ 告警/記錄 → Pandas 統計 → KMeans 找門檻 → 更新規則</strong></li>
+                </ul>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>層級</th><th>模組</th><th>職責</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>感知</td><td>YOLO</td><td>偵測物件</td></tr>
+                        <tr><td>結構化</td><td>Event JSON</td><td>統一事件格式</td></tr>
+                        <tr><td>判斷</td><td>Rule Engine</td><td>規則比對與告警</td></tr>
+                        <tr><td>分析</td><td>Pandas</td><td>統計與視覺化</td></tr>
+                        <tr><td>優化</td><td>KMeans</td><td>資料驅動門檻</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-timeline"></i> 三日 ML 課程總回顧</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">三次 ML 課程的完整脈絡：</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>日期</th><th>主題</th><th>關鍵內容</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>3/16</td><td>ML 基礎</td><td>scikit-learn / 資料集 / 切割 / KNN / predict / accuracy / confusion matrix</td></tr>
+                        <tr><td>3/17</td><td>YOLO</td><td>安裝 / 推論 / 訓練 / Event JSON / 事件處理去重累積計數 / 批次偵測</td></tr>
+                        <tr><td>3/25</td><td>規則引擎</td><td>YAML 規則 / N 幀聚合 / Pandas 統計 / KMeans 分群 / 整合管線</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section 5: HW — 完整整合練習 -->
+        <h3 class="section-title"><i class="fa-solid fa-pen-to-square"></i> HW — 完整整合練習</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-clipboard-question"></i> HW 題目</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc">假設你接手一個工地安全監控系統，有 100 筆 YOLO 偵測結果（含 head_detected 和 helmet_detected），請完成：</p>
+                <ul class="note-points">
+                    <li><strong>(1)</strong> 用 Pandas 統計各類型事件數量和信心度分佈</li>
+                    <li><strong>(2)</strong> 用 KMeans 找出信心度的高/中/低切分點</li>
+                    <li><strong>(3)</strong> 設計 YAML 規則檔</li>
+                    <li><strong>(4)</strong> 用規則引擎處理所有事件</li>
+                    <li><strong>(5)</strong> 用 Pandas 分析規則比對結果</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> HW 完整答案</h4>
+                    <span class="status-badge done">練習</span>
+                </div>
+                <p class="note-desc">串起所有模組的完整整合程式碼：</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check-circle"></i> 完整整合程式碼：</strong>
+<pre><code>import pandas as pd, json, yaml
+from sklearn.cluster import KMeans
+import numpy as np
+
+# === Step 1: Pandas 統計原始資料 ===
+with open('results.json') as f:
+    df = pd.DataFrame(json.load(f))
+print("=== 原始資料統計 ===")
+print(f"總筆數: {len(df)}")
+print(df["event_type"].value_counts())
+print(f"信心度: mean={df['confidence'].mean():.4f}, std={df['confidence'].std():.4f}")
+
+# === Step 2: KMeans 找門檻 ===
+X = df[["confidence"]].values
+kmeans = KMeans(n_clusters=3, random_state=42, n_init=10).fit(X)
+centers = sorted(kmeans.cluster_centers_.flatten())
+thresholds = [(centers[i]+centers[i+1])/2 for i in range(len(centers)-1)]
+print(f"\n=== KMeans 結果 ===")
+print(f"群中心: {[round(c,4) for c in centers]}")
+print(f"建議門檻: {[round(t,4) for t in thresholds]}")
+
+# === Step 3: 設計 YAML 規則 ===
+rules_config = {
+    "rules": [
+        {"name":"低信心忽略","max_confidence":round(thresholds[0],2),"action":"ignore"},
+        {"name":"沒戴安全帽","event_type":"head_detected","min_confidence":round(thresholds[1],2),"action":"alert","severity":"high"},
+        {"name":"沒戴安全帽低信心","event_type":"head_detected","action":"warning","severity":"low"},
+        {"name":"預設","action":"ok"}
+    ],
+    "alert_threshold": 2
+}
+with open('auto_rules.yaml','w') as f:
+    yaml.dump(rules_config, f, allow_unicode=True)
+print(f"\n規則已寫入 auto_rules.yaml")
+
+# === Step 4: 規則引擎處理 ===
+def check_event(event, rules):
+    for rule in rules:
+        if "event_type" in rule and event.get("event_type") != rule["event_type"]:
+            continue
+        if "min_confidence" in rule and event.get("confidence",0) &lt; rule["min_confidence"]:
+            continue
+        if "max_confidence" in rule and event.get("confidence",1) &gt; rule["max_confidence"]:
+            continue
+        return rule
+    return {"name":"unknown","action":"unknown"}
+
+results = []
+for _, row in df.iterrows():
+    event = row.to_dict()
+    matched = check_event(event, rules_config["rules"])
+    event["action"] = matched["action"]
+    event["rule"] = matched["name"]
+    results.append(event)
+result_df = pd.DataFrame(results)
+
+# === Step 5: Pandas 分析結果 ===
+print(f"\n=== 規則比對結果 ===")
+print(result_df["action"].value_counts())
+alerts = result_df[result_df["action"]=="alert"]
+print(f"\nalert事件: {len(alerts)}筆")
+if len(alerts) &gt; 0:
+    print(alerts[["source_image","event_type","confidence","rule"]].to_string())
+    alert_images = alerts["source_image"].unique()
+    should_alert = len(alert_images) &gt;= rules_config["alert_threshold"]
+    print(f"\n有alert的圖片: {list(alert_images)}")
+    print(f"{'發佈ALERT' if should_alert else '不發佈'}(門檻:{rules_config['alert_threshold']})")</code></pre>
+                    <p>這串起了所有模組：Pandas 統計 → KMeans 找門檻 → YAML 規則自動生成 → 規則引擎處理 → Pandas 分析結果。關鍵理解：KMeans 讓門檻從「拍腦袋」變成「資料驅動」，但最終門檻仍需人工審核調整 —— ML 是建議，人是決策者。</p>
+                </div>
             </div>
         </div>
 

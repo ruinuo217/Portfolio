@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI大數據養成班 - 3/17 資料科學與生成式 AI</title>
+    <title>AI大數據養成班 - 3/17 YOLO 物件偵測與事件處理</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="dashboard.css">
 </head>
@@ -221,7 +221,7 @@
 
         <div class="top-bar">
             <div class="breadcrumb">
-                首頁 > Week 11: AI 與資料科學 > <span>資料科學與生成式 AI</span>
+                首頁 > Week 11: AI 與資料科學 > <span>YOLO 物件偵測與事件處理</span>
             </div>
             <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
                 <i class="fas fa-home"></i> 回首頁
@@ -230,20 +230,473 @@
 
         <div class="banner">
             <div>
-                <h1>資料科學與生成式 AI</h1>
+                <h1>YOLO 物件偵測與事件處理</h1>
                 <p>3/17 課程筆記</p>
             </div>
-            <i class="fa-solid fa-brain banner-icon"></i>
+            <i class="fa-solid fa-eye banner-icon"></i>
         </div>
 
-        <h3 class="section-title">課程筆記：資料科學與生成式 AI</h3>
+        <!-- Section 1: YOLO 物件偵測概念 -->
+        <h3 class="section-title"><i class="fa-solid fa-brain"></i> YOLO 物件偵測概念</h3>
         <div class="dashboard-grid notes-section">
             <div class="card note-card" style="grid-column: 1 / -1;">
                 <div class="note-header">
-                    <h4><i class="fa-solid fa-brain"></i> 筆記待補</h4>
-                    <span class="status-badge pending">待補</span>
+                    <h4><i class="fa-solid fa-bullseye"></i> 什麼是 YOLO</h4>
+                    <span class="status-badge important">觀念</span>
                 </div>
-                <p class="note-desc">課程內容稍後補充。</p>
+                <p class="note-desc"><strong>You Only Look Once</strong> — 一次看完整張影像就完成物件偵測。YOLO 以 CNN 為骨幹，不只判「是什麼」，還回答「在哪裡、多確定」。</p>
+                <ul class="note-points">
+                    <li><strong>一次推論：</strong>一張影像同時找出多個物件及其位置，不需逐區掃描</li>
+                    <li><strong>即時性：</strong>適合攝影機 / 串流場景，速度足以支撐即時處理</li>
+                    <li><strong>結構化輸出：</strong>輸出的是 class / bbox / confidence，不是圖片</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 系統角色：</strong>YOLO 的定位是「影像 → 結構化觀測資料（detections）」。它把非結構化的圖片轉換成系統可以處理的結構化資料。
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-scale-balanced"></i> Pre-trained Models 選型</h4>
+                    <span class="status-badge info">觀念</span>
+                </div>
+                <p class="note-desc">根據場景需求選擇適合的模型大小，先用小模型跑通流程，確定需求再換大模型。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>模型</th><th>大小</th><th>速度</th><th>適用場景</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>yolov5s</td><td>小</td><td>最快</td><td>原型開發 / 教學</td></tr>
+                        <tr><td>yolov5m</td><td>中</td><td>快</td><td>一般系統</td></tr>
+                        <tr><td>yolov5l</td><td>大</td><td>慢</td><td>伺服器部署</td></tr>
+                        <tr><td>yolov5x</td><td>超大</td><td>最慢</td><td>高精度需求</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section 2: YOLO 安裝與推論 -->
+        <h3 class="section-title"><i class="fa-solid fa-terminal"></i> YOLO 安裝與推論</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-download"></i> 安裝環境</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">安裝必要套件與下載 YOLOv5 專案。</p>
+                <pre><code># 系統套件
+sudo apt update && apt install python3-pip python3-dev
+
+# Python 套件
+pip3 install numpy pillow ultralytics
+
+# 下載 YOLOv5
+git clone https://github.com/ultralytics/yolov5.git
+cd yolov5
+pip install -r requirements.txt
+
+# 測試推論
+python3 detect.py --source data/images</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> Python 推論程式碼</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">使用 ultralytics 套件載入模型並取得結構化輸出。</p>
+                <pre><code>from ultralytics import YOLO
+
+# 載入預訓練模型
+model = YOLO("yolov5s.pt")
+
+# 推論
+results = model("image.jpg")
+
+# 結構化輸出
+for box in results[0].boxes:
+    print(box.cls)    # class_id
+    print(box.conf)   # confidence
+    print(box.xyxy)   # bbox 座標 (x1, y1, x2, y2)
+
+# 儲存結果圖
+results[0].save()</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop：YOLO 偵測</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc"><strong>題目：</strong>找一張動物圖片執行偵測，觀察輸出結構。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check-circle"></i> 解答：</strong>
+                    <pre><code>from ultralytics import YOLO
+
+model = YOLO("yolov5s.pt")
+results = model("cat.jpg")
+results[0].save(filename="result.jpg")
+
+for box in results[0].boxes:
+    print({"class_id": int(box.cls[0]),
+           "confidence": round(float(box.conf[0]), 4),
+           "bbox": [round(x,2) for x in box.xyxy[0].tolist()]})
+
+# 輸出: {"class_id":15, "confidence":0.8793, "bbox":[203.6,127.1,898.2,1203.7]}</code></pre>
+                    <p>class_id=15 對應 COCO 資料集的 cat 類別。每個物件都有 class（是什麼）/ bbox（在哪裡）/ confidence（多確定）三要素。這些結構化資料足以交給系統後續處理（告警 / 記錄 / 統計）——不需要圖片本身。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: YOLO 模型訓練（安全帽偵測） -->
+        <h3 class="section-title"><i class="fa-solid fa-hard-hat"></i> YOLO 模型訓練（安全帽偵測）</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-gears"></i> 訓練流程</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">使用 Roboflow 公開資料集（Helmet Detection ~1100 張，已標註）訓練自訂模型。</p>
+                <ul class="note-points">
+                    <li><strong>資料集結構：</strong>下載 YOLO 格式 — images/ + labels/ + data.yaml</li>
+                    <li><strong>訓練指令：</strong><code>yolo train model=yolov8n.pt data=data.yaml epochs=30 imgsz=640</code>（約 5 小時）</li>
+                    <li><strong>產出：</strong>runs/detect/train/weights/best.pt</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-play"></i> 用自訓模型推論</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">用訓練好的 best.pt 對新圖片推論。</p>
+                <pre><code># CLI 推論
+yolo predict model=best.pt source=image.jpg save_txt=True
+
+# Python 推論
+from ultralytics import YOLO
+model = YOLO("best.pt")
+results = model("image.jpg")
+for box in results[0].boxes:
+    print(box.xyxy, box.cls, box.conf)</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop：訓練安全帽模型</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc"><strong>題目：</strong>從 Roboflow 下載資料集，訓練 YOLO，對測試圖推論。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check-circle"></i> 解答：</strong>
+                    <p>訓練流程：</p>
+                    <ul class="note-points">
+                        <li>(1) Roboflow Universe 搜尋 helmet → 選 helmet-c1enh → Fork Dataset → 下載 YOLO 格式 ZIP</li>
+                        <li>(2) 解壓確認結構：train/images+labels, valid/images+labels, data.yaml</li>
+                        <li>(3) <code>yolo train model=yolov8n.pt data=data.yaml epochs=30 imgsz=640</code>（約 5hr）</li>
+                        <li>(4) 推論：<code>yolo predict model=runs/detect/train/weights/best.pt source=test.jpg</code></li>
+                    </ul>
+                    <p>你不是在「寫模型」，是在「配置系統能力」。model=yolov8n.pt 是 Transfer Learning（預訓練權重），epochs=30 讓模型看資料 30 次，imgsz=640 是輸入解析度。best.pt 就是你訓練的成果。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: YOLO → Event JSON -->
+        <h3 class="section-title"><i class="fa-solid fa-arrow-right-arrow-left"></i> YOLO → Event JSON</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-lightbulb"></i> 為什麼要轉 Event</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">畫好框的圖片無法直接用於告警 / API 回傳 / 資料庫統計。系統需要的是結構化事件。</p>
+                <pre><code>// 系統需要的格式
+{
+  "event_type": "helmet_detected",
+  "confidence": 0.87,
+  "bbox": {"x1": 120.5, "y1": 80.3, "x2": 340.1, "y2": 290.7},
+  "timestamp": "2026-03-17T10:30:00Z"
+}</code></pre>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 核心觀念：</strong>YOLO 不是在「辨識安全帽」——YOLO 只是產生事件觸發條件。完整流程：影像 → YOLO 推論 → Detection Event → 規則 / API / 告警 / 紀錄。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-file-code"></i> 標註轉事件實作</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">save_txt=True 輸出 YOLO 格式 txt（class_id x_center y_center width height），再轉換為事件 JSON。</p>
+                <pre><code># label_to_event.py
+# 讀取 YOLO 格式 txt → 組成事件 JSON
+import json
+from datetime import datetime
+
+def parse_label(txt_path, image_name):
+    events = []
+    with open(txt_path) as f:
+        for line in f:
+            parts = line.strip().split()
+            cls_id = int(parts[0])
+            x_c, y_c, w, h = map(float, parts[1:])
+            events.append({
+                "event_type": f"class_{cls_id}_detected",
+                "source_image": image_name,
+                "bbox": {"x_center": x_c, "y_center": y_c,
+                         "width": w, "height": h},
+                "timestamp": datetime.utcnow().isoformat() + "Z"
+            })
+    return events</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop：圖片到事件</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc"><strong>題目：</strong>整合 YOLO 推論 + 事件轉換，輸入圖片輸出事件 JSON。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check-circle"></i> 解答：</strong>
+                    <pre><code>from ultralytics import YOLO
+from datetime import datetime
+import json
+
+LABEL_MAP = {0: "head", 1: "helmet"}
+
+def detect_and_convert(model_path, image_path, min_confidence=0.5):
+    model = YOLO(model_path)
+    results = model(image_path)
+    events = []
+    for box in results[0].boxes:
+        conf = float(box.conf[0])
+        if conf &lt; min_confidence:
+            continue
+        cls_id = int(box.cls[0])
+        x1, y1, x2, y2 = box.xyxy[0].tolist()
+        events.append({
+            "event_type": f"{LABEL_MAP.get(cls_id,'unknown')}_detected",
+            "confidence": round(conf, 4),
+            "bbox": {"x1":round(x1,2),"y1":round(y1,2),
+                     "x2":round(x2,2),"y2":round(y2,2)},
+            "source_image": image_path.split("/")[-1],
+            "timestamp": datetime.utcnow().isoformat() + "Z"
+        })
+    return events
+
+events = detect_and_convert("best.pt", "test.jpg")
+print(json.dumps(events, indent=2))</code></pre>
+                    <p>延伸思考：同一張圖多個 helmet → 每個 box 產生一筆事件。沒戴安全帽（class 0 = head）→ event_type = 'head_detected'。confidence 過濾在事件層做（模型層輸出所有偵測，事件層決定哪些值得處理）。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 5: 事件處理（去重/累積/計數） -->
+        <h3 class="section-title"><i class="fa-solid fa-filter"></i> 事件處理（去重 / 累積 / 計數）</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-bell"></i> 為什麼需要事件處理</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">攝影機 30fps → 同一違規者 1 秒產生 30 筆事件 → 老闆手機 30 則推播。必須從 Frame-level 轉為 Event-level：30 筆 no_helmet（1 秒）→ 1 次違規。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>操作</th><th>說明</th><th>範例</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>去重 Dedup</strong></td><td>合併重複偵測</td><td>同一人連續影格只算一次</td></tr>
+                        <tr><td><strong>累積 Accumulate</strong></td><td>時間窗口統計</td><td>過去 N 分鐘違規次數</td></tr>
+                        <tr><td><strong>計數 Count</strong></td><td>當前狀態</td><td>場域內目前幾人</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-clone"></i> IoU 去重</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc"><strong>IoU = 交集面積 / 聯集面積</strong>。IoU > 0.5 → 可能是同一物件。</p>
+                <ul class="note-points">
+                    <li><strong>EventDeduplicator：</strong>時間窗口內相同類別且 IoU > 閾值 → 視為重複 → 返回 None</li>
+                    <li><strong>效果：</strong>30 筆 / 秒 → 1 筆事件</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-chart-bar"></i> 累積器與計數器</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">在去重後進一步統計與追蹤。</p>
+                <ul class="note-points">
+                    <li><strong>EventAccumulator：</strong>時間窗口（如 5 分鐘）內各類別事件數量。get_violation_count() 統計 no_helmet + no_vest</li>
+                    <li><strong>ObjectCounter：</strong>追蹤物件進入 / 離開，超時 5 秒未偵測 = 離開</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-diagram-project"></i> 事件處理管線</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">EventPipeline：YOLO Events → 去重 → 累積 → 計數 → 輸出。</p>
+                <pre><code># EventPipeline.process() 回傳結構
+{
+    "is_new": True,        # 是否為新事件（通過去重）
+    "violations": 3,       # 時間窗口內違規次數
+    "person_count": 12     # 目前場域內人數
+}</code></pre>
+            </div>
+        </div>
+
+        <!-- Section 6: 批次偵測與告警 Workshop -->
+        <h3 class="section-title"><i class="fa-solid fa-server"></i> 批次偵測與告警 Workshop</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-sitemap"></i> 架構設計</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">FastAPI Server 接收圖片跑 YOLO 回傳事件 JSON + Client 逐一送圖片收集結果。</p>
+                <ul class="note-points">
+                    <li><strong>Server：</strong>接收上傳圖片 → YOLO 推論 → 組 event JSON → 回傳</li>
+                    <li><strong>Alert 判斷：</strong>有 head_detected = True（未戴安全帽）</li>
+                    <li><strong>Client：</strong>逐一上傳 images/ 目錄的圖片，所有結果寫 results.json</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-server"></i> Server 端</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">FastAPI UploadFile 接收圖片 → 存 temp.jpg → YOLO 推論 → 組 event JSON → 回傳。</p>
+                <pre><code>from fastapi import FastAPI, UploadFile
+from ultralytics import YOLO
+import os
+
+app = FastAPI()
+model = YOLO("best.pt")
+LABEL_MAP = {0: "head", 1: "helmet"}
+
+@app.post("/detect")
+async def detect(file: UploadFile):
+    content = await file.read()
+    with open("temp.jpg", "wb") as f:
+        f.write(content)
+    results = model("temp.jpg")
+    events = []
+    for box in results[0].boxes:
+        cls_id = int(box.cls[0])
+        events.append({
+            "event_type": f"{LABEL_MAP[cls_id]}_detected",
+            "confidence": round(float(box.conf[0]), 4),
+            "bbox": box.xyxy[0].tolist()
+        })
+    has_alert = any(
+        e["event_type"] == "head_detected" for e in events
+    )
+    os.remove("temp.jpg")
+    return {
+        "events": events,
+        "event_count": len(events),
+        "alert": has_alert
+    }</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-paper-plane"></i> Client 端</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">requests.post 上傳圖片，收集 events 寫入 results.json。</p>
+                <pre><code>import requests, json, os
+
+all_events = []
+for fname in sorted(os.listdir("images")):
+    with open(f"images/{fname}", "rb") as f:
+        r = requests.post(
+            "http://localhost:8000/detect",
+            files={"file": (fname, f, "image/jpeg")}
+        )
+    data = r.json()
+    all_events.extend(data["events"])
+    alert = " ALERT" if data["alert"] else ""
+    print(f"{fname} -> {data['event_count']} events{alert}")
+
+with open("results.json", "w") as f:
+    json.dump(all_events, f, indent=2)</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop：批次偵測</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc"><strong>題目：</strong>建立 FastAPI Server + Client，批次偵測圖片並產生告警。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check-circle"></i> 解答：</strong>
+                    <p><strong>Server 核心：</strong></p>
+                    <pre><code>from fastapi import FastAPI, UploadFile
+from ultralytics import YOLO
+import os
+
+app = FastAPI()
+model = YOLO("best.pt")
+LABEL_MAP = {0: "head", 1: "helmet"}
+
+@app.post("/detect")
+async def detect(file: UploadFile):
+    content = await file.read()
+    with open("temp.jpg", "wb") as f:
+        f.write(content)
+    results = model("temp.jpg")
+    events = []
+    for box in results[0].boxes:
+        cls_id = int(box.cls[0])
+        events.append({
+            "event_type": f"{LABEL_MAP[cls_id]}_detected",
+            "confidence": round(float(box.conf[0]), 4),
+            "bbox": box.xyxy[0].tolist()
+        })
+    has_alert = any(e["event_type"] == "head_detected" for e in events)
+    os.remove("temp.jpg")
+    return {"events": events, "event_count": len(events), "alert": has_alert}</code></pre>
+                    <p><strong>Client 核心：</strong></p>
+                    <pre><code>import requests, json, os
+
+all_events = []
+for fname in sorted(os.listdir("images")):
+    with open(f"images/{fname}", "rb") as f:
+        r = requests.post(
+            "http://localhost:8000/detect",
+            files={"file": (fname, f, "image/jpeg")}
+        )
+    data = r.json()
+    all_events.extend(data["events"])
+    alert = " ALERT" if data["alert"] else ""
+    print(f"{fname} -> {data['event_count']} events{alert}")
+
+with open("results.json", "w") as f:
+    json.dump(all_events, f, indent=2)</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 7: 課程回顧 -->
+        <h3 class="section-title"><i class="fa-solid fa-graduation-cap"></i> 課程回顧</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-map"></i> 今日學習架構</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">完整流程：YOLO 安裝 → 推論（Pre-trained）→ 訓練（自訂模型）→ Event JSON（結構化輸出）→ 事件處理（去重 / 累積 / 計數）→ 批次偵測 + 告警（FastAPI + Client）。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 核心觀念：</strong>YOLO 是感知層，負責產生事件，不是直接給答案。系統需要的是結構化資料，不是圖片。從影像到事件、從事件到決策，這才是完整的 AI 應用架構。
+                </div>
             </div>
         </div>
 

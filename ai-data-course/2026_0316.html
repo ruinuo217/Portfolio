@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI大數據養成班 - 3/16 資料科學與生成式 AI</title>
+    <title>AI大數據養成班 - 3/16 機器學習基礎與 Scikit-learn</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="dashboard.css">
 </head>
@@ -221,7 +221,7 @@
 
         <div class="top-bar">
             <div class="breadcrumb">
-                首頁 > Week 11: AI 與資料科學 > <span>資料科學與生成式 AI</span>
+                首頁 > Week 11: AI 與資料科學 > <span>機器學習基礎與 Scikit-learn</span>
             </div>
             <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
                 <i class="fas fa-home"></i> 回首頁
@@ -230,20 +230,488 @@
 
         <div class="banner">
             <div>
-                <h1>資料科學與生成式 AI</h1>
+                <h1>機器學習基礎與 Scikit-learn</h1>
                 <p>3/16 課程筆記</p>
             </div>
             <i class="fa-solid fa-brain banner-icon"></i>
         </div>
 
-        <h3 class="section-title">課程筆記：資料科學與生成式 AI</h3>
+        <!-- Section 1: AI 的演進與系統角色 -->
+        <h3 class="section-title"><i class="fa-solid fa-timeline"></i> AI 的演進與系統角色</h3>
         <div class="dashboard-grid notes-section">
             <div class="card note-card" style="grid-column: 1 / -1;">
                 <div class="note-header">
-                    <h4><i class="fa-solid fa-brain"></i> 筆記待補</h4>
-                    <span class="status-badge pending">待補</span>
+                    <h4><i class="fa-solid fa-clock-rotate-left"></i> AI演進史</h4>
+                    <span class="status-badge important">觀念</span>
                 </div>
-                <p class="note-desc">課程內容稍後補充。</p>
+                <p class="note-desc">AI 的發展不是技術潮流，是系統複雜度變高的必然結果。</p>
+                <ul class="note-points">
+                    <li><strong>1950s 規則邏輯：</strong>用 if-else 寫規則，但規則寫不完，系統無法應對所有情境</li>
+                    <li><strong>1980s 機器學習：</strong>不再寫規則，改成從資料中學習模式（讓資料說話）</li>
+                    <li><strong>2010s 深度學習：</strong>處理影像、語音、文字等非結構化資料，感知能力大幅提升</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-layer-group"></i> ML vs DL 系統角色</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">ML 和 DL 在系統中扮演不同角色，不是互相取代的關係。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>比較項目</th><th>ML (機器學習)</th><th>DL (深度學習)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>資料型態</strong></td><td>結構化資料</td><td>非結構化資料</td></tr>
+                        <tr><td><strong>擅長任務</strong></td><td>分類、預測、風險評分</td><td>看見、聽見、理解</td></tr>
+                        <tr><td><strong>代表工具</strong></td><td>scikit-learn</td><td>YOLO + Transformer</td></tr>
+                        <tr><td><strong>系統層級</strong></td><td>判斷層 (Decision Layer)</td><td>感知理解層 (Perception Layer)</td></tr>
+                    </tbody>
+                </table>
+                <p class="note-desc"><strong>系統流程：</strong>Camera → DL(YOLO) → Event(結構化資料) → ML/規則判斷 → LLM → 人類可讀輸出</p>
+                <ul class="note-points">
+                    <li><strong>模型不直接給答案：</strong>模型輸出的是數值/機率，不是最終決策</li>
+                    <li><strong>輸出必須變 Event：</strong>DL 的輸出要轉成結構化資料才能進入下一層</li>
+                    <li><strong>系統邏輯與語言輸出是不同層：</strong>判斷歸判斷，表達歸表達</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-dumbbell"></i> 練習：AI系統角色</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc"><strong>題目：</strong>在工地安全監控系統中，ML 和 DL 各負責什麼？</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check-circle"></i> 回答：</strong>
+                    <ul>
+                        <li><strong>DL (YOLO) 負責感知層：</strong>從攝影機畫面中偵測物件（人/安全帽/背心），輸出結構化資料（class_id / confidence / bbox）。</li>
+                        <li><strong>ML (scikit-learn) 負責判斷層：</strong>根據偵測結果的 confidence 值 + 歷史模式，判斷是否為真正違規（而非誤判）。</li>
+                        <li><strong>LLM 負責輸出層：</strong>把判斷結果轉成人類可讀的警報訊息。</li>
+                    </ul>
+                    <p>模型不是直接給答案 —— YOLO 說「confidence=0.68 的 head_detected」不代表一定是違規，需要經過規則/ML 判斷層才決定系統行動。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Scikit-learn 安裝與資料集概念 -->
+        <h3 class="section-title"><i class="fa-solid fa-gears"></i> Scikit-learn 安裝與資料集概念</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-download"></i> 安裝與工作流程</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">建立虛擬環境並安裝 scikit-learn。</p>
+                <pre><code>python3 -m venv env
+pip install scikit-learn
+pip list | grep scikit-learn</code></pre>
+                <p class="note-desc"><strong>ML 套件流程圖：</strong></p>
+                <ul class="note-points">
+                    <li>資料集 → 特徵 (X) → 標籤 (y) → 模型訓練 → 預測結果</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-database"></i> 資料集 (Dataset) 概念</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">資料集不是 CSV、不是資料表、不是資料庫，是「站在模型角度看資料」的抽象概念。</p>
+                <ul class="note-points">
+                    <li><strong>樣本 (Sample)：</strong>一筆資料</li>
+                    <li><strong>特徵 (Feature)：</strong>描述屬性（輸入）</li>
+                    <li><strong>標籤 (Label)：</strong>要預測的答案（輸出）</li>
+                </ul>
+                <p class="note-desc">模型從 Feature 學習去預測 Label。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 重點：</strong>資料品質決定模型上限。再好的演算法也救不了爛資料。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrows-rotate"></i> 資料型態轉換</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">資料從人類可讀到模型可用的轉換路徑：</p>
+                <ul class="note-points">
+                    <li><strong>CSV / Database → DataFrame（人類與工程師）→ NumPy Array（模型）→ scikit-learn</strong></li>
+                </ul>
+                <p class="note-desc">scikit-learn 真正吃的是 <strong>NumPy Array</strong>：純數值、沒有欄位名稱、速度快。內建資料集省略轉換步驟。</p>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-seedling"></i> Iris 鳶尾花資料集</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">經典 ML 入門資料集：150 筆、5 欄位（花萼長寬 + 花瓣長寬 + 類別）。</p>
+                <ul class="note-points">
+                    <li><strong>3 個品種：</strong>Setosa (0) / Versicolor (1) / Virginica (2)</li>
+                </ul>
+                <pre><code>from sklearn import datasets
+iris = datasets.load_iris()</code></pre>
+                <p class="note-desc"><strong>Bunch 結構：</strong></p>
+                <ul class="note-points">
+                    <li><code>data</code>：(150, 4) 的特徵矩陣</li>
+                    <li><code>target</code>：(150,) 的標籤陣列</li>
+                    <li><code>feature_names</code>：4 個特徵名稱</li>
+                    <li><code>target_names</code>：3 個類別名稱</li>
+                    <li><code>DESCR</code>：資料集說明文件</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-dumbbell"></i> Workshop：資料集轉 DataFrame</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc"><strong>題目：</strong>把 iris Bunch 轉成 Pandas DataFrame。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check-circle"></i> 回答：</strong>
+                    <pre><code>import pandas as pd
+from sklearn import datasets
+
+iris = datasets.load_iris()
+df = pd.DataFrame(iris.data, columns=iris.feature_names)
+print(df)
+# 輸出: [150 rows x 4 columns]
+# 欄位: sepal length/width, petal length/width
+
+# 也可以加上 target 欄位:
+df['target'] = iris.target
+print(df.head())</code></pre>
+                    <p><code>iris.data</code> 是 (150, 4) 的 NumPy array，<code>iris.feature_names</code> 是 4 個欄位名稱的 list。<code>pd.DataFrame(data, columns=names)</code> 把 array 轉成有欄位名的表格。這就是 CSV → DataFrame → Array 的逆向操作，讓人類更容易檢查資料。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: 資料切割 (Train/Test Split) -->
+        <h3 class="section-title"><i class="fa-solid fa-scissors"></i> 資料切割 (Train/Test Split)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-triangle-exclamation"></i> 為什麼不能用全部資料訓練</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">全部訓練 + 同批驗證 = 模型記住資料而非學會判斷 = <strong>過度擬合 (Overfitting)</strong>。考試題目表現好但新資料崩潰。</p>
+                <ul class="note-points">
+                    <li><strong>切割目的：</strong>保留一部分模擬未來真實世界</li>
+                    <li><strong>Training data：</strong>學習用</li>
+                    <li><strong>Test data：</strong>驗證用 = 模型的期末考</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-sliders"></i> 切割比例與參數</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">常見比例：70/30、80/20、90/10。本課程用 <strong>70/30</strong>。</p>
+                <pre><code>train_test_split(X, y, test_size=0.3, random_state=42)</code></pre>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>參數</th><th>說明</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>test_size</code></td><td>測試集比例（0.3 = 30%）</td></tr>
+                        <tr><td><code>random_state</code></td><td>亂數種子，沒設 = 無法 debug</td></tr>
+                        <tr><td><code>shuffle</code></td><td>預設 True，時序資料不能亂 shuffle</td></tr>
+                        <tr><td><code>stratify</code></td><td>維持類別分佈，不平衡時必用</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-dice"></i> 隨機數範例理解切割</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">用簡單的數字列表理解 train_test_split 行為：</p>
+                <pre><code>data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+train, test = train_test_split(data, random_state=777, train_size=0.8)
+# train = [9, 4, 5, 6, 2, 10, 7, 8]
+# test  = [3, 1]</code></pre>
+                <p class="note-desc"><strong>重點：</strong>train_test_split 不是 ML 專用 API，是資料切割工具。</p>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-cut"></i> Iris 實際切割</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">切割 Iris 資料集並檢查結果：</p>
+                <pre><code>X = iris.data
+y = iris.target
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42)</code></pre>
+                <p class="note-desc"><strong>檢查三件事：</strong></p>
+                <ul class="note-points">
+                    <li>shape 對不對：(105, 4) / (45, 4)</li>
+                    <li>標籤有沒有一起切</li>
+                    <li>類別分佈是否合理（Counter）</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-dumbbell"></i> Workshop：檢查資料切割</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc"><strong>題目：</strong>執行切割後填空 shape 和 Counter，回答思考題。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check-circle"></i> 回答：</strong>
+                    <pre><code>from sklearn.model_selection import train_test_split
+from collections import Counter
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42)
+
+print("X shape:", X.shape)           # (150, 4)
+print("X_train:", X_train.shape)     # (105, 4)
+print("X_test:", X_test.shape)       # (45, 4)
+print("y_train分佈:", Counter(y_train))  # Counter({1:39, 0:34, 2:32})
+print("y_test分佈:", Counter(y_test))    # Counter({0:16, 2:18, 1:11})</code></pre>
+                    <p><strong>思考題回答：</strong></p>
+                    <ul>
+                        <li>(1) X_train 和 y_train 筆數一致（都是 105），因為特徵和標籤必須一一對應，切割時是同步切的。</li>
+                        <li>(2) 三類比例大致相同但不完美 —— 如果某類幾乎不存在，模型學不到該類。</li>
+                        <li>(3) 如果某類在訓練集幾乎沒有，模型會完全忽略該類，在測試時對該類的預測全錯 = 分類器的盲區。可用 <code>stratify=y</code> 參數維持類別分佈。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: 訓練模型 (KNN) -->
+        <h3 class="section-title"><i class="fa-solid fa-graduation-cap"></i> 訓練模型 (KNN)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-map-signs"></i> 演算法選擇邏輯</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">演算法地圖思考流程：</p>
+                <ul class="note-points">
+                    <li>樣本 > 50？→ 是</li>
+                    <li>分類問題？→ 是</li>
+                    <li>有標籤？→ 是（監督學習）</li>
+                    <li>中小型 + 結構化？→ 是</li>
+                    <li>→ <strong>KNN</strong></li>
+                </ul>
+                <p class="note-desc"><strong>KNN = 「看附近的人是誰，我就跟誰一樣」。</strong>不需訓練複雜模型、不涉及權重、直觀好理解。</p>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-robot"></i> KNN 建立與訓練</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">建立模型（還沒學）→ fit（開始學）。</p>
+                <pre><code>from sklearn.neighbors import KNeighborsClassifier
+
+knn = KNeighborsClassifier()
+knn.fit(X_train, y_train)</code></pre>
+                <p class="note-desc"><strong>fit 參數：</strong>X = 訓練特徵，y = 對應標籤，筆數必須一樣。</p>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-dumbbell"></i> Workshop：建立並訓練模型</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc"><strong>題目：</strong>填空 KNeighborsClassifier() 和 knn.fit(X_train, y_train)，回答思考題。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check-circle"></i> 回答：</strong>
+                    <pre><code>knn = KNeighborsClassifier()  # 建立模型（預設 k=5）
+knn.fit(X_train, y_train)     # 訓練 = 把資料存起來</code></pre>
+                    <p><strong>填空答案：</strong>(1) 模型類別名稱：KNeighborsClassifier (2) 訓練方法：fit() (3) 丟進模型的資料：X=X_train（訓練特徵），y=y_train（訓練標籤）。</p>
+                    <p><strong>思考題：</strong></p>
+                    <ul>
+                        <li>(1) 只用 X_train 因為 X_test 要留給「期末考」，全部訓練 = 自我欺騙。</li>
+                        <li>(2) 把 X_test 也拿去訓練 = 過度擬合，準確率虛高但遇到新資料就崩。</li>
+                        <li>(3) 模型現在還不「知道答案」—— fit 只是記住訓練資料，predict 才會產生預測結果。KNN 的 fit 特別簡單：就是把資料存起來，預測時再算距離。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 5: 預測資料 (Predict) -->
+        <h3 class="section-title"><i class="fa-solid fa-wand-magic-sparkles"></i> 預測資料 (Predict)</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-bullseye"></i> predict() 的角色</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">新資料 X → 模型（已 fit）→ 預測結果 y_pred。predict 只看 X，不知道正確答案。</p>
+                <ul class="note-points">
+                    <li><strong>KNN 的 predict：</strong>算新資料與訓練資料的距離，取最近 k 個鄰居多數決</li>
+                    <li><strong>你該問的不是準不準，而是：</strong>輸出型態是什麼？跟 y_test 長度一樣嗎？</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-dumbbell"></i> Workshop：第一個預測</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc"><strong>題目：</strong>y_pred = knn.predict(X_test)，填空並觀察。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check-circle"></i> 回答：</strong>
+                    <pre><code>y_pred = knn.predict(X_test)
+print("y_pred:", y_pred)  # [1 0 2 1 1 0 1 2 ...]
+print("y_test:", y_test)  # [1 0 2 1 1 0 1 2 ...]
+print("型態:", type(y_pred))  # numpy.ndarray
+print("長度:", len(y_pred), len(y_test))  # 45 45 (一樣)</code></pre>
+                    <p><strong>填空：</strong>(1) 預測方法：predict() (2) y_pred 型態：numpy.ndarray (3) len 相同：是 —— 每筆 X_test 對應一個預測結果。</p>
+                    <p>注意：y_pred 和 y_test 的值不一定完全相同 —— 不同的地方就是模型判錯的。目前只有預測結果，還沒量化「對了幾題」，這是下一步 evaluation 的工作。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 6: 模型評估 -->
+        <h3 class="section-title"><i class="fa-solid fa-chart-column"></i> 模型評估</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-scale-balanced"></i> 為什麼要評估</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">只看 Accuracy 不一定安全。</p>
+                <ul class="note-points">
+                    <li><strong>情境 A：</strong>100 筆只錯 2 筆 = 98%</li>
+                    <li><strong>情境 B：</strong>錯的 2 筆是高風險事件 = 系統出事</li>
+                </ul>
+                <p class="note-desc"><strong>Accuracy = 預測正確數 / 總數</strong></p>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-percent"></i> Accuracy 準確率</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <pre><code>from sklearn.metrics import accuracy_score
+acc = accuracy_score(y_test, y_pred)</code></pre>
+                <ul class="note-points">
+                    <li><strong>優點：</strong>好理解、快速</li>
+                    <li><strong>限制：</strong>看不出錯在哪類 / 對不平衡資料危險 / 不適合風險系統</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-table-cells"></i> Confusion Matrix 混淆矩陣</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc"><strong>「列是真實答案，欄是模型回答」。</strong>對角線 = 判對，非對角線 = 判錯（錯到哪裡去）。</p>
+                <p class="note-desc">範例 <code>[[16,0,0],[0,14,1],[0,2,12]]</code>：Setosa 全對，Versicolor 偶爾錯，Virginica 最常被搞混。</p>
+                <ul class="note-points">
+                    <li><strong>Accuracy 是分數，Confusion Matrix 是錯誤地圖。</strong></li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 重點：</strong>看懂 Confusion Matrix 比背指標重要 10 倍。
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-dumbbell"></i> Workshop：模型評估</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc"><strong>題目：</strong>計算 accuracy 和 confusion_matrix。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check-circle"></i> 回答：</strong>
+                    <pre><code>from sklearn.metrics import accuracy_score, confusion_matrix
+
+acc = accuracy_score(y_test, y_pred)
+cm = confusion_matrix(y_test, y_pred)
+print("Accuracy:", acc)  # ~0.98 (約 98%)
+print("Confusion Matrix:")
+print(cm)
+# [[16  0  0]
+#  [ 0 17  1]
+#  [ 0  0 11]]</code></pre>
+                    <p><strong>觀察：</strong></p>
+                    <ul>
+                        <li>(1) Accuracy 高 ≠ 安全 —— 如果錯的那 1 筆是高風險（如漏判沒戴安全帽），系統可能出事。</li>
+                        <li>(2) Confusion Matrix 告訴你 Accuracy 看不到的：Setosa（類 0）全對，Versicolor（類 1）有 1 筆被誤判成 Virginica，Virginica（類 2）全對。</li>
+                        <li>(3) 如果某類經常被誤判，在系統上可能造成：漏報（該告警沒告警）或誤報（不該告警卻告警）—— 前者風險更高。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 7: 完整流程回顧 + HW -->
+        <h3 class="section-title"><i class="fa-solid fa-arrows-spin"></i> 完整流程回顧 + HW</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-list-ol"></i> ML 完整流程</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">六步驟完成一次完整的機器學習分類任務：</p>
+                <ul class="note-points">
+                    <li><strong>Step 1：</strong>載入資料集</li>
+                    <li><strong>Step 2：</strong>檢查結構（shape / distribution）</li>
+                    <li><strong>Step 3：</strong>切割 train / test</li>
+                    <li><strong>Step 4：</strong>建立模型 + fit</li>
+                    <li><strong>Step 5：</strong>predict</li>
+                    <li><strong>Step 6：</strong>evaluate（accuracy + confusion matrix）</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-dumbbell"></i> HW：完整練習</h4>
+                    <span class="status-badge info">練習</span>
+                </div>
+                <p class="note-desc"><strong>題目：</strong>從頭到尾完成 Iris 分類，用不同 random_state 觀察結果變化，用 stratify=y 再試一次。</p>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-check-circle"></i> 回答：完整程式碼</strong>
+                    <pre><code>from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score, confusion_matrix
+from collections import Counter
+
+# Step 1: 載入資料
+iris = datasets.load_iris()
+X, y = iris.data, iris.target
+print(f"資料集: {X.shape}, 類別分佈: {Counter(y)}")
+
+# Step 2: 切割資料 (70/30, 固定種子)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42, stratify=y)
+print(f"Train: {X_train.shape}, Test: {X_test.shape}")
+print(f"Train分佈: {Counter(y_train)}, Test分佈: {Counter(y_test)}")
+
+# Step 3: 建立並訓練 KNN
+knn = KNeighborsClassifier(n_neighbors=5)
+knn.fit(X_train, y_train)
+
+# Step 4: 預測
+y_pred = knn.predict(X_test)
+
+# Step 5: 評估
+acc = accuracy_score(y_test, y_pred)
+cm = confusion_matrix(y_test, y_pred)
+print(f"Accuracy: {acc:.4f}")
+print(f"Confusion Matrix:\n{cm}")
+
+# 延伸：換 random_state 觀察
+for seed in [0, 42, 100, 777]:
+    Xtr, Xte, ytr, yte = train_test_split(
+        X, y, test_size=0.3, random_state=seed)
+    knn2 = KNeighborsClassifier()
+    knn2.fit(Xtr, ytr)
+    print(f"seed={seed}: acc={accuracy_score(yte, knn2.predict(Xte)):.4f}")
+
+# 觀察：不同 seed 會有不同 accuracy (0.93~1.0)
+# 加 stratify=y 可確保每個 seed 的類別分佈一致，結果更穩定</code></pre>
+                    <p><strong>重點：</strong>random_state 影響切割方式 → 影響 accuracy。沒有 stratify 時某些 seed 可能讓某類在 test 中過少，導致評估不穩定。加 <code>stratify=y</code> 後，無論 seed 如何，三類比例都與原始資料一致（各佔 1/3）。</p>
+                </div>
             </div>
         </div>
 
