@@ -94,6 +94,11 @@ h2.st { font-size: clamp(2rem, 3.5vw, 2.8rem); font-weight: 800; letter-spacing:
 .bdg.or { background: #fff2e8; color: #c05000; }
 h3.pt { font-size: clamp(1.5rem, 2vw, 1.75rem); font-weight: 800; letter-spacing: -.03em; line-height: 1.2; margin-bottom: 14px; }
 .pd { font-size: 0.875rem; color: var(--m); line-height: 1.8; margin-bottom: 24px; flex-grow: 1; }
+.pstruct { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; flex-grow: 1; }
+.prow { display: flex; gap: 12px; align-items: flex-start; font-size: 0.875rem; line-height: 1.65; }
+.plbl { flex-shrink: 0; width: 34px; font-weight: 700; font-size: 0.72rem; letter-spacing: .05em; color: var(--b); padding-top: 2px; text-transform: uppercase; }
+.pval { color: var(--m); line-height: 1.75; }
+.pval strong { color: var(--t); font-weight: 600; }
 .pd strong { color: var(--t); font-weight: 600; }
 .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 28px; }
 .tag { padding: 5px 12px; border-radius: 6px; font-size: 0.875rem; font-weight: 600; background: var(--w); border: 1px solid var(--g2); color: var(--m); letter-spacing: .01em; }
