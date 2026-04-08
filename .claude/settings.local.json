@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c ':*)",
+      "Bash(PYTHONIOENCODING=utf-8 python3)",
+      "Bash(PYTHONIOENCODING=utf-8 python3 /tmp/fix_en_resume.py)",
+      "Bash(PYTHONIOENCODING=utf-8 python3 c:/tmp/fix_en_resume.py)",
+      "Bash(python -c \"from docx import Document; d=Document\\('Reyna_Gao_Resume_zh.docx'\\); [print\\(repr\\(p.text\\)\\) for p in d.paragraphs]\")"
+    ]
+  }
+}

@@ -77,7 +77,7 @@ h2.st { font-size: clamp(2rem, 3.5vw, 2.8rem); font-weight: 800; letter-spacing:
 /* ── PROJECTS ── */
 #projects { background: var(--w); padding: 110px 8%; }
 .prjhd { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 60px; }
-.prjhd .slead { max-width: 320px; text-align: right; }
+.prjhd .slead { max-width: none; text-align: right; margin-right: 80px; }
 .pc { background: var(--g1); border-radius: 24px; overflow: hidden; margin-bottom: 24px; border: 1px solid transparent; transition: border-color .3s, box-shadow .3s, transform .3s; }
 .pc:hover { border-color: var(--g2); box-shadow: var(--shh); transform: translateY(-5px); }
 .pci { display: grid; grid-template-columns: 1fr 480px; min-height: 340px; }
