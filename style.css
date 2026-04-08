@@ -66,20 +66,58 @@ h2.st { font-size: clamp(2rem, 3.5vw, 2.8rem); font-weight: 800; letter-spacing:
 .pvlist { display: flex; flex-direction: column; gap: 12px; }
 .pv { display: flex; align-items: flex-start; gap: 18px; padding: 22px 24px; background: var(--w); border-radius: var(--r); border: 1px solid transparent; transition: border-color .25s, box-shadow .25s, transform .25s; }
 .pv:hover { border-color: var(--g2); box-shadow: var(--sh); transform: translateY(-2px); }
-.pvico { width: 44px; height: 44px; flex-shrink: 0; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 0.875rem; }
+.pvico { width: 44px; height: 44px; flex-shrink: 0; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
 .pi1 { background: #f0f4ff; }
 .pi2 { background: #fff4ee; }
 .pi3 { background: #eefaf7; }
 .pi4 { background: #fdf4ff; }
-.pvb h4 { font-size: 0.875rem; font-weight: 700; margin-bottom: 4px; }
-.pvb p { font-size: 0.875rem; color: var(--m); line-height: 1.55; }
+.pvb h4 { font-size: 0.875rem; font-weight: 700; margin-bottom: 5px; }
+.pvb p { font-size: 0.8rem; color: var(--m); line-height: 1.6; }
+
+/* ── SKILLS — white bg, full-width, 3-column groups ── */
+#skills { background: var(--w); padding: 110px 8%; border-top: 1px solid var(--g2); }
+
+/* header row: title left, legend right */
+.sk-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; margin-bottom: 14px; }
+.sk-legend { display: flex; align-items: center; gap: 20px; padding: 10px 20px; background: var(--g1); border-radius: 980px; }
+.sk-leg-item { display: inline-flex; align-items: center; gap: 8px; font-size: 0.75rem; font-weight: 600; color: var(--m); white-space: nowrap; }
+.sk-leg-chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 980px; font-size: 0.72rem; font-weight: 700; }
+.sk-leg-chip.solid { background: var(--bb); border: 1.5px solid rgba(0,113,227,.2); color: var(--b); }
+.sk-leg-chip.outline { background: var(--w); border: 1.5px solid var(--g2); color: var(--m); }
+.sk-leg-dot { width: 5px; height: 5px; border-radius: 50%; }
+.sk-leg-dot.bl { background: var(--b); }
+.sk-leg-dot.gr { background: var(--g3); }
+.sk-divider { height: 1px; background: var(--g2); margin-bottom: 48px; }
+
+/* 3-column groups grid */
+.sk-groups { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+.sk-group { padding: 0 40px 0 0; border-right: 1px solid var(--g2); }
+.sk-group:last-child { border-right: none; padding-right: 0; padding-left: 40px; }
+.sk-group:nth-child(2) { padding-left: 40px; }
+.sk-group-label { font-size: 0.72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--h); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+.sk-group-label::after { content: ''; flex: 1; height: 1px; background: var(--g2); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 7px; padding: 7px 14px; border-radius: 980px; font-size: 0.78rem; font-weight: 600; border: 1.5px solid var(--g2); background: var(--w); color: var(--m); transition: all .2s; cursor: default; }
+.chip:hover { border-color: var(--g3); color: var(--t); transform: translateY(-1px); box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+.chip.co { background: var(--bb); border-color: rgba(0,113,227,.2); color: var(--b); }
+.chip.co:hover { background: #daeaff; border-color: var(--b); }
+.chip.mi { color: var(--t); }
+.chip.lo { color: var(--t); }
+.cdot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.chip.co .cdot { background: var(--b); }
+.chip.mi .cdot { background: var(--g3); }
+.chip.lo .cdot { background: var(--g3); }
+.chip.fe { color: var(--t); }
+.chip.fe .cdot { background: var(--g3); }
+.chip.cl { color: var(--t); }
+.chip.cl .cdot { background: var(--g3); }
 
 /* ── PROJECTS ── */
 #projects { background: var(--w); padding: 110px 8%; }
 .prjhd { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 60px; }
 .prjhd .slead { max-width: none; text-align: right; margin-right: 80px; }
-.pc { background: var(--g1); border-radius: 24px; overflow: hidden; margin-bottom: 24px; border: 1px solid transparent; transition: border-color .3s, box-shadow .3s, transform .3s; }
-.pc:hover { border-color: var(--g2); box-shadow: var(--shh); transform: translateY(-5px); }
+.pc { background: var(--g1); border-radius: 24px; overflow: hidden; margin-bottom: 24px; border: 1px solid var(--g2); transition: border-color .3s, box-shadow .3s, transform .3s; }
+.pc:hover { border-color: var(--g3); box-shadow: var(--shh); transform: translateY(-5px); }
 .pci { display: grid; grid-template-columns: 1fr 480px; min-height: 340px; }
 .pci.fl { grid-template-columns: 480px 1fr; }
 .pci.fl .pcb { order: 2; }
@@ -145,33 +183,8 @@ h3.pt { font-size: clamp(1.5rem, 2vw, 1.75rem); font-weight: 800; letter-spacing
 .fcd.t2 { height: 72px; }
 .fcd.ac { background: #f3eeff; border-color: #e0cfff; }
 
-/* ── SKILLS ── */
-#skills { background: var(--g1); padding: 110px 8%; }
-.sklay { display: grid; grid-template-columns: 300px 1fr; gap: 80px; align-items: start; margin-top: 64px; }
-.skstk { position: sticky; top: 72px; }
-.skstk p { font-size: 0.875rem; color: var(--m); line-height: 1.75; margin-top: 14px; }
-.tblk { margin-bottom: 44px; }
-.thead { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
-.tlbl { font-size: 0.875rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--h); white-space: nowrap; }
-.trl { flex: 1; height: 1px; background: var(--g2); }
-.chips { display: flex; flex-wrap: wrap; gap: 9px; }
-.chip { display: inline-flex; align-items: center; gap: 7px; padding: 8px 16px; border-radius: 980px; font-size: 0.875rem; font-weight: 600; border: 1.5px solid var(--g2); background: var(--w); color: var(--m); transition: all .2s; cursor: default; }
-.chip:hover { border-color: var(--g3); color: var(--t); transform: translateY(-1px); box-shadow: 0 2px 10px rgba(0,0,0,.06); }
-.chip.co { background: var(--bb); border-color: rgba(0,113,227,.2); color: var(--b); }
-.chip.co:hover { background: #daeaff; border-color: var(--b); }
-.chip.mi { color: var(--m); }
-.chip.lo { color: var(--h); }
-.cdot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-.chip.co .cdot { background: var(--b); }
-.chip.mi .cdot { background: #a855f7; }
-.chip.lo .cdot { background: var(--g3); }
-.chip.fe { color: #1a7a4a; }
-.chip.fe .cdot { background: #34c77b; }
-.chip.cl { color: #6030c0; }
-.chip.cl .cdot { background: #a855f7; }
-
 /* ── TIMELINE ── */
-#timeline { background: var(--w); padding: 110px 8%; }
+#timeline { background: var(--w); padding: 110px 8%; border-top: 1px solid var(--g2); }
 .tllay { display: grid; grid-template-columns: 240px 1fr; margin-top: 64px; }
 .tllft { position: sticky; top: 72px; padding-right: 48px; height: fit-content; }
 .tllft p { font-size: 0.875rem; color: var(--m); line-height: 1.75; margin-top: 12px; }
@@ -230,8 +243,12 @@ footer p { font-size: 0.875rem; color: var(--h); }
   #hero { padding: 130px 6% 80px; }
   .hst { padding: 0 28px; }
   #about, #skills, #contact, #projects, #timeline { padding: 80px 6%; }
-  .alay, .sklay, .ctlay { grid-template-columns: 1fr; gap: 48px; }
-  .skstk { position: static; }
+  .alay, .ctlay { grid-template-columns: 1fr; gap: 48px; }
+  .sk-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .sk-groups { grid-template-columns: 1fr; }
+  .sk-group { border-right: none; border-bottom: 1px solid var(--g2); padding: 0 0 32px; margin-bottom: 32px; }
+  .sk-group:last-child { border-bottom: none; margin-bottom: 0; padding: 0; }
+  .sk-group:nth-child(2), .sk-group:last-child { padding-left: 0; }
   .pci, .pci.fl { grid-template-columns: 1fr; }
   .pci.fl .pcb { order: unset; }
   .pci.fl .pcv { order: -1; }
@@ -250,4 +267,5 @@ footer p { font-size: 0.875rem; color: var(--h); }
   .hst:last-child { border-bottom: none; padding-bottom: 0; }
   .frow { grid-template-columns: 1fr; }
   .cform { padding: 28px 22px; }
+  .sk-legend { flex-direction: column; align-items: flex-start; gap: 10px; border-radius: 14px; }
 }
