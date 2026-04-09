@@ -151,7 +151,7 @@ app.config["JSON_AS_ASCII"] = False  # 解決中文亂碼問題
 swagger = Swagger(app)  # 初始化 Swagger API 文件
 
 # 載入模型與技能對應表
-base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+base_dir = os.path.dirname(os.path.abspath(__file__))
 models_dir = os.path.join(base_dir, "models")
 
 try:
@@ -399,6 +399,8 @@ def recommend_job():
                     "mode": "explore",
                     "recommended_cluster": name,
                     "matched_skills": matched_skills,
+                    "matched_skills_count": len(matched_skills),
+                    "total_required_skills": len(required_skills),
                     "confidence": match_pct,
                 }
             )
