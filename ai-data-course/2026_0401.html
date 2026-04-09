@@ -671,6 +671,251 @@ print(response.text)</code></pre>
             </div>
         </div>
 
+        <!-- Section: LangChain Chain 基礎 -->
+        <h3 class="section-title"><i class="fa-solid fa-link"></i> LangChain：Chain 與 LCEL</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-circle-question"></i> 為什麼需要 LangChain</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">當需求變成「偵測違規 → 查法規 → 生成告警 → 通知主管」，這不是一個 LLM 呼叫能解決的事。LangChain 是 LLM 編排（Orchestration）框架，把多步驟串起來。</p>
+                <table class="concept-table">
+                    <thead><tr><th>組件</th><th>說明</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Prompt</strong></td><td>提示詞模板</td></tr>
+                        <tr><td><strong>LLM</strong></td><td>Gemini / GPT-4 / Claude</td></tr>
+                        <tr><td><strong>Chain</strong></td><td>多個組件串接</td></tr>
+                        <tr><td><strong>Tool</strong></td><td>外部功能（查 DB、發信）</td></tr>
+                        <tr><td><strong>Agent</strong></td><td>動態決策</td></tr>
+                    </tbody>
+                </table>
+                <p class="note-desc"><strong>安裝：</strong></p>
+                <pre><code>pip install langchain langchain-google-genai langchain-openai python-dotenv</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrow-right-long"></i> LCEL：用 | 組合</h4>
+                    <span class="status-badge important">語法</span>
+                </div>
+                <p class="note-desc">LCEL（LangChain Expression Language）用 <code>|</code> 把組件串起來，就像 Unix pipe：</p>
+                <pre><code>chain = prompt | llm | parser
+
+# 等同於：
+# prompt 輸出 → llm 輸入 → llm 輸出 → parser 輸入</code></pre>
+                <ul class="note-points">
+                    <li><code>|</code> 不是 Python 原生 OR，LangChain overload 它的行為</li>
+                    <li>每個組件都實作 <code>Runnable</code> 介面，可自由串接</li>
+                    <li>類比 Linux pipe：<code>cat file | grep "error" | wc -l</code></li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> 第一個 Chain：問答機器人</h4>
+                    <span class="status-badge info">範例</span>
+                </div>
+                <pre><code>from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+
+# 1. Prompt 模板
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "你是工安專家，專門回答職業安全相關問題。"),
+    ("human", "{question}")
+])
+
+# 2. LLM
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
+
+# 3. Parser（把 AIMessage 轉成純字串）
+parser = StrOutputParser()
+
+# 4. 組合 Chain
+chain = prompt | llm | parser
+
+# 5. 執行
+result = chain.invoke({"question": "什麼是 PPE？"})
+print(result)</code></pre>
+                <ul class="note-points">
+                    <li><strong>沒有 Parser：</strong>結果是 <code>AIMessage</code> 物件，要 <code>.content</code> 才能拿文字</li>
+                    <li><strong>有 StrOutputParser：</strong>直接拿到字串</li>
+                    <li><strong>資料管線：</strong>dict → prompt → AIMessage → str</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-shield-halved"></i> 失敗處理：with_fallbacks</h4>
+                    <span class="status-badge important">技巧</span>
+                </div>
+                <p class="note-desc">Chain 中任一步失敗會直接拋 exception。最簡單用 try/except，更好的做法是 fallback：</p>
+                <pre><code># 便宜的當主力，貴的當備援
+main_llm = ChatGoogleGenerativeAI(model="gemini-1.0-pro")
+backup_llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
+
+safe_llm = main_llm.with_fallbacks([backup_llm])
+chain = prompt | safe_llm | parser
+# main 掛掉 → 自動切換 backup</code></pre>
+                <p class="note-desc">實務常用便宜模型當主力、貴的當 fallback——平常省錢，出事才花錢。</p>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-layer-group"></i> 多步驟 Chain</h4>
+                    <span class="status-badge info">範例</span>
+                </div>
+                <p class="note-desc">違規事件 → 分析嚴重程度 → 生成告警，前一個 Chain 的輸出餵給後一個：</p>
+                <pre><code>analyze_chain = analyze_prompt | llm | StrOutputParser()
+alert_chain = alert_prompt | llm | StrOutputParser()
+
+violation = "A區工人未配戴安全帽"
+severity = analyze_chain.invoke({"violation": violation})
+alert = alert_chain.invoke({
+    "violation": violation,
+    "severity": severity,    # ← 上一個 Chain 的輸出
+})</code></pre>
+            </div>
+        </div>
+
+        <!-- Section: OpenAI × LangChain -->
+        <h3 class="section-title"><i class="fa-solid fa-shuffle"></i> OpenAI × LangChain：一行換模型</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrows-left-right"></i> LangChain 抽象化的價值</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">原生 OpenAI 跟 Gemini 語法完全不同，但用 LangChain 包裝後，<strong>換模型只要改一行</strong>，Chain 完全不動：</p>
+                <pre><code># Gemini
+from langchain_google_genai import ChatGoogleGenerativeAI
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
+
+# OpenAI（只改這兩行）
+from langchain_openai import ChatOpenAI
+llm = ChatOpenAI(model="gpt-4o-mini")
+
+# Chain 一模一樣
+chain = prompt | llm | parser
+result = chain.invoke({"question": "什麼是 PPE？"})</code></pre>
+                <table class="concept-table">
+                    <thead><tr><th>情境</th><th>做法</th></tr></thead>
+                    <tbody>
+                        <tr><td>Gemini API 掛了</td><td>換成 ChatOpenAI，Chain 不用改</td></tr>
+                        <tr><td>想比較哪個模型好</td><td>同一個 Chain 跑兩遍</td></tr>
+                        <tr><td>不同任務不同模型</td><td>偵測用 Gemini，摘要用 OpenAI</td></tr>
+                        <tr><td>客戶要求特定模型</td><td>改一行就好</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section: LangChain Tool -->
+        <h3 class="section-title"><i class="fa-solid fa-screwdriver-wrench"></i> LangChain Tool：LLM 與系統的邊界</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-circle-info"></i> Tool 是什麼</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">LLM 會「說話」但不會「做事」——查資料庫、發 LINE、存 CSV 都做不到。Tool 就是讓 LLM 可以「做事」的橋樑。</p>
+                <ul class="note-points">
+                    <li><strong>LLM 能做：</strong>理解文字、生成文字</li>
+                    <li><strong>LLM 做不到：</strong>查 DB、發通知、存檔、呼叫 API</li>
+                    <li><strong>Tool：</strong>Python 函式 + 描述，讓 LLM 知道何時該呼叫</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code-compare"></i> 跟 Function Calling 的關係</h4>
+                    <span class="status-badge important">比較</span>
+                </div>
+                <table class="concept-table">
+                    <thead><tr><th>項目</th><th>Gemini FC</th><th>LangChain Tool</th></tr></thead>
+                    <tbody>
+                        <tr><td>定義</td><td>function + docstring</td><td><code>@tool</code> 裝飾器</td></tr>
+                        <tr><td>綁定</td><td><code>tools=[func]</code></td><td><code>llm.bind_tools([tool])</code></td></tr>
+                        <tr><td>執行</td><td>手動兩段式</td><td>可自動執行</td></tr>
+                        <tr><td>跨模型</td><td>只能 Gemini</td><td>換模型不用改</td></tr>
+                    </tbody>
+                </table>
+                <p class="note-desc"><strong>核心優勢：</strong>Tool 寫一次，換 LLM 不用改。</p>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> 定義 Tool：@tool 裝飾器</h4>
+                    <span class="status-badge info">範例</span>
+                </div>
+                <pre><code>from langchain_core.tools import tool
+
+@tool
+def search_regulation(keyword: str) -> str:
+    """搜尋工安法規
+
+    Args:
+        keyword: 搜尋關鍵字，例如「安全帽」「反光背心」
+
+    Returns:
+        相關法規條文
+    """
+    regulations = {
+        "安全帽": "職安法第 281 條：應使勞工確實使用安全帽。",
+        "反光背心": "職安法第 21 條：應提供反光背心。",
+    }
+    return regulations.get(keyword, f"找不到「{keyword}」相關法規")</code></pre>
+                <ul class="note-points">
+                    <li><strong>Function name：</strong>變成 Tool 名稱</li>
+                    <li><strong>docstring：</strong>變成 Tool 描述（LLM 靠這個決定要不要用）</li>
+                    <li><strong>type hints：</strong>變成參數格式</li>
+                    <li><strong>關鍵：</strong>docstring 寫得好不好，直接影響 LLM 的呼叫品質</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-link"></i> 綁定 + 兩段式呼叫</h4>
+                    <span class="status-badge info">範例</span>
+                </div>
+                <pre><code>llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
+
+# 綁定 Tool
+llm_with_tools = llm.bind_tools([search_regulation, send_alert])
+
+# LLM 不會直接回答，會說「我要呼叫 search_regulation」
+response = llm_with_tools.invoke("安全帽的法規是什麼？")
+print(response.tool_calls)
+# → [{"name": "search_regulation",
+#      "args": {"keyword": "安全帽"}}]</code></pre>
+                <p class="note-desc">跟 Gemini Function Calling 一樣兩段式：LLM 回傳 tool_calls → 你執行 → 把結果送回。</p>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-robot"></i> 自動執行：create_agent</h4>
+                    <span class="status-badge info">進階</span>
+                </div>
+                <pre><code>from langchain.agents import create_agent
+
+agent = create_agent(
+    "google_genai:gemini-2.5-flash",
+    tools=[search_regulation, send_alert, log_violation],
+    system_prompt="你是工安助手，可查法規、發告警、記錄違規。",
+)
+
+# 一行搞定：LLM 自動選 Tool → 執行 → 拿結果 → 回答
+result = agent.invoke({
+    "messages": [{"role": "user", "content": "幫我查安全帽法規"}]
+})
+print(result["messages"][-1].content)</code></pre>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-triangle-exclamation"></i> 安全考量：</strong>Tool 功能要窄，不要給 LLM 太大權力。只讀 &gt; 可寫。參數要驗證。<strong>絕不</strong>讓 LLM 直接執行 SQL（SQL Injection 風險）。
+                </div>
+            </div>
+        </div>
+
         <!-- Section 7: 課程回顧 -->
         <h3 class="section-title"><i class="fa-solid fa-clipboard-check"></i> 課程回顧</h3>
         <div class="dashboard-grid notes-section">

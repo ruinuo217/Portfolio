@@ -618,6 +618,793 @@ qa_chain = RetrievalQA.from_chain_type(
                 </div>
             </div>
 
+        </div>
+
+        <!-- Section: LangGraph 簡介 -->
+        <h3 class="section-title"><i class="fa-solid fa-diagram-project"></i> LangGraph 簡介 + State + Node</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-circle-question"></i> 為什麼需要 LangGraph</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">LangChain 的 Chain 是<strong>線性</strong>的（A → B → C），不能分支、不能回頭、不能追蹤狀態。需求一複雜就卡住：</p>
+                <ul class="note-points">
+                    <li><strong>需求：</strong>「高風險通知主管，低風險記錄就好，通知失敗要重試」</li>
+                    <li><strong>Chain 做不到：</strong>線性流程無法分流、無法迴圈</li>
+                    <li><strong>LangGraph 解法：</strong>把 Chain 升級為 Graph（狀態圖）</li>
+                </ul>
+                <table class="concept-table">
+                    <thead><tr><th>項目</th><th>LangChain</th><th>LangGraph</th></tr></thead>
+                    <tbody>
+                        <tr><td>流程</td><td>線性 A→B→C</td><td>圖（可分支可迴圈）</td></tr>
+                        <tr><td>狀態</td><td>每步獨立</td><td>State 跨步共享</td></tr>
+                        <tr><td>分支</td><td>不支援</td><td>conditional_edges</td></tr>
+                        <tr><td>迴圈</td><td>不支援</td><td>節點可指回自己</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-cubes"></i> 四個核心概念</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <table class="concept-table">
+                    <thead><tr><th>概念</th><th>說明</th><th>類比</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>State</strong></td><td>狀態資料（全流程共享）</td><td>共用白板</td></tr>
+                        <tr><td><strong>Node</strong></td><td>處理節點（一個函式）</td><td>工作站</td></tr>
+                        <tr><td><strong>Edge</strong></td><td>節點間的連線</td><td>輸送帶</td></tr>
+                        <tr><td><strong>Conditional Edge</strong></td><td>條件分支</td><td>分岔路口</td></tr>
+                    </tbody>
+                </table>
+                <p class="note-desc"><strong>安裝：</strong></p>
+                <pre><code>pip install langgraph langchain-google-genai python-dotenv</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> Hello World：計數器</h4>
+                    <span class="status-badge info">範例</span>
+                </div>
+                <pre><code>from langgraph.graph import StateGraph, START, END
+from typing import TypedDict
+
+# 1. 定義 State
+class CounterState(TypedDict):
+    count: int
+
+# 2. 定義 Node（接 State → 回傳要更新的欄位）
+def increment(state: CounterState) -> CounterState:
+    return {"count": state["count"] + 1}
+
+# 3. 建立 Graph
+graph = StateGraph(CounterState)
+graph.add_node("increment", increment)
+graph.add_edge(START, "increment")
+graph.add_edge("increment", END)
+
+# 4. 編譯 + 執行
+app = graph.compile()
+result = app.invoke({"count": 0})
+print(result)  # {"count": 1}</code></pre>
+                <ul class="note-points">
+                    <li><strong>Node 不用回傳整個 State：</strong>只回傳要更新的欄位</li>
+                    <li><strong>State 是共用白板：</strong>所有 Node 讀寫同一份，不是 Node 之間直接傳值</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-list-check"></i> Annotated 累加語法</h4>
+                    <span class="status-badge important">技巧</span>
+                </div>
+                <p class="note-desc">普通欄位會<strong>覆蓋</strong>，<code>Annotated[list, add]</code> 會<strong>累加</strong>：</p>
+                <pre><code>from typing import Annotated
+from operator import add
+
+class SafetyState(TypedDict):
+    raw_event: str
+    event_type: Optional[str]
+    severity: Optional[str]
+    messages: Annotated[list, add]   # ← 累加
+    status: str</code></pre>
+                <ul class="note-points">
+                    <li><strong>普通欄位：</strong>Node A 寫 "parsed"、Node B 寫 "alerted" → 結果是 "alerted"</li>
+                    <li><strong>Annotated 累加：</strong>A 寫 ["分析完成"]、B 寫 ["告警發送"] → ["分析完成", "告警發送"]</li>
+                    <li><strong>實用場景：</strong>記錄完整處理歷程</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-layer-group"></i> 三種 Node</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <table class="concept-table">
+                    <thead><tr><th>Node 類型</th><th>做什麼</th><th>場景</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>邏輯 Node</strong></td><td>純 Python 計算/判斷</td><td>if-else、格式轉換</td></tr>
+                        <tr><td><strong>LLM Node</strong></td><td>呼叫 AI 模型</td><td>語意理解、文字生成</td></tr>
+                        <tr><td><strong>Tool Node</strong></td><td>存取外部系統</td><td>查 DB、呼叫 API</td></tr>
+                    </tbody>
+                </table>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 關鍵：</strong>每個 Node 只做一件事，透過 State 共用白板串起來。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: 條件分支 -->
+        <h3 class="section-title"><i class="fa-solid fa-code-branch"></i> 條件分支：根據狀態選路線</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-route"></i> 路由函式（Router）</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">路由函式讀 State 決定走哪條路，回傳值用 <code>Literal</code> 限定可能路線：</p>
+                <pre><code>from typing import Literal
+
+def route_by_severity(state) -> Literal["high_handler", "low_handler"]:
+    if state["severity"] == "高":
+        return "high_handler"
+    return "low_handler"</code></pre>
+                <ul class="note-points">
+                    <li><strong>只讀 State：</strong>路由函式不修改 State</li>
+                    <li><strong>Literal 型別：</strong>幫 IDE 和 LangGraph 知道有哪些可能路線</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrows-split-up-and-left"></i> add_conditional_edges</h4>
+                    <span class="status-badge info">範例</span>
+                </div>
+                <pre><code>graph.add_conditional_edges(
+    "classify",           # 來源節點
+    route_by_severity,    # 路由函式
+    {
+        "high_handler": "high_handler",  # 回傳值 → 節點
+        "low_handler": "low_handler",
+    }
+)
+graph.add_edge("high_handler", END)
+graph.add_edge("low_handler", END)</code></pre>
+                <p class="note-desc"><strong>第三個參數</strong>是對照表：路由函式回傳值 → 實際節點名稱。</p>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-diagram-next"></i> 完整流程示意</h4>
+                    <span class="status-badge info">流程</span>
+                </div>
+                <pre><code>parse → classify → route ─┬─→ high_handler → 通知主管 → END
+                          └─→ low_handler  → 記錄事件 → END
+
+# no_helmet → 高風險 → 通知主管
+# no_vest   → 低風險 → 記錄事件</code></pre>
+                <p class="note-desc"><strong>多條件分支</strong>：可以同時考慮多個因素，例如「高風險 + 重試超過 2 次 → 緊急路線」。</p>
+            </div>
+        </div>
+
+        <!-- Section: 迴圈重試 -->
+        <h3 class="section-title"><i class="fa-solid fa-rotate"></i> 迴圈重試：失敗了再來一次</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrows-rotate"></i> 迴圈 = 條件分支指回自己</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">LangGraph 沒有 for / while。<strong>迴圈就是讓條件分支的一條路指回來源節點</strong>：</p>
+                <pre><code>send_notification ──→ should_retry ──→ send_notification（再來一次）
+                              │
+                              ├──→ finish（成功）
+                              └──→ error（放棄）</code></pre>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-triangle-exclamation"></i> 重要：</strong>一定要有終止條件，否則無限迴圈！
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> 重試實作範例</h4>
+                    <span class="status-badge info">範例</span>
+                </div>
+                <pre><code>class RetryState(TypedDict):
+    task: str
+    retry_count: int
+    success: bool
+    messages: Annotated[list, add]
+
+def should_retry(state) -> Literal["retry","done","give_up"]:
+    if state.get("success"):
+        return "done"
+    if state["retry_count"] >= 3:
+        return "give_up"
+    return "retry"
+
+graph.add_conditional_edges("send", should_retry, {
+    "retry": "send",       # ← 指回自己 = 迴圈
+    "done": "finish",
+    "give_up": "error",
+})</code></pre>
+                <ul class="note-points">
+                    <li><code>"retry": "send"</code> 就是迴圈關鍵</li>
+                    <li><code>retry_count >= 3</code> 是終止條件</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section: Human-in-the-Loop -->
+        <h3 class="section-title"><i class="fa-solid fa-user-check"></i> Human-in-the-Loop：人工審核</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-pause"></i> 為什麼要暫停</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">自動化很好，但有些決策不能全自動——「高風險告警發出去之前，主管要先看過」。</p>
+                <pre><code>parse → classify → 高風險 → [暫停] → 主管核准 → 發告警
+                                          → 主管拒絕 → 結束</code></pre>
+                <ul class="note-points">
+                    <li><strong>Checkpointer：</strong>把當前狀態存起來，之後可恢復</li>
+                    <li><strong>interrupt_before：</strong>指定暫停點</li>
+                    <li><strong>thread_id：</strong>識別「哪一次執行」，像客服工單編號</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> Checkpointer 設定</h4>
+                    <span class="status-badge info">範例</span>
+                </div>
+                <pre><code>from langgraph.checkpoint.memory import MemorySaver
+
+checkpointer = MemorySaver()  # 正式系統用 Redis/PostgreSQL
+
+app = graph.compile(
+    checkpointer=checkpointer,
+    interrupt_before=["send_alert"],  # 在這個 Node 之前暫停
+)</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-play-pause"></i> 暫停 → 審核 → 繼續</h4>
+                    <span class="status-badge info">流程</span>
+                </div>
+                <pre><code>config = {"configurable": {"thread_id": "violation-001"}}
+
+# Step 1：執行到暫停點
+result = app.invoke(
+    {"raw_event": "no_helmet", "status": "pending", "messages": []},
+    config=config,
+)
+# → 跑了 parse → classify → [暫停]
+print(f"暫停於：{result['status']}")
+
+# Step 2：人工審核（更新 State）
+app.update_state(config, {
+    "status": "approved",
+    "messages": ["主管已核准"],
+})
+
+# Step 3：繼續執行（傳 None = 從暫停處繼續）
+result = app.invoke(None, config=config)
+# → 繼續跑 send_alert → END</code></pre>
+                <ul class="note-points">
+                    <li><code>app.invoke(None, config)</code> — 傳 None 代表從暫停處繼續</li>
+                    <li><code>app.update_state(config, {...})</code> — 人工修改 State</li>
+                    <li><strong>不同事件用不同 thread_id：</strong>互不干擾</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 五大概念串起來：</strong>State（共用白板）→ Node（工作站）→ Edge（路線）→ Conditional Edge（分岔/迴圈）→ Checkpointer（暫停/恢復）。Multi-Agent 跟 MCP 都是建在這五個概念之上。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: MCP 入門 -->
+        <h3 class="section-title"><i class="fa-solid fa-plug"></i> MCP 入門 — Model Context Protocol</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-circle-info"></i> MCP 是什麼</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">MCP 是一個<strong>標準協議</strong>，讓你寫的工具可以被任何 AI 助手呼叫。就像 USB 是「讓任何裝置都能插上任何電腦」的標準，MCP 是「讓任何工具都能被任何 LLM 使用」的標準。</p>
+                <ul class="note-points">
+                    <li><strong>USB 類比：</strong>鍵盤 / 滑鼠 / 隨身碟 ─ USB 協議 ─ 任何電腦</li>
+                    <li><strong>MCP 對應：</strong>你寫的工具 ─ MCP 協議 ─ 任何 AI 助手（Claude / OpenAI / Gemini）</li>
+                    <li><strong>核心價值：</strong>工具寫一次，到處都能用</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 解決的痛點：</strong>過去每個 LLM 框架有自己的 tool 接法（OpenAI Function Calling、LangChain @tool、Gemini Function Declarations），同一個功能要寫三次。MCP 統一介面後寫一次就好。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-users"></i> 兩個角色</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">MCP 架構非常簡單，只有兩端：</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>角色</th><th>誰</th><th>做什麼</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Server</strong></td><td>你寫的程式</td><td>提供工具（tool）給別人用</td></tr>
+                        <tr><td><strong>Client</strong></td><td>AI 助手 / 測試程式</td><td>連上 Server，呼叫工具</td></tr>
+                    </tbody>
+                </table>
+                <p class="note-desc"><strong>安裝：</strong></p>
+                <pre><code>pip install mcp
+python -c "import mcp; print(mcp.__version__)"</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-server"></i> 最簡單的 Server</h4>
+                    <span class="status-badge info">範例</span>
+                </div>
+                <p class="note-desc"><strong>server.py</strong> — 用 FastMCP 建立 Server，<code>@mcp.tool()</code> 把函式註冊成工具：</p>
+                <pre><code>from mcp.server.fastmcp import FastMCP
+
+mcp = FastMCP("自我介紹")
+
+@mcp.tool()
+def get_name() -> str:
+    """回傳我的名字。"""
+    return "小明"
+
+@mcp.tool()
+def get_age() -> str:
+    """回傳我的年齡。"""
+    return "25 歲"
+
+if __name__ == "__main__":
+    mcp.run()  # stdio 模式</code></pre>
+                <ul class="note-points">
+                    <li><strong>docstring 很重要：</strong>LLM 靠這段文字決定何時呼叫 tool</li>
+                    <li><strong>stdio 模式：</strong>透過 stdin/stdout 跟 Client 溝通，直接跑會看到空白（在等 Client 連線）</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-plug-circle-bolt"></i> Client 呼叫流程</h4>
+                    <span class="status-badge info">範例</span>
+                </div>
+                <p class="note-desc"><strong>client.py</strong> — Client 會自動啟動 Server 子程序，不用自己跑 <code>python server.py</code>：</p>
+                <pre><code>import asyncio
+from mcp import ClientSession, StdioServerParameters
+from mcp.client.stdio import stdio_client
+
+async def main():
+    server_params = StdioServerParameters(command="python", args=["server.py"])
+    async with stdio_client(server_params) as (read, write):
+        async with ClientSession(read, write) as session:
+            await session.initialize()                # 握手
+            tools = await session.list_tools()        # 列出可用工具
+            result = await session.call_tool("get_name", arguments={})
+            print(result.content[0].text)
+
+asyncio.run(main())</code></pre>
+                <ul class="note-points">
+                    <li><strong>stdio_client：</strong>啟動 Server 子程序、接管 stdin/stdout，回傳 read/write 管道</li>
+                    <li><strong>ClientSession：</strong>「翻譯員」，把請求轉成 MCP 協議格式（JSON-RPC）</li>
+                    <li><strong>離開 async with：</strong>自動斷線、關閉 Server 子程序</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section: MCP 概念與架構 -->
+        <h3 class="section-title"><i class="fa-solid fa-sitemap"></i> MCP 概念與架構</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-layer-group"></i> 三層角色</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">完整 MCP 架構有三層，一個 Host 可以連多個 Server：</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>角色</th><th>是誰</th><th>做什麼</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Host</strong></td><td>Claude Desktop / Cursor / 你的 LangGraph App</td><td>使用者面對的應用，內建 MCP Client</td></tr>
+                        <tr><td><strong>Client</strong></td><td>Host 內部模組</td><td>負責跟 Server 建立連線、傳送請求</td></tr>
+                        <tr><td><strong>Server</strong></td><td>你寫的 Python 程式</td><td>暴露 tools / resources / prompts</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code-compare"></i> MCP vs Function Calling</h4>
+                    <span class="status-badge important">比較</span>
+                </div>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>項目</th><th>Function Calling</th><th>MCP</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>綁定對象</strong></td><td>特定模型 API</td><td>任何支援 MCP 的 Host</td></tr>
+                        <tr><td><strong>定義方式</strong></td><td>每次 API call 帶 Schema</td><td>Server 啟動時註冊</td></tr>
+                        <tr><td><strong>運行位置</strong></td><td>你的 app 內</td><td>獨立 process</td></tr>
+                        <tr><td><strong>可重用性</strong></td><td>換框架要重寫</td><td>寫一次到處用</td></tr>
+                    </tbody>
+                </table>
+                <p class="note-desc"><strong>類比：</strong>Function Calling 是「每家餐廳自己的菜單格式」，MCP 是「全國統一的菜單標準」。</p>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-toolbox"></i> Server 提供的三種能力</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>能力</th><th>說明</th><th>類比</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Tools</strong></td><td>可被 LLM 呼叫的函式</td><td>像 Function Calling 的 function</td></tr>
+                        <tr><td><strong>Resources</strong></td><td>可被讀取的資料</td><td>像檔案系統，LLM 可以「打開」來看</td></tr>
+                        <tr><td><strong>Prompts</strong></td><td>預定義的 prompt 模板</td><td>像快捷鍵，選了就送出固定 prompt</td></tr>
+                    </tbody>
+                </table>
+                <ul class="note-points">
+                    <li><strong>傳輸方式 1 — stdio：</strong>Host 直接啟動 Server process，本地開發 / Claude Desktop 適用</li>
+                    <li><strong>傳輸方式 2 — SSE：</strong>Server 跑在某 URL，Client 透過 HTTP 連線，遠端部署 / 多人共用</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section: MCP + LLM 混合 -->
+        <h3 class="section-title"><i class="fa-solid fa-shuffle"></i> MCP + LLM 混合：一個 Server 多種 AI</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrow-right-arrow-left"></i> 三步驟流程</h4>
+                    <span class="status-badge important">流程</span>
+                </div>
+                <p class="note-desc">把 MCP Server 接上 LLM，讓 LLM 自己決定該呼叫哪個 tool：</p>
+                <ul class="note-points">
+                    <li><strong>Step 1：</strong>從 MCP Server 拿 tool 定義 → 轉成 LLM 看得懂的格式</li>
+                    <li><strong>Step 2：</strong>把 tool 定義 + 使用者問題 丟給 LLM</li>
+                    <li><strong>Step 3：</strong>LLM 決定呼叫哪個 tool → 透過 MCP 執行 → 拿回結果</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 關鍵：</strong>每個 LLM 的 tool 格式不同，但 MCP 給你的 tool 定義是統一的。只需要做一次「格式轉換」。Server 完全不用改，換 LLM 只改 Client。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-table"></i> 格式對照表</h4>
+                    <span class="status-badge info">參考</span>
+                </div>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>MCP 定義</th><th>OpenAI</th><th>Gemini</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>tool.name</td><td>function.name</td><td>FunctionDeclaration.name</td></tr>
+                        <tr><td>tool.description</td><td>function.description</td><td>.description</td></tr>
+                        <tr><td>tool.inputSchema</td><td>function.parameters</td><td>.parameters</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-brands fa-openai"></i> OpenAI 接 MCP</h4>
+                    <span class="status-badge info">範例</span>
+                </div>
+                <pre><code># Step 1: 轉格式
+mcp_tools = await session.list_tools()
+openai_tools = [{
+    "type": "function",
+    "function": {
+        "name": t.name,
+        "description": t.description,
+        "parameters": t.inputSchema,
+    },
+} for t in mcp_tools.tools]
+
+# Step 2: 丟給 OpenAI
+response = openai_client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=messages,
+    tools=openai_tools,
+)
+
+# Step 3: 執行 LLM 決定的 tool call
+for tc in response.choices[0].message.tool_calls:
+    result = await session.call_tool(
+        tc.function.name,
+        arguments=json.loads(tc.function.arguments),
+    )</code></pre>
+            </div>
+        </div>
+
+        <!-- Section: MCP 實作整合 -->
+        <h3 class="section-title"><i class="fa-solid fa-screwdriver-wrench"></i> MCP 實作：從 Mock 到真實連接</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrow-up-right-from-square"></i> 從 Mock 到真實的三步驟</h4>
+                    <span class="status-badge important">流程</span>
+                </div>
+                <ul class="note-points">
+                    <li><strong>Step 1 — Mock：</strong>寫死在程式碼裡的字典（之前 LangGraph Tool Node 的做法）</li>
+                    <li><strong>Step 2 — 讀取外部資料源：</strong>MCP Server 讀 JSON / API / 資料庫，資料更新不用改程式</li>
+                    <li><strong>Step 3 — 接上 LangGraph：</strong>用 MCPToolClient 包裝，當作 Node 呼叫</li>
+                </ul>
+                <p class="note-desc"><strong>整合架構：</strong></p>
+                <pre><code>┌─────────────┐  MCP   ┌────────────┐    ┌──────────────┐
+│ LangGraph   │◄──────►│ MCP Server │◄──►│ regulations  │
+│ 工安系統    │        │ 法規查詢   │    │   .json      │
+└─────────────┘        └────────────┘    └──────────────┘
+                            ▲
+                            │ MCP (stdio)
+                       ┌────┴─────┐
+                       │ 法務部門 │
+                       │ Claude   │
+                       └──────────┘</code></pre>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 核心價值：</strong>一個 Server，多個 Client，同一份資料。JSON 更新後，所有 Client 自動拿到最新資料。
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> LangGraph + MCP 整合範例</h4>
+                    <span class="status-badge info">範例</span>
+                </div>
+                <p class="note-desc"><strong>MCPToolClient 包裝</strong>，讓 Node 可以非同步呼叫 MCP Server：</p>
+                <pre><code>class MCPToolClient:
+    def __init__(self, command, args):
+        self.server_params = StdioServerParameters(command=command, args=args)
+
+    async def call_tool(self, tool_name, arguments):
+        async with stdio_client(self.server_params) as (read, write):
+            async with ClientSession(read, write) as session:
+                await session.initialize()
+                result = await session.call_tool(tool_name, arguments=arguments)
+                return result.content[0].text
+
+# 在 Node 內呼叫
+async def lookup_regulation(state: SafetyState) -> dict:
+    result = await regulation_client.call_tool(
+        "search_regulation",
+        {"category": state["category"]},
+    )
+    return {"regulation": result, "messages": [f"📋 法規查詢完成"]}
+
+# 因為 Node 是 async，要用 ainvoke 而非 invoke
+result = await app.ainvoke({"category": "高處墜落", "messages": []})</code></pre>
+                <ul class="note-points">
+                    <li><strong>ainvoke vs invoke：</strong>有 async Node 必須用 ainvoke</li>
+                    <li><strong>State 共享：</strong>MCP 查詢結果寫回 state，下游 Node 可讀取</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section: Multi-Agent Supervisor -->
+        <h3 class="section-title"><i class="fa-solid fa-users-gear"></i> LangGraph Multi-Agent：Supervisor 模式</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-people-group"></i> 三種 Multi-Agent 模式</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>模式</th><th>適合場景</th><th>複雜度</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Supervisor</strong></td><td>任務可明確拆分、需統一決策</td><td>⭐⭐</td></tr>
+                        <tr><td><strong>Swarm</strong></td><td>Agent 互相討論、邊界模糊</td><td>⭐⭐⭐</td></tr>
+                        <tr><td><strong>Hierarchical</strong></td><td>大型系統、多層管理</td><td>⭐⭐⭐⭐</td></tr>
+                    </tbody>
+                </table>
+                <ul class="note-points">
+                    <li><strong>單一 Agent 痛點：</strong>prompt 越塞越多、context window 爆掉、出錯整個壞</li>
+                    <li><strong>Multi-Agent 優勢：</strong>專家做專家的事、各自管理 context、可並行</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-user-tie"></i> Supervisor 的職責</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">Supervisor 是一個特殊 Node，負責：</p>
+                <ul class="note-points">
+                    <li><strong>看 State：</strong>現在的任務是什麼？</li>
+                    <li><strong>選 Agent：</strong>誰最適合處理？</li>
+                    <li><strong>收結果：</strong>Agent 做完，結果寫回 State</li>
+                    <li><strong>判斷：</strong>還有事要做嗎？做完就 END</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 重點：</strong>Multi-Agent 不是新框架，就是把 LangGraph 的 State / Node / Conditional Edge 組合起來——每個 Agent 是一個 Node，Supervisor 是路由 Node。
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> Supervisor 架構範例</h4>
+                    <span class="status-badge info">範例</span>
+                </div>
+                <p class="note-desc"><strong>State 設計</strong>：每個 Agent 寫自己的欄位，避免互相覆蓋；Supervisor 透過 next_agent 控制流程。</p>
+                <pre><code>class SupervisorState(TypedDict):
+    event: dict
+    regulation_result: str        # 法規 Agent 寫
+    report_result: str            # 報告 Agent 寫
+    notification_result: str      # 通知 Agent 寫
+    next_agent: str               # Supervisor 決策
+    completed_agents: list[str]
+    messages: Annotated[list, add_messages]
+
+def supervisor_decide(state) -> dict:
+    completed = state.get("completed_agents", [])
+    if "regulation" not in completed:    next_agent = "regulation"
+    elif "report" not in completed:      next_agent = "report"
+    elif "notification" not in completed: next_agent = "notification"
+    else:                                 next_agent = "done"
+    return {"next_agent": next_agent}
+
+# 建構 Graph
+graph.add_node("supervisor", supervisor_decide)
+graph.add_node("regulation", regulation_agent)
+graph.add_node("report", report_agent)
+graph.add_node("notification", notification_agent)
+graph.add_edge(START, "supervisor")
+graph.add_conditional_edges("supervisor", lambda s: s["next_agent"], {
+    "regulation": "regulation",
+    "report": "report",
+    "notification": "notification",
+    "done": END,
+})
+# 每個 Agent 完成後回到 supervisor
+graph.add_edge("regulation", "supervisor")
+graph.add_edge("report", "supervisor")
+graph.add_edge("notification", "supervisor")</code></pre>
+                <ul class="note-points">
+                    <li><strong>一次 invoke：</strong>Supervisor 自動跑多輪（4 次決策 + 3 次 Agent 執行）</li>
+                    <li><strong>不用手動控制順序：</strong>由 Supervisor 根據 completed_agents 決定下一步</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section: 部署 MCP SSE -->
+        <h3 class="section-title"><i class="fa-solid fa-cloud-arrow-up"></i> 部署：MCP SSE + FastAPI</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-tower-broadcast"></i> stdio vs SSE</h4>
+                    <span class="status-badge important">比較</span>
+                </div>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>項目</th><th>stdio</th><th>SSE</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>連線</strong></td><td>啟動 Server process</td><td>HTTP 連線</td></tr>
+                        <tr><td><strong>位置</strong></td><td>同一台機器</td><td>任何地方</td></tr>
+                        <tr><td><strong>場景</strong></td><td>個人開發</td><td>團隊共用、正式部署</td></tr>
+                        <tr><td><strong>啟動</strong></td><td>command + args</td><td>url</td></tr>
+                    </tbody>
+                </table>
+                <p class="note-desc"><strong>SSE 是什麼：</strong>Server-Sent Events，HTTP 協議讓 Server 持續推送資料給 Client，比 WebSocket 簡單。</p>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-rocket"></i> 一行升級為 SSE</h4>
+                    <span class="status-badge info">範例</span>
+                </div>
+                <p class="note-desc">Server 程式碼幾乎完全不改：</p>
+                <pre><code># 之前
+if __name__ == "__main__":
+    mcp.run()              # stdio
+
+# 現在
+if __name__ == "__main__":
+    mcp.run(transport="sse")  # SSE on :8000</code></pre>
+                <p class="note-desc"><strong>Client 改一行：</strong></p>
+                <pre><code>from mcp.client.sse import sse_client
+
+async with sse_client("http://localhost:8000/sse") as (read, write):
+    async with ClientSession(read, write) as session:
+        ...</code></pre>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 設計哲學：</strong>傳輸層跟工具邏輯分離——Tool 程式碼完全不變，只有 run() 改。
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code-merge"></i> FastAPI 同時提供 MCP SSE + REST</h4>
+                    <span class="status-badge info">實戰</span>
+                </div>
+                <p class="note-desc">不是所有系統都支援 MCP，前端 dashboard 可能只會打 REST。同一個 FastAPI app 兩種介面都提供：</p>
+                <pre><code>from fastapi import FastAPI
+from mcp.server.fastmcp import FastMCP
+
+mcp = FastMCP("工地設備查詢系統")
+
+@mcp.tool()
+def get_equipment_status(equipment_id: str) -> str:
+    """查詢設備狀態。"""
+    ...
+
+app = FastAPI(title="工地設備管理 API")
+
+# REST API（給前端 dashboard）
+@app.get("/api/equipment/{equipment_id}")
+def api_get_equipment(equipment_id: str):
+    return EQUIPMENT_DB.get(equipment_id, {"error": "not found"})
+
+# 掛載 MCP SSE
+app = mcp.streamable_http_app()
+# uvicorn app:app --host 0.0.0.0 --port 8000</code></pre>
+                <p class="note-desc"><strong>同一個 port 提供兩種介面：</strong></p>
+                <ul class="note-points">
+                    <li><code>/sse</code> → MCP SSE endpoint（給 Claude / LangGraph）</li>
+                    <li><code>/api/equipment/{id}</code> → REST API（給前端 / 其他系統）</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section: LangSmith -->
+        <h3 class="section-title"><i class="fa-solid fa-magnifying-glass-chart"></i> LangSmith：除錯與觀測</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-eye"></i> 為什麼需要</h4>
+                    <span class="status-badge important">痛點</span>
+                </div>
+                <p class="note-desc">Multi-Agent / Graph 跑出來的結果不對，但不知道哪一步出問題？print 大法不夠用——Supervisor 跑好幾輪、每輪不同 Agent，根本看不完。</p>
+                <p class="note-desc"><strong>LangSmith</strong> 是 LangChain 團隊的觀測平台，自動記錄 LLM 應用的每一步：</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>功能</th><th>說明</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Trace</td><td>完整執行軌跡（每個 Node 的輸入/輸出）</td></tr>
+                        <tr><td>Latency</td><td>每一步花了多久</td></tr>
+                        <tr><td>Token Usage</td><td>每次 LLM 呼叫用了多少 token</td></tr>
+                        <tr><td>Error Tracking</td><td>哪一步出錯、錯誤訊息</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-key"></i> 零侵入設定</h4>
+                    <span class="status-badge info">設定</span>
+                </div>
+                <p class="note-desc"><strong>Step 1</strong> — 註冊 <a href="https://smith.langchain.com/" target="_blank">smith.langchain.com</a>，免費方案每月 5000 次 trace</p>
+                <p class="note-desc"><strong>Step 2</strong> — 取得 API Key（Settings → API Keys）</p>
+                <p class="note-desc"><strong>Step 3</strong> — 加入 .env：</p>
+                <pre><code>LANGSMITH_API_KEY="ls-your-api-key"
+LANGSMITH_TRACING=true
+LANGSMITH_PROJECT="hello-world"</code></pre>
+                <p class="note-desc"><strong>Step 4</strong> — 不用改程式碼！</p>
+                <pre><code>load_dotenv()
+result = app.invoke({...})
+# 執行過程已自動送到 LangSmith</code></pre>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 設計哲學：</strong>零侵入觀測。LangGraph 內部每次 invoke 自動檢查 LANGSMITH_TRACING 是否為 true，是就送 trace，不是就跳過。拿掉環境變數就完全不送任何資料。
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid notes-section">
             <div class="card note-card" style="grid-column: 1 / -1;">
                 <div class="note-header">
                     <h4><i class="fa-solid fa-pen-to-square"></i> 整合思考題 + HW</h4>
