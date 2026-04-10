@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI大數據養成班 - 4/10 協作開發與虛擬化技術</title>
+    <title>AI大數據養成班 - 4/10 協作開發與虛擬化技術 I：Docker 基礎</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="dashboard.css">
 </head>
@@ -221,7 +221,7 @@
 
         <div class="top-bar">
             <div class="breadcrumb">
-                首頁 > Week 14: 實務應用 > <span>協作開發與虛擬化技術</span>
+                首頁 > Week 14: 實務應用 > <span>協作開發與虛擬化技術 I：Docker 基礎</span>
             </div>
             <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
                 <i class="fas fa-home"></i> 回首頁
@@ -230,20 +230,540 @@
 
         <div class="banner">
             <div>
-                <h1>協作開發與虛擬化技術</h1>
-                <p>4/10 課程筆記</p>
+                <h1>協作開發與虛擬化技術 I：Docker 基礎</h1>
+                <p>Docker 核心概念、Image/Container/Dockerfile、生命週期管理、Docker Hub 分享</p>
             </div>
-            <i class="fa-solid fa-code-branch banner-icon"></i>
+            <i class="fa-solid fa-cube banner-icon"></i>
         </div>
 
-        <h3 class="section-title">課程筆記：協作開發與虛擬化技術</h3>
+        <!-- Section 1: Docker 解決什麼問題 -->
+        <h3 class="section-title"><i class="fa-solid fa-question-circle"></i> Docker 解決什麼問題</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-bug"></i> 情境：「在我電腦可以跑啊」</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">AI 工程師模型訓練好了，FastAPI 也包好了，但同事跑不起來：</p>
+                <ul class="note-points">
+                    <li><strong>CUDA 版本不對：</strong>你用 CUDA 12.1，他裝 11.8</li>
+                    <li><strong>Python 版本衝突：</strong>你用 3.11，他的系統是 3.9</li>
+                    <li><strong>套件衝突：</strong>pip install 成功但 import 失敗（版本不相容）</li>
+                    <li><strong>OS library 缺失：</strong>libGL、libgthread 等系統套件沒裝</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> Docker 核心想法：</strong>不要叫別人裝環境，直接把裝好的環境給他。把程式碼 + 執行環境 + 系統套件全部打包成一個「容器」。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-scale-balanced"></i> Docker vs 虛擬機（VM）</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">Docker 與傳統虛擬機的架構差異：</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>比較項目</th><th>VM（虛擬機）</th><th>Docker（容器）</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>虛擬化層級</strong></td><td>硬體層（Hypervisor）</td><td>OS 層（共用 Kernel）</td></tr>
+                        <tr><td><strong>啟動速度</strong></td><td>分鐘級</td><td>秒級</td></tr>
+                        <tr><td><strong>資源佔用</strong></td><td>GB 級（含完整 OS）</td><td>MB 級（僅應用 + 依賴）</td></tr>
+                        <tr><td><strong>隔離性</strong></td><td>完全隔離</td><td>行程級隔離</td></tr>
+                        <tr><td><strong>可攜性</strong></td><td>需搬整個 VM Image</td><td>輕量 Image，秒推秒拉</td></tr>
+                        <tr><td><strong>典型用途</strong></td><td>需要不同 OS 的環境</td><td>微服務部署 / CI/CD</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrows-rotate"></i> Build &rarr; Ship &rarr; Run</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">Docker 的三階段工作流程：</p>
+                <ul class="note-points">
+                    <li><strong>Build（建構）：</strong>用 Dockerfile 定義環境 &rarr; <code>docker build</code> 產生 Image</li>
+                    <li><strong>Ship（交付）：</strong>把 Image 推上 Docker Hub &rarr; <code>docker push</code></li>
+                    <li><strong>Run（執行）：</strong>任何機器拉下來就能跑 &rarr; <code>docker pull</code> + <code>docker run</code></li>
+                </ul>
+                <p class="note-desc"><strong>Docker 三大價值：</strong></p>
+                <ul class="note-points">
+                    <li><strong>環境一致：</strong>開發、測試、生產環境完全相同</li>
+                    <li><strong>可重現：</strong>Dockerfile 就是環境的版本控制</li>
+                    <li><strong>可交付：</strong>不是交程式碼，是交「能跑的環境」</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 2: Docker 安裝與設定 -->
+        <h3 class="section-title"><i class="fa-solid fa-download"></i> Docker 安裝與設定</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-terminal"></i> 安裝步驟（Ubuntu）</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">在 Ubuntu / Debian 系統上安裝 Docker：</p>
+                <pre><code># 1. 安裝 Docker
+sudo apt update
+sudo apt install docker.io -y
+
+# 2. 啟動 Docker 服務
+sudo systemctl start docker
+
+# 3. 設定開機自動啟動
+sudo systemctl enable docker
+
+# 4. 確認服務狀態
+sudo systemctl status docker
+
+# 5. 確認版本
+docker -v</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-user-shield"></i> 權限設定</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">預設只有 root 能執行 docker 指令，把使用者加入 docker 群組：</p>
+                <pre><code>sudo usermod -aG docker $USER</code></pre>
+                <p class="note-desc">指令逐段解說：</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>部分</th><th>說明</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>sudo</code></td><td>以管理員權限執行</td></tr>
+                        <tr><td><code>usermod</code></td><td>修改使用者帳號設定</td></tr>
+                        <tr><td><code>-aG</code></td><td>-a = append（附加），-G = 指定群組</td></tr>
+                        <tr><td><code>docker</code></td><td>要加入的群組名稱</td></tr>
+                        <tr><td><code>$USER</code></td><td>目前登入的使用者名稱</td></tr>
+                    </tbody>
+                </table>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-circle-info"></i> 注意：</strong>執行後需要<strong>登出再登入</strong>（或 <code>newgrp docker</code>）才會生效。
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop：安裝 Docker 並驗證</h4>
+                    <span class="status-badge info">Workshop</span>
+                </div>
+                <p class="note-desc"><strong>任務：</strong>安裝 Docker 並確認安裝成功。</p>
+                <ul class="note-points">
+                    <li>執行 <code>sudo apt install docker.io -y</code> 安裝</li>
+                    <li>執行 <code>sudo systemctl start docker</code> 啟動服務</li>
+                    <li>執行 <code>docker -v</code> 確認版本號輸出</li>
+                    <li>執行 <code>sudo usermod -aG docker $USER</code> 設定權限</li>
+                    <li>登出再登入，測試 <code>docker ps</code> 不需要 sudo</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 3: Docker Image（使用者視角） -->
+        <h3 class="section-title"><i class="fa-solid fa-box-archive"></i> Docker Image（使用者視角）</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-compact-disc"></i> Image 是什麼</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">Docker Image 是<strong>唯讀的</strong>、包含一切執行所需的檔案系統快照。</p>
+                <ul class="note-points">
+                    <li><strong>唯讀：</strong>Image 一旦建立就不會改變</li>
+                    <li><strong>分層結構：</strong>每一層都是一個檔案系統變更</li>
+                    <li><strong>包含一切：</strong>OS 基底 + 系統套件 + 程式碼 + 依賴</li>
+                </ul>
+                <p class="note-desc"><strong>Image 與 Container 的關係：</strong></p>
+                <ul class="note-points">
+                    <li><strong>Image = 設計圖（Class）：</strong>定義環境的模板</li>
+                    <li><strong>Container = 執行實例（Instance）：</strong>根據 Image 啟動的執行環境</li>
+                    <li>一個 Image 可以啟動<strong>多個 Container</strong></li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-cloud-arrow-down"></i> Image 來源</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">取得 Image 的兩種方式：</p>
+                <ul class="note-points">
+                    <li><strong>Docker Hub（公開倉庫）：</strong>直接拉取官方或社群維護的 Image</li>
+                    <li><strong>自行建立（Dockerfile）：</strong>用 Dockerfile 客製化自己的 Image</li>
+                </ul>
+                <p class="note-desc"><strong>從 Docker Hub 取得 Image 的指令：</strong></p>
+                <pre><code># 搜尋 Image
+docker search python
+
+# 下載 Image
+docker pull python:latest
+
+# 列出本機所有 Image
+docker images
+
+# 用 Image 啟動 Container（互動模式）
+docker run -ti python:latest</code></pre>
+                <p class="note-desc"><code>docker run</code> 旗標說明：</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>旗標</th><th>說明</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>-t</code></td><td>分配一個虛擬終端機（tty），讓輸出格式正常</td></tr>
+                        <tr><td><code>-i</code></td><td>保持 stdin 開啟，允許互動輸入</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop：下載並體驗 Image</h4>
+                    <span class="status-badge info">Workshop</span>
+                </div>
+                <p class="note-desc"><strong>任務：</strong>從 Docker Hub 下載 Python Image 並進入互動模式。</p>
+                <ul class="note-points">
+                    <li>執行 <code>docker pull python:latest</code> 下載 Python Image</li>
+                    <li>執行 <code>docker images</code> 確認 Image 已下載</li>
+                    <li>執行 <code>docker run -ti python:latest</code> 進入 Python 互動模式</li>
+                    <li>在 Python Shell 中輸入 <code>print("Hello Docker!")</code> 測試</li>
+                    <li>輸入 <code>exit()</code> 離開 Container</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 4: Dockerfile（建構者視角） -->
+        <h3 class="section-title"><i class="fa-solid fa-file-code"></i> Dockerfile（建構者視角）</h3>
         <div class="dashboard-grid notes-section">
             <div class="card note-card" style="grid-column: 1 / -1;">
                 <div class="note-header">
-                    <h4><i class="fa-solid fa-code-branch"></i> 筆記待補</h4>
-                    <span class="status-badge pending">待補</span>
+                    <h4><i class="fa-solid fa-scroll"></i> Dockerfile 是什麼</h4>
+                    <span class="status-badge important">觀念</span>
                 </div>
-                <p class="note-desc">課程內容稍後補充。</p>
+                <p class="note-desc">Dockerfile 是一個<strong>純文字檔</strong>，描述如何一步步建構 Image。就像食譜一樣，記錄每一個步驟。</p>
+                <ul class="note-points">
+                    <li>檔名就叫 <code>Dockerfile</code>（沒有副檔名）</li>
+                    <li>每一行指令會產生一個新的<strong>層（Layer）</strong></li>
+                    <li>Docker 會從上到下依序執行每一行</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> FastAPI 最小版本</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc"><strong>main.py</strong> &mdash; FastAPI 應用程式：</p>
+                <pre><code>from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/")
+def read_root():
+    return {"message": "Hello Docker!"}</code></pre>
+                <p class="note-desc"><strong>requirements.txt</strong> &mdash; 依賴清單：</p>
+                <pre><code>fastapi
+uvicorn</code></pre>
+                <p class="note-desc"><strong>Dockerfile</strong> &mdash; 建構指令：</p>
+                <pre><code>FROM python:3.11-slim
+WORKDIR /app
+COPY . .
+RUN pip install -r requirements.txt
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-list-check"></i> Dockerfile 逐行解說</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">每一行指令的作用與執行時機：</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>指令</th><th>說明</th><th>何時執行</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>FROM python:3.11-slim</code></td><td>以 Python 3.11 精簡版為基底</td><td>build 時</td></tr>
+                        <tr><td><code>WORKDIR /app</code></td><td>設定工作目錄（不存在會自動建立）</td><td>build 時</td></tr>
+                        <tr><td><code>COPY . .</code></td><td>把本機檔案複製到 Container 的 /app</td><td>build 時</td></tr>
+                        <tr><td><code>RUN pip install ...</code></td><td>安裝 Python 套件</td><td>build 時</td></tr>
+                        <tr><td><code>CMD ["uvicorn", ...]</code></td><td>Container 啟動時執行的指令</td><td>run 時</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code-compare"></i> RUN vs CMD 差異</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">這是初學者最常混淆的兩個指令：</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>特性</th><th>RUN</th><th>CMD</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>執行時機</strong></td><td>docker build 時（建構階段）</td><td>docker run 時（啟動階段）</td></tr>
+                        <tr><td><strong>執行次數</strong></td><td>可以有多個 RUN</td><td>只有最後一個 CMD 生效</td></tr>
+                        <tr><td><strong>用途</strong></td><td>安裝套件、下載檔案、設定環境</td><td>定義 Container 啟動後要執行的程式</td></tr>
+                        <tr><td><strong>結果</strong></td><td>產生新的 Image Layer</td><td>不產生 Layer，只是記錄啟動指令</td></tr>
+                    </tbody>
+                </table>
+                <p class="note-desc"><strong>執行流程圖示：</strong></p>
+                <pre><code>Dockerfile
+    |
+    v
+[docker build] ──── RUN pip install ... ──── 安裝套件（寫入 Image）
+    |
+    v
+  Image（唯讀快照）
+    |
+    v
+[docker run] ─────── CMD uvicorn ... ─────── 啟動應用程式（Container 內執行）
+    |
+    v
+  Container（執行中）</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-hammer"></i> Build 與執行</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">建構 Image 並啟動 Container：</p>
+                <pre><code># 建構 Image（-t 指定名稱）
+docker build -t my-fastapi .
+
+# 確認 Image 已建立
+docker images
+
+# 啟動 Container（-p 對應 Port）
+docker run -p 8000:8000 my-fastapi</code></pre>
+                <p class="note-desc">瀏覽器打開 <code>http://localhost:8000</code> 即可看到回應。</p>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop：Build FastAPI Image</h4>
+                    <span class="status-badge info">Workshop</span>
+                </div>
+                <p class="note-desc"><strong>任務：</strong>建構 FastAPI Image 並透過瀏覽器存取。</p>
+                <ul class="note-points">
+                    <li>建立專案資料夾，寫好 <code>main.py</code>、<code>requirements.txt</code>、<code>Dockerfile</code></li>
+                    <li>執行 <code>docker build -t my-fastapi .</code> 建構 Image</li>
+                    <li>執行 <code>docker images</code> 確認 Image 存在</li>
+                    <li>執行 <code>docker run -p 8000:8000 my-fastapi</code> 啟動</li>
+                    <li>瀏覽器開啟 <code>http://localhost:8000</code> 確認回應</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 5: Docker Container（生命週期） -->
+        <h3 class="section-title"><i class="fa-solid fa-recycle"></i> Docker Container（生命週期）</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-circle-nodes"></i> Container 生命週期</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">Container 從建立到銷毀的完整流程：</p>
+                <pre><code>create &rarr; start &rarr; running &rarr; stop &rarr; exited
+  |         |         |          |         |
+  |         |         |          |         +-- 已停止，可再 start
+  |         |         |          +-- 發送停止信號
+  |         |         +-- 正常運行中
+  |         +-- 啟動 Container
+  +-- 建立 Container（尚未啟動）</code></pre>
+                <p class="note-desc"><strong>重點：</strong><code>docker run</code> = <code>create</code> + <code>start</code> + <code>run</code>，一條指令完成三步。</p>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-network-wired"></i> 為什麼用 0.0.0.0</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">FastAPI 為什麼要綁 <code>0.0.0.0</code> 而不是 <code>127.0.0.1</code>？</p>
+                <ul class="note-points">
+                    <li><strong>127.0.0.1：</strong>只監聽 Container 內部的 loopback，外面連不進來</li>
+                    <li><strong>0.0.0.0：</strong>監聽所有網路介面，允許外部（Host）透過 Port Mapping 連入</li>
+                </ul>
+                <p class="note-desc"><strong>Port Mapping 流程：</strong></p>
+                <pre><code>Browser &rarr; Host:8000 &rarr; Container:8000 &rarr; FastAPI (0.0.0.0:8000)
+
+docker run -p 8000:8000 my-fastapi
+              |     |
+              |     +-- Container 內部 Port
+              +-- Host 對外 Port</code></pre>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 記憶口訣：</strong><code>-p Host端口:Container端口</code>，左邊是外面，右邊是裡面。
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-terminal"></i> 最小必會指令</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">日常操作 Container 最常用的指令：</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>指令</th><th>說明</th><th>範例</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>docker ps</code></td><td>列出執行中的 Container</td><td><code>docker ps</code></td></tr>
+                        <tr><td><code>docker ps -a</code></td><td>列出所有 Container（含已停止）</td><td><code>docker ps -a</code></td></tr>
+                        <tr><td><code>docker stop</code></td><td>停止指定的 Container</td><td><code>docker stop &lt;container_id&gt;</code></td></tr>
+                        <tr><td><code>docker logs</code></td><td>查看 Container 的輸出日誌</td><td><code>docker logs &lt;container_id&gt;</code></td></tr>
+                        <tr><td><code>docker rm</code></td><td>刪除已停止的 Container</td><td><code>docker rm &lt;container_id&gt;</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop：Container 操作實戰</h4>
+                    <span class="status-badge info">Workshop</span>
+                </div>
+                <p class="note-desc"><strong>任務：</strong>在背景啟動 Container，確認 API 可連線，然後停止並確認消失。</p>
+                <ul class="note-points">
+                    <li>執行 <code>docker run -d -p 8000:8000 my-fastapi</code>（<code>-d</code> = 背景模式）</li>
+                    <li>瀏覽器存取 <code>http://localhost:8000</code> 確認 API 正常</li>
+                    <li>執行 <code>docker ps</code> 查看執行中的 Container</li>
+                    <li>執行 <code>docker stop &lt;container_id&gt;</code> 停止</li>
+                    <li>再次存取 <code>http://localhost:8000</code> &mdash; 確認已無法連線</li>
+                    <li>執行 <code>docker ps -a</code> 查看已停止的 Container</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-book"></i> 附錄：進階指令</h4>
+                    <span class="status-badge pending">附錄</span>
+                </div>
+                <p class="note-desc">進階 Container 操作指令（查表用）：</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>指令</th><th>說明</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>docker exec -ti &lt;id&gt; bash</code></td><td>進入執行中的 Container 開 shell</td></tr>
+                        <tr><td><code>docker inspect &lt;id&gt;</code></td><td>查看 Container 詳細資訊（JSON）</td></tr>
+                        <tr><td><code>docker attach &lt;id&gt;</code></td><td>附加到 Container 的主程序</td></tr>
+                        <tr><td><code>--restart always</code></td><td>Container 停止後自動重啟</td></tr>
+                        <tr><td><code>--network host</code></td><td>Container 直接使用 Host 網路</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section 6: Docker Hub（Image 分享） -->
+        <h3 class="section-title"><i class="fa-solid fa-cloud-arrow-up"></i> Docker Hub（Image 分享）</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-warehouse"></i> Docker Hub 是什麼</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">Docker Hub = 放 Image 的地方，就像 GitHub 放程式碼一樣。</p>
+                <ul class="note-points">
+                    <li><strong>公開倉庫：</strong>任何人都可以拉取（如 python, nginx, ubuntu）</li>
+                    <li><strong>私有倉庫：</strong>免費帳號可建立 1 個私有 Repository</li>
+                    <li><strong>官方 Image：</strong>Docker 官方維護的高品質 Image</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-upload"></i> 推送 Image 流程</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">將本機 Image 推送到 Docker Hub 的完整步驟：</p>
+                <pre><code># 1. 註冊 Docker Hub 帳號（hub.docker.com）
+# 2. 在 Docker Hub 新增 Repository
+
+# 3. 本機登入
+docker login
+
+# 4. 為 Image 加上標籤（格式：帳號/Repository:標籤）
+docker tag my-fastapi username/my-fastapi:latest
+
+# 5. 推送到 Docker Hub
+docker push username/my-fastapi:latest
+
+# 6. 在其他機器上拉取
+docker pull username/my-fastapi:latest</code></pre>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 重點：</strong><code>docker tag</code> 不會複製 Image，只是為同一個 Image 多加一個名稱（像 Git 的 tag）。
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop：上傳 Image 至 Docker Hub</h4>
+                    <span class="status-badge info">Workshop</span>
+                </div>
+                <p class="note-desc"><strong>任務：</strong>將剛才建立的 FastAPI Image 推送到 Docker Hub。</p>
+                <ul class="note-points">
+                    <li>前往 <code>hub.docker.com</code> 註冊帳號（如果還沒有）</li>
+                    <li>建立一個新的 Repository（例如 <code>my-fastapi</code>）</li>
+                    <li>本機執行 <code>docker login</code> 輸入帳號密碼</li>
+                    <li>執行 <code>docker tag my-fastapi &lt;你的帳號&gt;/my-fastapi:latest</code></li>
+                    <li>執行 <code>docker push &lt;你的帳號&gt;/my-fastapi:latest</code></li>
+                    <li>到 Docker Hub 網頁確認 Image 已上傳</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 7: Dockerfile 指令速查表（附錄） -->
+        <h3 class="section-title"><i class="fa-solid fa-rectangle-list"></i> Dockerfile 指令速查表（附錄）</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-star"></i> 主線必學指令</h4>
+                    <span class="status-badge important">必學</span>
+                </div>
+                <p class="note-desc">這 5 個指令可以處理 90% 的 Dockerfile 需求：</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>指令</th><th>說明</th><th>範例</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>FROM</code></td><td>指定基底 Image</td><td><code>FROM python:3.11-slim</code></td></tr>
+                        <tr><td><code>WORKDIR</code></td><td>設定工作目錄</td><td><code>WORKDIR /app</code></td></tr>
+                        <tr><td><code>COPY</code></td><td>複製本機檔案到 Image</td><td><code>COPY . .</code></td></tr>
+                        <tr><td><code>RUN</code></td><td>build 時執行指令</td><td><code>RUN pip install -r requirements.txt</code></td></tr>
+                        <tr><td><code>CMD</code></td><td>Container 啟動時的預設指令</td><td><code>CMD ["uvicorn", "main:app"]</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-book-bookmark"></i> 進階查表指令</h4>
+                    <span class="status-badge pending">附錄</span>
+                </div>
+                <p class="note-desc">用到時再查即可，不需要背：</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>指令</th><th>說明</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>ADD</code></td><td>類似 COPY，但可解壓 tar 檔 / 下載 URL</td></tr>
+                        <tr><td><code>ENV</code></td><td>設定環境變數，如 <code>ENV PORT=8000</code></td></tr>
+                        <tr><td><code>EXPOSE</code></td><td>宣告 Container 監聽的 Port（文件用途）</td></tr>
+                        <tr><td><code>LABEL</code></td><td>為 Image 加上中繼資料標籤</td></tr>
+                        <tr><td><code>USER</code></td><td>切換執行身份（避免用 root）</td></tr>
+                        <tr><td><code>VOLUME</code></td><td>宣告掛載點，資料持久化</td></tr>
+                        <tr><td><code>ONBUILD</code></td><td>延遲執行：當此 Image 被當作 base 時才觸發</td></tr>
+                    </tbody>
+                </table>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-circle-info"></i> 建議：</strong>先掌握主線 5 個指令（FROM / WORKDIR / COPY / RUN / CMD），能 build 出可用的 Image 後，再依需求學進階指令。
+                </div>
             </div>
         </div>
 

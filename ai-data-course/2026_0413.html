@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI大數據養成班 - 4/13 協作開發與虛擬化技術</title>
+    <title>AI大數據養成班 - 4/13 協作開發與虛擬化技術 II：Docker Compose 與 Kubernetes</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="dashboard.css">
 </head>
@@ -221,7 +221,7 @@
 
         <div class="top-bar">
             <div class="breadcrumb">
-                首頁 > Week 15: DevOps 與 Linux > <span>協作開發與虛擬化技術</span>
+                首頁 > Week 15: DevOps 與 Linux > <span>協作開發與虛擬化技術 II</span>
             </div>
             <a href="https://ruinuo217.github.io/Portfolio/" class="btn-nav" style="text-decoration: none;">
                 <i class="fas fa-home"></i> 回首頁
@@ -230,20 +230,918 @@
 
         <div class="banner">
             <div>
-                <h1>協作開發與虛擬化技術</h1>
-                <p>4/13 課程筆記</p>
+                <h1>協作開發與虛擬化技術 II：Docker Compose 與 Kubernetes</h1>
+                <p>Docker Compose 多容器編排、Docker/Compose/K8S 三層關係、Kubernetes 核心概念與實作（Pod / Deployment / Service / HPA）</p>
             </div>
-            <i class="fa-solid fa-code-branch banner-icon"></i>
+            <i class="fa-solid fa-cubes banner-icon"></i>
         </div>
 
-        <h3 class="section-title">課程筆記：協作開發與虛擬化技術</h3>
+        <!-- Section 1: Docker Compose -->
+        <h3 class="section-title"><i class="fa-solid fa-layer-group"></i> Docker Compose — 一次啟動整個系統</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-diagram-project"></i> 為什麼需要 Docker Compose</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc"><strong>情境：</strong>真實系統不只一個 Container。一個 AI 專案可能包含：</p>
+                <ul class="note-points">
+                    <li><strong>FastAPI：</strong>API 伺服器</li>
+                    <li><strong>PostgreSQL：</strong>關聯式資料庫</li>
+                    <li><strong>ChromaDB / Qdrant：</strong>向量資料庫</li>
+                    <li><strong>Worker：</strong>背景任務處理</li>
+                </ul>
+                <p class="note-desc"><strong>用 docker run 多次的問題：</strong></p>
+                <ul class="note-points">
+                    <li>啟動順序錯 &rarr; API 先跑但 DB 還沒好，直接噴錯</li>
+                    <li>Port 撞 &rarr; 多個 Container 搶同一個 Port</li>
+                    <li>重開後不知道先跑哪個 &rarr; 每次都要記順序、手動輸入一堆指令</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 解法：</strong>Docker Compose — 用一個 YAML 檔定義多個 Container，一個指令全部啟動。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-download"></i> 安裝 Docker Compose</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">Docker Compose V2 以 plugin 形式安裝，指令從 <code>docker-compose</code> 變成 <code>docker compose</code>（空格取代連字號）。</p>
+                <pre><code># 安裝 Docker Compose V2
+sudo apt install docker-compose-v2
+
+# 確認版本
+docker compose version</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-file-code"></i> 第一個 docker-compose.yml（FastAPI only）</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">最簡單的範例——只有一個服務：</p>
+                <pre><code># docker-compose.yml
+services:
+  api:
+    image: my-fastapi-app
+    ports:
+      - "8000:8000"</code></pre>
+                <p class="note-desc">這樣就能用 <code>docker compose up</code> 啟動，不用每次打長長的 <code>docker run -p 8000:8000 my-fastapi-app</code>。</p>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> FastAPI + PostgreSQL 完整範例</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">一個完整的兩服務 Compose 檔案：</p>
+                <pre><code># docker-compose.yml
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://user:pass@db:5432/mydb
+
+  db:
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=mydb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  pgdata:</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-table"></i> docker-compose.yml 參數解說</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>參數</th><th>用途</th><th>範例</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>services</strong></td><td>定義系統中所有服務</td><td>api、db、worker</td></tr>
+                        <tr><td><strong>build</strong></td><td>用 Dockerfile 建 image</td><td><code>build: .</code></td></tr>
+                        <tr><td><strong>image</strong></td><td>直接用現成 image</td><td><code>image: postgres:16</code></td></tr>
+                        <tr><td><strong>ports</strong></td><td>主機 Port : 容器 Port</td><td><code>"8000:8000"</code></td></tr>
+                        <tr><td><strong>depends_on</strong></td><td>啟動順序（先啟動依賴服務）</td><td><code>depends_on: [db]</code></td></tr>
+                        <tr><td><strong>environment</strong></td><td>環境變數</td><td><code>POSTGRES_USER=user</code></td></tr>
+                        <tr><td><strong>volumes</strong></td><td>資料持久化（Container 刪掉資料還在）</td><td><code>pgdata:/var/lib/...</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-circle-question"></i> environment 怎麼知道設什麼</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">每個 image 支援的環境變數都不同，去 <strong>Docker Hub</strong> 查文件。</p>
+                <ul class="note-points">
+                    <li>搜尋 <code>postgres</code> &rarr; 找到 Environment Variables 區塊</li>
+                    <li>常見：<code>POSTGRES_USER</code>、<code>POSTGRES_PASSWORD</code>、<code>POSTGRES_DB</code></li>
+                    <li>MySQL：<code>MYSQL_ROOT_PASSWORD</code>、<code>MYSQL_DATABASE</code></li>
+                    <li>不是自己亂猜，是官方文件寫好的</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-hard-drive"></i> 為什麼要 volumes</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc"><strong>資料持久化</strong>：Container 預設是短暫的，刪掉就沒了。</p>
+                <ul class="note-points">
+                    <li>沒 volume &rarr; <code>docker compose down</code> 後資料庫資料全消失</li>
+                    <li>有 volume &rarr; 資料存在主機上，Container 重建後資料還在</li>
+                    <li>Named Volume（如 <code>pgdata</code>）由 Docker 管理，不用自己指定路徑</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-network-wired"></i> 服務間連線：用服務名稱當 hostname</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">Docker Compose 自動建立一個內部網路，服務之間可以用<strong>服務名稱</strong>互相連線。</p>
+                <ul class="note-points">
+                    <li>API 連 DB &rarr; <code>db:5432</code>（不是 localhost:5432）</li>
+                    <li>API 連 Redis &rarr; <code>redis:6379</code></li>
+                    <li>服務名稱 = docker-compose.yml 裡定義的 key</li>
+                </ul>
+                <pre><code># 在 API 的程式碼裡
+DATABASE_URL = "postgresql://user:pass@db:5432/mydb"
+#                                      ^^
+#                              用服務名稱，不是 IP</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-terminal"></i> Compose 常用指令</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <pre><code># 啟動所有服務（前景模式，看得到 log）
+docker compose up
+
+# 啟動所有服務（背景模式）
+docker compose up -d
+
+# 停止並移除所有服務
+docker compose down
+
+# 查看服務狀態
+docker compose ps
+
+# 查看 log
+docker compose logs -f</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrows-left-right"></i> Compose 與 Docker 指令對照</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>動作</th><th>Docker 指令</th><th>Docker Compose 指令</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>啟動</td><td><code>docker run ...</code>（每個服務各跑一次）</td><td><code>docker compose up</code></td></tr>
+                        <tr><td>停止</td><td><code>docker stop container1 container2</code></td><td><code>docker compose down</code></td></tr>
+                        <tr><td>查看狀態</td><td><code>docker ps</code></td><td><code>docker compose ps</code></td></tr>
+                        <tr><td>查看 log</td><td><code>docker logs container1</code></td><td><code>docker compose logs</code></td></tr>
+                        <tr><td>重新建置</td><td><code>docker build + docker run</code></td><td><code>docker compose up --build</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop：FastAPI + DB 一鍵啟動</h4>
+                    <span class="status-badge info">Workshop</span>
+                </div>
+                <p class="note-desc">建立 <code>docker-compose.yml</code>，用一個指令啟動 FastAPI + PostgreSQL。</p>
+                <ul class="note-points">
+                    <li>建立專案資料夾，準備 Dockerfile 與 docker-compose.yml</li>
+                    <li>執行 <code>docker compose up -d</code></li>
+                    <li>用 <code>curl http://localhost:8000</code> 確認 API 正常</li>
+                    <li>用 <code>docker compose logs -f</code> 觀察兩個服務的 log</li>
+                    <li>用 <code>docker compose down</code> 一鍵停止全部</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 2: 三層關係 -->
+        <h3 class="section-title"><i class="fa-solid fa-sitemap"></i> Docker &rarr; docker-compose &rarr; Kubernetes 三層關係</h3>
         <div class="dashboard-grid notes-section">
             <div class="card note-card" style="grid-column: 1 / -1;">
                 <div class="note-header">
-                    <h4><i class="fa-solid fa-code-branch"></i> 筆記待補</h4>
-                    <span class="status-badge pending">待補</span>
+                    <h4><i class="fa-solid fa-layer-group"></i> 三層架構概觀</h4>
+                    <span class="status-badge important">觀念</span>
                 </div>
-                <p class="note-desc">課程內容稍後補充。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>層級</th><th>工具</th><th>管什麼</th><th>適用場景</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Layer 1</strong></td><td>Docker</td><td>單一服務</td><td>本機開發、模型測試</td></tr>
+                        <tr><td><strong>Layer 2</strong></td><td>docker-compose</td><td>一個系統（多服務）</td><td>專案交付、團隊協作</td></tr>
+                        <tr><td><strong>Layer 3</strong></td><td>Kubernetes</td><td>營運層級</td><td>服務不中斷、自動擴縮、多機器</td></tr>
+                    </tbody>
+                </table>
+                <ul class="note-points">
+                    <li><strong>Docker：</strong>把一個程式包成 Container，在任何機器跑起來</li>
+                    <li><strong>docker-compose：</strong>把多個 Container 組成一個系統，一鍵啟動</li>
+                    <li><strong>Kubernetes：</strong>管理成千上萬個 Container，自動修復、擴縮、排程</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-circle-pause"></i> 為什麼「現在不急著教 K8S」</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc"><strong>沒有規模就沒必要。</strong></p>
+                <ul class="note-points">
+                    <li>你的專案只有 2-3 個服務 &rarr; docker-compose 就夠了</li>
+                    <li>K8S 是為了「一台機器不夠」的時候準備的</li>
+                    <li>先學好 Compose，等遇到瓶頸再上 K8S</li>
+                    <li>但概念要先懂，面試會考</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrows-spin"></i> docker-compose 是 K8S 的「前置語言」</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">docker-compose 的概念可以直接對應到 K8S：</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>docker-compose</th><th>Kubernetes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>services</td><td>Deployment + Service</td></tr>
+                        <tr><td>image</td><td>Pod 裡的 Container image</td></tr>
+                        <tr><td>ports</td><td>Service (NodePort / LoadBalancer)</td></tr>
+                        <tr><td>depends_on</td><td>Init Container / Readiness Probe</td></tr>
+                        <tr><td>volumes</td><td>PersistentVolume (PV) + PVC</td></tr>
+                        <tr><td>environment</td><td>ConfigMap / Secret</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-scale-balanced"></i> 什麼時候需要 K8S</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">判斷準則：</p>
+                <ul class="note-points">
+                    <li>服務掛掉需要<strong>自動重啟</strong> &rarr; 需要 K8S</li>
+                    <li>流量暴增需要<strong>自動擴展</strong> &rarr; 需要 K8S</li>
+                    <li>需要<strong>多台機器</strong>分散負載 &rarr; 需要 K8S</li>
+                    <li>需要<strong>零停機更新</strong>（Rolling Update） &rarr; 需要 K8S</li>
+                    <li>只是本機開發 / 小型專案 &rarr; docker-compose 就夠</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 學習地圖：</strong>Docker（包東西） &rarr; docker-compose（組系統） &rarr; K8S（管營運）。先把前兩層做好，第三層的概念先理解、實作等需要時再深入。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Kubernetes 概念 -->
+        <h3 class="section-title"><i class="fa-solid fa-dharmachakra"></i> Kubernetes 概念</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-cubes"></i> K8S 是什麼</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc"><strong>Kubernetes（K8S）</strong>是容器編排系統，由 CNCF（Cloud Native Computing Foundation）維護。</p>
+                <ul class="note-points">
+                    <li>Google 內部系統 Borg 的開源版</li>
+                    <li>管理大量 Container 的部署、擴縮、修復</li>
+                    <li>K8S = K + 8個字母 + S（Kubernetes 的縮寫）</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-circle-nodes"></i> Pod / Node / Cluster 核心概念</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <ul class="note-points">
+                    <li><strong>Pod：</strong>K8S 最小部署單位，裡面裝一或多個 Container</li>
+                    <li><strong>Node：</strong>一台機器（實體 or 虛擬），上面跑多個 Pod</li>
+                    <li><strong>Cluster：</strong>一群 Node 組成的集群，由 K8S 統一管理</li>
+                </ul>
+                <p class="note-desc">類比：Pod = 員工、Node = 辦公室、Cluster = 整間公司。</p>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrows-left-right"></i> K8S vs Docker vs Docker Compose</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>特性</th><th>Docker</th><th>Docker Compose</th><th>Kubernetes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>管理範圍</strong></td><td>單一 Container</td><td>多個 Container（單機）</td><td>多個 Container（多機）</td></tr>
+                        <tr><td><strong>自動修復</strong></td><td>無</td><td>無</td><td>有（Pod 掛掉自動重建）</td></tr>
+                        <tr><td><strong>自動擴縮</strong></td><td>無</td><td>無</td><td>有（HPA）</td></tr>
+                        <tr><td><strong>負載平衡</strong></td><td>無</td><td>無</td><td>有（Service）</td></tr>
+                        <tr><td><strong>滾動更新</strong></td><td>無</td><td>手動</td><td>自動（Deployment）</td></tr>
+                        <tr><td><strong>適用場景</strong></td><td>開發測試</td><td>小型部署</td><td>正式營運</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-shield-halved"></i> K8S 解決的問題</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <ul class="note-points">
+                    <li><strong>服務掛掉怎辦？</strong> &rarr; K8S 偵測到 Pod 異常，自動重建新的 Pod</li>
+                    <li><strong>機器壞了怎辦？</strong> &rarr; K8S 把 Pod 搬到其他健康的 Node 上</li>
+                    <li><strong>流量暴增怎辦？</strong> &rarr; HPA 自動增加 Pod 數量分散負載</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 核心差異：</strong>Docker = <strong>工具</strong>（你告訴它怎麼跑），K8S = <strong>制度</strong>（你宣告期望狀態，它自己想辦法達成）。這就是「宣告式」(Declarative) vs「命令式」(Imperative) 的差別。
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: K8S 環境建置 -->
+        <h3 class="section-title"><i class="fa-solid fa-gear"></i> K8S 環境建置</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-terminal"></i> kubectl 是什麼</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc"><code>kubectl</code> 是跟 K8S 溝通的<strong>唯一窗口</strong>（CLI 工具）。</p>
+                <ul class="note-points">
+                    <li>所有操作都透過 kubectl 下指令</li>
+                    <li>kubectl 會把指令送給 K8S 的 API Server</li>
+                    <li>類似 Docker 的 <code>docker</code> 指令</li>
+                </ul>
+                <pre><code># 安裝 kubectl
+sudo snap install kubectl --classic
+
+# 確認安裝
+kubectl version --client</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-laptop-code"></i> Minikube：本機 K8S 練習環境</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">Minikube 在本機建立一個單節點的 K8S Cluster，用來學習和測試。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>類型</th><th>工具</th><th>用途</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>學習環境</strong></td><td>Minikube / kind</td><td>本機練習、開發測試</td></tr>
+                        <tr><td><strong>正式環境</strong></td><td>EKS (AWS) / GKE (GCP) / AKS (Azure)</td><td>正式營運、自動擴縮</td></tr>
+                    </tbody>
+                </table>
+                <pre><code># 安裝 Minikube
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+# 啟動 Minikube
+minikube start
+
+# 確認 Cluster 資訊
+kubectl cluster-info
+
+# 查看 Node
+kubectl get nodes</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop：安裝並確認 Cluster</h4>
+                    <span class="status-badge info">Workshop</span>
+                </div>
+                <ul class="note-points">
+                    <li>安裝 kubectl 與 Minikube</li>
+                    <li>執行 <code>minikube start</code></li>
+                    <li>執行 <code>kubectl cluster-info</code> 確認 Cluster 正在運行</li>
+                    <li>執行 <code>kubectl get nodes</code> 確認有一個 Node，狀態為 Ready</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 5: Pod -->
+        <h3 class="section-title"><i class="fa-solid fa-box"></i> Pod</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-box-open"></i> Pod 是什麼</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">K8S <strong>不直接管 Container</strong>，管的是 <strong>Pod</strong>。</p>
+                <ul class="note-points">
+                    <li><strong>Pod = K8S 最小部署單位</strong>，裡面裝一或多個 Container</li>
+                    <li>為什麼不直接用 Container？因為有時多個 Container 需要<strong>共享網路和儲存空間</strong>（容器群組概念）</li>
+                    <li>大多數情況：一個 Pod 裝一個 Container</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-skull-crossbones"></i> Pod 是短命的</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc"><strong>Pod 掛掉是正常的。</strong>K8S 的設計哲學就是假設 Pod 隨時會掛。</p>
+                <ul class="note-points">
+                    <li>Pod 掛掉不會自動重啟（除非有 Deployment 管它）</li>
+                    <li>Pod 可以換 Node——今天在 Node A，明天可能在 Node B</li>
+                    <li>Pod 每次重建都是<strong>全新的</strong>（新 IP、新狀態）</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 重點：</strong>不要把 Pod 當寵物（小心呵護），要把它當牛（壞了就換一頭新的）。
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-terminal"></i> Pod 操作指令</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <pre><code># 建立一個 Pod（用 nginx image）
+kubectl run my-nginx --image=nginx
+
+# 查看所有 Pod
+kubectl get pods
+
+# 查看 Pod 詳細資訊
+kubectl describe pod my-nginx
+
+# 刪除 Pod
+kubectl delete pod my-nginx
+
+# 再次查看——Pod 消失了，沒人救它
+kubectl get pods</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop：建立 Pod &rarr; 刪掉 &rarr; 確認沒人救</h4>
+                    <span class="status-badge info">Workshop</span>
+                </div>
+                <ul class="note-points">
+                    <li>用 <code>kubectl run</code> 建立一個 nginx Pod</li>
+                    <li>用 <code>kubectl get pods</code> 確認 Pod 正在運行</li>
+                    <li>用 <code>kubectl delete pod</code> 刪掉它</li>
+                    <li>再用 <code>kubectl get pods</code> 確認——Pod 消失了，沒有人自動補回來</li>
+                    <li>結論：<strong>裸 Pod 沒有自我修復能力</strong>，需要 Deployment</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 6: Deployment -->
+        <h3 class="section-title"><i class="fa-solid fa-rocket"></i> Deployment</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-shield-halved"></i> Deployment 是什麼</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc"><strong>Deployment 負責確保指定數量的 Pod 持續存在。</strong></p>
+                <ul class="note-points">
+                    <li>你告訴 Deployment：「我要 3 個 nginx Pod」</li>
+                    <li>Deployment 保證永遠有 3 個 Pod 在跑</li>
+                    <li>Pod 掛掉 &rarr; Deployment 自動建新的補上</li>
+                    <li>這就是 K8S 的<strong>自我修復（Self-Healing）</strong></li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-file-code"></i> Deployment YAML 範例</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <pre><code># deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-api
+  template:
+    metadata:
+      labels:
+        app: my-api
+    spec:
+      containers:
+      - name: api
+        image: nginx
+        ports:
+        - containerPort: 80</code></pre>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>參數</th><th>用途</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>apiVersion</strong></td><td>API 版本（Deployment 用 apps/v1）</td></tr>
+                        <tr><td><strong>kind</strong></td><td>資源類型（Deployment）</td></tr>
+                        <tr><td><strong>metadata.name</strong></td><td>Deployment 名稱</td></tr>
+                        <tr><td><strong>spec.replicas</strong></td><td>要維持幾個 Pod</td></tr>
+                        <tr><td><strong>selector.matchLabels</strong></td><td>用 label 找到對應的 Pod</td></tr>
+                        <tr><td><strong>template</strong></td><td>Pod 的模板（要長什麼樣）</td></tr>
+                        <tr><td><strong>containers</strong></td><td>Pod 裡的 Container 定義</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-terminal"></i> Deployment 操作指令</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <pre><code># 套用 YAML 建立 Deployment
+kubectl apply -f deployment.yaml
+
+# 查看 Deployment
+kubectl get deployments
+
+# 查看 Pod（會看到 2 個 Pod）
+kubectl get pods
+
+# 刪掉一個 Pod → 觀察自動補新的
+kubectl delete pod my-api-xxxxx
+kubectl get pods  # 會看到一個新 Pod 自動產生
+
+# Scale：修改 replicas 為 3
+# 1. 編輯 deployment.yaml，把 replicas 改成 3
+# 2. 重新套用
+kubectl apply -f deployment.yaml
+kubectl get pods  # 現在有 3 個 Pod</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop A：自我修復</h4>
+                    <span class="status-badge info">Workshop</span>
+                </div>
+                <ul class="note-points">
+                    <li>建立 Deployment（replicas: 2）</li>
+                    <li>用 <code>kubectl get pods</code> 確認 2 個 Pod</li>
+                    <li>手動刪掉一個 Pod</li>
+                    <li>再查看 &rarr; Deployment 自動補了一個新的</li>
+                    <li>結論：Deployment 確保 Pod 數量永遠符合預期</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop B：1 份 &rarr; 2 份</h4>
+                    <span class="status-badge info">Workshop</span>
+                </div>
+                <ul class="note-points">
+                    <li>修改 YAML 的 replicas: 1 &rarr; 2</li>
+                    <li>執行 <code>kubectl apply -f deployment.yaml</code></li>
+                    <li>用 <code>kubectl get pods</code> 確認變成 2 個 Pod</li>
+                    <li>結論：Scale 就是改 replicas 數字再 apply</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 7: Service -->
+        <h3 class="section-title"><i class="fa-solid fa-globe"></i> Service</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-question"></i> 為什麼需要 Service</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc"><strong>Pod 每次重建 IP 會變</strong>，使用者連哪個？</p>
+                <ul class="note-points">
+                    <li>Pod A 掛了 &rarr; Deployment 建了 Pod B &rarr; IP 不一樣了</li>
+                    <li>如果使用者直接連 Pod IP，每次 Pod 重建都要改設定</li>
+                    <li><strong>Service 提供穩定的連線入口</strong>，不管後面的 Pod 怎麼換，IP 都不變</li>
+                    <li>Service 靠 <strong>label selector</strong> 找到對應的 Pod</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-file-code"></i> Service YAML（NodePort）</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <pre><code># service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-api-service
+spec:
+  type: NodePort
+  selector:
+    app: my-api        # 找 label 為 app=my-api 的 Pod
+  ports:
+  - port: 80           # Service 的 Port
+    targetPort: 80     # Pod 的 Port
+    nodePort: 30080    # 對外暴露的 Port（30000-32767）</code></pre>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>參數</th><th>用途</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>type: NodePort</strong></td><td>讓外部可以透過 Node IP + Port 連進來</td></tr>
+                        <tr><td><strong>selector</strong></td><td>用 label 找到要轉發流量的 Pod</td></tr>
+                        <tr><td><strong>port</strong></td><td>Service 本身的 Port</td></tr>
+                        <tr><td><strong>targetPort</strong></td><td>Container 內部的 Port</td></tr>
+                        <tr><td><strong>nodePort</strong></td><td>外部存取的 Port（範圍 30000-32767）</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-terminal"></i> Service 操作與測試</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <pre><code># 建立 Service
+kubectl apply -f service.yaml
+
+# 查看 Service
+kubectl get svc
+
+# 查看 Service 對應的 Pod（Endpoints）
+kubectl get endpoints
+
+# 取得 Minikube IP
+minikube ip
+
+# 用 curl 測試（Minikube IP + NodePort）
+curl http://$(minikube ip):30080
+
+# 刪掉一個 Pod → 服務不中斷
+kubectl delete pod my-api-xxxxx
+curl http://$(minikube ip):30080   # 還是能連！</code></pre>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 重點：</strong>刪 Pod 服務不中斷！Service 會自動把流量導到其他存活的 Pod，Deployment 同時補新的 Pod 上來。
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop：建立 Service &rarr; curl 測試 &rarr; 刪 Pod 再 curl</h4>
+                    <span class="status-badge info">Workshop</span>
+                </div>
+                <ul class="note-points">
+                    <li>確保 Deployment 有至少 2 個 Pod 在跑</li>
+                    <li>建立 Service（NodePort 30080）</li>
+                    <li>用 <code>curl http://$(minikube ip):30080</code> 測試</li>
+                    <li>手動刪掉一個 Pod</li>
+                    <li>再次 curl &rarr; 服務依然正常回應</li>
+                    <li>結論：Service + Deployment = 服務不中斷</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 8: HPA -->
+        <h3 class="section-title"><i class="fa-solid fa-chart-line"></i> HPA（Horizontal Pod Autoscaler）</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-gauge-high"></i> HPA 是什麼</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc"><strong>情境：</strong>不知道該開幾個 Pod？流量高峰開太少會掛，低峰開太多浪費錢。</p>
+                <ul class="note-points">
+                    <li>HPA 只看 <strong>Pod 資源使用率</strong>（主要是 CPU）決定要幾個 Pod</li>
+                    <li>CPU 使用率超過門檻 &rarr; 自動增加 Pod</li>
+                    <li>CPU 使用率降低 &rarr; 自動減少 Pod</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-gears"></i> 三元件分工</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>元件</th><th>負責什麼</th><th>類比</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Service</strong></td><td>流量送給誰</td><td>櫃台（統一入口）</td></tr>
+                        <tr><td><strong>Deployment</strong></td><td>維持幾個 Pod</td><td>主管（確保人數）</td></tr>
+                        <tr><td><strong>HPA</strong></td><td>要不要調整 Pod 數量</td><td>老闆（看業績決定加人減人）</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-file-code"></i> HPA 設定步驟</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc"><strong>Step 1：</strong>啟用 metrics-server（Minikube）</p>
+                <pre><code>minikube addons enable metrics-server</code></pre>
+                <p class="note-desc"><strong>Step 2：</strong>修改 Deployment YAML 加上資源限制</p>
+                <pre><code># deployment.yaml（加上 resources）
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-api
+  template:
+    metadata:
+      labels:
+        app: my-api
+    spec:
+      containers:
+      - name: api
+        image: nginx
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: "100m"       # 最少需要 0.1 CPU
+          limits:
+            cpu: "200m"       # 最多用 0.2 CPU</code></pre>
+                <p class="note-desc"><strong>Step 3：</strong>建立 HPA</p>
+                <pre><code># 套用 Deployment
+kubectl apply -f deployment.yaml
+
+# 建立 HPA：CPU 超過 50% 就擴展，最少 1 個 Pod，最多 5 個
+kubectl autoscale deployment my-api --cpu-percent=50 --min=1 --max=5
+
+# 查看 HPA
+kubectl get hpa</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-vial"></i> Demo：負載測試觀察自動擴展</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">用 busybox 持續發送請求，觀察 Pod 數量自動增加。</p>
+                <pre><code># 開一個新終端，持續發送請求（模擬高流量）
+kubectl run -i --tty load-generator --rm --image=busybox \
+  --restart=Never -- /bin/sh -c \
+  "while sleep 0.01; do wget -q -O- http://my-api-service; done"
+
+# 在另一個終端觀察 HPA 變化
+kubectl get hpa -w
+
+# 觀察 Pod 數量變化
+kubectl get pods -w</code></pre>
+                <ul class="note-points">
+                    <li>負載開始 &rarr; CPU 使用率上升 &rarr; HPA 觸發擴展 &rarr; Pod 從 1 個變成 2、3、4...</li>
+                    <li>停止負載 &rarr; CPU 使用率下降 &rarr; HPA 縮減 Pod 數量（有冷卻時間）</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop：讓系統自己決定規模</h4>
+                    <span class="status-badge info">Workshop</span>
+                </div>
+                <ul class="note-points">
+                    <li>啟用 metrics-server</li>
+                    <li>部署帶 resources 限制的 Deployment</li>
+                    <li>建立 HPA（CPU 50%、min 1、max 5）</li>
+                    <li>用 busybox 發送負載</li>
+                    <li>觀察 Pod 自動擴展到多個</li>
+                    <li>停止負載，觀察 Pod 自動縮回</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 9: YAML 基礎教學 -->
+        <h3 class="section-title"><i class="fa-solid fa-file-lines"></i> YAML 基礎教學（附錄）</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-file-code"></i> YAML 是什麼</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc"><strong>YAML Ain't Markup Language</strong> — 一種人類容易讀寫的資料序列化格式。</p>
+                <ul class="note-points">
+                    <li><strong>大小寫敏感：</strong><code>Name</code> 和 <code>name</code> 不同</li>
+                    <li><strong>用空格縮排</strong>（不能用 Tab），通常 2 個空格</li>
+                    <li><strong># 為註解</strong></li>
+                    <li>副檔名：<code>.yml</code> 或 <code>.yaml</code> 都行</li>
+                    <li>Docker Compose、K8S、GitHub Actions 都用 YAML</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code"></i> YAML 資料類型</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc"><strong>Object / Mapping（key-value）：</strong></p>
+                <pre><code># Object（字典）
+name: "FastAPI App"
+version: 1.0
+debug: true</code></pre>
+                <p class="note-desc"><strong>Array / Sequence（列表）：</strong></p>
+                <pre><code># Array（列表）
+ports:
+  - 8000
+  - 8001
+  - 8002</code></pre>
+                <p class="note-desc"><strong>Scalars（純量）：</strong></p>
+                <pre><code># 字串、數字、布林
+name: "hello"     # 字串
+count: 42         # 整數
+ratio: 3.14       # 浮點數
+enabled: true     # 布林</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-brands fa-python"></i> Python pyyaml</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">用 Python 讀寫 YAML 檔案：</p>
+                <pre><code>import yaml
+
+# 讀取 YAML
+with open("config.yaml", "r") as f:
+    config = yaml.safe_load(f)
+
+print(config)
+# {'name': 'FastAPI App', 'version': 1.0, 'debug': True}
+
+# 寫入 YAML
+data = {
+    "model": "gemini-2.0-flash",
+    "temperature": 0.7,
+    "tools": ["search", "calculator"]
+}
+
+with open("output.yaml", "w") as f:
+    yaml.dump(data, f, default_flow_style=False, allow_unicode=True)</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-wand-magic-sparkles"></i> 實用情境：AI 規則設定檔</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">用 YAML 管理 AI 系統的規則設定：</p>
+                <pre><code># ai_rules.yaml
+model:
+  name: "gemini-2.0-flash"
+  temperature: 0.3
+
+safety_rules:
+  - name: "安全帽偵測"
+    condition: "未戴安全帽"
+    severity: "high"
+    action: "send_alert"
+
+  - name: "反光背心偵測"
+    condition: "未穿反光背心"
+    severity: "medium"
+    action: "log_warning"
+
+thresholds:
+  confidence: 0.8
+  alert_cooldown: 300  # 秒</code></pre>
+                <pre><code># Python 讀取設定檔
+import yaml
+
+with open("ai_rules.yaml", "r") as f:
+    rules = yaml.safe_load(f)
+
+for rule in rules["safety_rules"]:
+    print(f"規則：{rule['name']}，嚴重度：{rule['severity']}")</code></pre>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 重點：</strong>YAML 讓設定與程式碼分離。修改規則不用改程式碼，改 YAML 檔就好。Docker Compose 和 K8S 大量使用 YAML，先熟悉語法之後學更快。
+                </div>
             </div>
         </div>
 
