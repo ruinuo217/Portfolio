@@ -29,7 +29,7 @@
     <a href="#timeline" data-zh="經歷" data-en="Experience">經歷</a>
     <a href="#projects" data-zh="專案" data-en="Projects">專案</a>
     <a href="#contact" data-zh="聯絡" data-en="Contact">聯絡</a>
-    <a href="Reyna_Gao_Resume_zh.docx" class="ndl" download="高婷容_Reyna_Gao_履歷_中文版.docx" data-zh="下載履歷 ↓" data-en="Download CV ↓">下載履歷 ↓</a>
+    <a href="高婷容Reyna_簡歷.pdf" class="ndl" download="高婷容Reyna_簡歷.pdf" data-zh="下載履歷 ↓" data-en="Download CV ↓">下載履歷 ↓</a>
     <button id="langBtn" onclick="toggleLang()" style="padding:5px 14px;border-radius:980px;border:1.5px solid var(--g2);background:transparent;font-family:'Manrope',sans-serif;font-size:0.875rem;font-weight:600;color:var(--m);cursor:pointer;transition:border-color .2s,color .2s;">EN</button>
   </div>
 </nav>
@@ -530,11 +530,11 @@
     const dlLink = document.querySelector('a[download]');
     if (dlLink) {
       if (targetLang === 'zh') {
-        dlLink.href = 'Reyna_Gao_Resume_zh.docx';
-        dlLink.download = '高婷容_Reyna_Gao_履歷_中文版.docx';
+        dlLink.href = '高婷容Reyna_簡歷.pdf';
+        dlLink.download = '高婷容Reyna_簡歷.pdf';
       } else {
-        dlLink.href = 'Reyna_Gao_Resume_EN.docx';
-        dlLink.download = 'Reyna_Gao_Resume_EN.docx';
+        dlLink.href = '高婷容Reyna_簡歷.pdf';
+        dlLink.download = '高婷容Reyna_簡歷.pdf';
       }
     }
     document.querySelectorAll('[data-zh]').forEach(el => {
