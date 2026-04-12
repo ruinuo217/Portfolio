@@ -10,15 +10,15 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
-    --navy: #1B2B4B;
+    --navy: #374151; 
+    --navy-dark: #1F2937;
     --blue: #2563EB;
     --blue-light: #3B6FD4;
     --accent: #60A5FA;
     --white: #FFFFFF;
     --gray: #6B7280;
-    --dark: #1F2937;
-    --bg-sidebar: #1B2B4B;
-    --sidebar-w: 230px;
+    --dark: #111827;
+    --sidebar-w: 240px;
     --body-font: 'Noto Sans TC', sans-serif;
   }
 
@@ -27,7 +27,7 @@
     background: #fff;
     color: var(--dark);
     font-size: 14px;
-    line-height: 1.7;
+    line-height: 1.6; /* 整體行距稍微縮小 */
   }
 
   .page {
@@ -40,46 +40,45 @@
 
   /* ── HEADER ── */
   .header {
-    background: var(--navy);
-    color: #fff;
-    padding: 24px 28px 24px 28px;
+    background: #F8FAFC;
+    color: var(--navy-dark);
+    padding: 24px 32px 18px 32px; /* 上下留白縮小 */
     display: flex;
-    align-items: flex-start;
-    gap: 24px;
+    align-items: center;
+    gap: 30px;
     flex-shrink: 0;
+    border-bottom: 3px solid var(--navy-dark);
   }
   .header-left { flex: 1; min-width: 0; }
   .header-left h1 {
     font-family: 'DM Serif Display', serif;
-    font-size: 28pt;
-    letter-spacing: 0.5px;
-    color: #fff;
+    font-size: 32pt; /* 稍微縮小字體 */
+    letter-spacing: 1px;
+    color: var(--navy-dark);
     line-height: 1;
   }
   .header-left .sub {
-    font-size: 13px;
-    color: var(--accent);
-    font-weight: 500;
-    margin-top: 7px;
-    letter-spacing: 0.4px;
+    font-size: 16px;
+    color: var(--blue);
+    font-weight: 700;
+    margin-top: 8px;
+    letter-spacing: 0.5px;
   }
   .header-summary {
-    font-size: 12.5px;
-    color: #F1F5FD;
-    line-height: 1.85;
-    margin-top: 14px;
-    max-width: 580px;
-    letter-spacing: 0.2px;
+    font-size: 14px;
+    color: #4B5563;
+    line-height: 1.7;
+    margin-top: 10px;
+    max-width: 600px;
   }
   .header-photo {
-    width: 110px;
+    width: 110px; /* 照片稍微縮小一點點 */
     height: 110px;
-    border-radius: 50%;
+    border-radius: 8px;
     object-fit: cover;
     object-position: center 5%;
-    border: none;
     flex-shrink: 0;
-    align-self: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   }
 
   /* ── BODY ── */
@@ -94,32 +93,34 @@
   .sidebar {
     width: var(--sidebar-w);
     min-width: var(--sidebar-w);
-    background: #F0F4FB;
-    padding: 22px 19px;
+    background: #F9FAFB;
+    padding: 20px 20px; /* 對齊 main 區塊 */
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    border-right: 2px solid #DBEAFE;
-    overflow: hidden;
+    gap: 18px; /* 縮小區塊間距 */
+    border-right: 1px solid #E5E7EB;
   }
-  .s-section { display: flex; flex-direction: column; gap: 4px; }
-  .s-title {
-    font-size: 11px;
+  .s-section { display: flex; flex-direction: column; gap: 8px; }
+  
+  .s-title, .m-title {
+    font-size: 14px;
     font-weight: 700;
-    color: var(--blue);
-    text-transform: uppercase;
-    letter-spacing: 1.1px;
-    padding-bottom: 4px;
-    border-bottom: 1.5px solid var(--blue);
-    margin-bottom: 6px;
+    color: #fff;
+    background: var(--navy-dark);
+    padding: 5px 12px;
+    letter-spacing: 1.5px;
+    border-radius: 2px;
+    margin-bottom: 6px; /* 縮小底部留白 */
   }
 
-  .skill-group { margin-bottom: 6px; }
+  .skill-group { margin-bottom: 8px; } /* 縮小技能組間距 */
   .skill-label {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
-    color: var(--navy);
+    color: var(--navy-dark);
     margin-bottom: 4px;
+    border-left: 3px solid var(--blue);
+    padding-left: 6px;
   }
   .skill-tags {
     display: flex;
@@ -127,351 +128,244 @@
     gap: 4px;
   }
   .tag {
-    background: #DBEAFE;
-    color: var(--navy);
-    font-size: 11px;
+    background: #E5E7EB;
+    color: var(--navy-dark);
+    font-size: 12px;
     padding: 2px 7px;
-    border-radius: 3px;
+    border-radius: 4px;
     font-weight: 500;
   }
-  .tag.dark { background: var(--navy); color: #fff; }
+  .tag.primary { background: var(--blue); color: #fff; }
+  .tag.dark { background: var(--navy-dark); color: #fff; }
 
   .edu-item { margin-bottom: 10px; }
-  .edu-school {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--navy);
-    line-height: 1.35;
-  }
-  .edu-dept {
-    font-size: 12px;
-    color: var(--gray);
-    margin-top: 3px;
-  }
-  .edu-date {
-    font-size: 12px;
-    color: var(--blue);
-    font-weight: 500;
-    margin-top: 3px;
-  }
-  .edu-note {
-    font-size: 12px;
-    color: var(--gray);
-    margin-top: 4px;
-    line-height: 1.5;
-  }
-
-  .cert-item {
-    font-size: 12px;
-    color: var(--dark);
-    padding-left: 12px;
-    position: relative;
-    margin-bottom: 5%;
-    line-height: 1.5;
-  }
-  .cert-item::before { content: '▸'; position: absolute; left: 0; color: var(--blue); }
+  .edu-school { font-size: 14px; font-weight: 700; color: var(--navy-dark); }
+  .edu-dept { font-size: 12px; color: var(--gray); margin-top: 2px; }
+  .edu-date { font-size: 12px; color: var(--blue); font-weight: 600; margin-top: 2px; }
 
   /* ── MAIN ── */
   .main {
     flex: 1;
-    padding: 22px 32px 28px;
+    padding: 20px 32px 20px; /* 縮小上下留白 */
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 16px; /* 大幅縮小區塊間距 */
     overflow: hidden;
-    min-width: 0;
   }
 
-  .m-title {
-    font-size: 12px;
+  /* 專長區塊 */
+  .strength-list { display: flex; flex-direction: column; gap: 12px; } /* 縮小項目間距 */
+  .sc {
+    padding-left: 14px;
+    border-left: 3px solid var(--blue);
+  }
+  .sc-title {
+    font-size: 14.5px;
     font-weight: 700;
-    color: var(--blue);
-    text-transform: uppercase;
-    letter-spacing: 1.2px;
-    padding-bottom: 5px;
-    border-bottom: 1.5px solid var(--blue);
-    margin-bottom: 10px;
+    color: var(--navy-dark);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
+  .sc-desc {
+    font-size: 13px; /* 字體微調，讓排版更緊湊 */
+    color: #374151;
+    line-height: 1.6;
+    text-align: justify;
+  }
+  .sc-tags { margin-top: 4px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .sc-tags span { font-size: 12px; color: var(--blue); font-weight: 600; }
+  .sc-tags span::before { content: '#'; }
 
-  /* work */
-  .job { margin-bottom: 12px; }
-  .job:last-child { margin-bottom: 0; }
+  /* 工作經歷 */
+  .job { margin-bottom: 10px; }
   .job-header {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    margin-bottom: 3px;
+    margin-bottom: 2px;
   }
-  .job-title {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--navy);
-  }
-  .job-date {
-    font-size: 12px;
-    color: var(--gray);
-    white-space: nowrap;
-    margin-left: 8px;
-    flex-shrink: 0;
-  }
-  .job-company {
-    font-size: 13px;
-    color: var(--blue-light);
-    font-weight: 500;
-    margin-bottom: 8px;
-  }
+  .job-title { font-size: 13.5px; font-weight: 700; color: var(--navy-dark); }
+  .job-date { font-size: 12px; color: var(--gray); }
+  .job-company { font-size: 12px; color: var(--blue-light); font-weight: 500; margin-bottom: 4px; }
   .job-bullets { padding-left: 0; list-style: none; }
   .job-bullets li {
-    font-size: 13px;
-    color: var(--dark);
+    font-size: 12px;
+    color: #4B5563;
     padding-left: 14px;
     position: relative;
-    margin-bottom: 6px;
-    line-height: 1.7;
+    margin-bottom: 2px; /* 縮小列距 */
+    line-height: 1.5;
   }
   .job-bullets li::before {
     content: '·';
     position: absolute;
     left: 2px;
     color: var(--blue);
-    font-size: 17px;
-    top: -3px;
-  }
-
-  .achievement {
-    display: block;
-    background: #EFF6FF;
-    border-left: 3px solid var(--blue);
-    padding: 7px 12px;
-    font-size: 12px;
-    color: var(--navy);
-    font-weight: 500;
-    border-radius: 0 4px 4px 0;
-    margin-top: 8px;
-    line-height: 1.65;
-  }
-
-  /* strengths */
-  .strength-list { display: flex; flex-direction: column; gap: 12px; }
-
-  .sc {
-    padding-left: 13px;
-    border-left: 3px solid #BFDBFE;
-  }
-  .sc-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--navy);
-    margin-bottom: 4px;
-  }
-  .sc-desc {
-    font-size: 12px;
-    color: var(--dark);
-    line-height: 1.7;
-    margin-bottom: 6px;
-  }
-  .sc-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-  .sc-tags span { font-size: 12px; color: var(--blue-light); font-weight: 600; }
-  .sc-tags span::before { content: '#'; }
-
-  .divider {
-    height: 1px;
-    background: #E5E7EB;
-    margin: 6px 0;
+    font-size: 18px;
+    top: -4px;
   }
 
   @media print {
     @page { size: A4; margin: 0; }
-    html, body {
-      margin: 0 !important;
-      padding: 0 !important;
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
-    }
-    .page {
-      page-break-after: avoid;
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-    .job, .sc, .edu-item { page-break-inside: avoid; break-inside: avoid; }
+    html, body { margin: 0 !important; padding: 0 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    .page { page-break-after: avoid; page-break-inside: avoid; }
+    .job, .sc { page-break-inside: avoid; }
   }
 </style>
 </head>
 <body>
 <div class="page">
 
-  <!-- HEADER -->
   <div class="header">
     <div class="header-left">
       <h1>高婷容 Reyna Gao</h1>
-      <div class="sub">前端開發 ／ 後端工程 ／ 數據分析 ／ AI 應用整合</div>
-      <div class="header-summary">設計與行銷出身，現轉型前端開發與數據分析，習慣從使用者需求出發、以數據驗證決策。在電商培養出高壓環境下快速拆解問題的能力，在接案與培訓中持續精進技術——並致力於將商業思維、視覺美感與工程邏輯整合，打造出真正解決問題的產品。</div>
+      <div class="sub">Python 後端工程師 ｜ AI 應用整合 ｜ 具備全端與資料處理能力</div>
+      <div class="header-summary">
+        設計與行銷底蘊出身，現專攻 Python 後端開發與 AI 系統整合。運用 FastAPI、ETL 數據管線與 GCP 雲端部署，並具備 React 前端獨立開發能力。能將商業邏輯與 AI 技術 (LLM, MCP) 結合，打造創新互動體驗的系統整合方案。過往在電商高壓環境下，培養出跨部門溝通與系統化解決問題的能力，期盼能將此綜合優勢帶入 Python 後端工程師的角色中發揮。
+      </div>
     </div>
     <img src="picture.jpg" alt="Reyna Gao" class="header-photo">
   </div>
 
-  <!-- BODY -->
   <div class="body">
 
-    <!-- SIDEBAR -->
     <div class="sidebar">
+      
+      <div class="s-section">
+        <div class="s-title">技術棧技能</div>
+
+        <div class="skill-group">
+          <div class="skill-label">後端與資料庫</div>
+          <div class="skill-tags">
+            <span class="tag primary">Python</span>
+            <span class="tag primary">FastAPI</span>
+            <span class="tag">MySQL</span>
+            <span class="tag">RESTful API</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-label">AI 應用與數據</div>
+          <div class="skill-tags">
+            <span class="tag dark">LLM</span>
+            <span class="tag dark">MCP 整合</span>
+            <span class="tag">ELK Stack</span>
+            <span class="tag">ETL</span>
+            <span class="tag">YOLO</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-label">前端開發</div>
+          <div class="skill-tags">
+            <span class="tag primary">React</span>
+            <span class="tag">JavaScript</span>
+            <span class="tag">HTML/CSS</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-label">DevOps & 工具</div>
+          <div class="skill-tags">
+            <span class="tag">GCP / AWS</span>
+            <span class="tag">Docker</span>
+            <span class="tag">Git</span>
+            <span class="tag">ZeroTier</span>
+            <span class="tag">Linux</span>
+          </div>
+        </div>
+      </div>
 
       <div class="s-section">
         <div class="s-title">學歷與培訓</div>
 
         <div class="edu-item">
-          <div class="edu-school">勞動部進修培訓</div>
-          <div class="edu-dept">AI 大數據跨域人才養成班</div>
-          <div class="edu-date">2025.12 — 2026.05（預計）</div>
-          <div class="edu-note">Python · ML · LLM · FastAPI · MySQL · Linux · AWS / GCP · Docker / K8S</div>
+          <div class="edu-school">勞動部 AI 大數據養成班</div>
+          <div class="edu-dept">Python 核心技術與大數據分析實務</div>
+          <div class="edu-date">2025.12 — 2026.05</div>
         </div>
 
         <div class="edu-item">
           <div class="edu-school">中國文化大學</div>
-          <div class="edu-dept">數位媒體學系（進修學士班）</div>
-          <div class="edu-date">2025.09 — 預計 2027 畢業</div>
-          <div class="edu-note" style="white-space:nowrap;">夜間修讀／每學期 20+ 學分</div>
-          <div class="edu-note">數位媒體 · 廣告策略 · 自媒體經營 · AI 內容產製</div>
-          <div class="edu-note" style="color:var(--blue);font-weight:600;margin-top:4px;">✓ 可全職配合一般日班工作時間</div>
+          <div class="edu-dept">數位媒體學系（進修部）</div>
+          <div class="edu-date">2025.09 — 2027 畢業</div>
+          <div style="font-size: 12px; color: #4B5563; margin-top:2px;">✓ 夜間修讀，可全職配合日班作息</div>
         </div>
       </div>
 
       <div class="s-section">
-        <div class="s-title">核心技能</div>
-
-        <div class="skill-group">
-          <div class="skill-label">前端開發</div>
-          <div class="skill-tags">
-            <span class="tag dark">React</span>
-            <span class="tag">JavaScript</span>
-            <span class="tag">HTML/CSS</span>
-            <span class="tag">Bootstrap</span>
-            <span class="tag">Chart.js</span>
-          </div>
-        </div>
-
-        <div class="skill-group">
-          <div class="skill-label">後端 / 資料庫</div>
-          <div class="skill-tags">
-            <span class="tag dark">Python</span>
-            <span class="tag">FastAPI</span>
-            <span class="tag">MySQL</span>
-          </div>
-        </div>
-
-        <div class="skill-group">
-          <div class="skill-label">數據視覺化</div>
-          <div class="skill-tags">
-            <span class="tag">Tableau</span>
-            <span class="tag">Power BI</span>
-          </div>
-        </div>
-
-        <div class="skill-group">
-          <div class="skill-label">雲端與開發工具</div>
-          <div class="skill-tags">
-            <span class="tag">GCP</span>
-            <span class="tag">AWS</span>
-            <span class="tag">Git</span>
-            <span class="tag">Docker</span>
-            <span class="tag">K8S</span>
-          </div>
-        </div>
-
-        <div class="skill-group">
-          <div class="skill-label">UI/UX & 設計</div>
-          <div class="skill-tags">
-            <span class="tag">Figma</span>
-            <span class="tag">Adobe CC</span>
-            <span class="tag">Cinema 4D</span>
-          </div>
+        <div class="s-title">認證與其他專長</div>
+        <div style="font-size: 12px; line-height: 1.5; color: var(--navy-dark);">
+          • iPAS AI 應用規劃師考取中<br>
+          • Google UX Design<br>
+          • Tableau / BI 數據視覺化<br>
+          • Figma / UIUX 切版設計規劃
         </div>
       </div>
 
-      <div class="s-section">
-        <div class="s-title">認證 & 證照</div>
-        <div class="cert-item">Adobe Photoshop 專業認證</div>
-        <div class="cert-item">Adobe Illustrator 專業認證</div>
-        <div class="cert-item">Google UX Design Specialization</div>
-      </div>
+    </div><div class="main">
 
-    </div><!-- /sidebar -->
-
-    <!-- MAIN -->
-    <div class="main">
-
-      <!-- 工作經歷 -->
       <div class="m-section">
-        <div class="m-title">工作經歷</div>
-
-        <div class="job">
-          <div class="job-header">
-            <div class="job-title">自由接案 ｜ 網頁設計與前端開發</div>
-            <div class="job-date">2024.01 — 2025.08</div>
-          </div>
-          <div class="job-company">酒商電商品牌 / 韓式花藝電商</div>
-          <ul class="job-bullets">
-            <li>酒商電商｜以客製化 HTML/CSS 搭建 Shopline 電商前端架構，執行全站 SEO 優化（每頁 keywords & alt 標籤配置）。</li>
-            <li>獨立完成韓式花藝品牌 UI/UX 全流程（競品分析 → Figma 高擬真 Prototype）。</li>
-          </ul>
-          <div class="achievement">【成就】酒商電商｜CTR 16.1%，達業界均值 3–8 倍；SEO 導入後 28 天點擊 +14%、曝光 +10%</div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="job">
-          <div class="job-header">
-            <div class="job-title">Shopee 蝦皮購物 ｜ 行銷企劃與活動營運</div>
-            <div class="job-date">2021.06 — 2023.08</div>
-          </div>
-          <div class="job-company">正職 2022.03–2023.08 ｜ 兼職 2021.06–2022.03</div>
-          <ul class="job-bullets">
-            <li>負責活動版面配置、路徑測試及數據監控，並請 BI 撈取數據，自行產出成效分析簡報並提出優化建議。</li>
-            <li>橫向協調設計、物流、POS、客戶經理等 5 個以上部門，推進專案達成預期績效。</li>
-            <li>擔任 Campaign 第一線客訴窗口，系統性分類問題並主動優化活動文案以防堵爭議。</li>
-          </ul>
-          <div class="achievement">【成就】流程優化提案使月均客訴量降低 90%｜由兼職轉正首年獲 A+ 最高績效（6 人組唯二）</div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="job">
-          <div class="job-header">
-            <div class="job-title">REDMAN ｜ 3D 動畫與渲染設計師</div>
-            <div class="job-date">2020.10 — 2021.05</div>
-          </div>
-          <div class="job-company">華碩、微星、高通等知名 3C 品牌商業案</div>
-          <ul class="job-bullets">
-            <li>運用 Cinema 4D、Octane 結合 Adobe CC，獨立進行商業級 3D 渲染製作。</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- 專長 -->
-      <div class="m-section">
-        <div class="m-title">專長</div>
+        <div class="m-title">專案經驗與技術專長</div>
         <div class="strength-list">
 
           <div class="sc">
-            <div class="sc-title">前端開發 & UI/UX 設計</div>
-            <div class="sc-desc">獨立將設計稿轉化為高互動性網頁的能力。具備 React 基礎開發與前端技術；並能運用 Figma 產出高擬真 Prototype，從 UI/UX 規劃到前端交付皆能全程自我管理，並持續迭代產出。</div>
-            <div class="sc-tags"><span>React</span><span>JavaScript</span><span>HTML/CSS</span><span>Bootstrap</span><span>Figma</span><span>RWD</span></div>
+            <div class="sc-title">後端架構與 ETL 數據處理</div>
+            <div class="sc-desc">運用 Python 核心與 FastAPI 框架，具備從無到有設計 RESTful API 的能力。能規劃完整 ETL 流程，曾將萬筆以上的原始數據資料進行清洗與結構化，存入關聯式資料庫，並成功將後端系統與資料庫容器化，部署至 GCP 雲端環境。目前正於專案中導入 ELK Stack (Elasticsearch, Logstash, Kibana) 進行數據分析，並具備 ZeroTier 內網穿透的實務經驗。</div>
+            <div class="sc-tags"><span>Python</span><span>FastAPI</span><span>MySQL</span><span>GCP</span><span>Docker</span><span>ELK</span></div>
           </div>
 
           <div class="sc">
-            <div class="sc-title">數據分析 & BI 視覺化</div>
-            <div class="sc-desc">具備全流程的數據處理能力，能運用 MySQL 進行 ETL 資料清洗與架構設計。精通 Tableau，能將龐雜的數據資料轉化為直觀的儀表板；並具備優異的需求對齊溝通能力，     能將數據洞察轉化為可行決策，清晰傳達給不同受眾。</div>
-            <div class="sc-tags"><span>Tableau</span><span>MySQL</span><span>ETL</span><span>GCP</span></div>
+            <div class="sc-title">AI 應用與 LLM / MCP 整合</div>
+            <div class="sc-desc">專攻大語言模型 (LLM) 的商業應用落地，具備將外部資料源與模型串接的能力。了解 MCP (Model Context Protocol) 規範，能開發中介層讓 AI 與硬體/資料庫進行深度互動。目前正運用 Raspberry Pi 5 開發互動裝置，透過 MCP 協議串接 YOLO 電腦視覺模型，達成 IoT 軟硬體整合。</div>
+            <div class="sc-tags"><span>LLM</span><span>MCP</span><span>Prompt Engineering</span><span>YOLO</span><span>Raspberry Pi</span></div>
           </div>
 
+          <div class="sc">
+            <div class="sc-title">全端協作與前端開發 (React)</div>
+            <div class="sc-desc">具備「工程+設計」雙重視角，能獨立將 Figma 高擬真 Prototype 轉化為高效能的 Web 應用。運用 React 與現代 JavaScript (ES6+)，習慣以組件化思維開發前端，確保與後端 API 資料串接順暢。能運用前端技術降低後端渲染負擔，打造高互動性的管理後台與儀表板。</div>
+            <div class="sc-tags"><span>React</span><span>JavaScript</span><span>RESTful API 串接</span><span>Figma</span></div>
+          </div>
 
+          <div class="sc">
+            <div class="sc-title">技術專案管理 (Technical PM)</div>
+            <div class="sc-desc"> 於培訓班中，具備帶領技術團隊進行系統開發的經驗，擔任專案經理 (PM) 與組長角色。能有效統籌前後端開發、數據工程與 AI 模型等不同技術分支，負責需求對齊、時程控管WBS與技術整合，確保專案如期交付，並能夠擔任上台發表簡報。</div>
+            <div class="sc-tags"><span>Project Management</span><span>跨域協作</span><span>需求釐清</span></span><span>WBS製作</span></div>
+          </div>
 
         </div>
       </div>
 
-    </div><!-- /main -->
-  </div><!-- /body -->
+      <div class="m-section">
+        <div class="m-title">工作經歷</div>
+        
+        <div class="job">
+          <div class="job-header">
+            <div class="job-title">網頁設計與前端開發工程師</div>
+            <div class="job-date">2024.01 — 2025.08</div>
+          </div>
+          <div class="job-company">自由接案 (酒商電商 / 韓式花藝品牌)</div>
+          <ul class="job-bullets">
+            <li>負責前端架構開發與全站 SEO 技術優化，導入後 28 天內達成曝光 +10%、點擊 +14%。</li>
+            <li>UI/UX 全流程與商業模式規劃，獨立完成高擬真 Prototype 與前端交付。</li>
+          </ul>
+        </div>
 
-</div><!-- /page -->
-</body>
+        <div class="job">
+          <div class="job-header">
+            <div class="job-title">行銷企劃與活動營運專員 (OPS & Marketing)</div>
+            <div class="job-date">2021.06 — 2023.08</div>
+          </div>
+          <div class="job-company">Shopee 蝦皮購物</div>
+          <ul class="job-bullets">
+            <li>結合 BI 數據產出成效分析，透過系統性流程優化提案，並達成預期營運指標 (KPI)。</li>
+            <li>負責大型檔期專案管理 (PM)，具備強大跨部門協作能力，橫向協調工程、設計、物流等 5 個以上團隊推進專案落地，並於轉正首年獲 A+ 最高績效。</li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div></div></div></body>
 </html>
