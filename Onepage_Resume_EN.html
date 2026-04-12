@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reyna Gao — Resume</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=DM+Serif+Display:ital@0;1&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --navy: #374151;
+    --navy-dark: #1F2937;
+    --blue: #2563EB;
+    --blue-light: #3B6FD4;
+    --accent: #60A5FA;
+    --white: #FFFFFF;
+    --gray: #6B7280;
+    --dark: #111827;
+    --sidebar-w: 270px;
+    --body-font: 'Noto Sans TC', sans-serif;
+  }
+
+  html, body {
+    font-family: var(--body-font);
+    background: #fff;
+    color: var(--dark);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .page {
+    width: 210mm;
+    height: 297mm;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: #F8FAFC;
+    color: var(--navy-dark);
+    padding: 24px 32px 18px 32px;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    flex-shrink: 0;
+    border-bottom: 3px solid var(--navy-dark);
+  }
+  .header-left { flex: 1; min-width: 0; }
+  .header-left h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32pt;
+    letter-spacing: 1px;
+    color: var(--navy-dark);
+    line-height: 1;
+  }
+  .header-left .sub {
+    font-size: 16px;
+    color: var(--blue);
+    font-weight: 700;
+    margin-top: 8px;
+    letter-spacing: 0.5px;
+  }
+  .header-summary {
+    font-size: 14px;
+    color: #4B5563;
+    line-height: 1.7;
+    margin-top: 10px;
+    max-width: 600px;
+  }
+  .header-photo {
+    width: 110px;
+    height: 110px;
+    border-radius: 8px;
+    object-fit: cover;
+    object-position: center 5%;
+    flex-shrink: 0;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+
+  /* ── BODY ── */
+  .body {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: var(--sidebar-w);
+    min-width: var(--sidebar-w);
+    background: #F9FAFB;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-right: 1px solid #E5E7EB;
+  }
+  .s-section { display: flex; flex-direction: column; gap: 4px; }
+
+  .s-title, .m-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--navy-dark);
+    padding: 5px 12px;
+    letter-spacing: 1.5px;
+    border-radius: 2px;
+    margin-bottom: 4px;
+  }
+
+  .skill-group { margin-bottom: 5px; }
+  .skill-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--navy-dark);
+    margin-bottom: 4px;
+    border-left: 3px solid var(--blue);
+    padding-left: 6px;
+  }
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .tag {
+    background: #E5E7EB;
+    color: var(--navy-dark);
+    font-size: 12px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+  .tag.primary { background: var(--blue); color: #fff; }
+  .tag.dark { background: var(--navy-dark); color: #fff; }
+
+  .edu-item { margin-bottom: 6px; }
+  .edu-school { font-size: 14px; font-weight: 700; color: var(--navy-dark); }
+  .edu-dept { font-size: 12px; color: var(--gray); margin-top: 2px; }
+  .edu-date { font-size: 12px; color: var(--blue); font-weight: 600; margin-top: 2px; }
+
+  /* ── MAIN ── */
+  .main {
+    flex: 1;
+    padding: 20px 32px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow: hidden;
+  }
+
+  .strength-list { display: flex; flex-direction: column; gap: 12px; }
+  .sc {
+    padding-left: 14px;
+    border-left: 3px solid var(--blue);
+  }
+  .sc-title {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--navy-dark);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sc-desc {
+    font-size: 13px;
+    color: #374151;
+    line-height: 1.6;
+    text-align: justify;
+  }
+  .sc-tags { margin-top: 4px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .sc-tags span { font-size: 12px; color: var(--blue); font-weight: 600; }
+  .sc-tags span::before { content: '#'; }
+
+  /* Work Experience */
+  .job { margin-bottom: 10px; }
+  .job-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 2px;
+  }
+  .job-title { font-size: 13.5px; font-weight: 700; color: var(--navy-dark); }
+  .job-date { font-size: 12px; color: var(--gray); }
+  .job-company { font-size: 12px; color: var(--blue-light); font-weight: 500; margin-bottom: 4px; }
+  .job-bullets { padding-left: 0; list-style: none; }
+  .job-bullets li {
+    font-size: 12px;
+    color: #4B5563;
+    padding-left: 14px;
+    position: relative;
+    margin-bottom: 2px;
+    line-height: 1.5;
+  }
+  .job-bullets li::before {
+    content: '·';
+    position: absolute;
+    left: 2px;
+    color: var(--blue);
+    font-size: 18px;
+    top: -4px;
+  }
+
+  @media print {
+    @page { size: A4; margin: 0; }
+    html, body { margin: 0 !important; padding: 0 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    .page { page-break-after: avoid; page-break-inside: avoid; }
+    .job, .sc { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>Reyna Gao</h1>
+      <div class="sub">Python Backend Engineer ｜ AI Integration ｜ Full-Stack & Data Processing</div>
+      <div class="header-summary">
+        From design and marketing foundations, now specializing in Python backend development and AI system integration. Leveraging FastAPI, ETL data pipelines, and GCP cloud deployment, with independent React frontend capability. Combining business logic with AI technologies (LLM, MCP) to build innovative system integration solutions. Cultivated strong cross-departmental communication and systematic problem-solving skills in high-pressure e-commerce environments.
+      </div>
+    </div>
+    <img src="picture.jpg" alt="Reyna Gao" class="header-photo">
+  </div>
+
+  <div class="body">
+
+    <div class="sidebar">
+
+      <div class="s-section">
+        <div class="s-title">TECH STACK</div>
+
+        <div class="skill-group">
+          <div class="skill-label">Backend & Database</div>
+          <div class="skill-tags">
+            <span class="tag primary">Python</span>
+            <span class="tag primary">FastAPI</span>
+            <span class="tag">MySQL</span>
+            <span class="tag">RESTful API</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-label">AI & Data</div>
+          <div class="skill-tags">
+            <span class="tag dark">LLM</span>
+            <span class="tag dark">MCP Integration</span>
+            <span class="tag">ELK Stack</span>
+            <span class="tag">ETL</span>
+            <span class="tag">YOLO</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-label">Frontend</div>
+          <div class="skill-tags">
+            <span class="tag primary">React</span>
+            <span class="tag">JavaScript</span>
+            <span class="tag">HTML/CSS</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-label">DevOps & Tools</div>
+          <div class="skill-tags">
+            <span class="tag">GCP / AWS</span>
+            <span class="tag">Docker</span>
+            <span class="tag">Git</span>
+            <span class="tag">ZeroTier</span>
+            <span class="tag">Linux</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="s-section">
+        <div class="s-title">EDUCATION & TRAINING</div>
+
+        <div class="edu-item">
+          <div class="edu-school">MOL AI & Big Data Program</div>
+          <div class="edu-dept">Python Core & Big Data Analytics</div>
+          <div class="edu-date">2025.12 — 2026.05</div>
+        </div>
+
+        <div class="edu-item">
+          <div class="edu-school">Chinese Culture University</div>
+          <div class="edu-dept">Digital Media (Evening Program)</div>
+          <div class="edu-date">2025.09 — Expected 2027</div>
+          <div style="font-size: 12px; color: #4B5563; margin-top:2px;">✓ Evening classes, available for full-time daytime work</div>
+        </div>
+      </div>
+
+      <div class="s-section">
+      <div class="s-title">CERTIFICATIONS</div>
+        <div style="font-size: 11px; line-height: 1.4; color: var(--navy-dark);">
+          <span style="color:var(--blue); font-weight:700;">AI & Data Analytics</span><br>
+          • iPAS AI Application Planner (in progress)<br>
+          • Tableau / BI Data Visualization<br>
+          <span style="color:var(--blue); font-weight:700; display:block; margin-top:2px;">Product & UI/UX</span>
+          • Google UX Design Certificate<br>
+          • Figma / UI/UX Design & Prototyping<br>
+          • Adobe PS / AI Certified<br>
+          <span style="color:var(--blue); font-weight:700; display:block; margin-top:2px;">Industry Domain Knowledge</span>
+          • WSET Level 2 Wine Certification<br>
+          • KFDA Level 2 Floral Design (Korea)<br>
+        </div>
+      </div>
+
+    </div><div class="main">
+
+      <div class="m-section">
+        <div class="m-title">PROJECTS & EXPERTISE</div>
+        <div class="strength-list">
+
+          <div class="sc">
+            <div class="sc-title">Backend Architecture & ETL</div>
+            <div class="sc-desc">Proficient in Python and FastAPI framework, capable of designing RESTful APIs from scratch. Experienced in planning end-to-end ETL pipelines, having cleaned and structured 10,000+ raw data records into relational databases. Successfully containerized backend systems and databases for deployment on GCP cloud. Currently integrating ELK Stack (Elasticsearch, Logstash, Kibana) for data analytics, with hands-on experience in ZeroTier network tunneling.</div>
+            <div class="sc-tags"><span>Python</span><span>FastAPI</span><span>MySQL</span><span>GCP</span><span>Docker</span><span>ELK</span></div>
+          </div>
+
+          <div class="sc">
+            <div class="sc-title">AI Applications & LLM / MCP</div>
+            <div class="sc-desc">Focused on commercial deployment of Large Language Models (LLM), with the ability to integrate external data sources with AI models. Knowledgeable in MCP (Model Context Protocol), capable of developing middleware for deep AI-hardware/database interactions. Currently building interactive devices with Raspberry Pi 5, connecting YOLO computer vision models via MCP protocol for IoT hardware-software integration.</div>
+            <div class="sc-tags"><span>LLM</span><span>MCP</span><span>Prompt Engineering</span><span>YOLO</span><span>Raspberry Pi</span></div>
+          </div>
+
+          <div class="sc">
+            <div class="sc-title">Full-Stack & Frontend (React)</div>
+            <div class="sc-desc">Combining engineering and design perspectives, capable of independently transforming Figma hi-fi prototypes into high-performance web applications. Utilizing React and modern JavaScript (ES6+) with component-based development practices, ensuring seamless integration with backend APIs. Skilled in leveraging frontend technologies to reduce server-side rendering load, building highly interactive admin dashboards and data panels.</div>
+            <div class="sc-tags"><span>React</span><span>JavaScript</span><span>RESTful API Integration</span><span>Figma</span></div>
+          </div>
+
+          <div class="sc">
+            <div class="sc-title">Technical Project Management</div>
+            <div class="sc-desc">Experienced in leading technical teams for system development during training programs, serving as Project Manager (PM) and team lead. Skilled in coordinating frontend, backend, data engineering, and AI model workstreams. Responsible for requirements alignment, timeline management via WBS, and technical integration to ensure on-time project delivery. Capable of presenting project outcomes to stakeholders.</div>
+            <div class="sc-tags"><span>Project Management</span><span>Cross-domain Collaboration</span><span>Requirements Analysis</span><span>WBS Planning</span></div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="m-section">
+        <div class="m-title">WORK EXPERIENCE</div>
+
+        <div class="job">
+          <div class="job-header">
+            <div class="job-title">Web Designer & Frontend Developer</div>
+            <div class="job-date">2024.01 — 2025.08</div>
+          </div>
+          <div class="job-company">Freelance (Spirits E-commerce / Korean Floral Brand)</div>
+          <ul class="job-bullets">
+            <li>Led frontend architecture development and site-wide SEO optimization, achieving +10% impressions and +14% clicks within 28 days of implementation.</li>
+            <li>Managed full UI/UX process and business model planning, independently delivering hi-fi prototypes and frontend implementation.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <div class="job-header">
+            <div class="job-title">Marketing Planner & Campaign Operations</div>
+            <div class="job-date">2021.06 — 2023.08</div>
+          </div>
+          <div class="job-company">Shopee</div>
+          <ul class="job-bullets">
+            <li>Leveraged BI data for performance analysis, driving systematic process optimization proposals and achieving operational KPI targets.</li>
+            <li>Managed large-scale campaign projects as PM, demonstrating strong cross-departmental collaboration by coordinating 5+ teams across engineering, design, and logistics to deliver results. Achieved A+ top performance rating in first year.</li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div></div></div></body>
+</html>

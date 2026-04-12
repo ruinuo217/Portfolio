@@ -528,14 +528,18 @@
   let lang = 'zh';
   function applyLang(targetLang) {
     document.getElementById('langBtn').textContent = targetLang === 'zh' ? 'EN' : '中';
-    const dlLink = document.querySelector('a[download]');
-    if (dlLink) {
+    const dlLinks = document.querySelectorAll('a[download]');
+    if (dlLinks.length >= 2) {
       if (targetLang === 'zh') {
-        dlLink.href = '高婷容Reyna_簡歷.pdf';
-        dlLink.download = '高婷容Reyna_簡歷.pdf';
+        dlLinks[0].href = '高婷容Reyna_簡歷.pdf';
+        dlLinks[0].download = '高婷容Reyna_簡歷.pdf';
+        dlLinks[1].href = '高婷容Reyna_自傳.pdf';
+        dlLinks[1].download = '高婷容Reyna_自傳.pdf';
       } else {
-        dlLink.href = '高婷容Reyna_簡歷.pdf';
-        dlLink.download = '高婷容Reyna_簡歷.pdf';
+        dlLinks[0].href = 'Reyna Gao — Resume.pdf';
+        dlLinks[0].download = 'Reyna_Gao_Resume_EN.pdf';
+        dlLinks[1].href = 'Reyna Gao — Personal Statement.pdf';
+        dlLinks[1].download = 'Reyna_Gao_Personal_Statement_EN.pdf';
       }
     }
     document.querySelectorAll('[data-zh]').forEach(el => {
