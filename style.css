@@ -143,8 +143,8 @@ h3.pt { font-size: clamp(1.5rem, 2vw, 1.75rem); font-weight: 800; letter-spacing
 .pacts { display: flex; gap: 10px; }
 .af { display: inline-flex; align-items: center; gap: 6px; padding: 9px 20px; background: var(--t); color: var(--w); border-radius: 980px; font-size: 0.875rem; font-weight: 600; transition: background .2s; }
 .af:hover { background: #333; }
-.al { display: inline-flex; align-items: center; gap: 6px; padding: 9px 20px; border: 1.5px solid var(--g2); border-radius: 980px; font-size: 0.875rem; font-weight: 600; color: var(--m); transition: border-color .2s, color .2s; }
-.al:hover { border-color: var(--t); color: var(--t); }
+.al { display: inline-flex; align-items: center; gap: 6px; padding: 9px 20px; border: 1.5px solid var(--b); border-radius: 980px; font-size: 0.875rem; font-weight: 600; color: var(--b); transition: border-color .2s, color .2s, background .2s; }
+.al:hover { background: var(--b); color: var(--w); border-color: var(--b); }
 .pcv { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
 
 /* Project Visuals */
