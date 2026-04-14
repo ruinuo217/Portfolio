@@ -230,20 +230,868 @@
 
         <div class="banner">
             <div>
-                <h1>協作開發與虛擬化技術</h1>
-                <p>4/14 課程筆記</p>
+                <h1>協作開發與虛擬化技術 III：ArgoCD 與 GitOps CI/CD</h1>
+                <p>ArgoCD 安裝與設定、GitOps 概念、Sync / Auto-Sync / Self-Heal、GitHub Actions CI、CI/CD 完整串接、Git Rollback</p>
             </div>
-            <i class="fa-solid fa-code-branch banner-icon"></i>
+            <i class="fa-solid fa-arrows-spin banner-icon"></i>
         </div>
 
-        <h3 class="section-title">課程筆記：協作開發與虛擬化技術</h3>
+        <!-- Section 1: 為什麼需要 ArgoCD -->
+        <h3 class="section-title"><i class="fa-solid fa-circle-question"></i> Ch1 — 為什麼需要 ArgoCD</h3>
         <div class="dashboard-grid notes-section">
             <div class="card note-card" style="grid-column: 1 / -1;">
                 <div class="note-header">
-                    <h4><i class="fa-solid fa-code-branch"></i> 筆記待補</h4>
-                    <span class="status-badge pending">待補</span>
+                    <h4><i class="fa-solid fa-triangle-exclamation"></i> 情境：傳統部署的痛點</h4>
+                    <span class="status-badge important">觀念</span>
                 </div>
-                <p class="note-desc">課程內容稍後補充。</p>
+                <p class="note-desc">團隊有 5 個工程師，K8S 上跑了 3 個服務，目前的部署流程是：</p>
+                <ol class="note-points">
+                    <li>改程式碼</li>
+                    <li><code>docker build</code> + <code>docker push</code></li>
+                    <li>改 Deployment YAML 的 image tag</li>
+                    <li><code>kubectl apply -f ...</code></li>
+                </ol>
+                <p class="note-desc"><strong>問題開始出現：</strong></p>
+                <ul class="note-points">
+                    <li>小明昨天部署了什麼版本？<strong>沒人知道</strong></li>
+                    <li>小華在 prod 上手動 <code>kubectl scale</code> 改了 replicas，YAML 沒更新</li>
+                    <li>出事要退版，沒人記得上一版的 YAML 長什麼樣</li>
+                    <li>主管問「現在線上跑的是哪個版本」，你要登到機器上 <code>kubectl describe</code> 才知道</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 核心問題：</strong>問題不在 K8S，在於沒有一個「唯一的真相來源」(Single Source of Truth)。
+                </div>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code-branch"></i> GitOps 是什麼</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc"><strong>一句話：Git repo 就是系統的唯一真相來源。</strong></p>
+                <p class="note-desc">K8S 上跑的狀態，必須跟 Git repo 裡的 YAML 一致。有差異就是錯的，要修正。</p>
+                <ul class="note-points">
+                    <li><strong>傳統部署（Push 模式）：</strong>開發者 &rarr; <code>kubectl apply</code> &rarr; K8S<br>問題：誰 apply 的？apply 了什麼？沒有記錄。</li>
+                    <li><strong>GitOps（Pull 模式）：</strong>開發者 &rarr; <code>git push</code> &rarr; Git repo &larr; ArgoCD 持續監控 &rarr; K8S<br>所有變更都在 Git 裡，有 commit、有 diff、有 blame。</li>
+                </ul>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrows-spin"></i> ArgoCD 的角色</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">ArgoCD 是一個跑在 K8S 裡的 GitOps 工具。它做一件事：</p>
+                <p class="note-desc"><strong>持續比對 Git repo 裡的 YAML 和 K8S 上的實際狀態，發現差異就同步。</strong></p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>概念</th><th>傳統 kubectl</th><th>ArgoCD</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>部署方式</strong></td><td>人手動 apply</td><td>ArgoCD 自動從 Git 拉</td></tr>
+                        <tr><td><strong>部署記錄</strong></td><td>沒有（除非你自己記）</td><td>Git commit history</td></tr>
+                        <tr><td><strong>退版</strong></td><td>kubectl rollout undo（記在 K8S）</td><td>git revert（記在 Git）</td></tr>
+                        <tr><td><strong>多人協作</strong></td><td>誰最後 apply 誰贏</td><td>PR review &rarr; merge &rarr; 自動部署</td></tr>
+                        <tr><td><strong>狀態漂移</strong></td><td>有人手動改了不知道</td><td>ArgoCD 偵測到差異，自動修正</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrows-left-right"></i> 跟之前學的對照</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>你已經會的</th><th>在 ArgoCD 世界裡</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>kubectl apply -f deploy.yaml</code></td><td>ArgoCD 幫你做，你只需要 <code>git push</code></td></tr>
+                        <tr><td><code>kubectl rollout undo</code></td><td><code>git revert</code> + ArgoCD 自動同步</td></tr>
+                        <tr><td>手動改 replicas</td><td>ArgoCD 偵測到跟 Git 不一致，改回來</td></tr>
+                        <tr><td>記住「上次部署的是什麼」</td><td>看 Git log</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-map"></i> 這門課會學什麼</h4>
+                    <span class="status-badge info">課程地圖</span>
+                </div>
+                <ul class="note-points">
+                    <li><strong>Ch1</strong> 為什麼需要 ArgoCD（你在這裡）</li>
+                    <li><strong>Ch2</strong> 安裝 ArgoCD</li>
+                    <li><strong>Ch3</strong> 第一個 Application</li>
+                    <li><strong>Ch4</strong> Sync 與 Auto-Sync</li>
+                    <li><strong>Ch5</strong> GitHub Actions（CI）</li>
+                    <li><strong>Ch6</strong> CI/CD 完整串接</li>
+                    <li><strong>Ch7</strong> 用 Git 做 Rollback</li>
+                    <li><strong>Ch8</strong> 多環境管理</li>
+                    <li><strong>Ch9</strong> 總整合 Workshop</li>
+                </ul>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 完成後的部署流程：</strong><code>git push</code> &rarr; GitHub Actions build Image（CI 自動建置） &rarr; 更新 YAML &rarr; ArgoCD 自動部署（CD 自動部署）
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: 安裝 ArgoCD -->
+        <h3 class="section-title"><i class="fa-solid fa-download"></i> Ch2 — 安裝 ArgoCD</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-list-check"></i> 前置條件</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <ul class="note-points">
+                    <li>Minikube 已啟動（<code>minikube status</code> 確認 Running）</li>
+                    <li><code>kubectl</code> 可以正常使用</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-terminal"></i> Step 1 ~ 2：建立 namespace 並安裝</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <pre><code># Step 1：建立 ArgoCD namespace
+kubectl create namespace argocd
+
+# Step 2：安裝 ArgoCD
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+# 等所有 Pod 都 Running（第一次可能要等 1~2 分鐘拉 Image）
+kubectl get pods -n argocd</code></pre>
+                <p class="note-desc">預期輸出——全部 Running 才算安裝完成：</p>
+                <pre><code>NAME                                  READY   STATUS    AGE
+argocd-server-xxx                     1/1     Running   ...
+argocd-repo-server-xxx                1/1     Running   ...
+argocd-application-controller-xxx     1/1     Running   ...
+argocd-redis-xxx                      1/1     Running   ...
+argocd-dex-server-xxx                 1/1     Running   ...</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-globe"></i> Step 3：存取 ArgoCD Dashboard</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">ArgoCD 有 Web UI，用 port-forward 開通：</p>
+                <pre><code>kubectl port-forward svc/argocd-server -n argocd 8080:443 &</code></pre>
+                <p class="note-desc">開瀏覽器：<code>https://localhost:8080</code></p>
+                <p class="note-desc">會出現 SSL 憑證警告（自簽憑證），點「繼續前往」即可。</p>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-key"></i> Step 4：取得初始密碼</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">帳號是 <code>admin</code>，密碼存在 Secret 裡：</p>
+                <pre><code>kubectl -n argocd get secret argocd-initial-admin-secret \
+  -o jsonpath="{.data.password}" | base64 -d</code></pre>
+                <p class="note-desc">用這組帳密登入 Dashboard。</p>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-terminal"></i> Step 5：安裝 ArgoCD CLI（選用）</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <pre><code># 下載 CLI
+sudo curl -sSL -o /usr/local/bin/argocd \
+  https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+sudo chmod +x /usr/local/bin/argocd
+
+# CLI 登入
+argocd login localhost:8080 --username admin --password &lt;剛才的密碼&gt; --insecure</code></pre>
+                <p class="note-desc">Dashboard 看到空的 Applications 頁面，代表安裝成功。</p>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop：安裝 ArgoCD</h4>
+                    <span class="status-badge info">Workshop</span>
+                </div>
+                <ul class="note-points">
+                    <li>在 Minikube 上安裝 ArgoCD</li>
+                    <li>用 port-forward 開啟 Dashboard</li>
+                    <li>取得初始密碼並登入</li>
+                    <li>截圖 Dashboard 空白頁面，貼到共筆</li>
+                </ul>
+                <p class="note-desc"><strong>驗證指令：</strong></p>
+                <pre><code>kubectl get pods -n argocd
+kubectl get svc -n argocd</code></pre>
+
+                <div class="note-header" style="margin-top: 1.2em;">
+                    <h4><i class="fa-solid fa-pen"></i> 練習回答</h4>
+                </div>
+                <p class="note-desc"><strong>Q：安裝完 ArgoCD 後，如何確認所有元件都正常運行？</strong></p>
+                <p class="note-desc">A：執行 <code>kubectl get pods -n argocd</code>，確認所有 Pod 的 STATUS 都是 <code>Running</code>，且 READY 欄位顯示 <code>1/1</code>。關鍵元件包含：<code>argocd-server</code>（Web UI / API）、<code>argocd-repo-server</code>（從 Git 拉取 YAML）、<code>argocd-application-controller</code>（比對 Git 與 K8S 狀態的核心）、<code>argocd-redis</code>（快取）、<code>argocd-dex-server</code>（SSO 認證）。如果有 Pod 卡在 <code>ContainerCreating</code> 或 <code>ImagePullBackOff</code>，通常是網路問題或 Image 還在下載中，等待或檢查網路即可。</p>
+            </div>
+        </div>
+
+        <!-- Section 3: Sync 與 Auto-Sync -->
+        <h3 class="section-title"><i class="fa-solid fa-rotate"></i> Ch4 — Sync 與 Auto-Sync</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-sliders"></i> 三種同步模式</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">Application 建好了，第一次 Sync 也成功了。但每次改 Git repo 的 YAML，都要手動按 Sync——能不能自動？</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>模式</th><th>行為</th><th>適合場景</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>手動 Sync</strong></td><td>改了 Git，要自己按 Sync</td><td>prod 環境，需要人工確認</td></tr>
+                        <tr><td><strong>Auto-Sync</strong></td><td>改了 Git，ArgoCD 自動同步</td><td>dev 環境，快速迭代</td></tr>
+                        <tr><td><strong>Self-Heal</strong></td><td>有人手動 kubectl 改了 K8S，ArgoCD 自動改回 Git 的版本</td><td>防止狀態漂移</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-hand-pointer"></i> Demo 1：手動 Sync</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc"><strong>Step 1：</strong>在 GitHub 上修改 YAML——把 <code>deployment.yaml</code> 的 replicas 從 2 改成 3。</p>
+                <p class="note-desc"><strong>Step 2：</strong>觀察 Dashboard——ArgoCD 會在幾分鐘內偵測到（預設每 3 分鐘檢查一次），狀態變成 <code>OutOfSync</code>。</p>
+                <pre><code># 或手動觸發檢查
+argocd app get fastapi-app --refresh</code></pre>
+                <p class="note-desc"><strong>Step 3：</strong>手動 Sync</p>
+                <pre><code>argocd app sync fastapi-app</code></pre>
+                <p class="note-desc">Pod 數量變更為新的 replicas 值。</p>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-bolt"></i> Demo 2：開啟 Auto-Sync</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <pre><code># 用 CLI 開啟
+argocd app set fastapi-app --sync-policy automated</code></pre>
+                <p class="note-desc">或在 Application YAML 加上：</p>
+                <pre><code>spec:
+  syncPolicy:
+    automated:
+      prune: true       # Git 裡刪掉的資源，K8S 上也會自動刪除
+      selfHeal: true    # 有人手動改 K8S，自動改回 Git 的版本</code></pre>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>參數</th><th>說明</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>automated</strong></td><td>開啟自動同步</td></tr>
+                        <tr><td><strong>prune: true</strong></td><td>Git 裡刪掉的資源，K8S 上也會自動刪除</td></tr>
+                        <tr><td><strong>selfHeal: true</strong></td><td>有人手動改 K8S，自動改回 Git 的版本</td></tr>
+                    </tbody>
+                </table>
+                <p class="note-desc"><strong>測試：</strong>在 GitHub 上改 replicas 從 2 &rarr; 4，等幾分鐘，ArgoCD 自動部署，Pod 變成 4 個。</p>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-shield-halved"></i> Demo 3：Self-Heal（自動修正狀態漂移）</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">開啟 Self-Heal 後，手動改 K8S 會被自動修正。</p>
+                <p class="note-desc"><strong>Step 1：</strong>手動 scale 到 10</p>
+                <pre><code>kubectl scale deployment fastapi-deploy --replicas=10
+kubectl get pods</code></pre>
+                <p class="note-desc">10 個 Pod 開始建立。</p>
+                <p class="note-desc"><strong>Step 2：</strong>ArgoCD 偵測到差異——幾秒後多餘的 Pod 開始 <code>Terminating</code>：</p>
+                <pre><code>fastapi-deploy-bddb76dbc-5wxgs   1/1     Terminating   0          23s
+fastapi-deploy-bddb76dbc-cpnql   1/1     Terminating   0          23s</code></pre>
+                <p class="note-desc">ArgoCD 發現 K8S 上有 10 個 Pod，但 Git 寫的是 2 個，觸發 Self-Heal。</p>
+                <p class="note-desc"><strong>Step 3：</strong>確認回到 Git 定義的狀態</p>
+                <pre><code>kubectl get pods
+# 回到 2 個 Pod，跟 Git 一致</code></pre>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 核心觀念：</strong>Git 是唯一真相，任何偏離都會被修正。
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-terminal"></i> 常用指令整理</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>指令</th><th>用途</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>argocd app get APP --refresh</code></td><td>立刻檢查 Git 變更</td></tr>
+                        <tr><td><code>argocd app sync APP</code></td><td>手動同步</td></tr>
+                        <tr><td><code>argocd app set APP --sync-policy automated</code></td><td>開啟 Auto-Sync</td></tr>
+                        <tr><td><code>argocd app set APP --self-heal</code></td><td>開啟 Self-Heal</td></tr>
+                        <tr><td><code>argocd app set APP --sync-policy none</code></td><td>關閉 Auto-Sync</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop：Sync 模式實驗</h4>
+                    <span class="status-badge info">Workshop</span>
+                </div>
+                <ul class="note-points">
+                    <li>在 GitHub 上修改 replicas，觀察 ArgoCD 顯示 <code>OutOfSync</code></li>
+                    <li>手動 Sync，確認 Pod 數量變更</li>
+                    <li>開啟 Auto-Sync</li>
+                    <li>再次在 GitHub 上修改 replicas，觀察自動同步</li>
+                    <li>開啟 Self-Heal</li>
+                    <li>用 <code>kubectl scale</code> 手動改 replicas，觀察 ArgoCD 自動改回來</li>
+                </ul>
+                <p class="note-desc"><strong>預期結果：</strong></p>
+                <ul class="note-points">
+                    <li><strong>手動 Sync：</strong>改完 Git 後按 Sync，K8S 更新</li>
+                    <li><strong>Auto-Sync：</strong>改完 Git 後不用操作，K8S 自動更新</li>
+                    <li><strong>Self-Heal：</strong>手動改 K8S 後，ArgoCD 自動改回 Git 的版本</li>
+                </ul>
+
+                <div class="note-header" style="margin-top: 1.2em;">
+                    <h4><i class="fa-solid fa-pen"></i> 練習回答</h4>
+                </div>
+                <p class="note-desc"><strong>Q：Self-Heal 和 Auto-Sync 有什麼差別？什麼場景下要同時開啟？</strong></p>
+                <p class="note-desc">A：<strong>Auto-Sync</strong> 處理的方向是 Git &rarr; K8S：當 Git repo 有新的 commit（YAML 被修改），ArgoCD 自動把變更部署到 K8S。<strong>Self-Heal</strong> 處理的方向是 K8S &rarr; Git：當有人繞過 Git 直接用 <code>kubectl</code> 修改 K8S（例如手動 scale），ArgoCD 會偵測到 K8S 跟 Git 不一致，自動把 K8S 改回 Git 定義的狀態。在 dev 環境中通常同時開啟兩者——Auto-Sync 讓開發者只需 <code>git push</code> 就能部署，Self-Heal 確保沒有人用 kubectl 偷改狀態導致環境跟 Git 不一致。在 prod 環境通常只開 Self-Heal（防漂移），不開 Auto-Sync（需要人工審核後才部署）。</p>
+            </div>
+        </div>
+
+        <!-- Section 4: GitHub Actions (CI) -->
+        <h3 class="section-title"><i class="fa-brands fa-github"></i> Ch5 — GitHub Actions（CI）</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-hand-point-right"></i> 情境：還有手動的步驟</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">目前流程中，還有三步是手動的：</p>
+                <pre><code>改程式碼 → 手動 docker build → 手動 docker push → 手動改 YAML image tag → ArgoCD 自動部署
+           ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^
+           這三步還是手動的</code></pre>
+                <p class="note-desc">GitHub Actions 可以自動化前面這段（CI = Continuous Integration）。</p>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-robot"></i> GitHub Actions 是什麼</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">GitHub 內建的自動化工具。在 repo 裡放一個 YAML 檔，GitHub 就會在指定事件（例如 <code>git push</code>）時自動執行。</p>
+                <pre><code>.github/
+└── workflows/
+    └── ci.yaml    ← GitHub 看到這個檔案就知道要跑</code></pre>
+            </div>
+
+            <div class="card note-card">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-tag"></i> 為什麼用 commit hash 當 tag</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>tag 策略</th><th>範例</th><th>問題</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>latest</td><td><code>app:latest</code></td><td>每次都一樣，K8S 不知道有新版</td></tr>
+                        <tr><td>v1, v2</td><td><code>app:v2</code></td><td>要手動維護版號</td></tr>
+                        <tr><td><strong>commit hash</strong></td><td><code>app:a1b2c3d</code></td><td>自動產生，每次不同，可追溯到程式碼</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-file-code"></i> 第一個 Workflow：Build + Push Image</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc"><code>.github/workflows/ci.yaml</code>：</p>
+                <pre><code>name: CI - Build and Push
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and Push
+        uses: docker/build-push-action@v5
+        with:
+          context: ./app
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/docker-fastapi:${{ github.sha }}</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-table"></i> Workflow 參數解說</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>區塊</th><th>說明</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>on: push: branches: [main] + paths: ['app/**']</code></td><td>main branch 的 app/ 目錄有變更時才觸發（改 YAML 不會觸發 CI）</td></tr>
+                        <tr><td><code>runs-on: ubuntu-latest</code></td><td>在 GitHub 提供的 Ubuntu 機器上跑</td></tr>
+                        <tr><td><code>actions/checkout@v4</code></td><td>拉 repo 程式碼</td></tr>
+                        <tr><td><code>docker/login-action@v3</code></td><td>登入 Docker Hub</td></tr>
+                        <tr><td><code>docker/build-push-action@v5</code></td><td>Build Image 並 Push</td></tr>
+                        <tr><td><code>tags: ...:${{ github.sha }}</code></td><td>用 commit hash 當 tag，每次都不同</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-key"></i> 設定 GitHub Repository Secrets</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">到 GitHub 的 argocd-demo repo 頁面：<strong>Settings &rarr; Secrets and variables &rarr; Actions</strong></p>
+                <p class="note-desc">在 Repository secrets 區塊，點 <strong>New repository secret</strong>，新增兩個：</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>Name</th><th>Value</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>DOCKER_USERNAME</code></td><td>你的 Docker Hub 帳號</td></tr>
+                        <tr><td><code>DOCKER_PASSWORD</code></td><td>你的 Docker Hub 密碼或 Access Token</td></tr>
+                    </tbody>
+                </table>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-triangle-exclamation"></i> 注意：</strong>是 <strong>Repository secrets</strong>，不是 Environment secrets 或 Organization secrets。
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop：測試 CI</h4>
+                    <span class="status-badge info">Workshop</span>
+                </div>
+                <ul class="note-points">
+                    <li>確認 argocd-demo repo 有 <code>app/</code> 目錄和 <code>.github/workflows/ci.yaml</code></li>
+                    <li>到 GitHub repo 的 Settings &rarr; Secrets &rarr; Actions，設定 <code>DOCKER_USERNAME</code> 與 <code>DOCKER_PASSWORD</code></li>
+                    <li>修改 <code>app/main.py</code>（例如改回傳內容），<code>git push</code></li>
+                    <li>到 repo 的 Actions 頁面觀察 CI 執行</li>
+                    <li>到 Docker Hub 確認新 Image 出現（tag 是 commit hash）</li>
+                </ul>
+                <p class="note-desc"><strong>預期結果：</strong><code>git push</code> 後 GitHub Actions 自動觸發，Actions 頁面顯示綠色勾勾，Docker Hub 出現新的 Image。</p>
+
+                <div class="note-header" style="margin-top: 1.2em;">
+                    <h4><i class="fa-solid fa-pen"></i> 練習回答</h4>
+                </div>
+                <p class="note-desc"><strong>Q：為什麼 CI workflow 的 on.push.paths 設定為 <code>'app/**'</code>？如果不設定 paths 會怎樣？</strong></p>
+                <p class="note-desc">A：設定 <code>paths: ['app/**']</code> 表示只有 <code>app/</code> 目錄底下的檔案有變更時才觸發 CI。這是為了避免不必要的 build——例如只修改了 K8S 的 YAML 檔（不在 app/ 裡）或修改了 README，這些情況下程式碼沒變、Image 不需要重建。如果不設定 paths，每次 push 到 main 都會觸發 CI，即使只改了一個文件也會重新 build + push Image，浪費 GitHub Actions 的執行時間和 Docker Hub 的空間。</p>
+            </div>
+        </div>
+
+        <!-- Section 5: CI/CD 完整串接 -->
+        <h3 class="section-title"><i class="fa-solid fa-link"></i> Ch6 — CI/CD 完整串接</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-diagram-project"></i> 完整 CI/CD 流程圖</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">上一章的 CI 會自動 build Image 並 push 到 Docker Hub，但部署到 K8S 還是要手動改 YAML 的 image tag。這一章把最後一段也自動化：</p>
+                <pre><code>  開發者 git push（改程式碼）
+    │
+    ▼
+  App Repo（程式碼 + Dockerfile + CI workflow）
+    │ 觸發 GitHub Actions
+    ▼
+  GitHub Actions（CI）
+    ├── 1. docker build
+    ├── 2. docker push → Docker Hub
+    └── 3. 更新 Config Repo 的 image tag
+                         │
+                         ▼
+                    Config Repo（只放 K8S YAML）
+                         │ ArgoCD 每 3 分鐘偵測
+                         ▼
+                    ArgoCD（CD）: OutOfSync → Auto-Sync
+                         │ kubectl apply
+                         ▼
+                    K8S 部署新 Image，新版 Pod 上線</code></pre>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 關鍵：</strong>全程只有第一步（git push）是人做的，其餘全自動。
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-code-fork"></i> 架構：兩個 Repo</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>Repo</th><th>內容</th><th>誰在用</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>argocd-demo</strong>（App Repo）</td><td>程式碼 + Dockerfile + CI workflow</td><td>開發者 git push &rarr; 觸發 CI</td></tr>
+                        <tr><td><strong>argocd-config</strong>（Config Repo）</td><td>K8S YAML</td><td>ArgoCD 監控 &rarr; 自動部署</td></tr>
+                    </tbody>
+                </table>
+                <pre><code>argocd-demo（App Repo）         argocd-config（Config Repo）
+├── app/                        ├── deployment.yaml
+│   ├── main.py                 └── service.yaml
+│   ├── Dockerfile
+│   └── requirements.txt
+└── .github/workflows/
+    └── ci.yaml</code></pre>
+                <p class="note-desc"><strong>為什麼要分兩個 repo？</strong>App Repo 的 push 觸發 CI（build Image），Config Repo 的變更觸發 CD（ArgoCD 部署）。分開後不會有無限迴圈問題（CI 改了 Config Repo 不會重新觸發 CI）。</p>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-file-code"></i> 完整 CI Workflow（含更新 Config Repo）</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">在 argocd-demo repo 的 <code>.github/workflows/ci.yaml</code>：</p>
+                <pre><code>name: CI/CD - Build, Push, Deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app/**'
+
+jobs:
+  build-and-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and Push
+        uses: docker/build-push-action@v5
+        with:
+          context: ./app
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/docker-fastapi:${{ github.sha }}
+
+      - name: Update Config Repo
+        run: |
+          git clone https://x-access-token:${{ secrets.CONFIG_REPO_TOKEN }}@github.com/4-learn/argocd-config.git
+          cd argocd-config
+          sed -i "s|image: .*/docker-fastapi:.*|image: ${{ secrets.DOCKER_USERNAME }}/docker-fastapi:${{ github.sha }}|" deployment.yaml
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add deployment.yaml
+          git commit -m "chore: update image to ${{ github.sha }}"
+          git push</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-magnifying-glass"></i> Update Config Repo 逐行解說</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>行</th><th>指令</th><th>做什麼</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td><code>git clone https://x-access-token:TOKEN@...</code></td><td>用 GitHub Token 把 Config Repo clone 到 CI 機器上</td></tr>
+                        <tr><td>2</td><td><code>cd argocd-config</code></td><td>進到 Config Repo 目錄</td></tr>
+                        <tr><td>3</td><td><code>sed -i "s|image: ...|image: 新tag|"</code></td><td>把 deployment.yaml 的 image tag 換成這次 commit hash</td></tr>
+                        <tr><td>4-5</td><td><code>git config user.name / email</code></td><td>CI 機器沒有 git 身份，要先設定</td></tr>
+                        <tr><td>6</td><td><code>git add deployment.yaml</code></td><td>加入變更</td></tr>
+                        <tr><td>7</td><td><code>git commit -m "chore: ..."</code></td><td>commit</td></tr>
+                        <tr><td>8</td><td><code>git push</code></td><td>推到 Config Repo &rarr; ArgoCD 偵測到 &rarr; 自動部署</td></tr>
+                    </tbody>
+                </table>
+                <p class="note-desc"><code>sed</code> 的效果：</p>
+                <pre><code># 改之前
+image: yillkid/docker-fastapi:v1
+
+# 改之後（假設 commit hash 是 a1b2c3d）
+image: yillkid/docker-fastapi:a1b2c3d</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-key"></i> 需要的 Secret</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc">在 argocd-demo repo 的 Settings &rarr; Secrets and variables &rarr; Actions &rarr; Repository secrets 新增：</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>Secret 名稱</th><th>說明</th><th>Ch5 已設？</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>DOCKER_USERNAME</code></td><td>Docker Hub 帳號</td><td>是</td></tr>
+                        <tr><td><code>DOCKER_PASSWORD</code></td><td>Docker Hub 密碼或 Access Token</td><td>是</td></tr>
+                        <tr><td><code>CONFIG_REPO_TOKEN</code></td><td>GitHub PAT，有 argocd-config repo 的寫入權限</td><td><strong>新增</strong></td></tr>
+                    </tbody>
+                </table>
+                <p class="note-desc"><strong>怎麼建 CONFIG_REPO_TOKEN？</strong></p>
+                <ul class="note-points">
+                    <li>GitHub &rarr; Settings &rarr; Developer settings &rarr; Personal access tokens &rarr; Tokens (classic) &rarr; New personal access token (classic)</li>
+                    <li>勾選 <strong>repo</strong> 權限（Full control of private repositories）</li>
+                    <li>產生後複製，貼到 argocd-demo 的 Repository Secret</li>
+                </ul>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-list-ol"></i> 流程驗證（Step by Step）</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc"><strong>Step 1：</strong>修改 <code>app/main.py</code>（例如改 version 從 v3.0 → v4.0），<code>git push</code>。</p>
+                <p class="note-desc"><strong>Step 2：</strong>到 GitHub &rarr; argocd-demo &rarr; Actions 頁面，確認 CI 觸發並執行。等綠色勾勾（約 1~3 分鐘）。</p>
+                <p class="note-desc"><strong>Step 3：</strong>確認 Config Repo 被更新</p>
+                <pre><code>cd ~/workspace/argocd-config
+git pull
+cat deployment.yaml | grep image
+# image: yillkid/docker-fastapi:2944037abc123...</code></pre>
+                <p class="note-desc"><strong>Step 4：</strong>觀察 ArgoCD 偵測</p>
+                <pre><code>argocd app get fastapi-app --refresh
+# Sync Status:  OutOfSync     ← Git 跟 K8S 不一致
+# Auto-Sync 開啟的話，幾秒後自動變成 Synced</code></pre>
+                <p class="note-desc"><strong>Step 5：</strong>觀察 Pod Rolling Update</p>
+                <pre><code>kubectl get pods -w
+# 新 Pod ContainerCreating，舊 Pod 逐一 Terminating</code></pre>
+                <p class="note-desc"><strong>Step 6：</strong>確認新版上線</p>
+                <pre><code>curl http://$(minikube ip):31045
+# {"version":"v4.0","status":"ok"}</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-binoculars"></i> 完整觀測指令整理</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>觀察什麼</th><th>指令</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>CI 有沒有跑</td><td>GitHub &rarr; Actions 頁面</td></tr>
+                        <tr><td>Config Repo 被改了沒</td><td><code>cd argocd-config && git pull && grep image deployment.yaml</code></td></tr>
+                        <tr><td>ArgoCD 偵測到沒</td><td><code>argocd app get fastapi-app --refresh</code></td></tr>
+                        <tr><td>Pod 在替換嗎</td><td><code>kubectl get pods -w</code></td></tr>
+                        <tr><td>新版上線了嗎</td><td><code>curl http://&lt;minikube-ip&gt;:&lt;nodeport&gt;</code></td></tr>
+                        <tr><td>port-forward 斷了</td><td><code>kubectl port-forward svc/argocd-server -n argocd 8080:443 &</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-circle-exclamation"></i> 常見問題排解</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>問題</th><th>原因</th><th>解法</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>CI 的 Update Config Repo 失敗</td><td>CONFIG_REPO_TOKEN 沒設或沒有 repo 權限</td><td>到 App Repo 的 Settings &rarr; Secrets 設定</td></tr>
+                        <tr><td>ArgoCD 顯示 Synced 但 Pod 沒變</td><td>Application 指向舊的 repo</td><td><code>argocd app set fastapi-app --repo &lt;正確的 config repo URL&gt; --path .</code></td></tr>
+                        <tr><td>argocd 指令連不到</td><td>port-forward 斷了</td><td><code>kubectl port-forward svc/argocd-server -n argocd 8080:443 &</code></td></tr>
+                        <tr><td>Pod 一直 ImagePullBackOff</td><td>Docker Hub 上沒有這個 tag</td><td>到 Docker Hub 確認 Image 存在</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop：CI/CD 完整串接</h4>
+                    <span class="status-badge info">Workshop</span>
+                </div>
+                <ul class="note-points">
+                    <li>確認兩個 repo 都在 GitHub 上：argocd-demo（App）、argocd-config（Config）</li>
+                    <li>在 argocd-demo 設定 3 個 Secret：<code>DOCKER_USERNAME</code>、<code>DOCKER_PASSWORD</code>、<code>CONFIG_REPO_TOKEN</code></li>
+                    <li>更新 argocd-demo 的 <code>ci.yaml</code> 加上 Update Config Repo 步驟</li>
+                    <li>確認 ArgoCD Application 指向 argocd-config，Auto-Sync 開啟</li>
+                    <li>修改 <code>app/main.py</code>（例如改回傳內容），<code>git push</code> 到 argocd-demo</li>
+                    <li>到 argocd-demo 的 Actions 頁面觀察 CI 執行</li>
+                    <li>CI 完成後，到 argocd-config 檢查 <code>deployment.yaml</code> 的 image tag 是否被更新</li>
+                    <li>觀察 ArgoCD 自動部署新版本</li>
+                    <li><code>curl</code> 確認新版回傳內容</li>
+                </ul>
+
+                <div class="note-header" style="margin-top: 1.2em;">
+                    <h4><i class="fa-solid fa-pen"></i> 練習回答</h4>
+                </div>
+                <p class="note-desc"><strong>Q：為什麼要把 App Repo 和 Config Repo 分成兩個？如果放在同一個 repo 會有什麼問題？</strong></p>
+                <p class="note-desc">A：分開的核心原因是<strong>避免無限迴圈</strong>。如果程式碼和 K8S YAML 放在同一個 repo，CI workflow 在 build 完 Image 後會用 <code>sed</code> 修改 <code>deployment.yaml</code> 並 <code>git push</code>。這次 push 又會觸發 CI（因為 repo 有新的 commit），CI 又會 build Image、又改 YAML、又 push......形成無限迴圈。分成兩個 repo 後：App Repo 的 push 只觸發 CI（build Image），CI 改的是 Config Repo，而 Config Repo 沒有設定 CI workflow，所以不會再觸發任何 build。另外分開也有<strong>權限管理</strong>的好處——開發者只需要 App Repo 的 push 權限，Config Repo 的直接修改可以限制給 SRE/DevOps 團隊。</p>
+            </div>
+        </div>
+
+        <!-- Section 6: 用 Git 做 Rollback -->
+        <h3 class="section-title"><i class="fa-solid fa-rotate-left"></i> Ch7 — 用 Git 做 Rollback</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-arrows-left-right"></i> 兩種退版方式的比較</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">CI/CD pipeline 自動部署了 v2，結果 v2 有 bug。要退版。</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th></th><th>kubectl rollout undo</th><th>git revert</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>操作位置</strong></td><td>K8S cluster 上</td><td>Git repo</td></tr>
+                        <tr><td><strong>需要權限</strong></td><td>kubectl 權限</td><td>Git 權限</td></tr>
+                        <tr><td><strong>記錄在哪</strong></td><td>K8S revision history</td><td>Git commit history</td></tr>
+                        <tr><td><strong>跟 ArgoCD 的關係</strong></td><td>ArgoCD 不知道你改了，可能 Self-Heal 改回去</td><td>ArgoCD 偵測到 Git 變了，自動同步</td></tr>
+                    </tbody>
+                </table>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-triangle-exclamation"></i> 重要：</strong>在 GitOps 流程中，用 <code>kubectl rollout undo</code> 會跟 ArgoCD 打架——你在 K8S 上改回 v1，但 Git 裡還是 v2，ArgoCD 的 Self-Heal 會把它改回 v2。正確做法：在 Git 上退版，讓 ArgoCD 自動同步。
+                </div>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-terminal"></i> Demo：Git Revert 退版</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc"><strong>Step 1：</strong>確認目前版本</p>
+                <pre><code>curl http://192.168.49.2:31045
+# {"version":"v2","fix":"resolved timeout issue"}</code></pre>
+
+                <p class="note-desc"><strong>Step 2：</strong>在 Config Repo 做 <code>git revert</code></p>
+                <pre><code>cd ~/workspace/argocd-config
+git log --oneline -3
+# 5c92ff0 chore: update image to v2     ← HEAD（目前，v2）
+# 6143afd Reapply "feat: initial K8S config for ArgoCD"
+# 2e21504 feat: initial K8S config for ArgoCD
+
+git revert HEAD --no-edit
+git push              ← 一定要 push，ArgoCD 監控的是 GitHub</code></pre>
+
+                <p class="note-desc"><strong><code>git revert HEAD --no-edit</code> 是什麼意思？</strong></p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>部分</th><th>說明</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>git revert</code></td><td>產生一個新的 commit，把指定 commit 做的事反過來</td></tr>
+                        <tr><td><code>HEAD</code></td><td>指「最新的那個 commit」</td></tr>
+                        <tr><td><code>--no-edit</code></td><td>不跳出編輯器，直接用預設的 commit message</td></tr>
+                    </tbody>
+                </table>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 重要觀念：</strong>revert 不是「回到過去」，是「產生一個新 commit 來抵銷上一個 commit」。Git 歷史只會往前，不會刪東西。
+                </div>
+                <pre><code># revert 前：
+  5c92ff0 chore: update image to v2        ← image 從 v1 改成 v2
+
+# revert 後：
+  d227984 Revert "chore: update image to v2"  ← 新 commit，把 v2 改回 v1
+  5c92ff0 chore: update image to v2</code></pre>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-eye"></i> 觀察 ArgoCD 自動退版</h4>
+                    <span class="status-badge done">實作</span>
+                </div>
+                <p class="note-desc"><strong>Step 3：</strong>觀察 ArgoCD 自動退版</p>
+                <pre><code>argocd app get fastapi-app --refresh
+# Sync Status:  OutOfSync     ← 偵測到 Config Repo 變了
+# Auto-Sync 開啟的話，幾秒後自動同步，Pod Rolling Update 回 v1</code></pre>
+                <p class="note-desc"><strong>Step 4：</strong>確認退版成功</p>
+                <pre><code>curl http://192.168.49.2:31045
+# {"version":"v1"}</code></pre>
+                <p class="note-desc">全程沒用 <code>kubectl rollout undo</code>，只用 Git 操作。</p>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-clock-rotate-left"></i> ArgoCD Dashboard 的 History</h4>
+                    <span class="status-badge important">觀念</span>
+                </div>
+                <p class="note-desc">在 Dashboard 的 Application 頁面，點 <strong>HISTORY AND ROLLBACK</strong>，可以看到每次 Sync 的記錄：</p>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>Revision</th><th>Image</th><th>時間</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>3</td><td>docker-fastapi:v1（revert）</td><td>剛剛</td></tr>
+                        <tr><td>2</td><td>docker-fastapi:v2</td><td>10 分鐘前</td></tr>
+                        <tr><td>1</td><td>docker-fastapi:v1</td><td>1 小時前</td></tr>
+                    </tbody>
+                </table>
+                <p class="note-desc">也可以在 Dashboard 直接點特定 revision 做 rollback，效果跟 <code>git revert</code> 一樣。</p>
+            </div>
+
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-flask"></i> Workshop：Git Rollback</h4>
+                    <span class="status-badge info">Workshop</span>
+                </div>
+                <ul class="note-points">
+                    <li>確認目前跑的是 v2</li>
+                    <li>在 Config Repo（argocd-config）用 <code>git revert</code> 退回 v1</li>
+                    <li>觀察 ArgoCD 自動同步</li>
+                    <li><code>curl</code> 確認退回 v1</li>
+                    <li>到 ArgoCD Dashboard 的 History 頁面截圖</li>
+                </ul>
+                <p class="note-desc"><strong>預期結果：</strong><code>git revert</code> 後，ArgoCD 自動部署 v1。全程不需要 <code>kubectl rollout undo</code>。Dashboard History 有完整的部署記錄。</p>
+
+                <div class="note-header" style="margin-top: 1.2em;">
+                    <h4><i class="fa-solid fa-pen"></i> 練習回答</h4>
+                </div>
+                <p class="note-desc"><strong>Q：為什麼在 GitOps 流程中不應該用 <code>kubectl rollout undo</code> 退版？<code>git revert</code> 和 <code>git reset --hard</code> 在退版上有什麼差別？</strong></p>
+                <p class="note-desc">A：不用 <code>kubectl rollout undo</code> 的原因是它會跟 ArgoCD 打架。<code>rollout undo</code> 只改了 K8S 上的狀態，Git repo 裡的 YAML 還是指向 v2。如果開了 Self-Heal，ArgoCD 會發現 K8S（v1）跟 Git（v2）不一致，然後「修正」回 v2——等於你的退版被撤銷了。正確做法是在 Git 上操作，讓 ArgoCD 自動同步。</p>
+                <p class="note-desc">至於 <code>git revert</code> 和 <code>git reset --hard</code> 的差別：<code>git revert</code> 會產生一個<strong>新的 commit</strong> 來抵銷指定 commit 的變更，Git 歷史完整保留，適合已經 push 到遠端的情況。<code>git reset --hard</code> 則是直接把 HEAD 指標往回移，歷史記錄會被「刪掉」，需要 <code>git push --force</code> 才能推上去，在多人協作中非常危險（會覆蓋別人的 commit）。在 GitOps 流程中，應該永遠用 <code>git revert</code>——保留完整歷史，團隊可以追溯每一次變更和退版的原因。</p>
+            </div>
+        </div>
+
+        <!-- 總結 -->
+        <h3 class="section-title"><i class="fa-solid fa-flag-checkered"></i> 今日總結</h3>
+        <div class="dashboard-grid notes-section">
+            <div class="card note-card" style="grid-column: 1 / -1;">
+                <div class="note-header">
+                    <h4><i class="fa-solid fa-graduation-cap"></i> 今日學習重點</h4>
+                    <span class="status-badge done">總結</span>
+                </div>
+                <table class="concept-table">
+                    <thead>
+                        <tr><th>章節</th><th>核心概念</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Ch1 為什麼需要 ArgoCD</strong></td><td>傳統部署的痛點 &rarr; GitOps 用 Git 當唯一真相來源</td></tr>
+                        <tr><td><strong>Ch2 安裝 ArgoCD</strong></td><td>namespace + install + port-forward + 取得初始密碼</td></tr>
+                        <tr><td><strong>Ch4 Sync 模式</strong></td><td>手動 Sync / Auto-Sync / Self-Heal 三種模式</td></tr>
+                        <tr><td><strong>Ch5 GitHub Actions</strong></td><td>CI 自動 build + push Image，用 commit hash 當 tag</td></tr>
+                        <tr><td><strong>Ch6 CI/CD 串接</strong></td><td>兩個 Repo 架構，CI 自動更新 Config Repo，ArgoCD 自動部署</td></tr>
+                        <tr><td><strong>Ch7 Git Rollback</strong></td><td>用 <code>git revert</code> 退版，不用 <code>kubectl rollout undo</code></td></tr>
+                    </tbody>
+                </table>
+                <div class="alert-box">
+                    <strong><i class="fa-solid fa-lightbulb"></i> 一句話總結：</strong>在 GitOps 的世界裡，<strong>Git 是唯一真相</strong>。部署用 <code>git push</code>，退版用 <code>git revert</code>，所有變更都有記錄、可追溯、可審核。ArgoCD 負責讓 K8S 的狀態永遠跟 Git 保持一致。
+                </div>
             </div>
         </div>
 
